@@ -1,0 +1,252 @@
+\documentclass[12pt,a4paper]{scrartcl}		% KOMA-Klassen benutzen!
+
+%\usepackage[ngerman]{babel}			% deutsche Namen/Umlaute
+\usepackage[utf8]{inputenc}			% Zeichensatzkodierung
+\usepackage{url}
+\usepackage{graphicx}
+\usepackage[colorlinks=false, pdfborder={0 0 0}]{hyperref}
+\usepackage{amsmath}
+\usepackage{multicol}
+\usepackage{glossaries}
+\usepackage{expdlist}
+
+\usepackage{setspace} % Anderthalbfacher Zeilenabstand ist Standard in den meisten Seminararbeiten. Das Paket setspace ermöglicht ein einfaches Umstellen von normalem, anderthalbfachen oder sogar doppeltem Zeilenabstand. 
+\usepackage[paper=a4paper,inner=25mm,outer=20mm,top=15mm,bottom=20mm]{geometry} %Das geometry Paket dient zur Einrichtung der Seiten. Hier werden die jeweiligen Seitenränder angegeben. Diese wWerte sollten durch die jeweiligen Vorgaben des Seminarleiters oder Instituts ersetzt werden.
+\setlength{\parindent}{1.7em} %Neue Abschnitte werden mit hängendem Einzug gesetzt, parindent definiert. um wie viel der Absat eingerückt wird. Die Einheit em ist abhängig vom verwendeten Zeichensatz und daher absoluten Werten in mm oder cm vorzuziehen. 
+\setcounter{secnumdepth}{3} %Bis zu welcher Gliederungsebene nummeriert werden soll gibt dieser Befehl vor. In diesem Falle werden \section, \subsection und \subsubsection nummereiert.
+\setcounter{tocdepth}{3} %Bis zu welcher Ebene Einträge ins Inhaltsverzeichnis aufgenommen werden. In diesem Beispiel ebenfalls bis Ebene drei (\subsubsection). Ein durch \paragraph ausgewiesener Abschnitt wird demnach nicht im Inhaltsverzeichnis auftauchen. 
+
+\newcommand{\citeurl}[2]{\url{#1} (#2)}
+
+
+
+\begin{document}
+%\titlehead{}
+%\subject{subject}
+\title{}
+\subtitle{}
+\author{Thomas Koch\\\url{thomas@koch.ro}\\matriculation number 7250371}
+\publishers{Fernuniversität Hagen\\Faculty of mathematics and computer science}
+\date{\today}
+%\thanks{}
+\maketitle{}
+
+%\newpage{}
+\tableofcontents{}
+\begin{abstract}
+
+\end{abstract}
+\newpage{}
+
+\section{Is webdav restful?}
+\appendix
+
+\section{Standards}
+\subsection{Contacts}
+%\subparagraph{IETF (RFC)}
+\begin{description}[\breaklabel\setleftmargin{1ex}]
+
+  \item[RFC 6450 vCard Format Specification]
+
+    This document defines the vCard data format for representing and exchanging
+    a variety of information about individuals and other entities (e.g.,
+    formatted and structured name and delivery addresses, email address,
+    multiple telephone numbers, photograph, logo, audio clips, etc.). This is
+    the new version and obsoletes RFCs 2425, 2426, and 4770, and updates RFC
+    2739.
+
+  \item[RFC 6351 xCard: vCard XML Representation]
+
+    This document defines the XML schema of the vCard data format. 
+
+% http://portablecontacts.net/draft-spec.html
+  \item[Portable Contacts] 
+
+    Portable Contacts defines contact data structures and a ReST API. It has
+    been integrated in the OpenSocial standard.
+
+\end{description}
+
+\subsection{Calendaring}
+%\subparagraph{IETF (RFC)}
+\begin{description}[\breaklabel\setleftmargin{1ex}]
+
+  \item[RFC 5545 Internet Calendaring and Scheduling Core Object Specification]
+
+    iCalendar is the core data schema for calendaring information. This is the
+    new version and obsoletes RFC2445
+
+  \item[RFC 6321 xCal: The XML format for iCalendar]
+
+    This specification defines a format for representing iCalendar data in
+    XML. More specifically, is to define an XML format that allows iCalendar
+    data to be converted to XML, and then back to iCalendar, without losing any
+    semantic meaning in the data. Anyone creating XML calendar data according to
+    this specification will know that their data can be converted to a valid
+    iCalendar representation as well.
+
+  \item[CalWS RESTful Web Services Protocol for Calendaring]
+
+    This document, developed by the XML Technical Committee, specifies a RESTful
+    web services Protocol for calendaring operations. This protocol has been
+    contributed to OASIS WS-CALENDAR as a component of the WS-CALENDAR
+    Specification under development by OASIS.
+
+  % https://code.google.com/apis/calendar/v3
+  \item[Google Calendar API V3]
+
+    While not being a standard, the Google Calendar API is RESTful and will
+    surely be implemented by many client applications. It's remarkable that the
+    API supports partial GETs returning only specified fields and the HTTP PATCH
+    verb to update only specified fields.
+
+\end{description}
+
+\subsection{Scheduling}
+
+\begin{description}[\breaklabel\setleftmargin{1ex}]
+  \item[RFC 5546 iCalendar Transport-Independent Interoperability Protocol (iTIP)] 
+
+    Scheduling Events, BusyTime, To-dos and Journal Entries; Specifies
+    the mechanisms for calendaring event interchange between calendar
+    servers. This is the new version and obsoletes RFC2446
+
+  \item[RFC 6047 iCalendar Message-Based Interoperability Protocol (iMIP)]
+
+    Specifies how to exchange calendaring data via e-mail. This is the new
+    version and obsoletes RFC2447.
+
+\end{description}
+
+
+\subparagraph{others}
+
+\subsection{out of scope}
+\begin{description}[\breaklabel\setleftmargin{1ex}]
+
+  % http://www.openmobilealliance.org/Technical/release_program/cab_v1_0.aspx
+  \item[OMA Converged Address Book V1.0]
+
+    Standard by the Open Mobile Alliance defining data structures and
+    synchronization of contact data. It references vCard.
+  
+  % http://www.w3.org/TR/contacts-api
+  \item[W3C Contacts API]
+
+    A standard on how address books cold be accessed on devices or from
+    JavaScript inside a Web Browser. The standard references vCard, OMA
+    Converged Address Book and Portable Contacts.
+
+
+\end{description}
+
+
+\section{People, Groups and Organizations}
+% http://lists.w3.org/Archives/Public/public-device-apis/ - Contacts API
+% 
+% https://www.ietf.org/mailman/listinfo/calsify
+% https://www.ietf.org/mailman/listinfo/ischedule - only 8 mails since 2009
+% https://www.ietf.org/mailman/listinfo/httpmail only 3 mails since 2009
+% https://www.ietf.org/mailman/listinfo/vcarddav
+% https://www.ietf.org/mailman/listinfo/caldav
+% https://www.ietf.org/mailman/listinfo/imap5
+
+%http://groups.google.com/group/portablecontacts
+
+%http://tech.groups.yahoo.com/group/rest-discuss
+
+\paragraph{People}
+\begin{description}[\breaklabel\setleftmargin{1ex}]
+
+  \item[Eliot Lear <lear@cisco.com>]
+      IETF Calsify WG chair
+
+  \item[Lisa Dusseault]
+      
+    Lisa Dusseault is a development manager and standards architect at the Open
+    Source Applications Foundation, where she's involved in the Chandler, Cosmo
+    and Scooby projects. Previously, Lisa came from Xythos, an Internet startup
+    where she was development manager for four years. She has also been an IETF
+    contributor on various Internet applications protocols for eight years now,
+    and continues to do this kind of work at OSAF. She co-chairs the IETF IMAP
+    extensions and CALSIFY (Calendaring and Scheduling Standards Simplification)
+    Working Groups. She is also the author of a book on WebDAV and co-author of
+    CalDAV, an open and interoperable protocol for calendar access and sharing.
+
+  \item[Peter Saint-Andre <stpeter@stpeter.im>]
+
+    IETF Calsify WG area director
+
+  \item[Joseph Smarr]
+
+    former Plaxo now Google
+    presentation about portable contacts at vcarddav wg http://tools.ietf.org/agenda/74/slides/vcarddav-2.pdf
+    http://josephsmarr.com
+    http://anyasq.com/79-im-a-technical-lead-on-the-google+-team
+
+  \item[Mike Conley]
+
+    \url{http://mikeconley.ca/blog/}
+    % Email: mike.d.conley@gmail.com
+    % Twitter: http://www.twitter.com/mike_conley
+    % IRC: You can usually find me on Freenode as m_conley
+    working on a new address book for Thunderbird: \url{https://wiki.mozilla.org/Thunderbird/tb-planning}
+
+
+% http://notizblog.org/2011/11/17/the-long-term-failure-of-openweb/
+
+\end{description}
+
+
+
+\section{Implementations}
+
+% http://wiki.portablecontacts.net/w/page/17776143/Software%20and%20Services%20using%20Portable%20Contacts
+% http://en.wikipedia.org/wiki/List_of_applications_with_iCalendar_support
+% http://syncevolution.org/
+% http://www.janrain.com/solutions/supported-networks
+% http://vcard4j.sourceforge.net/
+% http://code.google.com/p/caldav4j/
+% http://www.webdav.org/projects/
+% http://en.wikipedia.org/wiki/CardDAV
+% webdav server http://milton.ettrema.com
+% http://jackrabbit.apache.org/jackrabbit-webdav-library.html
+% http://davmail.sourceforge.net/ Exchange GateWay using Jackrabbit
+
+\subsection{Servers}
+\begin{description}[\breaklabel\setleftmargin{1ex}]
+
+  % http://owncloud.org
+  \item[owncloud]
+
+    ownCloud supports syncing of calendar and contacts information via the
+    CalDAV and CardDAV protocols.
+
+\end{description}
+
+\subsection{Portable Contacts}
+
+\section{Links}
+
+\begin{itemize}
+\item \url{http://thesocialweb.tv}
+\item \url{http://www.vogella.de/articles/REST/article.html} REST with Java (JAX-RS) using Jersey - Tutorial 
+% http://exist.sourceforge.net/
+
+\end{itemize}
+
+\section{TODO}
+\begin{itemize}
+\item Does funambol.org has interesting implementations?
+\end{itemize}
+
+% http://en.wikibooks.org/wiki/LaTeX/Glossary
+\bibliography{references}{}
+\bibliographystyle{alphadin}
+\end{document}
+
+% Local Variables:
+% ispell-dictionary: "american"
+% eval: (progn (flyspell-mode 1) (outline-minor-mode 1) (hide-body))
+% End:
+%  LocalWords:  RESTful

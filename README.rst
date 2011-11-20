@@ -29,11 +29,15 @@ projects.
 .. _Bedework: http://www.bedework.org
 
 Kolab has a very pragmatic appproach in that it tries to reuse existing free
-software projects as much as possible. Therefor Kolab itself is a  more a
+software projects as much as possible. Therefor Kolab itself is more a
 repository of glue code and a knowledge base of how to configure and combine
 OpenLDAP, Cyrus (IMAP server), Postfix (Mail transfer agent) and other
 components. Kolab however has developed its own file format and only recently
 started to discuss the adoption of the new xCal and xCard formats.
+
+Kolab is also special because it uses an IMAP server as the data store and
+synchronization protocol for calendar and contact informations. I want to
+compare this approach to a restful one.
 
 I want to see, which (preferable JVM based) libraries and frameworks already
 exists to implement groupware systems to conform to the proposed standards,
@@ -46,6 +50,12 @@ Some of the candidates for evaluation:
  * Libraries implementing portable contacts / open social ...?
  * `CalDAV4j <http://code.google.com/p/caldav4j>`_
  * `iCal4j <http://ical4j.sourceforge.net>`_
+ * `Apache Shindig <http://shindig.apache.org>`_ (OpenSocial container. renders
+   gadgets, proxies requests, handles REST and RPC requests)
  * Many ReST frameworks: http://code.google.com/p/implementing-rest
 
+The current state of the thesis is available as
+`PDF <https://raw.github.com/thkoch2001/bachelor-thesis/master/latex/restful_groupware.pdf>`_,
+`HTML (single page) <http://thkoch2001.github.com/bachelor-thesis/single/restful_groupware.html>`_ and
+`HTML (multi page) <http://thkoch2001.github.com/bachelor-thesis/multi/restful_groupware.html>`_.
 
