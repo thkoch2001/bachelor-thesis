@@ -1,0 +1,269 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"  
+  "http://www.w3.org/TR/html4/loose.dtd">  
+<html > 
+<head> <title>1</title> 
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"> 
+<meta name="generator" content="TeX4ht (http://www.cse.ohio-state.edu/~gurari/TeX4ht/)"> 
+<meta name="originator" content="TeX4ht (http://www.cse.ohio-state.edu/~gurari/TeX4ht/)"> 
+<!-- html --> 
+<meta name="src" content="restful_groupware.tex"> 
+<meta name="date" content="2011-11-20 08:10:00"> 
+<link rel="stylesheet" type="text/css" href="restful_groupware.css"> 
+</head><body 
+>
+    <div class="maketitle">
+                                                                                         
+                                                                                         
+                                                                                         
+                                                                                         
+
+<h2 class="titleHead"></h2>
+           <div class="author" ><span 
+class="cmr-17">Thomas Koch</span>
+<br />        <a 
+href="thomas@koch.ro" class="url" ><span 
+class="cmtt-12x-x-144">thomas@koch.ro</span></a>
+<br /><span 
+class="cmr-17">matriculation number 7250371</span></div><br />
+<div class="date" ><span 
+class="cmr-17">November 20, 2011</span></div>
+<span 
+class="cmr-17">Fernuniversit</span><span 
+class="cmr-17">ät Hagen</span><br />
+<span 
+class="cmr-17">Faculty of mathematics and computer science</span>
+    </div>
+    <h3 class="likesectionHead"><a 
+ id="x1-1000"></a>Contents</h3>
+    <div class="tableofcontents">
+    <span class="sectionToc" >1 <a 
+href="#x1-20001" id="QQ2-1-2">Is webdav restful?</a></span>
+<br />    <span class="sectionToc" >A <a 
+href="#x1-3000A" id="QQ2-1-3">Standards</a></span>
+<br />    &#x00A0;<span class="subsectionToc" >A.1 <a 
+href="#x1-4000A.1" id="QQ2-1-4">Contacts</a></span>
+<br />    &#x00A0;<span class="subsectionToc" >A.2 <a 
+href="#x1-5000A.2" id="QQ2-1-5">Calendaring</a></span>
+<br />    &#x00A0;<span class="subsectionToc" >A.3 <a 
+href="#x1-6000A.3" id="QQ2-1-6">Scheduling</a></span>
+<br />    &#x00A0;<span class="subsectionToc" >A.4 <a 
+href="#x1-8000A.4" id="QQ2-1-8">out of scope</a></span>
+<br />    <span class="sectionToc" >B <a 
+href="#x1-9000B" id="QQ2-1-9">People, Groups and Organizations</a></span>
+<br />    <span class="sectionToc" >C <a 
+href="#x1-11000C" id="QQ2-1-11">Implementations</a></span>
+<br />    &#x00A0;<span class="subsectionToc" >C.1 <a 
+href="#x1-12000C.1" id="QQ2-1-12">Servers</a></span>
+<br />    &#x00A0;<span class="subsectionToc" >C.2 <a 
+href="#x1-13000C.2" id="QQ2-1-13">Portable Contacts</a></span>
+<br />    <span class="sectionToc" >D <a 
+href="#x1-14000D" id="QQ2-1-14">Links</a></span>
+<br />    <span class="sectionToc" >E <a 
+href="#x1-15000E" id="QQ2-1-15">TODO</a></span>
+    </div> <div 
+class="abstract" 
+>
+<!--l. 36--><p class="indent" >
+</div>
+                                                                                         
+                                                                                         
+    <h3 class="sectionHead"><span class="titlemark">1.  </span> <a 
+ id="x1-20001"></a>Is webdav restful?</h3>
+<!--l. 44--><p class="noindent" >
+    <h3 class="sectionHead"><span class="titlemark">A.  </span> <a 
+ id="x1-3000A"></a>Standards</h3>
+<!--l. 45--><p class="noindent" >
+    <h4 class="subsectionHead"><span class="titlemark">A.1.  </span> <a 
+ id="x1-4000A.1"></a>Contacts</h4>
+<!--l. 48--><p class="noindent" >
+      <dl class="description"><dt class="description">
+<span 
+class="cmssbx-10x-x-120">RFC 6450 vCard Format Specification</span>  </dt><dd 
+class="description">
+      <!--l. 51--><p class="noindent" >This document defines the vCard data format for representing and exchanging a variety
+      of information about individuals and other entities (e.g., formatted and structured
+      name and delivery addresses, email address, multiple telephone numbers, photograph,
+      logo, audio clips, etc.). This is the new version and obsoletes RFCs 2425, 2426, and
+      4770, and updates RFC 2739.
+      </dd><dt class="description">
+<span 
+class="cmssbx-10x-x-120">RFC 6351 xCard: vCard XML Representation</span>  </dt><dd 
+class="description">
+      <!--l. 60--><p class="noindent" >This document defines the XML schema of the vCard data format.
+      </dd><dt class="description">
+<span 
+class="cmssbx-10x-x-120">Portable Contacts</span>  </dt><dd 
+class="description">
+      <!--l. 65--><p class="noindent" >Portable  Contacts  defines  contact  data  structures  and  a  ReST  API.  It  has  been
+      integrated in the OpenSocial standard.
+      </dd></dl>
+<!--l. 70--><p class="noindent" >
+    <h4 class="subsectionHead"><span class="titlemark">A.2.  </span> <a 
+ id="x1-5000A.2"></a>Calendaring</h4>
+<!--l. 73--><p class="noindent" >
+      <dl class="description"><dt class="description">
+<span 
+class="cmssbx-10x-x-120">RFC 5545 Internet Calendaring and Scheduling Core Object Specification</span>  </dt><dd 
+class="description">
+      <!--l. 76--><p class="noindent" >iCalendar is the core data schema for calendaring information. This is the new version
+      and obsoletes RFC2445
+      </dd><dt class="description">
+<span 
+class="cmssbx-10x-x-120">RFC 6321 xCal: The XML format for iCalendar</span>  </dt><dd 
+class="description">
+                                                                                         
+                                                                                         
+      <!--l. 81--><p class="noindent" >This specification defines a format for representing iCalendar data in XML. More
+      specifically, is to define an XML format that allows iCalendar data to be converted to
+      XML, and then back to iCalendar, without losing any semantic meaning in the data.
+      Anyone creating XML calendar data according to this specification will know that their
+      data can be converted to a valid iCalendar representation as well.
+      </dd><dt class="description">
+<span 
+class="cmssbx-10x-x-120">CalWS RESTful Web Services Protocol for Calendaring</span>  </dt><dd 
+class="description">
+      <!--l. 90--><p class="noindent" >This document, developed by the XML Technical Committee, specifies a RESTful web
+      services Protocol for calendaring operations. This protocol has been contributed to
+      OASIS WS-CALENDAR as a component of the WS-CALENDAR Specification under
+      development by OASIS.
+      </dd><dt class="description">
+<span 
+class="cmssbx-10x-x-120">Google Calendar API V3</span>  </dt><dd 
+class="description">
+      <!--l. 98--><p class="noindent" >While not being a standard, the Google Calendar API is RESTful and will surely
+      be implemented by many client applications. It&#8217;s remarkable that the API supports
+      partial GETs returning only specified fields and the HTTP PATCH verb to update
+      only specified fields.
+      </dd></dl>
+<!--l. 105--><p class="noindent" >
+    <h4 class="subsectionHead"><span class="titlemark">A.3.  </span> <a 
+ id="x1-6000A.3"></a>Scheduling</h4>
+<!--l. 108--><p class="noindent" >
+      <dl class="description"><dt class="description">
+<span 
+class="cmssbx-10x-x-120">RFC 5546 iCalendar Transport-Independent Interoperability Protocol (iTIP)</span>  </dt><dd 
+class="description">
+      <!--l. 110--><p class="noindent" >Scheduling Events, BusyTime, To-dos and Journal Entries; Specifies the mechanisms
+      for calendaring event interchange between calendar servers. This is the new version
+      and obsoletes RFC2446
+      </dd><dt class="description">
+<span 
+class="cmssbx-10x-x-120">RFC 6047 iCalendar Message-Based Interoperability Protocol (iMIP)</span>  </dt><dd 
+class="description">
+      <!--l. 116--><p class="noindent" >Specifies how to exchange calendaring data via e-mail. This is the new version and
+      obsoletes RFC2447.
+      </dd></dl>
+<!--l. 122--><p class="indent" >    <span class="subparagraphHead"> <a 
+ id="x1-7000A.3"></a><span 
+class="cmbx-12">others</span></span>
+<!--l. 124--><p class="noindent" >
+    <h4 class="subsectionHead"><span class="titlemark">A.4.  </span> <a 
+ id="x1-8000A.4"></a>out of scope</h4>
+<!--l. 126--><p class="noindent" >
+                                                                                         
+                                                                                         
+      <dl class="description"><dt class="description">
+<span 
+class="cmssbx-10x-x-120">OMA Converged Address Book V1.0</span>  </dt><dd 
+class="description">
+      <!--l. 130--><p class="noindent" >Standard by the Open Mobile Alliance defining data structures and synchronization
+      of contact data. It references vCard.
+      </dd><dt class="description">
+<span 
+class="cmssbx-10x-x-120">W3C Contacts API</span>  </dt><dd 
+class="description">
+      <!--l. 136--><p class="noindent" >A standard on how address books cold be accessed on devices or from JavaScript inside
+      a Web Browser. The standard references vCard, OMA Converged Address Book and
+      Portable Contacts.
+      </dd></dl>
+<!--l. 144--><p class="noindent" >
+    <h3 class="sectionHead"><span class="titlemark">B.  </span> <a 
+ id="x1-9000B"></a>People, Groups and Organizations</h3>
+<!--l. 158--><p class="noindent" ><span class="paragraphHead"><a 
+ id="x1-10000B"></a><span 
+class="cmbx-12">People</span></span>
+      <dl class="description"><dt class="description">
+<span 
+class="cmssbx-10x-x-120">Eliot Lear ¡lear@cisco.com¿</span>  </dt><dd 
+class="description">IETF Calsify WG chair
+      </dd><dt class="description">
+<span 
+class="cmssbx-10x-x-120">Lisa Dusseault</span>  </dt><dd 
+class="description">
+      <!--l. 166--><p class="noindent" >Lisa Dusseault is a development manager and standards architect at the Open Source
+      Applications Foundation, where she&#8217;s involved in the Chandler, Cosmo and Scooby
+      projects.  Previously,  Lisa  came  from  Xythos,  an  Internet  startup  where  she  was
+      development manager for four years. She has also been an IETF contributor on various
+      Internet applications protocols for eight years now, and continues to do this kind of
+      work at OSAF. She co-chairs the IETF IMAP extensions and CALSIFY (Calendaring
+      and Scheduling Standards Simplification) Working Groups. She is also the author of a
+      book on WebDAV and co-author of CalDAV, an open and interoperable protocol for
+      calendar access and sharing.
+      </dd><dt class="description">
+<span 
+class="cmssbx-10x-x-120">Peter Saint-Andre ¡stpeter@stpeter.im¿</span>  </dt><dd 
+class="description">
+      <!--l. 178--><p class="noindent" >IETF Calsify WG area director
+      </dd><dt class="description">
+<span 
+class="cmssbx-10x-x-120">Joseph Smarr</span>  </dt><dd 
+class="description">
+      <!--l. 182--><p class="noindent" >former  Plaxo  now  Google  presentation  about  portable  contacts  at  vcarddav  wg
+      http://tools.ietf.org/agenda/74/slides/vcarddav-2.pdf           http://josephsmarr.com
+      http://anyasq.com/79-im-a-technical-lead-on-the-google+-team
+      </dd><dt class="description">
+<span 
+class="cmssbx-10x-x-120">Mike Conley</span>  </dt><dd 
+class="description">
+                                                                                         
+                                                                                         
+      <!--l. 189--><p class="noindent" ><a 
+href="http://mikeconley.ca/blog/" class="url" ><span 
+class="cmtt-12">http://mikeconley.ca/blog/</span></a> working  on  a  new  address  book  for  Thunderbird:
+      <a 
+href="https://wiki.mozilla.org/Thunderbird/tb-planning" class="url" ><span 
+class="cmtt-12">https://wiki.mozilla.org/Thunderbird/tb-planning</span></a>
+      </dd></dl>
+<!--l. 202--><p class="noindent" >
+    <h3 class="sectionHead"><span class="titlemark">C.  </span> <a 
+ id="x1-11000C"></a>Implementations</h3>
+<!--l. 216--><p class="noindent" >
+    <h4 class="subsectionHead"><span class="titlemark">C.1.  </span> <a 
+ id="x1-12000C.1"></a>Servers</h4>
+<!--l. 218--><p class="noindent" >
+      <dl class="description"><dt class="description">
+<span 
+class="cmssbx-10x-x-120">owncloud</span>  </dt><dd 
+class="description">
+      <!--l. 222--><p class="noindent" >ownCloud supports syncing of calendar and contacts information via the CalDAV and
+      CardDAV protocols.
+      </dd></dl>
+<!--l. 227--><p class="noindent" >
+    <h4 class="subsectionHead"><span class="titlemark">C.2.  </span> <a 
+ id="x1-13000C.2"></a>Portable Contacts</h4>
+<!--l. 229--><p class="noindent" >
+    <h3 class="sectionHead"><span class="titlemark">D.  </span> <a 
+ id="x1-14000D"></a>Links</h3>
+      <ul class="itemize1">
+      <li class="itemize"><a 
+href="http://thesocialweb.tv" class="url" ><span 
+class="cmtt-12">http://thesocialweb.tv</span></a>
+      </li>
+      <li class="itemize"><a 
+href="http://www.vogella.de/articles/REST/article.html" class="url" ><span 
+class="cmtt-12">http://www.vogella.de/articles/REST/article.html</span></a> REST with Java (JAX-RS)
+      using Jersey - Tutorial
+      </li></ul>
+                                                                                         
+                                                                                         
+<!--l. 238--><p class="noindent" >
+    <h3 class="sectionHead"><span class="titlemark">E.  </span> <a 
+ id="x1-15000E"></a>TODO</h3>
+      <ul class="itemize1">
+      <li class="itemize">Does funambol.org has interesting implementations?</li></ul>
+     
+</body></html> 
+
+                                                                                         
+
+
