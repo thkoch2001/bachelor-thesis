@@ -7,7 +7,7 @@
 <meta name="originator" content="TeX4ht (http://www.cse.ohio-state.edu/~gurari/TeX4ht/)"> 
 <!-- html,2 --> 
 <meta name="src" content="restful_groupware.tex"> 
-<meta name="date" content="2011-11-21 10:25:00"> 
+<meta name="date" content="2011-11-21 19:25:00"> 
 <link rel="stylesheet" type="text/css" href="restful_groupware.css"> 
 </head><body 
 >
@@ -19,14 +19,63 @@ href="#tailrestful_groupwarese1.html">tail</a>] [<a
 href="restful_groupware.html#restful_groupwarese1.html" >up</a>] </p></div>
     <h3 class="sectionHead"><span class="titlemark">1.  </span> <a 
  id="x3-20001"></a>Is webdav restful?</h3>
+<!--l. 43--><p class="noindent" >Roy Fielding says no: <a 
+href="http://tech.groups.yahoo.com/group/rest-discuss/message/5874" class="url" ><span 
+class="cmtt-12">http://tech.groups.yahoo.com/group/rest-discuss/message/5874</span></a>
+<!--l. 45--><p class="indent" >    <center class="quotation"><table class="quotation" 
+border="0" cellpadding="0" cellspacing="15"><tr><td>
+        <div class="quotation">
+      <!--l. 46--><p class="indent" >  PROP* methods conflict with REST because they prevent important resources
+      from having URIs and effectively double the number of methods for no good
+      reason. Both Henrik and I argued against those methods at the time. It really
+      doesn&#8217;t matter how uniform they are because they break other aspects of the
+      overall model, leading to further complications in versioning (WebDAV versioning
+      is hopelessly complicated), access control (WebDAV ACLs are completely wrong
+      for HTTP), and just about every other extension to WebDAV that has been
+      proposed.
+      <!--l. 56--><p class="indent" >   [&#x2026;]
+      <!--l. 58--><p class="indent" >   The problem with MOVE is that it is actually an operation on two independent
+      namespaces (the source collection and destination collection). The user must
+      have permission to remove from the source collection and add to the destination
+      collection, which can be a bit of a problem if they are in different authentication
+      realms. COPY has a similar problem, but at least in that case only one namespace
+      is modified. I don&#8217;t think either of them map very well to HTTP.</div>
+<!--l. 66--><p class="noindent" ></td></tr></table></center>
+    The discussion also continued on the microformats mailing list
+<a 
+href="http://microformats.org/discuss/mail/microformats-rest/2006-April/thread.html#217" class="url" ><span 
+class="cmtt-12">http://microformats.org/discuss/mail/microformats-rest/2006-April/thread.html#217</span></a>.
+<!--l. 71--><p class="indent" >    see Amundsen2010 for a restful approach to properties.
+<!--l. 73--><p class="indent" >    Is ATOM an alternative to WebDAV?
+<!--l. 75--><p class="indent" >
+      <div class="quote">
+      <!--l. 76--><p class="noindent" >AtomPub is different from DAV in two key respects:
+     <ul class="itemize1">
+     <li class="itemize">The client doesn&#8217;t control where things go, the server does
+     </li>
+     <li class="itemize">It is allowed and expected that an AtomPub server will look at the incoming
+     information and change it (generate ID, timestamps, sanitize HTML, etc)</li></ul>
+      </div>
+<!--l. 82--><p class="noindent" >Tim Bray, http://www.imc.org/atom-protocol/mail-archive/msg11271.html
+<!--l. 86--><p class="indent" >    Examples of APIs that use REST instead of WebDAV:
+      <ul class="itemize1">
+      <li class="itemize">Amazon          S3          <a 
+href="http://awsmedia.s3.amazonaws.com/pdf/RESTandS3.pdf" class="url" ><span 
+class="cmtt-12">http://awsmedia.s3.amazonaws.com/pdf/RESTandS3.pdf</span></a>
+      <a 
+href="http://docs.amazonwebservices.com/AmazonS3/latest/dev/RESTAPI.html" class="url" ><span 
+class="cmtt-12">http://docs.amazonwebservices.com/AmazonS3/latest/dev/RESTAPI.html</span></a>
+      </li></ul>
                                                                                          
                                                                                          
-    <!--l. 42--><div class="crosslinks"><p class="noindent">[<a 
+                                                                                         
+                                                                                         
+    <!--l. 92--><div class="crosslinks"><p class="noindent">[<a 
 href="restful_groupwarese2.html" >next</a>] [<a 
 href="restful_groupwareli1.html" >prev</a>] [<a 
 href="restful_groupwareli1.html#tailrestful_groupwareli1.html" >prev-tail</a>] [<a 
 href="restful_groupwarese1.html" >front</a>] [<a 
 href="restful_groupware.html#restful_groupwarese1.html" >up</a>] </p></div>
-<!--l. 42--><p class="indent" >    <a 
+<!--l. 92--><p class="indent" >    <a 
  id="tailrestful_groupwarese1.html"></a>  
 </body></html> 
