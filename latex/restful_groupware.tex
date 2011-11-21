@@ -39,6 +39,42 @@
 \newpage{}
 
 \section{Is webdav restful?}
+\section{Kolab and its use of IMAP}
+Kolab uses an IMAP server as the data store and
+synchronization protocol for calendar and contact informations. I want to
+compare this approach to a restful one.
+
+Advantages of IMAP:
+\begin{itemize}
+\item already there, since Mail uses it
+\item can store blobs/files so no need to map the iCal/vCard files to a relational scheme
+\item out of the box support for offline work and later synchronization (How does it solve editing conflicts?)
+\end{itemize}
+Disadvantages of IMAP:
+\begin{itemize}
+\item Complicate, 38 RFCs according to \url{http://de.wikipedia.org/wiki/Internet\_Message\_Access\_Protocol} see also: \url{http://www.apps.ietf.org/rfc/ipoplist.html}
+\item All clients directly access the iCal/vCard files with no moderation layer in between. This means that no validation or normalization can be done. Schema updates can only be done if all clients cooperate.
+\item IMAP imposes a folder structure. Google's gmail is an example for another, tag based approach. Messages could have several tags. It is therefor hard to access Gmail via IMAP.
+\item Sam Varshavchik, the author of the courier Mail Transfer Agent explains the history of IMAP and claims that the IMAP standard is broken: http://www.courier-mta.org/fud/
+\item IMAP is so complicate that the IMAP wiki holds 10 pages of advises for IMAP client authors: http://www.imapwiki.org/ClientImplementation RFC 2683 ``IMAP4 Implementation Recommendations'' is a 23 pages document (cut 5 pages for verbosity) explaining how to implement another RFC standard. Is there any widely used standard that needs another RFC explaining how to implement it?
+\item \url{http://en.wikipedia.org/wiki/Internet\_Message\_Access\_Protocol#Disadvantages}
+\item Some attempts to create a simpler alternative to IMAP:
+  \begin{itemize}
+  \item http://en.wikipedia.org/wiki/POP4
+  \item \url{http://en.wikipedia.org/wiki/Simple\_Mail\_Access\_Protocol} also here http://www.courier-mta.org/cone/smap1.html
+  \item \url{http://en.wikipedia.org/wiki/Internet\_Mail\_2000}
+  \item HTTP restful: http://tools.ietf.org/id/draft-dusseault-httpmail-00.txt mailing list: https://www.ietf.org/mailman/listinfo/httpmail
+  \item BikINI is not IMAP http://bikini.caterva.org
+  \item Outlook uses HTTP to communicate with Hotmail
+  \item another rest mail proposal: http://www.prescod.net/rest/restmail/
+  \end{itemize}
+\item more rants: http://blog.gaborcselle.com/2010/02/how-to-replace-imap.html
+\item IMAP issues found by the chandler project http://chandlerproject.org/bin/view/Jungle/IntrinsicIMAPIssues
+\end{itemize}
+
+\section{Persistency for Groupware Data}
+Relational Databases vs. NoSQL databases vs. plain files
+
 \appendix
 
 \section{Standards}
