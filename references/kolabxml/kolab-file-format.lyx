@@ -1,0 +1,1298 @@
+#LyX 1.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 221
+\textclass article
+\language english
+\inputencoding auto
+\fontscheme pslatex
+\graphics default
+\paperfontsize 12
+\spacing onehalf 
+\papersize a4paper
+\paperpackage a4
+\use_geometry 0
+\use_amsmath 0
+\use_natbib 0
+\use_numerical_citations 0
+\paperorientation portrait
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation skip
+\defskip medskip
+\quotes_language english
+\quotes_times 2
+\papercolumns 1
+\papersides 1
+\paperpagestyle fancy
+
+\layout Title
+
+Kolab Storage Format 2.0
+\layout Date
+
+31 March 2004 
+\layout Author
+
+Martin Konold
+\layout Abstract
+
+A cross platform groupware solution requires in case of simultaneous use
+ of shared data e.g.
+ shared calendar or shared contacts a common fileformat independent of operating
+ system and Kolab client used to access the data.
+ Unfortunately the internal data structures of the popular MAPI based Microsoft
+ Outlook are very different from the internet standards RFC 2445 and RFC
+ 2026.
+ Different approaches to solve the issue have been proposed.
+ Sofar no final solution has been proposed.
+ This document provides an alternative solution to the problem using a redundant
+ data technique which circumvents the need for a common data format and
+ the corresponding need to adapt either the KDE Kolab client, the Outlook
+ Kolab Plugin or both to the ability to write foreign formats.
+\layout Standard
+
+Copyright (c) 2004 Martin Konold.
+ Permission is granted to copy, distribute and/or modify this document under
+ the terms of the GNU Free Documentation License, Version 1.2 or any later
+ version published by the Free Software Foundation; with no Invariant Sections,
+ no Front-Cover Texts, and no Back-Cover Texts.
+ A copy of the license is included in the section entitled "GNU Free Documentati
+on License".
+\layout Section
+
+Goal
+\layout Standard
+
+The goal is to have a Kolab storage format which allows different Kolab
+ clients either KDE or Microsoft Outlook based to access the same data simultane
+ously in a robust and reliable fashion without loosing any data or functionality.
+ This is a hard requirement for full shared calendar and shared folder support
+ in Kolab 2.0.
+\layout Section
+
+Kolab Storage Format dilemma
+\layout Standard
+
+In Kolab 1.0 we basically have two incompatible data formats for the KDE
+ Kolab Client (KMail) and the Outlook Plugins (Bynari Connector 1.x or Toltec
+ Connector 1.x).
+ While the KDE Kolab client uses icalendar based clear text representation
+ of groupware data the Outlook Plugins use serialized TNEF encoded MAPI
+ objects.
+ 
+\layout Standard
+
+
+\begin_inset Float table
+wide false
+collapsed false
+
+\layout Caption
+
+Outlook and KDE Kolab Client Dataformat
+\begin_inset LatexCommand \label{cap:Outlook-and-KDE}
+
+\end_inset 
+
+
+\layout Standard
+\added_space_top medskip \added_space_bottom medskip \align center 
+
+\begin_inset  Tabular
+<lyxtabular version="3" rows="8" columns="2">
+<features>
+<column alignment="center" valignment="top" leftline="true" width="0">
+<column alignment="center" valignment="top" leftline="true" rightline="true" width="0">
+<row topline="true" bottomline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+Outlook
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+KDE Client
+\end_inset 
+</cell>
+</row>
+<row topline="true" bottomline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+tnef
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+ical
+\end_inset 
+</cell>
+</row>
+<row topline="true" bottomline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+
+\begin_inset Formula $\vec{{M}}$
+\end_inset 
+
+
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+
+\begin_inset Formula $\vec{{N}}$
+\end_inset 
+
+
+\end_inset 
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+
+\begin_inset Formula $M_{1}$
+\end_inset 
+
+
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+
+\begin_inset Formula $N_{1}$
+\end_inset 
+
+
+\end_inset 
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+
+\begin_inset Formula $M_{2}$
+\end_inset 
+
+
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+
+\begin_inset Formula $N_{2}$
+\end_inset 
+
+
+\end_inset 
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+
+\begin_inset Formula $M_{3}$
+\end_inset 
+
+
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+
+\begin_inset Formula $N_{3}$
+\end_inset 
+
+
+\end_inset 
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+
+\begin_inset Formula $M_{4}$
+\end_inset 
+
+
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+\end_inset 
+</cell>
+</row>
+<row topline="true" bottomline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+
+\begin_inset Formula $M_{5}$
+\end_inset 
+
+
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+\end_inset 
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset 
+
+
+\end_inset 
+
+
+\layout Standard
+
+As displayed in table 
+\begin_inset LatexCommand \prettyref{cap:Outlook-and-KDE}
+
+\end_inset 
+
+ the Outlook Plugin and and the KDE Kolab Client use very different representati
+on of data using different encodings and a different numbers of attributes
+ or properties.
+ This is due to the fact that Outlook internally is using a proprietary
+ data model while the KDE Kolab Client simply uses the internet standard
+ icalendar data format.
+ MS Outlook is based on MAPI and uses a MAPI Storage provider.
+ All currently available Outlook Plugins for Kolab use a PST file as the
+ MAPI storage provider.
+ The PST file can be considered as beeing similar to a hierarchical database
+ using an access path called the MAPI entry ID in order to refer to an object.
+ MAPI knows many different MAPI storage providers including the Microsoft
+ Exchange server.
+ The later can also be considered a hierarchical object store accessed via
+ MS RPC mechanisms.
+ 
+\layout Standard
+
+Within a MAPI object there are numerious properties similar but not identical
+ to icalendar attributes.
+ The number of MAPI properties (
+\begin_inset Formula $M_{1}\cdots M_{m}$
+\end_inset 
+
+) is typically much larger than the number of icalendar atttributes (
+\begin_inset Formula $N_{1}\cdots N_{n}$
+\end_inset 
+
+) describing the same object e.g.
+ a calendar entry or a contact (vcard).
+ The later fact is shown in table 
+\begin_inset LatexCommand \ref{cap:Outlook-and-KDE}
+
+\end_inset 
+
+.
+ For every icalendar attribute (
+\begin_inset Formula $N$
+\end_inset 
+
+) there is a corresponding MAPI property (
+\begin_inset Formula $M$
+\end_inset 
+
+) but not for every MAPI property is an corresponding icalendar attribute.
+ The individual rows of the table are ordered in such a way that the vector
+ 
+\begin_inset Formula $\vec{{N}}$
+\end_inset 
+
+is compacted.
+\layout Standard
+
+This leads to the fact that a mapping from MAPI to icalendar is 
+\emph on 
+not
+\emph default 
+ reverseable.
+\layout Standard
+
+
+\begin_inset Formula \[
+\vec{{M}}\rightarrow\vec{{N}}\rightarrow\vec{{M'}}\]
+
+\end_inset 
+
+
+\begin_inset LatexCommand \label{-\vec{{M}}\rightarrow\vec{{N}}\rightarrow\vec{{M'}}}
+
+\end_inset 
+
+
+\layout Standard
+
+
+\begin_inset Formula \[
+\vec{{M}}\neq\vec{{M'}}\]
+
+\end_inset 
+
+
+\layout Section
+
+New Kolab Storage Format (Kolab 2.0 Format)
+\begin_inset LatexCommand \label{sec:New-Kolab-Storage}
+
+\end_inset 
+
+
+\layout Standard
+
+The proposed solution to the dilemma of the non reverseable and incomplete
+ mapping of MAPI and the icalendar data format as described in the previous
+ chapter is the following method based on redundant storage of attributes
+ and properties while maintaining the coherency of the data on the application
+ level.
+ We hereby assume that the KDE Kolab Client is able to parse a TNEF encoded
+ MAPI object using libktnef in order to retrieve any relevant data and that
+ the Outlook plugin is able to parse icalendar objects.
+ Actually in order to be able to parse a tnef encoded MAPI object not much
+ about MAPI object needs to be understood.
+ I verified that a simple brute force reengineering effort would be sufficient
+ in order to figure out which properties contain the required data.
+ The biggest effort is to find the most suitable property containing the
+ often redundant data.
+ E.g.
+ a MAPI object representing a calendar entry contains the names of the attendend
+ees in 
+\emph on 
+multiple
+\emph default 
+ properties simultaneously.
+ A lot of this work has already been done for the libktnef implementation
+ so that the reengineering effort is manageable.
+ 
+\layout Standard
+
+I assume that the redundancy within MAPI is due to the long history (>10
+ years) of the Windows MAPI compatibility cruft.
+ Using the data obtained from parsing the tnef encoded MAPI object the KDE
+ Kolab client is able to create a corresponding valid and complete icalendar
+ object.
+ The KDE Kolab Client can then easily store the icalendar object on the
+ Kolab server.
+ On the other hand the KDE Kolab Client is not able to either update or
+ create a tnef encoded MAPI object.
+ In case the KDE Kolab Client changes any attribute as is very common and
+ expected with shared folders the actual data stored in the icalendar object
+ is out of sync with the original MAPI object.
+\layout Standard
+
+In case a KDE Kolab Client again accesses the same object it has to detect
+ the fact that the MAPI already got previously synchronized to the icalendar
+ object and therefore the KDE Kolab Client has to consider the icalendar
+ object to be determinative while ignoring but preserving the outdated MAPI
+ object.
+\layout Standard
+
+On the other hand if the Outlook Kolab Client using an appropriate plugin
+ sees the modified object then the Outlook Kolab plugin has to read the
+ outdated TNEF encoded MAPI object and then figure out that the corresponding
+ icalendar object is newer than the MAPI object.
+ The plugin then parses the icalendar object and uses the data obtained
+ from the more recent icalendar object in order to update the outdated propertie
+s of the MAPI object while preserving the unchanged MAPI properties.
+ This method allows for preservation of MAPI specific properties not available
+ in the icalendar object while the KDE Kolab client is not required to keep
+ the tnef encoded MAPI object uptodate.
+\layout Standard
+
+
+\series bold 
+Short summary:
+\series default 
+ The basic idea is that the KDE Kolab client is able to parse both the icalendar
+ objects and the tnef encoded MAPI objects but the KDE Kolab client is only
+ able to write icalendar objects to the Kolab server while preserving TNEF
+ encoded MAPI objects.
+ On the other hand the Outlook Kolab client is expected to be able to parse
+ its own TNEF encoded MAPI objects and in addition it is required to be
+ able to parse icalendar objects as written by the KDE Kolab client.
+ The Outlook Kolab plugin is only writing TNEF encoded MAPI objects while
+ preserving icalendar objects.
+ This means that on one hand we only require both clients to be able to
+ 
+\emph on 
+parse both formats
+\emph default 
+ for 
+\emph on 
+reading
+\emph default 
+ while on the other hand the Kolab clients only need to be able to 
+\emph on 
+write
+\emph default 
+ their 
+\emph on 
+own native
+\emph default 
+ formats.
+ This requirements seems to be feasable with limited project risks.
+\layout Subsection
+
+Implementation
+\layout Standard
+
+The Kolab Storage 2.0 format is implemented using multi-part mime messages
+ as defined in RFC 2045.
+ The Content-Type of TNEF encoded MAPI object is 
+\series bold 
+application/ms-tnef
+\series default 
+.
+ The Content-Type of icalendar object is 
+\series bold 
+text/calendar
+\series default 
+.
+ Each part of the multi-part mime message has a 
+\series bold 
+Content-Description
+\series default 
+ Header Field describing a Kolab object serial number.
+ The serial number is required in order to be able to figure out which part
+ is uptodate and therefore authorative in case corresponding MAPI properties
+ and a icalendar attributes are present simultaneously.
+ Lets assume the following szenario:
+\layout Standard
+
+
+\begin_inset Formula $\vec{{M_{0}}}\rightarrow^{OL}\vec{{M_{1}}}\rightarrow^{KDE}\frac{\vec{{M_{1}}}}{\vec{{N_{1}}}}$
+\end_inset 
+
+
+\begin_inset Formula $\rightarrow^{KDE}\frac{\vec{{M_{1}}}}{\vec{{N_{2}}}}\rightarrow^{OL}\frac{\vec{{M_{3}}}}{\vec{{N_{2}}}}$
+\end_inset 
+
+
+\begin_inset Formula $\rightarrow^{KDE}\frac{\vec{{M_{3}}}}{\vec{{N_{4}}}}$
+\end_inset 
+
+
+\layout Standard
+
+In the above example the Outlook Kolab client creates a TNEF encoded multi-part
+ mime message 
+\begin_inset Formula $\vec{M_{0}}$
+\end_inset 
+
+containing a single part with the serial number 0.
+ This TNEF encoded MAPI object is then subsequentially read and modified
+ by a potentially different Outlook Kolab client.
+ The resulting modified object 
+\begin_inset Formula $\vec{{M_{1}}}$
+\end_inset 
+
+is then given the updated serial number 1.
+ In the next step a KDE Kolab client reads the multi-part mime message containin
+g only a single part with the Content-Type TNEF and notices that there is
+ no icalendar part currently present.
+ Consequently the KDE Kolab client parses the TNEF encoded part 
+\begin_inset Formula $\vec{{M_{1}}}$
+\end_inset 
+
+for all required information and creates 
+\begin_inset Formula $\vec{{N_{1}}.}$
+\end_inset 
+
+In case the KDE Kolab client then changes the object 
+\begin_inset Formula $\vec{{N_{1}}}$
+\end_inset 
+
+ it has to increase the serial number to 
+\begin_inset Formula $\vec{{N_{2}}}$
+\end_inset 
+
+.
+ The serial number of the TNEF encoded MAPI object is never modified by
+ the KDE Kolab client and vice versa.
+ In this example the subsecquent read/modify is done by the Outlook client
+ and therefore this client has to firstly read the outdated TNEF part 
+\begin_inset Formula $M_{1}$
+\end_inset 
+
+then update the resulting MAPI object to 
+\begin_inset Formula $M_{2}$
+\end_inset 
+
+using the more recent attributes from the icalendar part 
+\begin_inset Formula $N_{2}$
+\end_inset 
+
+.
+ Due to the fact that in this example there is actually a read followed
+ by a modify the Outlook Kolab client writes the 
+\begin_inset Formula $\vec{{M_{3}}}$
+\end_inset 
+
+part while preserving the 
+\begin_inset Formula $\vec{{N_{2}}}$
+\end_inset 
+
+part from the KDE Kolab client.
+ Lastly a KDE Kolab client accesses the message, reads the icalendar part
+ and notices that the TNEF part is more recent than the icalendar part.
+ Again the TNEF part is parsed and the icalendar part is updated.
+ In case the KDE Kolab client would not change the data it would write 
+\begin_inset Formula $\vec{{N_{3}}}$
+\end_inset 
+
+while preserving 
+\begin_inset Formula $\vec{{M_{3}}}$
+\end_inset 
+
+but in this example the KDE Kolab client again modifies the data and consequentl
+y writes 
+\begin_inset Formula $\vec{{N_{4}}}$
+\end_inset 
+
+while preserving 
+\begin_inset Formula $\vec{{M_{3}}}.$
+\end_inset 
+
+
+\layout Section
+
+Future icalendar based Kolab Storage Format (Kolab 3.0)
+\layout Standard
+
+With Kolab 3.0 I want to propose a new data format for Kolab based on an
+ extension of the RFC 2445.
+ This new format will avoid the need of two parts per mime message and avoid
+ unnecessary redundancy.
+ Kolab 3.0 is not subject to this paper and shall not be further discussed
+ here.
+\layout Section
+
+FAQ
+\layout Subsection
+
+Why a redundant and asymmetric format?
+\layout Standard
+
+The Kolab 2.0 format as described in Chapter 
+\begin_inset LatexCommand \ref{sec:New-Kolab-Storage}
+
+\end_inset 
+
+ can be described as asymmetric and redundant.
+ On a first glimpse this looks uncommon and unpleasant but on a second look
+ you will see that such a format actually solves some real issues.
+\layout Standard
+
+Due to the fact that there is no bijective mapping
+\begin_inset Foot
+collapsed false
+
+\layout Standard
+
+A mapping is called bijective if it is both injective and surjective.
+ A bijective mapping is also called a bijection.
+ A function f admits an inverse f^{-1} (i.e., f " is invertible") iff f^{-1}
+ it is bijective.Two sets X and Y are called bijective if there is a bijective
+ map from X to Y.
+ In this sense, "bijective" is a synonym for "equipollent" (or "equipotent").
+ Bijectivity is an equivalence relation on the class of sets.
+ 
+\end_inset 
+
+ between an icalendar and a MAPI object it is simply
+\emph on 
+ impossible
+\emph default 
+ to create a true symmetric storage format.
+ There will be always components within an object which only make sense
+ in MAPI.
+ Looking at the table 
+\begin_inset LatexCommand \ref{cap:Outlook-and-KDE}
+
+\end_inset 
+
+ which describes the compacted mapping you can easily see that there is
+ indeed a mapping from an icalendar object to a MAPI object possible but
+ not the reverse.
+\layout Standard
+
+This fact must lead to an unsymmetric data format for persistent objects
+ of both worlds.
+ One may for the sake of storage efficiency identify icalendar attributes
+ and MAPI properties which map bijectivly.
+ This optimization is subject to the Kolab storage format 3.0.
+ This format then presents a single syntax based on icalendar attributes
+ but requires extra icalendar attributes in order to store MAPI specific
+ data.
+ The later only gets interpreted and written by MAPI clients.
+\layout Standard
+
+The asymmetry of the problem will always be at least represented in the
+ asymmetry of the access with regards to read and write accesses or no accesses
+ at all.
+ A simple and always present example for such a MAPI property is the MAPI
+ entry id.
+ The entry id is mandatory for MAPI objects but meaningless for icalendar
+ objects.
+ If the entry id is not preserved we get the infameous duplication of messages
+ in Outlook as observed by users of early versions of the Bynari Plugin.
+\layout Subsection
+
+Why TNEF in the Kolab 2.0 format?
+\layout Standard
+
+TNEF is actually not the real issue with the legacy Kolab 1.0 formated MAPI
+ objects.
+ TNEF is only an encoding defined and implemented by Microsoft in order
+ to make MAPI objects persistent and transferable via email.
+ It would definetly be possible for the Kolab Outlook Plugins to use another
+ serialization method instead of the convinient builtin TNEF encoder and
+ decoder.
+ Currently there exist several rather good and complete libraries
+\begin_inset Foot
+collapsed false
+
+\layout Standard
+
+A rather good and complete implementation of a tnef parsing library with
+ additional MAPI support is ytnef http://ytnef.sourceforge.net/.
+ This library has been designed and tested especially with Outlook calendar
+ data in mind.
+\end_inset 
+
+ which can parse TNEF encoded messages very well.
+ The difficult part is not the parsing of the TNEF encoding but the disassemblin
+g of the MAPI object into meaningful data.
+ The later requires to understand the MAPI properties and their semantics.
+ Unfortunately the MAPI object format and the corresponding MAPI properties
+ are not well documented and extremly obfusicated due to the builtin backwards
+ compatibility back to the infameous MS Exchange Email client
+\begin_inset Foot
+collapsed false
+
+\layout Standard
+
+The MS Exchange client is the predecessor of MS Outlook.
+ Please also note that MS Outlook and MS Outlook Express are two distinct
+ code bases.
+\end_inset 
+
+.
+\layout Standard
+
+This leads to the need to reverse engineer the MAPI object format.
+ Fortunately the available opensource TNEF libraries ease the job of reverse
+ engineering and a simple search for unique strings in prepared MAPI objects
+ shows the relevant properties.
+ The backwards compatibility hack of the MAPI objects leads often to multiple
+ hits.
+ Using different testing patterns then reveals the correct MAPI property
+ number.
+ Sofar I could verify manually for all tested TNEF encoded MAPI calendar
+ objects that I could reveal any information required to create a complete
+ icalendar object.
+\layout Standard
+
+Due to the fact that TNEF is well supported on Windows and that TNEF encoding
+ and decoding is built into Outlook already there is no immediate gain in
+ chosing another encoding technology.
+ Therefor in order to make a robust Kolab 2.0 storage format TNEF is proposed.
+ 
+\layout Part*
+
+Index
+\layout Standard
+
+
+\series bold 
+TNEF:
+\series default 
+ Transportation Neutral Encapsulation Format (Microsoft) TNEF is a format
+ for converting a set of MAPI properties a MAPI message into a serial data
+ stream.
+ The TNEF functions are primarily used by transport providers that need
+ to encode MAPI message properties for transmission through a messaging
+ system that does not support those properties directly.
+ For example, an SMTP-based transport uses TNEF to encode properties like
+ PR_SENT_REPRESENTING, which do not have direct representations in the structure
+ of an SMTP message.
+\layout Standard
+
+The TNEF implementation defines several TNEF-specific attributes, each of
+ which corresponds to a particular MAPI property.
+ These attributes are used to encode their respective MAPI properties into
+ the TNEF stream.
+ In addition, a special attribute is defined that can be used to encapsulate
+ any MAPI property that does not have a specific attribute corresponding
+ to it.
+ The reason these attributes are defined instead of simply using a uniform
+ encoding method for all MAPI properties is to enable backward compatibility
+ with non-MAPI-compliant software that is using TNEF such as Microsoft Mail
+ 3.x and its transport providers.
+\layout Standard
+
+
+\series bold 
+MAPI:
+\series default 
+ Messaging Application Program Interface (Messaging Application Programming
+ Interface) A messaging architecture and a client interface component.
+ As a messaging architecture, MAPI enables multiple applications to interact
+ with multiple messaging systems across a variety of hardware platforms.
+ See also MAPI subsystem, messaging system.
+ As a client interface component, MAPI is the complete set of functions
+ and object-oriented interfaces that forms the foundation for the MAPI subsystem
+'s client application and service provider interfaces.
+ In comparison with Simple MAPI, Common Messaging Calls (CMC), and the CDO
+ Library, MAPI provides the highest performance and greatest degree of control
+ to messaging-based applications and service providers.
+ 
+\layout Standard
+
+
+\series bold 
+MAPI object:
+\series default 
+ An object that supports the OLE Component Object Model (COM), implementing
+ one or more interfaces derived from the IUnknown interface.
+ It is implemented or used by a MAPI compliant service provider or client
+ application, or by MAPI itself.
+ 
+\layout Standard
+
+
+\series bold 
+MAPI message storage provider:
+\series default 
+ A MAPI service provider object that manages one or more message stores,
+ handling message distribution, organization, and storage.
+ Message store providers implement the IAttach : IMAPIProp, IMAPIFolder
+ : IMAPIContainer, IMessage : IMAPIProp, IMsgStore : IMAPIProp, IMSLogon
+ : IUnknown, and IMSProvider : IUnknown interfaces.
+ For more information, see Developing a Message Store Provider.
+ 
+\layout Section
+
+GNU Free Documentation License
+\layout Standard
+
+GNU Free Documentation License Version 1.2, November 2002
+\layout Standard
+
+Copyright (C) 2000,2001,2002 Free Software Foundation, Inc.
+ 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA Everyone is permitted
+ to copy and distribute verbatim copies of this license document, but changing
+ it is not allowed.
+\layout Standard
+
+0.
+ PREAMBLE
+\layout Standard
+
+The purpose of this License is to make a manual, textbook, or other functional
+ and useful document "free" in the sense of freedom: to assure everyone
+ the effective freedom to copy and redistribute it, with or without modifying
+ it, either commercially or noncommercially.
+ Secondarily, this License preserves for the author and publisher a way
+ to get credit for their work, while not being considered responsible for
+ modifications made by others.
+\layout Standard
+
+This License is a kind of "copyleft", which means that derivative works
+ of the document must themselves be free in the same sense.
+ It complements the GNU General Public License, which is a copyleft license
+ designed for free software.
+\layout Standard
+
+We have designed this License in order to use it for manuals for free software,
+ because free software needs free documentation: a free program should come
+ with manuals providing the same freedoms that the software does.
+ But this License is not limited to software manuals; it can be used for
+ any textual work, regardless of subject matter or whether it is published
+ as a printed book.
+ We recommend this License principally for works whose purpose is instruction
+ or reference.
+\layout Standard
+
+1.
+ APPLICABILITY AND DEFINITIONS
+\layout Standard
+
+This License applies to any manual or other work, in any medium, that contains
+ a notice placed by the copyright holder saying it can be distributed under
+ the terms of this License.
+ Such a notice grants a world-wide, royalty-free license, unlimited in duration,
+ to use that work under the conditions stated herein.
+ The "Document", below, refers to any such manual or work.
+ Any member of the public is a licensee, and is addressed as "you".
+ You accept the license if you copy, modify or distribute the work in a
+ way requiring permission under copyright law.
+\layout Standard
+
+A "Modified Version" of the Document means any work containing the Document
+ or a portion of it, either copied verbatim, or with modifications and/or
+ translated into another language.
+\layout Standard
+
+A "Secondary Section" is a named appendix or a front-matter section of the
+ Document that deals exclusively with the relationship of the publishers
+ or authors of the Document to the Document's overall subject (or to related
+ matters) and contains nothing that could fall directly within that overall
+ subject.
+ (Thus, if the Document is in part a textbook of mathematics, a Secondary
+ Section may not explain any mathematics.) The relationship could be a matter
+ of historical connection with the subject or with related matters, or of
+ legal, commercial, philosophical, ethical or political position regarding
+ them.
+\layout Standard
+
+The "Invariant Sections" are certain Secondary Sections whose titles are
+ designated, as being those of Invariant Sections, in the notice that says
+ that the Document is released under this License.
+ If a section does not fit the above definition of Secondary then it is
+ not allowed to be designated as Invariant.
+ The Document may contain zero Invariant Sections.
+ If the Document does not identify any Invariant Sections then there are
+ none.
+\layout Standard
+
+The "Cover Texts" are certain short passages of text that are listed, as
+ Front-Cover Texts or Back-Cover Texts, in the notice that says that the
+ Document is released under this License.
+ A Front-Cover Text may be at most 5 words, and a Back-Cover Text may be
+ at most 25 words.
+\layout Standard
+
+A "Transparent" copy of the Document means a machine-readable copy, represented
+ in a format whose specification is available to the general public, that
+ is suitable for revising the document straightforwardly with generic text
+ editors or (for images composed of pixels) generic paint programs or (for
+ drawings) some widely available drawing editor, and that is suitable for
+ input to text formatters or for automatic translation to a variety of formats
+ suitable for input to text formatters.
+ A copy made in an otherwise Transparent file format whose markup, or absence
+ of markup, has been arranged to thwart or discourage subsequent modification
+ by readers is not Transparent.
+ An image format is not Transparent if used for any substantial amount of
+ text.
+ A copy that is not "Transparent" is called "Opaque".
+\layout Standard
+
+Examples of suitable formats for Transparent copies include plain ASCII
+ without markup, Texinfo input format, LaTeX input format, SGML or XML using
+ a publicly available DTD, and standard-conforming simple HTML, PostScript
+ or PDF designed for human modification.
+ Examples of transparent image formats include PNG, XCF and JPG.
+ Opaque formats include proprietary formats that can be read and edited
+ only by proprietary word processors, SGML or XML for which the DTD and/or
+ processing tools are not generally available, and the machine-generated
+ HTML, PostScript or PDF produced by some word processors for output purposes
+ only.
+\layout Standard
+
+The "Title Page" means, for a printed book, the title page itself, plus
+ such following pages as are needed to hold, legibly, the material this
+ License requires to appear in the title page.
+ For works in formats which do not have any title page as such, "Title Page"
+ means the text near the most prominent appearance of the work's title,
+ preceding the beginning of the body of the text.
+\layout Standard
+
+A section "Entitled XYZ" means a named subunit of the Document whose title
+ either is precisely XYZ or contains XYZ in parentheses following text that
+ translates XYZ in another language.
+ (Here XYZ stands for a specific section name mentioned below, such as "Acknowle
+dgements", "Dedications", "Endorsements", or "History".) To "Preserve the
+ Title" of such a section when you modify the Document means that it remains
+ a section "Entitled XYZ" according to this definition.
+\layout Standard
+
+The Document may include Warranty Disclaimers next to the notice which states
+ that this License applies to the Document.
+ These Warranty Disclaimers are considered to be included by reference in
+ this License, but only as regards disclaiming warranties: any other implication
+ that these Warranty Disclaimers may have is void and has no effect on the
+ meaning of this License.
+\layout Standard
+
+2.
+ VERBATIM COPYING
+\layout Standard
+
+You may copy and distribute the Document in any medium, either commercially
+ or noncommercially, provided that this License, the copyright notices,
+ and the license notice saying this License applies to the Document are
+ reproduced in all copies, and that you add no other conditions whatsoever
+ to those of this License.
+ You may not use technical measures to obstruct or control the reading or
+ further copying of the copies you make or distribute.
+ However, you may accept compensation in exchange for copies.
+ If you distribute a large enough number of copies you must also follow
+ the conditions in section 3.
+\layout Standard
+
+You may also lend copies, under the same conditions stated above, and you
+ may publicly display copies.
+\layout Standard
+
+3.
+ COPYING IN QUANTITY
+\layout Standard
+
+If you publish printed copies (or copies in media that commonly have printed
+ covers) of the Document, numbering more than 100, and the Document's license
+ notice requires Cover Texts, you must enclose the copies in covers that
+ carry, clearly and legibly, all these Cover Texts: Front-Cover Texts on
+ the front cover, and Back-Cover Texts on the back cover.
+ Both covers must also clearly and legibly identify you as the publisher
+ of these copies.
+ The front cover must present the full title with all words of the title
+ equally prominent and visible.
+ You may add other material on the covers in addition.
+ Copying with changes limited to the covers, as long as they preserve the
+ title of the Document and satisfy these conditions, can be treated as verbatim
+ copying in other respects.
+\layout Standard
+
+If the required texts for either cover are too voluminous to fit legibly,
+ you should put the first ones listed (as many as fit reasonably) on the
+ actual cover, and continue the rest onto adjacent pages.
+\layout Standard
+
+If you publish or distribute Opaque copies of the Document numbering more
+ than 100, you must either include a machine-readable Transparent copy along
+ with each Opaque copy, or state in or with each Opaque copy a computer-network
+ location from which the general network-using public has access to download
+ using public-standard network protocols a complete Transparent copy of
+ the Document, free of added material.
+ If you use the latter option, you must take reasonably prudent steps, when
+ you begin distribution of Opaque copies in quantity, to ensure that this
+ Transparent copy will remain thus accessible at the stated location until
+ at least one year after the last time you distribute an Opaque copy (directly
+ or through your agents or retailers) of that edition to the public.
+\layout Standard
+
+It is requested, but not required, that you contact the authors of the Document
+ well before redistributing any large number of copies, to give them a chance
+ to provide you with an updated version of the Document.
+\layout Standard
+
+4.
+ MODIFICATIONS
+\layout Standard
+
+You may copy and distribute a Modified Version of the Document under the
+ conditions of sections 2 and 3 above, provided that you release the Modified
+ Version under precisely this License, with the Modified Version filling
+ the role of the Document, thus licensing distribution and modification
+ of the Modified Version to whoever possesses a copy of it.
+ In addition, you must do these things in the Modified Version:
+\layout Standard
+
+A.
+ Use in the Title Page (and on the covers, if any) a title distinct from
+ that of the Document, and from those of previous versions (which should,
+ if there were any, be listed in the History section of the Document).
+ You may use the same title as a previous version if the original publisher
+ of that version gives permission.
+ B.
+ List on the Title Page, as authors, one or more persons or entities responsible
+ for authorship of the modifications in the Modified Version, together with
+ at least five of the principal authors of the Document (all of its principal
+ authors, if it has fewer than five), unless they release you from this
+ requirement.
+ C.
+ State on the Title page the name of the publisher of the Modified Version,
+ as the publisher.
+ D.
+ Preserve all the copyright notices of the Document.
+ E.
+ Add an appropriate copyright notice for your modifications adjacent to
+ the other copyright notices.
+ F.
+ Include, immediately after the copyright notices, a license notice giving
+ the public permission to use the Modified Version under the terms of this
+ License, in the form shown in the Addendum below.
+ G.
+ Preserve in that license notice the full lists of Invariant Sections and
+ required Cover Texts given in the Document's license notice.
+ H.
+ Include an unaltered copy of this License.
+ I.
+ Preserve the section Entitled "History", Preserve its Title, and add to
+ it an item stating at least the title, year, new authors, and publisher
+ of the Modified Version as given on the Title Page.
+ If there is no section Entitled "History" in the Document, create one stating
+ the title, year, authors, and publisher of the Document as given on its
+ Title Page, then add an item describing the Modified Version as stated
+ in the previous sentence.
+ J.
+ Preserve the network location, if any, given in the Document for public
+ access to a Transparent copy of the Document, and likewise the network
+ locations given in the Document for previous versions it was based on.
+ These may be placed in the "History" section.
+ You may omit a network location for a work that was published at least
+ four years before the Document itself, or if the original publisher of
+ the version it refers to gives permission.
+ K.
+ For any section Entitled "Acknowledgements" or "Dedications", Preserve
+ the Title of the section, and preserve in the section all the substance
+ and tone of each of the contributor acknowledgements and/or dedications
+ given therein.
+ L.
+ Preserve all the Invariant Sections of the Document, unaltered in their
+ text and in their titles.
+ Section numbers or the equivalent are not considered part of the section
+ titles.
+ M.
+ Delete any section Entitled "Endorsements".
+ Such a section may not be included in the Modified Version.
+ N.
+ Do not retitle any existing section to be Entitled "Endorsements" or to
+ conflict in title with any Invariant Section.
+ O.
+ Preserve any Warranty Disclaimers.
+\layout Standard
+
+If the Modified Version includes new front-matter sections or appendices
+ that qualify as Secondary Sections and contain no material copied from
+ the Document, you may at your option designate some or all of these sections
+ as invariant.
+ To do this, add their titles to the list of Invariant Sections in the Modified
+ Version's license notice.
+ These titles must be distinct from any other section titles.
+\layout Standard
+
+You may add a section Entitled "Endorsements", provided it contains nothing
+ but endorsements of your Modified Version by various parties--for example,
+ statements of peer review or that the text has been approved by an organization
+ as the authoritative definition of a standard.
+\layout Standard
+
+You may add a passage of up to five words as a Front-Cover Text, and a passage
+ of up to 25 words as a Back-Cover Text, to the end of the list of Cover
+ Texts in the Modified Version.
+ Only one passage of Front-Cover Text and one of Back-Cover Text may be
+ added by (or through arrangements made by) any one entity.
+ If the Document already includes a cover text for the same cover, previously
+ added by you or by arrangement made by the same entity you are acting on
+ behalf of, you may not add another; but you may replace the old one, on
+ explicit permission from the previous publisher that added the old one.
+\layout Standard
+
+The author(s) and publisher(s) of the Document do not by this License give
+ permission to use their names for publicity for or to assert or imply endorseme
+nt of any Modified Version.
+\layout Standard
+
+5.
+ COMBINING DOCUMENTS
+\layout Standard
+
+You may combine the Document with other documents released under this License,
+ under the terms defined in section 4 above for modified versions, provided
+ that you include in the combination all of the Invariant Sections of all
+ of the original documents, unmodified, and list them all as Invariant Sections
+ of your combined work in its license notice, and that you preserve all
+ their Warranty Disclaimers.
+\layout Standard
+
+The combined work need only contain one copy of this License, and multiple
+ identical Invariant Sections may be replaced with a single copy.
+ If there are multiple Invariant Sections with the same name but different
+ contents, make the title of each such section unique by adding at the end
+ of it, in parentheses, the name of the original author or publisher of
+ that section if known, or else a unique number.
+ Make the same adjustment to the section titles in the list of Invariant
+ Sections in the license notice of the combined work.
+\layout Standard
+
+In the combination, you must combine any sections Entitled "History" in
+ the various original documents, forming one section Entitled "History";
+ likewise combine any sections Entitled "Acknowledgements", and any sections
+ Entitled "Dedications".
+ You must delete all sections Entitled "Endorsements".
+\layout Standard
+
+6.
+ COLLECTIONS OF DOCUMENTS
+\layout Standard
+
+You may make a collection consisting of the Document and other documents
+ released under this License, and replace the individual copies of this
+ License in the various documents with a single copy that is included in
+ the collection, provided that you follow the rules of this License for
+ verbatim copying of each of the documents in all other respects.
+\layout Standard
+
+You may extract a single document from such a collection, and distribute
+ it individually under this License, provided you insert a copy of this
+ License into the extracted document, and follow this License in all other
+ respects regarding verbatim copying of that document.
+\layout Standard
+
+7.
+ AGGREGATION WITH INDEPENDENT WORKS
+\layout Standard
+
+A compilation of the Document or its derivatives with other separate and
+ independent documents or works, in or on a volume of a storage or distribution
+ medium, is called an "aggregate" if the copyright resulting from the compilatio
+n is not used to limit the legal rights of the compilation's users beyond
+ what the individual works permit.
+ When the Document is included in an aggregate, this License does not apply
+ to the other works in the aggregate which are not themselves derivative
+ works of the Document.
+\layout Standard
+
+If the Cover Text requirement of section 3 is applicable to these copies
+ of the Document, then if the Document is less than one half of the entire
+ aggregate, the Document's Cover Texts may be placed on covers that bracket
+ the Document within the aggregate, or the electronic equivalent of covers
+ if the Document is in electronic form.
+ Otherwise they must appear on printed covers that bracket the whole aggregate.
+\layout Standard
+
+8.
+ TRANSLATION
+\layout Standard
+
+Translation is considered a kind of modification, so you may distribute
+ translations of the Document under the terms of section 4.
+ Replacing Invariant Sections with translations requires special permission
+ from their copyright holders, but you may include translations of some
+ or all Invariant Sections in addition to the original versions of these
+ Invariant Sections.
+ You may include a translation of this License, and all the license notices
+ in the Document, and any Warranty Disclaimers, provided that you also include
+ the original English version of this License and the original versions
+ of those notices and disclaimers.
+ In case of a disagreement between the translation and the original version
+ of this License or a notice or disclaimer, the original version will prevail.
+\layout Standard
+
+If a section in the Document is Entitled "Acknowledgements", "Dedications",
+ or "History", the requirement (section 4) to Preserve its Title (section
+ 1) will typically require changing the actual title.
+\layout Standard
+
+9.
+ TERMINATION
+\layout Standard
+
+You may not copy, modify, sublicense, or distribute the Document except
+ as expressly provided for under this License.
+ Any other attempt to copy, modify, sublicense or distribute the Document
+ is void, and will automatically terminate your rights under this License.
+ However, parties who have received copies, or rights, from you under this
+ License will not have their licenses terminated so long as such parties
+ remain in full compliance.
+\layout Standard
+
+10.
+ FUTURE REVISIONS OF THIS LICENSE
+\layout Standard
+
+The Free Software Foundation may publish new, revised versions of the GNU
+ Free Documentation License from time to time.
+ Such new versions will be similar in spirit to the present version, but
+ may differ in detail to address new problems or concerns.
+ See http://www.gnu.org/copyleft/.
+\layout Standard
+
+Each version of the License is given a distinguishing version number.
+ If the Document specifies that a particular numbered version of this License
+ "or any later version" applies to it, you have the option of following
+ the terms and conditions either of that specified version or of any later
+ version that has been published (not as a draft) by the Free Software Foundatio
+n.
+ If the Document does not specify a version number of this License, you
+ may choose any version ever published (not as a draft) by the Free Software
+ Foundation.
+\layout Standard
+
+ADDENDUM: How to use this License for your documents
+\layout Standard
+
+To use this License in a document you have written, include a copy of the
+ License in the document and put the following copyright and license notices
+ just after the title page:
+\layout Standard
+
+Copyright (c) YEAR YOUR NAME.
+ Permission is granted to copy, distribute and/or modify this document under
+ the terms of the GNU Free Documentation License, Version 1.2 or any later
+ version published by the Free Software Foundation; with no Invariant Sections,
+ no Front-Cover Texts, and no Back-Cover Texts.
+ A copy of the license is included in the section entitled "GNU Free Documentati
+on License".
+\layout Standard
+
+If you have Invariant Sections, Front-Cover Texts and Back-Cover Texts,
+ replace the "with...Texts." line with this:
+\layout Standard
+
+with the Invariant Sections being LIST THEIR TITLES, with the Front-Cover
+ Texts being LIST, and with the Back-Cover Texts being LIST.
+\layout Standard
+
+If you have Invariant Sections without Cover Texts, or some other combination
+ of the three, merge those two alternatives to suit the situation.
+\layout Standard
+
+If your document contains nontrivial examples of program code, we recommend
+ releasing these examples in parallel under your choice of free software
+ license, such as the GNU General Public License, to permit their use in
+ free software.
+ 
+\the_end

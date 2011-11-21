@@ -39,6 +39,56 @@
 \newpage{}
 
 \section{Is webdav restful?}
+
+Roy Fielding says no: \url{http://tech.groups.yahoo.com/group/rest-discuss/message/5874}
+
+\begin{quotation}
+PROP* methods conflict with REST because they prevent
+important resources from having URIs and effectively double the
+number of methods for no good reason. Both Henrik and I argued
+against those methods at the time. It really doesn't matter
+how uniform they are because they break other aspects of the
+overall model, leading to further complications in versioning
+(WebDAV versioning is hopelessly complicated), access control
+(WebDAV ACLs are completely wrong for HTTP), and just about every
+other extension to WebDAV that has been proposed.
+
+[\ldots]
+
+The problem with MOVE is that it is actually an operation on two
+independent namespaces (the source collection and destination
+collection). The user must have permission to remove from the
+source collection and add to the destination collection, which
+can be a bit of a problem if they are in different authentication
+realms. COPY has a similar problem, but at least in that case
+only one namespace is modified. I don't think either of them map
+very well to HTTP.
+\end{quotation}
+
+The discussion also continued on the microformats mailing list
+\url{http://microformats.org/discuss/mail/microformats-rest/2006-April/thread.html#217}.
+
+see Amundsen2010 for a restful approach to properties.
+
+Is ATOM an alternative to WebDAV?
+
+\begin{quote}
+  AtomPub is different from DAV in two key respects:
+  \begin{itemize}
+  \item The client doesn't control where things go, the server does
+  \item It is allowed and expected that an AtomPub server will look at the incoming information and change it (generate ID, timestamps, sanitize HTML, etc)
+  \end{itemize}
+\end{quote}
+Tim Bray, http://www.imc.org/atom-protocol/mail-archive/msg11271.html
+
+
+
+Examples of APIs that use REST instead of WebDAV:
+\begin{itemize}
+\item Amazon S3 \url{http://awsmedia.s3.amazonaws.com/pdf/RESTandS3.pdf} \url{http://docs.amazonwebservices.com/AmazonS3/latest/dev/RESTAPI.html}
+
+\end{itemize}
+
 \section{Kolab and its use of IMAP}
 Kolab uses an IMAP server as the data store and
 synchronization protocol for calendar and contact informations. I want to
@@ -52,17 +102,17 @@ Advantages of IMAP:
 \end{itemize}
 Disadvantages of IMAP:
 \begin{itemize}
-\item Complicate, 38 RFCs according to \url{http://de.wikipedia.org/wiki/Internet\_Message\_Access\_Protocol} see also: \url{http://www.apps.ietf.org/rfc/ipoplist.html}
+\item Complicate, 38 RFCs according to \url{http://de.wikipedia.org/wiki/Internet_Message_Access_Protocol} see also: \url{http://www.apps.ietf.org/rfc/ipoplist.html}
 \item All clients directly access the iCal/vCard files with no moderation layer in between. This means that no validation or normalization can be done. Schema updates can only be done if all clients cooperate.
 \item IMAP imposes a folder structure. Google's gmail is an example for another, tag based approach. Messages could have several tags. It is therefor hard to access Gmail via IMAP.
 \item Sam Varshavchik, the author of the courier Mail Transfer Agent explains the history of IMAP and claims that the IMAP standard is broken: http://www.courier-mta.org/fud/
 \item IMAP is so complicate that the IMAP wiki holds 10 pages of advises for IMAP client authors: http://www.imapwiki.org/ClientImplementation RFC 2683 ``IMAP4 Implementation Recommendations'' is a 23 pages document (cut 5 pages for verbosity) explaining how to implement another RFC standard. Is there any widely used standard that needs another RFC explaining how to implement it?
-\item \url{http://en.wikipedia.org/wiki/Internet\_Message\_Access\_Protocol#Disadvantages}
+\item \url{http://en.wikipedia.org/wiki/Internet_Message_Access_Protocol#Disadvantages}
 \item Some attempts to create a simpler alternative to IMAP:
   \begin{itemize}
   \item http://en.wikipedia.org/wiki/POP4
-  \item \url{http://en.wikipedia.org/wiki/Simple\_Mail\_Access\_Protocol} also here http://www.courier-mta.org/cone/smap1.html
-  \item \url{http://en.wikipedia.org/wiki/Internet\_Mail\_2000}
+  \item \url{http://en.wikipedia.org/wiki/Simple_Mail_Access_Protocol} also here http://www.courier-mta.org/cone/smap1.html
+  \item \url{http://en.wikipedia.org/wiki/Internet_Mail_2000}
   \item HTTP restful: http://tools.ietf.org/id/draft-dusseault-httpmail-00.txt mailing list: https://www.ietf.org/mailman/listinfo/httpmail
   \item BikINI is not IMAP http://bikini.caterva.org
   \item Outlook uses HTTP to communicate with Hotmail
@@ -79,7 +129,8 @@ Relational Databases vs. NoSQL databases vs. plain files
 
 \section{Standards}
 \subsection{Contacts}
-%\subparagraph{IETF (RFC)}
+
+% http://www.ibiblio.org/hhalpin/homepage/notes/vcardtable.html
 \begin{description}[\breaklabel\setleftmargin{1ex}]
 
   \item[RFC 6450 vCard Format Specification]
@@ -95,11 +146,37 @@ Relational Databases vs. NoSQL databases vs. plain files
 
     This document defines the XML schema of the vCard data format. 
 
-% http://portablecontacts.net/draft-spec.html
+  % http://portablecontacts.net/draft-spec.html
   \item[Portable Contacts] 
 
     Portable Contacts defines contact data structures and a ReST API. It has
     been integrated in the OpenSocial standard.
+
+  \item[Nepomuk Semantic Desktop Contact Ontology]
+
+  % http://xmlns.com/foaf/spec/
+  \item[Friend of a friend (FOAF)] 
+
+    FOAF is a 
+
+  % http://microformats.org/wiki/hcard
+  \item[hCard]
+
+  % http://www.w3.org/TR/vcard-rdf/
+  \item[W3C vCard ontology]
+
+  % http://www.w3.org/2000/10/swap/pim/contact
+  \item[W3C PIM ontology]
+
+  % http://www.hr-xml.org
+  % http://de.wikipedia.org/wiki/HR-XML
+  
+  \item[HR XML]
+
+    The HR-XML Consortium is the only independent, non-profit, volunteer-led
+    organization dedicated to the development and promotion of a standard suite
+    of XML specifications to enable e-business and the automation of human
+    resources-related data exchanges.
 
 \end{description}
 
@@ -231,6 +308,9 @@ Relational Databases vs. NoSQL databases vs. plain files
 
 % http://notizblog.org/2011/11/17/the-long-term-failure-of-openweb/
 
+% Julian Reschke, WebDAV Experte, RFC 5995, greenbytes GmbH,Hafenweg 16, 48155 Münster , Germany
+% Mark Nottingham http://www.mnot.net/personal/
+
 \end{description}
 
 
@@ -258,7 +338,32 @@ Relational Databases vs. NoSQL databases vs. plain files
     ownCloud supports syncing of calendar and contacts information via the
     CalDAV and CardDAV protocols.
 
+  % http://www.davical.org/
+  \item[DAViCal] 
+
+    PHP, SQL storage, CalDAV, CardDav
+
 \end{description}
+
+\subsection{Clients}
+
+\begin{description}[\breaklabel\setleftmargin{1ex}]
+
+  \item[Thunderbird]
+
+    CardDAV via SoCO connector \url{http://www.sogo.nu/fr/downloads/frontends.html}
+
+  \item[Evolution]
+  \item[Akonadi]
+
+  \item[more CardDAV] \url{http://wiki.davical.org/w/CardDAV/Clients} \url{http://en.wikipedia.org/wiki/CardDAV#Implementations}
+  \item[more CalDAV]  \url{http://wiki.davical.org/w/CalDAV_Clients} \url{http://en.wikipedia.org/wiki/CalDAV#Implementations}
+
+\end{description}
+
+
+\subsection{Web Services}
+% Google Calendar http://code.google.com/apis/calendar/caldav/
 
 \subsection{Portable Contacts}
 
@@ -266,8 +371,10 @@ Relational Databases vs. NoSQL databases vs. plain files
 
 \begin{itemize}
 \item \url{http://thesocialweb.tv}
-\item \url{http://www.vogella.de/articles/REST/article.html} REST with Java (JAX-RS) using Jersey - Tutorial 
+\item \url{http://www.vogella.de/articles/REST/article.html} REST with Java (JAX-RS) using Jersey - Tutorial
+\item \url{https://addons.mozilla.org/de/firefox/addon/restclient/}
 % http://exist.sourceforge.net/
+% http://wiki.davical.org/w/CardDAV/Configuration/Well-known_URLs
 
 \end{itemize}
 
@@ -275,6 +382,9 @@ Relational Databases vs. NoSQL databases vs. plain files
 \begin{itemize}
 \item Does funambol.org has interesting implementations?
 \end{itemize}
+% LDAP wäre auch eine Möglichkeit für Addressdaten, aber:
+% kein Standardschema, Mozilla anders als Apple
+% manche Clients können evtl. Adressen aus LDAP lesen aber nicht schreiben.
 
 % http://en.wikibooks.org/wiki/LaTeX/Glossary
 \bibliography{references}{}
