@@ -125,6 +125,13 @@ Disadvantages of IMAP:
 \section{Persistency for Groupware Data}
 Relational Databases vs. NoSQL databases vs. plain files
 
+Relational databases are not practical for contacts, events or todos. Common patterns in systems that use relational DBs for that purpose:
+\begin{itemize}
+\item artificial limits of entries, e.g. only 3 email addresses per contact, because there are only three columns email1, email2 and email3.
+\item Fields for custom data like custom1 to customX
+\item EAV pattern: tables like: id, foreign\_id, type, value
+\end{itemize}
+
 \appendix
 
 \section{Standards}
@@ -161,22 +168,6 @@ Relational Databases vs. NoSQL databases vs. plain files
 
   % http://microformats.org/wiki/hcard
   \item[hCard]
-
-  % http://www.w3.org/TR/vcard-rdf/
-  \item[W3C vCard ontology]
-
-  % http://www.w3.org/2000/10/swap/pim/contact
-  \item[W3C PIM ontology]
-
-  % http://www.hr-xml.org
-  % http://de.wikipedia.org/wiki/HR-XML
-  
-  \item[HR XML]
-
-    The HR-XML Consortium is the only independent, non-profit, volunteer-led
-    organization dedicated to the development and promotion of a standard suite
-    of XML specifications to enable e-business and the automation of human
-    resources-related data exchanges.
 
 \end{description}
 
@@ -231,9 +222,6 @@ Relational Databases vs. NoSQL databases vs. plain files
 
 \end{description}
 
-
-\subparagraph{others}
-
 \subsection{out of scope}
 \begin{description}[\breaklabel\setleftmargin{1ex}]
 
@@ -250,6 +238,20 @@ Relational Databases vs. NoSQL databases vs. plain files
     JavaScript inside a Web Browser. The standard references vCard, OMA
     Converged Address Book and Portable Contacts.
 
+  % http://www.w3.org/TR/vcard-rdf/
+  \item[W3C vCard ontology]
+
+  % http://www.w3.org/2000/10/swap/pim/contact
+  \item[W3C PIM ontology]
+
+  % http://www.hr-xml.org
+  % http://de.wikipedia.org/wiki/HR-XML  
+  \item[HR XML]
+
+    The HR-XML Consortium is the only independent, non-profit, volunteer-led
+    organization dedicated to the development and promotion of a standard suite
+    of XML specifications to enable e-business and the automation of human
+    resources-related data exchanges.
 
 \end{description}
 
@@ -328,9 +330,36 @@ Relational Databases vs. NoSQL databases vs. plain files
 % webdav server http://milton.ettrema.com
 % http://jackrabbit.apache.org/jackrabbit-webdav-library.html
 % http://davmail.sourceforge.net/ Exchange GateWay using Jackrabbit
-
+% http://en.wikipedia.org/wiki/List_of_applications_with_iCalendar_support
+% Open Core: http://en.wikipedia.org/wiki/Open_core
+% http://en.wikipedia.org/wiki/Groupware
 \subsection{Servers}
 \begin{description}[\breaklabel\setleftmargin{1ex}]
+
+  % http://en.wikipedia.org/wiki/Cyn.in
+  \item[Cyn.in]
+    Python, Open Core
+
+  % http://www.davical.org/
+  \item[DAViCal] 
+
+    PHP, SQL storage, CalDAV, CardDav
+
+  \item[eGroupWare]
+
+  % http://en.wikipedia.org/wiki/EXo_Platform
+  \item[eXo Platform]
+    Open Core, Java, AGPL, participates in OpenSocial?
+
+  % http://en.wikipedia.org/wiki/Group-Office
+  \item[Group-Office]
+    PHP, AGPL
+
+  \item[Horde]
+
+  % obm.org http://en.wikipedia.org/wiki/OBM_Groupware
+  \item[OBM Groupware]
+    PHP, GPL
 
   % http://owncloud.org
   \item[owncloud]
@@ -338,10 +367,37 @@ Relational Databases vs. NoSQL databases vs. plain files
     ownCloud supports syncing of calendar and contacts information via the
     CalDAV and CardDAV protocols.
 
-  % http://www.davical.org/
-  \item[DAViCal] 
+  % http://en.wikipedia.org/wiki/Scalix
+  \item[Scalix]
+    Open Core
+    Scalix Public License (SPL) based on MPL, requires to show the Scalix Logo
 
-    PHP, SQL storage, CalDAV, CardDav
+  % http://en.wikipedia.org/wiki/Simple_Groupware
+  \item[Simple Groupware]
+    PHP, GPL, SQL
+
+  % http://en.wikipedia.org/wiki/SOGo
+  \item[SOGo]
+    CalDAV and CardDAV, written in Objective-C
+
+  % http://en.wikipedia.org/wiki/Tiki_Wiki_CMS_Groupware
+  \item[Tiki Wiki]
+    PHP, SQL
+    Contacts \url{http://doc.tiki.org/Contacts}, Calendar \url{http://doc.tiki.org/Calendar}
+    iCal export
+    apparently no CardDAV/CalDAV
+    many many features!
+
+  % http://en.wikipedia.org/wiki/Tine_2.0
+  \item[Tine 2.0]
+    Tine is not eGroupWare
+
+  % http://en.wikipedia.org/wiki/Zarafa_%28software%29
+  \item[Zarafa]
+
+  % http://en.wikipedia.org/wiki/Zimbra
+  \item[Zimbra]
+    Open Core
 
 \end{description}
 
@@ -349,12 +405,16 @@ Relational Databases vs. NoSQL databases vs. plain files
 
 \begin{description}[\breaklabel\setleftmargin{1ex}]
 
+  % http://en.wikipedia.org/wiki/Spicebird
+  \item[Spicebird]
+    built on top of Thunderbird with Calendar
+
   \item[Thunderbird]
 
     CardDAV via SoCO connector \url{http://www.sogo.nu/fr/downloads/frontends.html}
 
-  \item[Evolution]
-  \item[Akonadi]
+  \item[Evolution, Evolution Data Server]
+  \item[KDE Kontact, Akonadi]
 
   \item[more CardDAV] \url{http://wiki.davical.org/w/CardDAV/Clients} \url{http://en.wikipedia.org/wiki/CardDAV#Implementations}
   \item[more CalDAV]  \url{http://wiki.davical.org/w/CalDAV_Clients} \url{http://en.wikipedia.org/wiki/CalDAV#Implementations}
@@ -375,7 +435,8 @@ Relational Databases vs. NoSQL databases vs. plain files
 \item \url{https://addons.mozilla.org/de/firefox/addon/restclient/}
 % http://exist.sourceforge.net/
 % http://wiki.davical.org/w/CardDAV/Configuration/Well-known_URLs
-
+% https://github.com/karl/monket-google-calendar A simplified UI for Google Calendar.
+% Nuxeo switches from Python to Java: http://www.infoq.com/articles/nuxeo_python_to_java http://www.infoq.com/news/nuxeo-zope-java-migration
 \end{itemize}
 
 \section{TODO}
@@ -385,6 +446,11 @@ Relational Databases vs. NoSQL databases vs. plain files
 % LDAP wäre auch eine Möglichkeit für Addressdaten, aber:
 % kein Standardschema, Mozilla anders als Apple
 % manche Clients können evtl. Adressen aus LDAP lesen aber nicht schreiben.
+
+% Calendaring is not easy as can be seen by the impressive list of failed projects:
+% http://www.hula-project.org/ 
+% Dreaming in Code - Scott Rosenberg's software epic. about the chandler failure
+% http://xmpp.org/extensions/xep-0054.html
 
 % http://en.wikibooks.org/wiki/LaTeX/Glossary
 \bibliography{references}{}
