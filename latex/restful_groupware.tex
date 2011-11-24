@@ -132,10 +132,26 @@ Relational databases are not practical for contacts, events or todos. Common pat
 \item EAV pattern: tables like: id, foreign\_id, type, value
 \end{itemize}
 
+
+\section{Selection of components}
+
+Apache Shindig for Open Social, includes client tests
+
+http://code.google.com/p/kolab-android/
+
+https://evolvis.org/projects/kolab-ws/
+
+http://packages.ubuntu.com/source/maverick/dovecot-metadata-plugin
+https://launchpad.net/ubuntu/+source/dovecot-metadata-plugin/8-0ubuntu1
+
+
+\subsection{REST framework}
+Jersey recommended by \cite{Kaiser2011} above Restfulie and RESTeasy because of maturity and flexibility.
+
 \appendix
 
 \section{Standards}
-\subsection{Contacts}
+\subsection{Contacts / Persons}
 
 % http://www.ibiblio.org/hhalpin/homepage/notes/vcardtable.html
 \begin{description}[\breaklabel\setleftmargin{1ex}]
@@ -154,7 +170,9 @@ Relational databases are not practical for contacts, events or todos. Common pat
     This document defines the XML schema of the vCard data format. 
 
   % http://portablecontacts.net/draft-spec.html
-  \item[Portable Contacts] 
+  % http://docs.opensocial.org/display/OSD/Specs
+  % http://docs.opensocial.org/display/OSD/Enterprise+OpenSocial+Extensions link to calendar!
+  \item[Portable Contacts, OpenSocial] 
 
     Portable Contacts defines contact data structures and a ReST API. It has
     been integrated in the OpenSocial standard.
@@ -203,6 +221,15 @@ Relational databases are not practical for contacts, events or todos. Common pat
     surely be implemented by many client applications. It's remarkable that the
     API supports partial GETs returning only specified fields and the HTTP PATCH
     verb to update only specified fields.
+
+  % http://open-services.net/specifications/
+  \item[Open Services for Lifecycle Collaboration (OSLC)]
+
+    uses FOAF person \url{http://open-services.net/bin/view/Main/OSLCCoreSpecAppendixA?sortcol=table;up=#foaf_Person_Resource}
+
+    provides change management, some overlapping to iCal TODOs \url{http://open-services.net/bin/view/Main/CmSpecificationV2}
+
+    reference implementation: \url{http://eclipse.org/lyo}
 
 \end{description}
 
@@ -320,6 +347,8 @@ Relational databases are not practical for contacts, events or todos. Common pat
 \section{Implementations}
 
 % http://wiki.portablecontacts.net/w/page/17776143/Software%20and%20Services%20using%20Portable%20Contacts
+% http://docs.opensocial.org/display/OSD/List+of+OpenSocial+Containers
+
 % http://en.wikipedia.org/wiki/List_of_applications_with_iCalendar_support
 % http://syncevolution.org/
 % http://www.janrain.com/solutions/supported-networks
@@ -397,7 +426,9 @@ Relational databases are not practical for contacts, events or todos. Common pat
 
   % http://en.wikipedia.org/wiki/Zimbra
   \item[Zimbra]
-    Open Core
+    Open Core, Own license (Zimbra Public License),
+    RFP since 2008 open: http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=498316
+    
 
 \end{description}
 

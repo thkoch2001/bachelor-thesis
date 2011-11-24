@@ -11,6 +11,15 @@
   timestamp = {2011.11.11}
 }
 
+@BOOK{Burke2009,
+  title = {RESTful Java with Jax-RS},
+  publisher = {O'Reilly},
+  year = {2009},
+  author = {Burke, Bill},
+  edition = {1st},
+  isbn = {0596158041, 9780596158040}
+}
+
 @TECHREPORT{RFC6352,
   author = {C. Daboo},
   title = {CardDAV: vCard Extensions to Web Distributed Authoring and Versioning
@@ -102,7 +111,6 @@
   year = {2004},
   author = {Dusseault, L.},
   series = {Prentice Hall series in computer networking and distributed systems},
-  __markedentry = {[thkoch:]},
   isbn = {9780130652089},
   lccn = {2003050879},
   owner = {thkoch},
@@ -129,6 +137,124 @@
   url = {http://doi.acm.org/10.1145/337180.337228}
 }
 
+@MASTERSTHESIS{Huebner2009,
+  author = {Hübner, Harry},
+  title = {Implementierung der OpenSocial-API in der Communityumgebung für das
+	Fernstudium},
+  school = {Fernuniversität Hagen, Lehrgebiet Informationssysteme und Datenbanken},
+  year = {2009},
+  type = {Bachelor thesis},
+  month = {6},
+  comment = {ha.huebner@nexgo.de
+	
+	https://www.xing.com/profile/Harry_Huebner2},
+  file = {:/home/thkoch/Desktop/studium/bachelor_thesis/references/opensocial/impl_opensocial_in_fernuni_community.pdf:PDF},
+  owner = {thkoch},
+  timestamp = {2011.11.24},
+  url = {harry011.files.wordpress.com/2009/06/opensocial_containerimpl.pdf}
+}
+
+@MASTERSTHESIS{Kaiser2011,
+  author = {Kaiser, Guido},
+  title = {Modellierung und Vergleich von Implementierungen einer REST-Anwendung
+	in verschiedenen Sprachen},
+  school = {Fernuniversität Hagen},
+  year = {2011},
+  type = {Master thesis},
+  month = {1},
+  abstract = {Aufgabenstellung
+	
+	
+	Representational State Transfer (REST) [1] gewinnt zunehmend an Bedeutung,
+	insbesondere im Bereich RESTful Webservices [2,3]. REST ist ein Architekturstil
+	für verteilte Hypermedia Systeme, der 2000 von Roy Fielding in seiner
+	Dissertation vorgestellt wurde [1]. Die wohl bekannteste Implementierung
+	von REST ist HTTP.
+	
+	
+	Gerade im Bereich der Modellierung von REST-Anwendungen gibt es noch
+	keine einheitlichen Methoden und Techniken. Für die Implementierung
+	solcher Anwendungen gibt es jedoch schon einige Frameworks [4-8]
+	für verschiedene Programmiersprachen.
+	
+	
+	Als Beispielanwendung soll ein Webphotoalbum, ähnlich wie Picasa [9]
+	oder flickr [10], verwendet werden.
+	
+	
+	Zunächst soll der Anwendungsfall analysiert, eine entsprechende REST-Schnittstelle
+	entworfen und diese anschließend in drei verschiedenen Sprachen,
+	z.B. Java, .NET und php, implementiert und verglichen werden. Die
+	Analyse und Modellierung sowie der Vergleich der Implementierung
+	soll Rückschlüsse und Hinweise für das REST-Metamodell liefern, das
+	zur Zeit am Lehrgebiet Datenverarbeitungstechnik entwickelt wird.
+	
+	
+	Dazu ist zunächst eine Einarbeitung in REST sowie die Frameworks der
+	verschiedenen Sprachen notwendig. Anschließend muss der Anwendungsfall
+	genau analysisiert und der Entwurf bewertet werden. Des weiteren
+	müssen Kriterien für den Vergleich der verschiedenen Implementierungen
+	erarbeitet werden und diese auf die fertigen Implementierungen angewendet
+	werden. Zusätzlich zu der eigentlichen REST-Anwendung auf dem Server
+	sollen auch zugehörige Client-Anwendungen in den drei Sprachen entwickelt
+	werden und diese jeweils mit allen drei Servern getestet werden.
+	
+	Zusammenfassung der Arbeit
+	
+	
+	Der Architekturstil Representational State Transfer (REST) gewinnt
+	bei der Verwendung von Webservices immer mehr an Bedeutung. Dabei
+	fehlt es noch an einheitlichen Methoden, Techniken und Praktiken
+	für den Entwurf und der Implementierung einer REST-Schnittstelle.
+	Es existieren bereits verschiedene Frameworks für unterschiedliche
+	Programmiersprachen, die eine aktive Unterstützung für die Entwicklung
+	einer RESTful, also einer zu REST konformen, Schnittstelle bieten.
+	Der Architekturstil definiert einige Prinzipien, auf denen auch das
+	Hypertext Transfer Protocol (HTTP) basiert, um verteilte
+	
+	Anwendungen zu entwickeln.
+	
+	
+	Diese Masterarbeit befasst sich mit der Verwendbarkeit von verschiedenen
+	Programmiersprachen, Technologien und der Kombination verschiedener
+	Frameworks, um eine REST-Schnittstelle zu implementieren. Zum Vergleich
+	werden die Sprachen Java, PHP und C# ausgewählt, in denen jeweils
+	ein Client und ein Server implementiert werden. Das System sollte
+	in Anlehnung an Flickr und Picasa ein Web-Fotoalbum realisieren.
+	Im Verlauf der Arbeit werden verschiedene Frameworks vorgestellt,
+	gegenübergestellt und für die Umsetzung der Anwendung verwendet.
+	Abschließend werden die verwendeten Frameworks und die unterschiedlichen
+	Implementierungen miteinander verglichen.
+	
+	
+	Diese Arbeit zeigt, dass es gute Frameworks gibt, mit denen es einfach
+	ist, einen RESTful-Webservice zu entwickeln. Grundsätzlich ähneln
+	sich die größeren Frameworks vom Funktionsumfang und von der Art
+	und Weise der Realisierung. Manche Prinzipien, wie beispielsweise
+	Hypermedia, werden bisher von den vorhandenen Frameworks nicht aktiv
+	unterstützt. Dies kann allerdings durch den Entwickler mit Werkzeugen
+	der Frameworks ausgeglichen werden. Die Vergleiche, der hier durchgeführten
+	Implementierungen, haben gezeigt, dass die Frameworks sich bei der
+	Generierung von HTTP-Status-Codes und in der Unterstützung der Repräsentationsformate
+	unterscheiden. Zum Teil ist es sogar notwendig, direkt in das Framework
+	einzugreifen, um eine identische Repräsentation einer Ressource zu
+	erhalten.
+	
+	
+	Der Vergleich des in dieser Ausarbeitung entwickelten Application
+	Programming Interface (API) mit denen ähnlicher Projekte zeigt, dass
+	es APIs gibt, die auf REST basieren sollen, aber nicht RESTful sind.
+	Die Ursache hierfür ist, dass sie gegen die Prinzipien verstoßen
+	oder beim Entwurf der Ressourcen nicht nach der Resource-oriented
+	Architecture (ROA) vorgehen, sondern eher klassisch nach einer Service-oriented
+	Architecture (SOA), wie beispielsweise bei einer Remote Procedure
+	Call (RPC) Schnittstelle.},
+  file = {:/home/thkoch/Desktop/studium/bachelor_thesis/references/rest/Masterarbeit-kaiser_rest_in_verschiedenen_sprachen.pdf:PDF},
+  owner = {thkoch},
+  timestamp = {2011.11.23},
+  url = {http://www.fernuni-hagen.de/dvt/studium/masterarbeiten_9.shtml}
+}
+
 @TECHREPORT{Kendall1994,
   author = {Kendall, Samuel C. and Waldo, Jim and Wollrath, Ann and Wyant, Geoff},
   title = {A Note on Distributed Computing},
@@ -136,6 +262,18 @@
   address = {Mountain View, CA, USA},
   file = {:/home/thkoch/Desktop/studium/bachelor_thesis/references/protocol_design/a_note_on_distributed_computing.pdf:PDF},
   publisher = {Sun Microsystems, Inc.}
+}
+
+@BOOK{LeBlanc2011,
+  title = {Programming Social Applications: Building Viral Experiences with
+	OpenSocial, OAuth, OpenID, and Distributed Web Frameworks},
+  publisher = {O'Reilly},
+  year = {2011},
+  author = {LeBlanc, J.},
+  __markedentry = {[thkoch:6]},
+  isbn = {9781449315276},
+  owner = {thkoch},
+  timestamp = {2011.11.24}
 }
 
 @TECHREPORT{RFC5333,
@@ -214,6 +352,15 @@
   timestamp = {2011.11.21}
 }
 
+@BOOK{Richardson2007,
+  title = {Restful web services},
+  publisher = {O'Reilly},
+  year = {2007},
+  author = {Richardson, Leonard and Ruby, Sam},
+  edition = {First},
+  isbn = {9780596529260}
+}
+
 @TECHREPORT{RFC3117,
   author = {M. Rose},
   title = {On the Design of Application Protocols},
@@ -226,6 +373,52 @@
   owner = {thkoch},
   publisher = {{RFC Editor}},
   timestamp = {2011.11.21}
+}
+
+@MASTERSTHESIS{Schneider2010,
+  author = {Schneider, Andreas},
+  title = {Vergleich und Beurteilung von Java Frameworks für Web Services mit
+	REST},
+  school = {Fernuniversität Hagen},
+  year = {2010},
+  type = {Diplomarbeit},
+  month = {2},
+  abstract = {Der Architekturstil REST wurde von Roy T. Fielding im Rahmen seiner
+	Dissertation entworfen und im Jahr 2000 veröffentlicht. Hierbei handelt
+	es sich um einen Stil für verteilte Systeme wie das World Wide Web.
+	Der Fokus liegt bei REST auf den Ressourcen, das sind die Objekte
+	einer Web Anwendung. Auch in jüngerer Zeit erfreut sich REST einer
+	wachsenden Bedeutung. So gibt es inzwischen eine Vielzahl von Frameworks,
+	die die Erstellung von Web Services nach den Prinzipien von REST
+	unterstützen.
+	
+	
+	Ziel dieser Arbeit war es, einige dieser Frameworks für die Programmiersprache
+	Java zu untersuchen, zu vergleichen und zu beurteilen. Hierfür wurden
+	folgende Frameworks festgelegt: die Java Servlet-API, die JAX-WS
+	Referenz-Implementierung Metro, Jersey und RESTEasy als Implementierungen
+	von JAX-RS, Restlet in den Versionen 1.1 und 2.0 sowie Spring-MVC.
+	
+	
+	Zunächst wurde ein Fragenkatalog auf Basis der Dissertation von Roy
+	Fielding abgeleitet. Dieser Katalog diente als Untersuchungsgrundlage
+	für die ausgewählten Frameworks. Weiterhin wurde eine Beispielanwendung
+	entworfen, welche anschließend mit jedem Framework implementiert
+	wurde. Bei dem Entwurf stand die Abbildung verschiedenartiger Ressourcen
+	im Vordergrund, um den jeweiligen Umgang in den Frameworks zu untersuchen.
+	
+	
+	Als weiteres Werkzeug wurde ein Testclient auf Basis des Apache HTTP
+	Clients entwickelt. Dadurch war es relativ einfach möglich, eine
+	identische Abfolge von Requests an die implementierten Web Services
+	zu schicken und die Antworten auszuwerten. Die so gewonnenen Ergebnisse
+	wurden für die einzelnen Frameworks ausführlich dargestellt, um deren
+	Stärken und Schwächen hervorzuheben. Anschließend wurden diese in
+	einem Vergleich gegenübergestellt.},
+  file = {:/home/thkoch/Desktop/studium/bachelor_thesis/references/rest/Diplomarbeit-schneider_vergleich_rest_frameworks.pdf:PDF},
+  owner = {thkoch},
+  timestamp = {2011.11.23},
+  url = {http://www.fernuni-hagen.de/dvt/studium/themen_11.shtml}
 }
 
 @TECHREPORT{RFC2739,
@@ -250,7 +443,7 @@
   type = {{RFC}},
   number = {5218},
   month = {July},
-  __markedentry = {[thkoch:6]},
+  __markedentry = {[thkoch:]},
   howpublished = {Internet Requests for Comments},
   owner = {thkoch},
   publisher = {{RFC Editor}},
@@ -278,6 +471,14 @@
   publisher = {innoq},
   timestamp = {2011.11.09},
   url = {http://www.sigs.de/publications/os/2006/05/tilkov_ghadir_OS_05_06.pdf}
+}
+
+@BOOK{Webber2010,
+  title = {REST in Practice: Hypermedia and Systems Architecture},
+  publisher = {O'Reilly},
+  year = {2010},
+  author = {Webber, Jim},
+  isbn = {978-0-596-80582-1}
 }
 
 @ARTICLE{Whitehead:2004:WPD:991078.991081,
@@ -318,8 +519,9 @@
 1 ExplicitGroup:calendaring\;0\;RFC2739\;RFC4791\;RFC5333\;RFC5545\;RF
 C5546\;RFC6047\;RFC6321\;;
 1 ExplicitGroup:contacts\;0\;RFC6350\;RFC6351\;RFC6352\;;
-1 ExplicitGroup:REST\;0\;Amundsen2010\;Fielding:2000:PDM:337180.337228
-\;Mogul:2004:CFH:991078.991080\;Tilkov2006\;Tilkov2011\;;
+1 ExplicitGroup:REST\;0\;Amundsen2010\;Burke2009\;Fielding:2000:PDM:33
+7180.337228\;Kaiser2011\;Mogul:2004:CFH:991078.991080\;Richardson2007\
+;Schneider2010\;Tilkov2006\;Tilkov2011\;Webber2010\;;
 1 ExplicitGroup:webdav\;0\;Amundsen2010\;Dusseault2004\;RFC4918\;White
 head:2004:WPD:991078.991081\;;
 }
