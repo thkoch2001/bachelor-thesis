@@ -132,6 +132,12 @@ Relational databases are not practical for contacts, events or todos. Common pat
 \item EAV pattern: tables like: id, foreign\_id, type, value
 \end{itemize}
 
+\section{Hypermedia}
+\subsection{Hypermedia in OpenSocial}
+
+Webfinger, e.g. get a profile picture from an email address
+
+Danger: One can trigger a http request by sending an email.
 
 \section{Selection of components}
 
@@ -246,6 +252,29 @@ Jersey recommended by \cite{Kaiser2011} above Restfulie and RESTeasy because of 
 
     Specifies how to exchange calendaring data via e-mail. This is the new
     version and obsoletes RFC2447.
+
+\end{description}
+
+\subsection{Relations and Links}
+% http://code.google.com/apis/socialgraph/
+\begin{description}[\breaklabel\setleftmargin{1ex}]
+
+  % http://gmpg.org/xfn/
+  \item[Xhtml Friends Network (XFN)] 
+
+    One of the relations returned by Google's webfinger.
+
+  % https://datatracker.ietf.org/doc/draft-jones-appsawg-webfinger/
+  \item[Webfinger]
+    Webfinger in Firefox Contacts Add-On \url{http://mozillalabs.com/blog/2010/03/contacts-in-the-browser-0-2-released/}
+
+  \item[RFC 6415 Web Host Metadata]
+
+  % http://docs.oasis-open.org/xri/xrd/v1.0/xrd-1.0.html
+  % http://en.wikipedia.org/wiki/XRDS
+  % http://code.google.com/p/webfinger/wiki/CommonLinkRelations
+  % http://hueniverse.com/category/discovery/
+  \item[Extensible Resource Descriptor (XRD)] 
 
 \end{description}
 

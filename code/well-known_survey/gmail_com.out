@@ -1,0 +1,25 @@
+* About to connect() to gmail.com port 80 (#0)
+*   Trying 74.125.39.18...   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0connected
+* Connected to gmail.com (74.125.39.18) port 80 (#0)
+> GET /.well-known/host-meta HTTP/1.1
+> User-Agent: curl/7.21.7 (x86_64-pc-linux-gnu) libcurl/7.21.7 OpenSSL/1.0.0e zlib/1.2.3.4 libidn/1.22 libssh2/1.2.8 librtmp/2.3
+> Host: gmail.com
+> Accept: */*
+> 
+< HTTP/1.1 200 OK
+< Content-Type: application/xrd+xml
+< Date: Fri, 25 Nov 2011 10:46:53 GMT
+< Expires: Fri, 25 Nov 2011 10:46:53 GMT
+< Cache-Control: private, max-age=0
+< X-Content-Type-Options: nosniff
+< X-Frame-Options: SAMEORIGIN
+< X-XSS-Protection: 1; mode=block
+< Server: GSE
+< Transfer-Encoding: chunked
+< 
+{ [data not shown]
+100   518    0   518    0     0   6190      0 --:--:-- --:--:-- --:--:-- 12046
+* Connection #0 to host gmail.com left intact
+* Closing connection #0

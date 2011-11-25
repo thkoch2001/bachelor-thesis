@@ -1,0 +1,22 @@
+* About to connect() to identi.ca port 80 (#0)
+*   Trying 174.142.114.102...   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0connected
+* Connected to identi.ca (174.142.114.102) port 80 (#0)
+> GET /.well-known/host-meta HTTP/1.1
+> User-Agent: curl/7.21.7 (x86_64-pc-linux-gnu) libcurl/7.21.7 OpenSSL/1.0.0e zlib/1.2.3.4 libidn/1.22 libssh2/1.2.8 librtmp/2.3
+> Host: identi.ca
+> Accept: */*
+> 
+< HTTP/1.1 200 OK
+< Date: Fri, 25 Nov 2011 10:47:08 GMT
+< Server: Apache/2.2.14 (Ubuntu)
+< X-Powered-By: PHP/5.3.8-1ppa1
+< Vary: Accept-Encoding,Cookie
+< Content-Length: 273
+< Content-Type: application/xrd+xml
+< 
+{ [data not shown]
+100   273  100   273    0     0    890      0 --:--:-- --:--:-- --:--:--  1615100   273  100   273    0     0    890      0 --:--:-- --:--:-- --:--:--  1615
+* Connection #0 to host identi.ca left intact
+* Closing connection #0

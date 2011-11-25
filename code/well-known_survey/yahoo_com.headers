@@ -1,0 +1,24 @@
+HTTP/1.1 301 Moved Permanently
+Date: Fri, 25 Nov 2011 10:46:54 GMT
+Location: http://www.yahoo.com/.well-known/host-meta
+Vary: Accept-Encoding
+Content-Type: text/html; charset=utf-8
+Cache-Control: private
+X-Pad: avoid browser bug
+Age: 0
+Transfer-Encoding: chunked
+Connection: keep-alive
+Server: YTS/1.20.0
+
+HTTP/1.1 200 OK
+Date: Fri, 25 Nov 2011 10:46:54 GMT
+P3P: policyref="http://info.yahoo.com/w3c/p3p.xml", CP="CAO DSP COR CUR ADM DEV TAI PSA PSD IVAi IVDi CONi TELo OTPi OUR DELi SAMi OTRi UNRi PUBi IND PHY ONL UNI PUR FIN COM NAV INT DEM CNT STA POL HEA PRE LOC GOV"
+Cache-Control: private
+Last-Modified: Tue, 20 Sep 2011 16:43:44 GMT
+Accept-Ranges: bytes
+Content-Type: text/plain; charset=utf-8
+Age: 0
+Transfer-Encoding: chunked
+Connection: keep-alive
+Server: YTS/1.20.0
+

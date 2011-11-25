@@ -1,0 +1,14 @@
+HTTP/1.1 200 OK
+Date: Fri, 25 Nov 2011 10:46:59 GMT
+Content-Type: application/xrd+xml
+Transfer-Encoding: chunked
+Connection: keep-alive
+Server: Apache
+Set-Cookie: PHPSESSID=4a7e214fd2666c05bc683fcd4615544986aec675; path=/; domain=.studivz.net; HttpOnly
+Expires: Thu, 19 Nov 1981 08:52:00 GMT
+Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0
+Pragma: no-cache
+X-Frame-Options: SAMEORIGIN
+X-Frontend: lnxp-3675
+X-J: lnxp-3202
+

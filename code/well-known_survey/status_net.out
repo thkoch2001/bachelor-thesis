@@ -1,0 +1,26 @@
+* About to connect() to status.net port 80 (#0)
+*   Trying 174.142.114.107...   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0connected
+* Connected to status.net (174.142.114.107) port 80 (#0)
+> GET /.well-known/host-meta HTTP/1.1
+> User-Agent: curl/7.21.7 (x86_64-pc-linux-gnu) libcurl/7.21.7 OpenSSL/1.0.0e zlib/1.2.3.4 libidn/1.22 libssh2/1.2.8 librtmp/2.3
+> Host: status.net
+> Accept: */*
+> 
+< HTTP/1.1 200 OK
+< Date: Fri, 25 Nov 2011 13:49:23 GMT
+< Server: Apache/2.2.11 (Ubuntu) PHP/5.2.6-3ubuntu4.6 with Suhosin-Patch mod_python/3.3.1 Python/2.6.2 mod_ssl/2.2.11 OpenSSL/0.9.8g
+< X-Powered-By: PHP/5.2.6-3ubuntu4.6
+< Set-Cookie: SESS85b527a5b3b232cae3f8fc977c39e695=b975f1ba7b59f277108f5b7ee150f38e; expires=Sat, 26 Nov 2011 13:49:23 GMT; path=/; domain=.status.net
+< Expires: Sun, 19 Nov 1978 05:00:00 GMT
+< Last-Modified: Fri, 25 Nov 2011 13:49:23 GMT
+< Cache-Control: store, no-cache, must-revalidate
+< Cache-Control: post-check=0, pre-check=0
+< Content-Length: 269
+< Content-Type: application/xrd+xml
+< 
+{ [data not shown]
+100   269  100   269    0     0    779      0 --:--:-- --:--:-- --:--:--  1331
+* Connection #0 to host status.net left intact
+* Closing connection #0

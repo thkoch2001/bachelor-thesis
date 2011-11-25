@@ -1,0 +1,28 @@
+* About to connect() to studivz.net port 80 (#0)
+*   Trying 217.188.35.145...   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0connected
+* Connected to studivz.net (217.188.35.145) port 80 (#0)
+> GET /.well-known/host-meta HTTP/1.1
+> User-Agent: curl/7.21.7 (x86_64-pc-linux-gnu) libcurl/7.21.7 OpenSSL/1.0.0e zlib/1.2.3.4 libidn/1.22 libssh2/1.2.8 librtmp/2.3
+> Host: studivz.net
+> Accept: */*
+> 
+< HTTP/1.1 200 OK
+< Date: Fri, 25 Nov 2011 10:46:59 GMT
+< Content-Type: application/xrd+xml
+< Transfer-Encoding: chunked
+< Connection: keep-alive
+< Server: Apache
+< Set-Cookie: PHPSESSID=4a7e214fd2666c05bc683fcd4615544986aec675; path=/; domain=.studivz.net; HttpOnly
+< Expires: Thu, 19 Nov 1981 08:52:00 GMT
+< Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0
+< Pragma: no-cache
+< X-Frame-Options: SAMEORIGIN
+< X-Frontend: lnxp-3675
+< X-J: lnxp-3202
+< 
+{ [data not shown]
+100   373    0   373    0     0   3255      0 --:--:-- --:--:-- --:--:--  6660100   373    0   373    0     0   3253      0 --:--:-- --:--:-- --:--:--  6660
+* Connection #0 to host studivz.net left intact
+* Closing connection #0

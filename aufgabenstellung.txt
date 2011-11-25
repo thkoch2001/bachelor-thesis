@@ -1,0 +1,39 @@
+Entwicklung einer REST-konformen Schnittstelle für die 
+Opensource-Groupware Kolab mit Unterstützung verschiedener Medientypen
+
+Für die Opensource-Groupware Kolab [1] gibt es bisher ein PHP-basiertes 
+Web-Frontend. Als Alternative dazu soll eine REST-konforme Schnittstelle 
+[2] für die Kontaktfunktionalität entwickelt werden. Um die Anbindung an 
+verschiedene Clienten zu unterstützen sollen die folgenden Medientypen 
+unterstützt werden:
+   * vCard [3]: Für die Darstellung von Kontaktdaten eignet sich vCard, 
+auch hier muss untersucht werden inwiefern die Daten aus Kolab 
+abgebildet werden können.
+   * Contact Schema von portablecontacts.net [4]: Dieses JSON-Format, 
+das auf vCard basiert, findet inzwischen auch in Open Social [5] Verwendung.
+   * XHTML [6]: XHTML eignet sich primär für menschliche Clients und 
+kann beliebige Daten enthalten. Hierbei soll auch untersucht werden, 
+inwiefern die Daten mit Hilfe von Microdata angereichert werden können, 
+so dass dieses Format auch für maschinelle Clienten nutzbar wird.
+        
+Bei der Implementierung soll untersucht werden, welche Komponenten des 
+Entwurfs für die Unterstützung verschiedener Medientypen gemeinsam 
+genutzt bzw. wiederverwendet werden können. Außerdem soll die 
+Hypermediaunterstützung[2] der verschiedenen Formate untersucht werden: 
+Wie viel muss ein Client vorher wissen und wie viel kann er durch 
+Hyperlinks entdecken?
+
+[1] http://kolab.org
+[2] http://www.ics.uci.edu/~fielding/pubs/dissertation/top.htm
+[3] 
+http://datatracker.ietf.org/doc/draft-ietf-vcarddav-vcardrev/?include_text=1
+[4] http://portablecontacts.net/draft-spec.html#schema
+[5] http://docs.opensocial.org/display/OS/Home
+[6] http://datatracker.ietf.org/doc/draft-ietf-vcarddav-vcardrev/
+
+optionale Ergänzungen:
+- CardDAV als alternatives Protokoll mit Untersuchung der 
+Wiederverwendbarkeit der Komponenten
+- Mitbetrachtung der Kalenderfunktionalität bei der Hypermediaunterstützung
+- zumindest lesender Zugriff auf die Kalenderfunktionalität über die 
+REST-Schnittstelle

@@ -1,0 +1,17 @@
+HTTP/1.1 301 Moved Permanently
+Server: nginx/0.8.53
+Date: Fri, 25 Nov 2011 10:48:59 GMT
+Content-Type: text/html
+Content-Length: 185
+Connection: keep-alive
+Location: https://joindiaspora.com/.well-known/host-meta
+
+HTTP/1.1 200 OK
+Server: nginx/0.8.53
+Date: Fri, 25 Nov 2011 10:48:59 GMT
+Content-Type: text/html
+Content-Length: 319
+Last-Modified: Thu, 03 Nov 2011 18:43:08 GMT
+Connection: keep-alive
+Accept-Ranges: bytes
+

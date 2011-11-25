@@ -1,0 +1,17 @@
+HTTP/1.0 301 Moved Permanently
+Location: http://www.xing.com/.well-known/host-meta
+Server: BigIP
+Connection: Keep-Alive
+Content-Length: 0
+
+HTTP/1.0 200 OK
+Server: Apache
+Last-Modified: Tue, 25 Oct 2011 11:08:46 GMT
+X-Cnection: close
+Content-Type: text/plain; charset=UTF-8
+X-UA-Compatible: IE=edge
+X-XSS-Protection: 1; mode=block
+Date: Fri, 25 Nov 2011 10:47:15 GMT
+Content-Length: 340
+Connection: close
+

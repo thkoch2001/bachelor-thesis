@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- NOTE: this host-meta end point is based on draft 16 of the IETF 'Web Host Metadata Standard' -->
+<XRD xmlns='http://docs.oasis-open.org/ns/xri/xrd-1.0' 
+     xmlns:hm='http://host-meta.net/xrd/1.0'>
+ 
+  <!-- Host-wide Information -->
+  <Subject>yahoo.com</Subject>
+  <Link rel='hub' 
+        href='http://yhub.yahoo.com' />
+  <Link rel='http://specs.openid.net/auth/2.0/provider' 
+        href='https://open.login.yahooapis.com/openid/op/auth'>
+    <Title>OpenID 2.0 Provider</Title>
+  </Link>
+    
+  <!-- Resource-specific Information -->
+  <Link rel='lrdd' 
+        template='https://open.login.yahooapis.com/query?uri={uri}'>
+    <Title>Resource Descriptor</Title>
+  </Link>
+  <Link rel='http://portablecontacts.net/spec/1.0#me' 
+        template='http://social.yahooapis.com/v1/users.email({uri})/profile/tinyusercard/open?format=json'/>
+  <Link rel='describedby' 
+        template='http://profiles.yahoo.com/{uri}' 
+        type='text/html'/>
+</XRD>

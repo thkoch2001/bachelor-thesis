@@ -1,0 +1,23 @@
+* About to connect() to us.ccnet.us port 80 (#0)
+*   Trying 64.130.10.13...   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0connected
+* Connected to us.ccnet.us (64.130.10.13) port 80 (#0)
+> GET /.well-known/host-meta HTTP/1.1
+> User-Agent: curl/7.21.7 (x86_64-pc-linux-gnu) libcurl/7.21.7 OpenSSL/1.0.0e zlib/1.2.3.4 libidn/1.22 libssh2/1.2.8 librtmp/2.3
+> Host: us.ccnet.us
+> Accept: */*
+> 
+< HTTP/1.1 200 OK
+< Date: Fri, 25 Nov 2011 13:49:23 GMT
+< Server: Apache/2.2.21
+< Last-Modified: Sun, 21 Nov 2010 08:22:59 GMT
+< ETag: "12c-4958bd8e93ec0"
+< Accept-Ranges: bytes
+< Content-Length: 300
+< Content-Type: text/plain
+< 
+{ [data not shown]
+100   300  100   300    0     0    569      0 --:--:-- --:--:-- --:--:--  1829
+* Connection #0 to host us.ccnet.us left intact
+* Closing connection #0

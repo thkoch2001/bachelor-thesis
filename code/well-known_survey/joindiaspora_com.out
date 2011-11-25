@@ -1,0 +1,78 @@
+* About to connect() to joindiaspora.com port 80 (#0)
+*   Trying 184.106.230.58...   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0connected
+* Connected to joindiaspora.com (184.106.230.58) port 80 (#0)
+> GET /.well-known/host-meta HTTP/1.1
+> User-Agent: curl/7.21.7 (x86_64-pc-linux-gnu) libcurl/7.21.7 OpenSSL/1.0.0e zlib/1.2.3.4 libidn/1.22 libssh2/1.2.8 librtmp/2.3
+> Host: joindiaspora.com
+> Accept: */*
+> 
+< HTTP/1.1 301 Moved Permanently
+< Server: nginx/0.8.53
+< Date: Fri, 25 Nov 2011 10:48:59 GMT
+< Content-Type: text/html
+< Content-Length: 185
+< Connection: keep-alive
+< Location: https://joindiaspora.com/.well-known/host-meta
+< 
+* Ignoring the response-body
+{ [data not shown]
+100   185  100   185    0     0    668      0 --:--:-- --:--:-- --:--:--  1401
+* Connection #0 to host joindiaspora.com left intact
+* Issue another request to this URL: 'https://joindiaspora.com/.well-known/host-meta'
+* About to connect() to joindiaspora.com port 443 (#1)
+*   Trying 184.106.230.58... connected
+* Connected to joindiaspora.com (184.106.230.58) port 443 (#1)
+* successfully set certificate verify locations:
+*   CAfile: none
+  CApath: /etc/ssl/certs
+* SSLv3, TLS handshake, Client hello (1):
+} [data not shown]
+* SSLv3, TLS handshake, Server hello (2):
+{ [data not shown]
+* SSLv3, TLS handshake, CERT (11):
+{ [data not shown]
+* SSLv3, TLS handshake, Server key exchange (12):
+{ [data not shown]
+* SSLv3, TLS handshake, Server finished (14):
+{ [data not shown]
+* SSLv3, TLS handshake, Client key exchange (16):
+} [data not shown]
+* SSLv3, TLS change cipher, Client hello (1):
+} [data not shown]
+* SSLv3, TLS handshake, Finished (20):
+} [data not shown]
+* SSLv3, TLS change cipher, Client hello (1):
+{ [data not shown]
+* SSLv3, TLS handshake, Finished (20):
+{ [data not shown]
+* SSL connection using DHE-RSA-AES256-SHA
+* Server certificate:
+* 	 subject: O=joindiaspora.com; OU=Domain Control Validated; CN=joindiaspora.com
+* 	 start date: 2011-11-15 23:41:58 GMT
+* 	 expire date: 2012-11-15 23:41:58 GMT
+* 	 subjectAltName: joindiaspora.com matched
+* 	 issuer: C=US; ST=Arizona; L=Scottsdale; O=GoDaddy.com, Inc.; OU=http://certificates.godaddy.com/repository; CN=Go Daddy Secure Certification Authority; serialNumber=07969287
+* 	 SSL certificate verify ok.
+> GET /.well-known/host-meta HTTP/1.1
+> User-Agent: curl/7.21.7 (x86_64-pc-linux-gnu) libcurl/7.21.7 OpenSSL/1.0.0e zlib/1.2.3.4 libidn/1.22 libssh2/1.2.8 librtmp/2.3
+> Host: joindiaspora.com
+> Accept: */*
+> 
+< HTTP/1.1 200 OK
+< Server: nginx/0.8.53
+< Date: Fri, 25 Nov 2011 10:48:59 GMT
+< Content-Type: text/html
+< Content-Length: 319
+< Last-Modified: Thu, 03 Nov 2011 18:43:08 GMT
+< Connection: keep-alive
+< Accept-Ranges: bytes
+< 
+{ [data not shown]
+100   319  100   319    0     0    331      0 --:--:-- --:--:-- --:--:--   331100   319  100   319    0     0    331      0 --:--:-- --:--:-- --:--:--     0
+* Connection #1 to host joindiaspora.com left intact
+* Closing connection #0
+* Closing connection #1
+* SSLv3, TLS alert, Client hello (1):
+} [data not shown]

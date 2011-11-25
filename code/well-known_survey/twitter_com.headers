@@ -1,0 +1,13 @@
+HTTP/1.1 200 OK
+Date: Fri, 25 Nov 2011 10:46:55 GMT
+Status: 200 OK
+Last-Modified: Tue, 15 Nov 2011 18:28:23 GMT
+Content-Type: text/plain; charset=UTF-8
+Content-Length: 326
+Set-Cookie: k=10.35.40.138.1322218015095118; path=/; expires=Fri, 02-Dec-11 10:46:55 GMT; domain=.twitter.com
+Cache-Control: max-age=86400
+Expires: Sat, 26 Nov 2011 10:46:55 GMT
+X-XSS-Protection: 1; mode=block
+Vary: Accept-Encoding
+Server: tfe
+
