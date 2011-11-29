@@ -1,6 +1,32 @@
-=======================================================
-Bachelor Thesis: Free Standards for a restful Groupware
-=======================================================
+====================================================
+Bachelor Thesis: Development of a rest API for Kolab
+====================================================
+
+Kolab_ is a free software groupware system utilizing a PHP web frontend
+(Horde_). A RESTful API is missing so far and should be developed in this
+bachelor thesis. Several media types should be supported:
+
+ * vCard_ is the most widespread format for contacts
+ * portablecontacts_ is a JSON format that got integrated into opensocial_
+ * XHTML is primarily meant to be used by humans and can contain arbitrary
+   data. It should be investigated how this view could be enriched with micro
+   data to be parsed by machines.
+
+.. _vCard: http://en.wikipedia.org/wiki/VCard
+.. _portablecontacts: http://www.portablecontacts.net
+.. _opensocial: http://www.opensocial.org
+.. _Horde: http://www.horde.org
+
+Beside the implementation the work should investigate, which components of the draft could be shared or reused for the support of different media types. Furthermore the support for hypermedia of the different formats should be researched: How much does a client need to know beforehand and what can be discovared through hyper links?
+        
+Optional extensions:
+
+ * CardDAV as an alternativ protocol with research of the reusability of components
+ * Examination of calendaring media types and their support for hypermedia
+ * read access to calendar data over the REST API
+
+Personal Motivation
+-------------------
 
 Using free software in a large organization is often hindered by the lack of a
 satisfying free alternative to Microsoft Exchange. Several free software
