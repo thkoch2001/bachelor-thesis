@@ -7,7 +7,7 @@
 <meta name="originator" content="TeX4ht (http://www.cse.ohio-state.edu/~gurari/TeX4ht/)"> 
 <!-- html,2 --> 
 <meta name="src" content="restful_groupware.tex"> 
-<meta name="date" content="2011-11-22 10:16:00"> 
+<meta name="date" content="2011-11-29 09:11:00"> 
 <link rel="stylesheet" type="text/css" href="restful_groupware.css"> 
 </head><body 
 >
@@ -26,7 +26,7 @@ class="cmtt-12x-x-144">thomas@koch.ro</span></a>
 <br /><span 
 class="cmr-17">matriculation number 7250371</span></div><br />
 <div class="date" ><span 
-class="cmr-17">November 22, 2011</span></div>
+class="cmr-17">November 29, 2011</span></div>
 <span 
 class="cmr-17">Fernuniversit</span><span 
 class="cmr-17">ät Hagen</span><br />
@@ -37,38 +37,69 @@ class="cmr-17">Faculty of mathematics and computer science</span>
     <span class="likesectionToc" ><a 
 href="restful_groupwareli1.html#x2-1000" id="QQ2-2-1">Contents</a></span>
 <br />    <span class="sectionToc" >1 <a 
-href="restful_groupwarese1.html#x3-20001" id="QQ2-3-2">Is webdav restful?</a></span>
+href="restful_groupwarese1.html#x3-20001" id="QQ2-3-2">Motivation</a></span>
 <br />    <span class="sectionToc" >2 <a 
-href="restful_groupwarese2.html#x4-30002" id="QQ2-4-3">Kolab and its use of IMAP</a></span>
+href="restful_groupwarese2.html#x4-30002" id="QQ2-4-3">Is webdav restful?</a></span>
 <br />    <span class="sectionToc" >3 <a 
-href="restful_groupwarese3.html#x5-40003" id="QQ2-5-4">Persistency for Groupware Data</a></span>
+href="restful_groupwarese3.html#x5-40003" id="QQ2-5-4">Kolab and its use of IMAP</a></span>
+<br />    <span class="sectionToc" >4 <a 
+href="restful_groupwarese4.html#x6-50004" id="QQ2-6-5">Persistency for Groupware Data</a></span>
+<br />    <span class="sectionToc" >5 <a 
+href="restful_groupwarese5.html#x7-60005" id="QQ2-7-6">Synchronizing a large collection</a></span>
+<br />    <span class="sectionToc" >6 <a 
+href="restful_groupwarese6.html#x8-70006" id="QQ2-8-7">Mediatypes</a></span>
+<br />    &#x00A0;<span class="subsectionToc" >6.1 <a 
+href="restful_groupwarese6.html#x8-80006.1" id="QQ2-8-8">Updates with alternative Mediatypes</a></span>
+<br />    <span class="sectionToc" >7 <a 
+href="restful_groupwarese7.html#x9-90007" id="QQ2-9-9">Hypermedia in RESTful applications</a></span>
+<br />    &#x00A0;<span class="subsectionToc" >7.1 <a 
+href="restful_groupwarese7.html#x9-100007.1" id="QQ2-9-10">Hypermedia in OpenSocial</a></span>
+<br />    <span class="sectionToc" >8 <a 
+href="restful_groupwarese8.html#x10-110008" id="QQ2-10-11">Selection of components</a></span>
+<br />    &#x00A0;<span class="subsectionToc" >8.1 <a 
+href="restful_groupwarese8.html#x10-120008.1" id="QQ2-10-12">REST framework</a></span>
+<br />    <span class="sectionToc" >9 <a 
+href="restful_groupwarese9.html#x11-130009" id="QQ2-11-13">Testing</a></span>
 <br />    <span class="sectionToc" >A <a 
-href="restful_groupwarese4.html#x6-5000A" id="QQ2-6-5">Standards</a></span>
+href="restful_groupwarese10.html#x12-14000A" id="QQ2-12-14">Standards</a></span>
 <br />    &#x00A0;<span class="subsectionToc" >A.1 <a 
-href="restful_groupwarese4.html#x6-6000A.1" id="QQ2-6-6">Contacts</a></span>
+href="restful_groupwarese10.html#x12-15000A.1" id="QQ2-12-15">Contacts / Persons</a></span>
 <br />    &#x00A0;<span class="subsectionToc" >A.2 <a 
-href="restful_groupwarese4.html#x6-7000A.2" id="QQ2-6-7">Calendaring</a></span>
+href="restful_groupwarese10.html#x12-16000A.2" id="QQ2-12-16">Calendaring</a></span>
 <br />    &#x00A0;<span class="subsectionToc" >A.3 <a 
-href="restful_groupwarese4.html#x6-8000A.3" id="QQ2-6-8">Scheduling</a></span>
+href="restful_groupwarese10.html#x12-17000A.3" id="QQ2-12-17">Scheduling</a></span>
 <br />    &#x00A0;<span class="subsectionToc" >A.4 <a 
-href="restful_groupwarese4.html#x6-9000A.4" id="QQ2-6-9">out of scope</a></span>
+href="restful_groupwarese10.html#x12-18000A.4" id="QQ2-12-18">Relations and Links</a></span>
+<br />    &#x00A0;<span class="subsectionToc" >A.5 <a 
+href="restful_groupwarese10.html#x12-19000A.5" id="QQ2-12-19">out of scope</a></span>
 <br />    <span class="sectionToc" >B <a 
-href="restful_groupwarese5.html#x7-10000B" id="QQ2-7-10">People, Groups and Organizations</a></span>
+href="restful_groupwarese11.html#x13-20000B" id="QQ2-13-20">People, Groups and Organizations</a></span>
 <br />    <span class="sectionToc" >C <a 
-href="restful_groupwarese6.html#x8-12000C" id="QQ2-8-12">Implementations</a></span>
+href="restful_groupwarese12.html#x14-22000C" id="QQ2-14-22">Implementations</a></span>
 <br />    &#x00A0;<span class="subsectionToc" >C.1 <a 
-href="restful_groupwarese6.html#x8-13000C.1" id="QQ2-8-13">Servers</a></span>
+href="restful_groupwarese12.html#x14-23000C.1" id="QQ2-14-23">Servers</a></span>
 <br />    &#x00A0;<span class="subsectionToc" >C.2 <a 
-href="restful_groupwarese6.html#x8-14000C.2" id="QQ2-8-14">Clients</a></span>
+href="restful_groupwarese12.html#x14-24000C.2" id="QQ2-14-24">Clients</a></span>
 <br />    &#x00A0;<span class="subsectionToc" >C.3 <a 
-href="restful_groupwarese6.html#x8-15000C.3" id="QQ2-8-15">Web Services</a></span>
+href="restful_groupwarese12.html#x14-25000C.3" id="QQ2-14-25">Web Services</a></span>
 <br />    &#x00A0;<span class="subsectionToc" >C.4 <a 
-href="restful_groupwarese6.html#x8-16000C.4" id="QQ2-8-16">Portable Contacts</a></span>
+href="restful_groupwarese12.html#x14-26000C.4" id="QQ2-14-26">Portable Contacts</a></span>
 <br />    <span class="sectionToc" >D <a 
-href="restful_groupwarese7.html#x9-17000D" id="QQ2-9-17">Links</a></span>
+href="restful_groupwarese13.html#x15-27000D" id="QQ2-15-27">Links</a></span>
+                                                                                         
+                                                                                         
 <br />    <span class="sectionToc" >E <a 
-href="restful_groupwarese8.html#x10-18000E" id="QQ2-10-18">TODO</a></span>
+href="restful_groupwarese14.html#x16-28000E" id="QQ2-16-28">TODO</a></span>
+<br />    <span class="likesectionToc" ><a 
+href="restful_groupwareli2.html#x17-29000E" id="QQ2-17-29">References</a></span>
     </div>
+
+
+
+
+
+
+
 
 
 

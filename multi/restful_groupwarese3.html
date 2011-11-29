@@ -1,34 +1,92 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"  
   "http://www.w3.org/TR/html4/loose.dtd">  
 <html > 
-<head><title>Persistency for Groupware Data</title> 
+<head><title>Kolab and its use of IMAP</title> 
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"> 
 <meta name="generator" content="TeX4ht (http://www.cse.ohio-state.edu/~gurari/TeX4ht/)"> 
 <meta name="originator" content="TeX4ht (http://www.cse.ohio-state.edu/~gurari/TeX4ht/)"> 
 <!-- html,2 --> 
 <meta name="src" content="restful_groupware.tex"> 
-<meta name="date" content="2011-11-22 10:16:00"> 
+<meta name="date" content="2011-11-29 09:11:00"> 
 <link rel="stylesheet" type="text/css" href="restful_groupware.css"> 
 </head><body 
 >
-    <!--l. 125--><div class="crosslinks"><p class="noindent">[<a 
+    <!--l. 104--><div class="crosslinks"><p class="noindent">[<a 
 href="restful_groupwarese4.html" >next</a>] [<a 
 href="restful_groupwarese2.html" >prev</a>] [<a 
 href="restful_groupwarese2.html#tailrestful_groupwarese2.html" >prev-tail</a>] [<a 
 href="#tailrestful_groupwarese3.html">tail</a>] [<a 
 href="restful_groupware.html#restful_groupwarese3.html" >up</a>] </p></div>
     <h3 class="sectionHead"><span class="titlemark">3.  </span> <a 
- id="x5-40003"></a>Persistency for Groupware Data</h3>
-<!--l. 126--><p class="noindent" >Relational Databases vs. NoSQL databases vs. plain files
-<!--l. 128--><p class="indent" >    Relational databases are not practical for contacts, events or todos. Common patterns in
-systems that use relational DBs for that purpose:
+ id="x5-40003"></a>Kolab and its use of IMAP</h3>
+<!--l. 105--><p class="noindent" >Kolab uses an IMAP server as the data store and synchronization protocol for calendar and
+contact informations. I want to compare this approach to a restful one.
+<!--l. 109--><p class="indent" >    Advantages of IMAP:
       <ul class="itemize1">
-      <li class="itemize">artificial limits of entries, e.g. only 3 email addresses per contact, because there are
-      only three columns email1, email2 and email3.
+      <li class="itemize">already there, since Mail uses it
       </li>
-      <li class="itemize">Fields for custom data like custom1 to customX
+      <li class="itemize">can store blobs/files so no need to map the iCal/vCard files to a relational scheme
       </li>
-      <li class="itemize">EAV pattern: tables like: id, foreign_id, type, value</li></ul>
+      <li class="itemize">out of the box support for offline work and later synchronization (How does it solve
+      editing conflicts?)</li></ul>
+<!--l. 115--><p class="noindent" >Disadvantages of IMAP:
+      <ul class="itemize1">
+      <li class="itemize">Complicate,                         38                         RFCs                         according
+      to <a 
+href="http://de.wikipedia.org/wiki/Internet_Message_Access_Protocol" class="url" ><span 
+class="cmtt-12">http://de.wikipedia.org/wiki/Internet_Message_Access_Protocol</span></a> see also:
+      <a 
+href="http://www.apps.ietf.org/rfc/ipoplist.html" class="url" ><span 
+class="cmtt-12">http://www.apps.ietf.org/rfc/ipoplist.html</span></a>
+      </li>
+      <li class="itemize">All clients directly access the iCal/vCard files with no moderation layer in between.
+      This means that no validation or normalization can be done. Schema updates can only
+      be done if all clients cooperate.
+      </li>
+      <li class="itemize">IMAP imposes a folder structure. Google&#8217;s gmail is an example for another, tag based
+      approach. Messages could have several tags. It is therefor hard to access Gmail via
+      IMAP.
+      </li>
+      <li class="itemize">Sam Varshavchik, the author of the courier Mail Transfer Agent explains the history of
+      IMAP and claims that the IMAP standard is broken: http://www.courier-mta.org/fud/
+      </li>
+      <li class="itemize">IMAP  is  so  complicate  that  the  IMAP  wiki  holds  10  pages  of  advises  for  IMAP
+      client  authors:  http://www.imapwiki.org/ClientImplementation  RFC  2683  &#8220;IMAP4
+      Implementation Recommendations&#8221; is a 23 pages document (cut 5 pages for verbosity)
+      explaining how to implement another RFC standard. Is there any widely used standard
+      that needs another RFC explaining how to implement it?
+      </li>
+      <li class="itemize"><a 
+href="http://en.wikipedia.org/wiki/Internet_Message_Access_Protocol#Disadvantages" class="url" ><span 
+class="cmtt-12">http://en.wikipedia.org/wiki/Internet_Message_Access_Protocol#Disadvantages</span></a>
+      </li>
+      <li class="itemize">Some attempts to create a simpler alternative to IMAP:
+                                                                                         
+                                                                                         
+           <ul class="itemize2">
+           <li class="itemize">http://en.wikipedia.org/wiki/POP4
+           </li>
+           <li class="itemize"><a 
+href="http://en.wikipedia.org/wiki/Simple_Mail_Access_Protocol" class="url" ><span 
+class="cmtt-12">http://en.wikipedia.org/wiki/Simple_Mail_Access_Protocol</span></a>  also   here
+           http://www.courier-mta.org/cone/smap1.html
+           </li>
+           <li class="itemize"><a 
+href="http://en.wikipedia.org/wiki/Internet_Mail_2000" class="url" ><span 
+class="cmtt-12">http://en.wikipedia.org/wiki/Internet_Mail_2000</span></a>
+           </li>
+           <li class="itemize">HTTP  restful:  http://tools.ietf.org/id/draft-dusseault-httpmail-00.txt  mailing
+           list: https://www.ietf.org/mailman/listinfo/httpmail
+           </li>
+           <li class="itemize">BikINI is not IMAP http://bikini.caterva.org
+           </li>
+           <li class="itemize">Outlook uses HTTP to communicate with Hotmail
+           </li>
+           <li class="itemize">another rest mail proposal: http://www.prescod.net/rest/restmail/</li></ul>
+      </li>
+      <li class="itemize">more rants: http://blog.gaborcselle.com/2010/02/how-to-replace-imap.html
+      </li>
+      <li class="itemize">IMAP issues found by the chandler project http://chandlerproject.org/bin/view/Jungle/IntrinsicIMAPIssues</li></ul>
                                                                                          
                                                                                          
     <!--l. 137--><div class="crosslinks"><p class="noindent">[<a 
