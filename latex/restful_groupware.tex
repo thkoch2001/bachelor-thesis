@@ -162,6 +162,10 @@ How to handle updates, if the mediatypes are not isomorph?
 
 How does Google handle PATCH in the calendar API?
 
+\subsection{Mediatype conversion}
+
+Which fields of portable contacts are derived from vCard: \url{http://wiki.portablecontacts.net/w/page/17776141/schema}
+
 \section{Hypermedia in RESTful applications}
 
 % http://restpatterns.org/Articles/The_Hypermedia_Scale
@@ -209,14 +213,22 @@ http://packages.ubuntu.com/source/maverick/dovecot-metadata-plugin
 https://launchpad.net/ubuntu/+source/dovecot-metadata-plugin/8-0ubuntu1
 
 % Apache Felix, Jackrabbit, RESTeasy http://blog.tfd.co.uk/2011/11/25/minimalist/
+% Scala Dispatch HTTP requests http://dispatch.databinder.net/Dispatch.html
+% Scala JSON serialization https://github.com/debasishg/sjson
+
+% JSON: http://jackson.codehaus.org/ http://code.google.com/p/google-gson/
 
 \subsection{REST framework}
 Jersey recommended by \cite{Kaiser2011} above Restfulie and RESTeasy because of maturity and flexibility.
+
+% http://www.torsten-horn.de/techdocs/jee-rest.htm RESTful Web Services mit JAX-RS und Jersey
 
 \section{Testing}
 How to test the ReST/CardDAV interface?
 
 % http://code.google.com/p/rest-client/
+
+Portable Contacts test client at plaxo \url{http://www.plaxo.com/pdata/testClient}
 
 \appendix
 
@@ -573,7 +585,34 @@ How to test the ReST/CardDAV interface?
 % http://wiki.davical.org/w/CardDAV/Configuration/Well-known_URLs
 % https://github.com/karl/monket-google-calendar A simplified UI for Google Calendar.
 % Nuxeo switches from Python to Java: http://www.infoq.com/articles/nuxeo_python_to_java http://www.infoq.com/news/nuxeo-zope-java-migration
+% JAXB Tutorial http://docs.oracle.com/cd/E17802_01/webservices/webservices/docs/1.6/tutorial/doc/JAXBWorks2.html
+% XML Schema http://www.javaworld.com/javaworld/jw-08-2005/jw-0808-xml.html?page=2
+% https://github.com/jaliss/securesocial provides OAuth, OAuth2 and OpenID authentication for Play Framework
+% Oauth http://code.google.com/intl/de/apis/accounts/docs/OAuth2.html
+% Permissions compared. IMAP, WEBDAV, ... http://chandlerproject.org/bin/view/Journal/LisaDusseault20040409
+
 \end{itemize}
+
+\subsection{Apache Shindig}
+RPC vs. REST API for Shindig/OpenSocial: \url{http://groups.google.com/group/opensocial-and-gadgets-spec/browse_thread/thread/a4ddf7cd09f90237/5cfa1658e1c1d698?lnk=gst&q=rest#5cfa1658e1c1d698}, \url{http://groups.google.com/group/opensocial-and-gadgets-spec/browse_thread/thread/d1a5627fb6e686ce/d27d47dee92a87b2} One argument was support for batching. A restful batching proposal didn't get consensus: \url{https://docs.google.com/View?docid=dc43mmng_23fdbpp7hd&pli=1}
+
+Flow of REST requests in Shindig \url{https://sites.google.com/site/opensocialarticles/Home/shindig-rest-java}
+
+Fielding says OpenSocial is not Restful \url{http://roy.gbiv.com/untangled/2008/rest-apis-must-be-hypertext-driven}. Discussion: \url{http://groups.google.com/group/opensocial-and-gadgets-spec/browse_thread/thread/aff4ba7373e21284/201a413efa67c26e#201a413efa67c26e}
+
+Google+ is likely to become OpenSocial enabled: \url{http://groups.google.com/group/opensocial-and-gadgets-spec/browse_thread/thread/1187241df6759a9a}
+
+Shindig issues to implement OpenSocial 2.0 \url{https://docs.google.com/spreadsheet/ccc?key=0AihdZBncP3KzdGN3dVl3MFpIUlk2TXIyR3hfUDhHZUE&hl=en_US#gid=0}
+
+How Shindig supports extensions: \url{https://cwiki.apache.org/confluence/display/SHINDIG/Arbitrary+Extensions+to+Apache+Shindig%27s+Data+Model}
+
+Videos about some 2.0 OS features \url{http://groups.google.com/group/opensocial-and-gadgets-spec/browse_thread/thread/7b911edfb1bb3b4d}
+
+OS and RDF \url{http://groups.google.com/group/opensocial-and-gadgets-spec/browse_thread/thread/20f62d627003509b}
+
+\subsection{Socialsite}
+
+Oracle's (former Sun's) extension to Apache Shindig. Blog \url{http://blogs.oracle.com/socialsite}
 
 \section{TODO}
 \begin{itemize}
