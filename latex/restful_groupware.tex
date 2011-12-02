@@ -166,6 +166,10 @@ How does Google handle PATCH in the calendar API?
 
 Which fields of portable contacts are derived from vCard: \url{http://wiki.portablecontacts.net/w/page/17776141/schema}
 
+\begin{quote}
+  No single data representation is ideal for every client. This protocol defines representations for each resource in three widely supported formats, JSON [RFC4627], XML, and Atom [RFC4287] / AtomPub [RFC5023], using a set of generic mapping rules. The mapping rules allow a server to write to a single interface rather than implementing the protocol three times.
+\end{quote}\cite[Core API Server]{OSSpec2.0.1}
+
 \section{Hypermedia in RESTful applications}
 
 % http://restpatterns.org/Articles/The_Hypermedia_Scale
@@ -200,6 +204,44 @@ Which fields of portable contacts are derived from vCard: \url{http://wiki.porta
 Webfinger, e.g. get a profile picture from an email address
 
 Danger: One can trigger na http request by sending an email.
+
+\section{Is OpenSocial restful?}
+
+Fielding says OpenSocial is not Restful \url{http://roy.gbiv.com/untangled/2008/rest-apis-must-be-hypertext-driven}. Discussion: \url{http://groups.google.com/group/opensocial-and-gadgets-spec/browse_thread/thread/aff4ba7373e21284/201a413efa67c26e}
+
+
+\begin{quote}
+  ``OpenSocial defines several services for providing access to a container's data.''
+\end{quote}\cite[Social API Server, sec 2, Services]{OSSpec2.0.1}
+
+
+\subparagraph{Parameters in path}
+The REST-URI-Fragment is not a path but an encoding of parameters for a procedure or service call.
+
+\begin{quote}
+  Each service type defines an associated partial URI format. The base URI for each service is found in the URI element associated with the service in the discovery document. Each service type accepts parameters via the URL path. Definitions are of the form:
+  \begin{verbatim}
+    {a}/{b}/{c}
+  \end{verbatim}
+\end{quote}\cite[Core API Server, sec 2.1.1.2.2, REST-URI-Fragment]{OSSpec2.0.1}
+
+Links structure in OpenSocial
+\begin{verbatim}
+  
+\end{verbatim}
+
+\subparagraph{Conclusion}
+
+The so called REST API of OpenSocial is not restful but rather another RPC
+interface in another style. An indication of this can be seen in the frequent
+use of the word ``Service'' and the unnecessary elaboration of basic HTTP
+concepts.  The Core API Server specification repeats the definition of HTTP
+methods (2.1.1.1 REST-HTTP-Method), requests (2.1.1 REST Request) and responses
+(2.1.2 REST Response). Even the structure of an HTTP URI is redefined (2.1.1.2
+REST-Request-URI).
+
+
+
 
 \section{Selection of components}
 
@@ -597,8 +639,6 @@ Portable Contacts test client at plaxo \url{http://www.plaxo.com/pdata/testClien
 RPC vs. REST API for Shindig/OpenSocial: \url{http://groups.google.com/group/opensocial-and-gadgets-spec/browse_thread/thread/a4ddf7cd09f90237/5cfa1658e1c1d698?lnk=gst&q=rest#5cfa1658e1c1d698}, \url{http://groups.google.com/group/opensocial-and-gadgets-spec/browse_thread/thread/d1a5627fb6e686ce/d27d47dee92a87b2} One argument was support for batching. A restful batching proposal didn't get consensus: \url{https://docs.google.com/View?docid=dc43mmng_23fdbpp7hd&pli=1}
 
 Flow of REST requests in Shindig \url{https://sites.google.com/site/opensocialarticles/Home/shindig-rest-java}
-
-Fielding says OpenSocial is not Restful \url{http://roy.gbiv.com/untangled/2008/rest-apis-must-be-hypertext-driven}. Discussion: \url{http://groups.google.com/group/opensocial-and-gadgets-spec/browse_thread/thread/aff4ba7373e21284/201a413efa67c26e#201a413efa67c26e}
 
 Google+ is likely to become OpenSocial enabled: \url{http://groups.google.com/group/opensocial-and-gadgets-spec/browse_thread/thread/1187241df6759a9a}
 
