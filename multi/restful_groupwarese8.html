@@ -1,43 +1,76 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"  
   "http://www.w3.org/TR/html4/loose.dtd">  
 <html > 
-<head><title>Selection of components</title> 
+<head><title>Is OpenSocial restful?</title> 
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"> 
 <meta name="generator" content="TeX4ht (http://www.cse.ohio-state.edu/~gurari/TeX4ht/)"> 
 <meta name="originator" content="TeX4ht (http://www.cse.ohio-state.edu/~gurari/TeX4ht/)"> 
 <!-- html,2 --> 
 <meta name="src" content="restful_groupware.tex"> 
-<meta name="date" content="2011-12-02 11:33:00"> 
+<meta name="date" content="2011-12-02 19:24:00"> 
 <link rel="stylesheet" type="text/css" href="restful_groupware.css"> 
 </head><body 
 >
-    <!--l. 204--><div class="crosslinks"><p class="noindent">[<a 
+    <!--l. 208--><div class="crosslinks"><p class="noindent">[<a 
 href="restful_groupwarese9.html" >next</a>] [<a 
 href="restful_groupwarese7.html" >prev</a>] [<a 
 href="restful_groupwarese7.html#tailrestful_groupwarese7.html" >prev-tail</a>] [<a 
 href="#tailrestful_groupwarese8.html">tail</a>] [<a 
 href="restful_groupware.html#restful_groupwarese8.html" >up</a>] </p></div>
     <h3 class="sectionHead"><span class="titlemark">8.  </span> <a 
- id="x10-120008"></a>Selection of components</h3>
-<!--l. 206--><p class="noindent" >Apache Shindig for Open Social, includes client tests
-<!--l. 208--><p class="indent" >    http://code.google.com/p/kolab-android/
-<!--l. 210--><p class="indent" >    https://evolvis.org/projects/kolab-ws/
-<!--l. 212--><p class="indent" >    http://packages.ubuntu.com/source/maverick/dovecot-metadata-plugin
-https://launchpad.net/ubuntu/+source/dovecot-metadata-plugin/8-0ubuntu1
-<!--l. 221--><p class="noindent" >
-    <h4 class="subsectionHead"><span class="titlemark">8.1.  </span> <a 
- id="x10-130008.1"></a>REST framework</h4>
-<!--l. 222--><p class="noindent" >Jersey recommended by <span class="cite">[<a 
-href="restful_groupwareli2.html#XKaiser2011">Kai11</a>]</span> above Restfulie and RESTeasy because of maturity and
-flexibility.
+ id="x10-120008"></a>Is OpenSocial restful?</h3>
+<!--l. 210--><p class="noindent" >Fielding says OpenSocial is not Restful <a 
+href="http://roy.gbiv.com/untangled/2008/rest-apis-must-be-hypertext-driven" class="url" ><span 
+class="cmtt-12">http://roy.gbiv.com/untangled/2008/rest-apis-must-be-hypertext-driven</span></a>. Discussion:
+<a 
+href="http://groups.google.com/group/opensocial-and-gadgets-spec/browse_thread/thread/aff4ba7373e21284/201a413efa67c26e" class="url" ><span 
+class="cmtt-12">http://groups.google.com/group/opensocial-and-gadgets-spec/browse_thread/thread/aff4ba7373e21284/201a413efa67c26e</span></a>
+<!--l. 213--><p class="indent" >
+      <div class="quote">
+      <!--l. 214--><p class="noindent" >&#8220;OpenSocial defines several services for providing access to a container&#8217;s data.&#8221;</div>
+<!--l. 215--><p class="noindent" ><span class="cite">[<a 
+href="restful_groupwareli2.html#XOSSpec2.0.1">Ope11</a>, Social API Server, sec 2, Services]</span>
+<!--l. 218--><p class="indent" >    <span class="subparagraphHead"> <a 
+ id="x10-130008"></a><span 
+class="cmbx-12">Parameters in path</span></span> The REST-URI-Fragment is not a path but an encoding of parameters
+for a procedure or service call.
+      <div class="quote">
+      <!--l. 222--><p class="noindent" >Each service type defines an associated partial URI format. The base URI for each
+      service is found in the URI element associated with the service in the discovery
+      document. Each service type accepts parameters via the URL path. Definitions are of
+      the form:
                                                                                          
                                                                                          
-    <!--l. 226--><div class="crosslinks"><p class="noindent">[<a 
+      <div class="verbatim" id="verbatim-1">
+&#x00A0;&#x00A0;&#x00A0;&#x00A0;{a}/{b}/{c}
+&#x00A0;<br />&#x00A0;&#x00A0;
+</div>
+      <!--l. 225--><p class="nopar" ></div>
+<span class="cite">[<a 
+href="restful_groupwareli2.html#XOSSpec2.0.1">Ope11</a>, Core API Server, sec 2.1.1.2.2, REST-URI-Fragment]</span>
+<!--l. 228--><p class="indent" >    Links structure in OpenSocial
+                                                                                         
+                                                                                         
+    <div class="verbatim" id="verbatim-2">
+</div>
+<!--l. 231--><p class="nopar" >
+<!--l. 233--><p class="indent" >    <span class="subparagraphHead"> <a 
+ id="x10-140008"></a><span 
+class="cmbx-12">Conclusion</span></span>
+    The so called REST API of OpenSocial is not restful but rather another RPC interface in
+another style. An indication of this can be seen in the frequent use of the word &#8220;Service&#8221; and the
+unnecessary elaboration of basic HTTP concepts. The Core API Server specification repeats the
+definition of HTTP methods (2.1.1.1 REST-HTTP-Method), requests (2.1.1 REST Request) and
+responses (2.1.2 REST Response). Even the structure of an HTTP URI is redefined (2.1.1.2
+REST-Request-URI).
+                                                                                         
+                                                                                         
+    <!--l. 246--><div class="crosslinks"><p class="noindent">[<a 
 href="restful_groupwarese9.html" >next</a>] [<a 
 href="restful_groupwarese7.html" >prev</a>] [<a 
 href="restful_groupwarese7.html#tailrestful_groupwarese7.html" >prev-tail</a>] [<a 
 href="restful_groupwarese8.html" >front</a>] [<a 
 href="restful_groupware.html#restful_groupwarese8.html" >up</a>] </p></div>
-<!--l. 226--><p class="indent" >    <a 
+<!--l. 246--><p class="indent" >    <a 
  id="tailrestful_groupwarese8.html"></a>   
 </body></html> 
