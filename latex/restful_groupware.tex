@@ -226,9 +226,47 @@ The REST-URI-Fragment is not a path but an encoding of parameters for a procedur
 \end{quote}\cite[Core API Server, sec 2.1.1.2.2, REST-URI-Fragment]{OSSpec2.0.1}
 
 Links structure in OpenSocial
-\begin{verbatim}
-  
-\end{verbatim}
+
+\begin{table}[h]
+\begin{tabular}{p{6.5cm} l p{10cm}}
+  URI fragment & Method & Description \\
+  %\hline
+  \verb:/people/{User-Id}/@self: & GET & profile for User-Id \\
+  \verb:/people/{User-Id}/@self: & DELETE & remove User \\
+  \verb:/people/{User-Id}/{Group-Id}: & GET & full profiles of group members \\
+  \verb:: & POST & Create relationship, target specified \newline by \verb:<entry><id>: in body \\
+   & POST & Update Person \\
+  \verb:/people/{Initial-User-Id}/: \newline \verb:{Group-Id}/{Related-User-Id}: & GET & ??? \\
+  \verb:/people/@supportedFields: & GET & list of supported person profile fields \\
+  \verb:/groups/{User-Id}[/{Group-Id}]: & GET & one or all groups of a user \\
+   & PUT & update group \\
+   & DELETE & delete group \\
+  \verb:/groups/{User-Id}: & POST & create group \\
+\end{tabular}
+  \caption{URI fragments for peoples and groups in the OpenSocial REST API}
+\end{table}
+
+\begin{itemize}
+  \item Collections are no entities of their own, but GET requests to entities returns lists of full objects.
+\end{itemize}
+
+\begin{table}[h]
+\begin{tabular}{p{9.5cm} l p{8cm}}
+  URI fragment & Method & Description \\
+  %\hline
+  \verb:/albums/{User-Id}/@self: & POST & create album \\
+  \verb:/albums/{User-Id}/{Group-Id}[/Album-Id]*: & GET & one or multiple albums \\
+  \verb:/mediaItems/{User-Id}/{Group-Id}/{Album-Id}/: \newline \verb:{MediaItem-Id}: & GET & one mediaitem \\
+  \verb:/mediaItem/{User-Id}/@self/{Album-Id}: (sic!) & POST & create mediaitem \\
+\end{tabular}
+  \caption{URI fragments for albums and mediaitems in the OpenSocial REST API}  
+\end{table}
+    The last URI is obviously missing an ``s'' behind mediaItem. This typo is present in the OpenSocial 
+              spec since Version 1.0, released in march 2010. This is of course not a big issue in itself,
+              but rather a sign that the specification is too verbose and does specify things that should be
+              self evident.
+
+
 
 \subparagraph{Conclusion}
 
@@ -271,6 +309,8 @@ How to test the ReST/CardDAV interface?
 % http://code.google.com/p/rest-client/
 
 Portable Contacts test client at plaxo \url{http://www.plaxo.com/pdata/testClient}
+
+\url{http://code.google.com/p/rest-assured/} \url{http://restfuse.com/}
 
 \appendix
 
@@ -649,6 +689,8 @@ How Shindig supports extensions: \url{https://cwiki.apache.org/confluence/displa
 Videos about some 2.0 OS features \url{http://groups.google.com/group/opensocial-and-gadgets-spec/browse_thread/thread/7b911edfb1bb3b4d}
 
 OS and RDF \url{http://groups.google.com/group/opensocial-and-gadgets-spec/browse_thread/thread/20f62d627003509b}
+
+OpenSocial Development Environment (OSDE, Eclipse Plugin)  \url{https://sites.google.com/site/opensocialdevenv}
 
 \subsection{Socialsite}
 
