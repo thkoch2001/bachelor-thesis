@@ -7,7 +7,7 @@
 <meta name="originator" content="TeX4ht (http://www.cse.ohio-state.edu/~gurari/TeX4ht/)"> 
 <!-- html,2 --> 
 <meta name="src" content="restful_groupware.tex"> 
-<meta name="date" content="2011-12-02 19:24:00"> 
+<meta name="date" content="2011-12-03 19:40:00"> 
 <link rel="stylesheet" type="text/css" href="restful_groupware.css"> 
 </head><body 
 >
@@ -49,12 +49,163 @@ for a procedure or service call.
 <span class="cite">[<a 
 href="restful_groupwareli2.html#XOSSpec2.0.1">Ope11</a>, Core API Server, sec 2.1.1.2.2, REST-URI-Fragment]</span>
 <!--l. 228--><p class="indent" >    Links structure in OpenSocial
+    <div class="table">
                                                                                          
                                                                                          
-    <div class="verbatim" id="verbatim-2">
-</div>
-<!--l. 231--><p class="nopar" >
-<!--l. 233--><p class="indent" >    <span class="subparagraphHead"> <a 
+<!--l. 230--><p class="indent" >    <a 
+ id="x10-130011"></a><hr class="float"><div class="float" 
+>
+                                                                                         
+                                                                                         
+<div class="tabular"> <table id="TBL-2" class="tabular" 
+cellspacing="0" cellpadding="0"  
+><colgroup id="TBL-2-1g"><col 
+id="TBL-2-1"><col 
+id="TBL-2-2"><col 
+id="TBL-2-3"></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-2-1-"><td  style="white-space:wrap; text-align:left;" id="TBL-2-1-1"  
+class="td11"><!--l. 232--><p class="noindent" >URI fragment                             </td><td  style="white-space:nowrap; text-align:left;" id="TBL-2-1-2"  
+class="td11">Method  </td><td  style="white-space:wrap; text-align:left;" id="TBL-2-1-3"  
+class="td11"><!--l. 232--><p class="noindent" >Description                                                          </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-2-2-"><td  style="white-space:wrap; text-align:left;" id="TBL-2-2-1"  
+class="td11"><!--l. 234--><p class="noindent" ><span class="obeylines-h"><span class="verb"><span 
+class="cmtt-12">/people/{User-Id}/@self</span></span></span>        </td><td  style="white-space:nowrap; text-align:left;" id="TBL-2-2-2"  
+class="td11">GET      </td><td  style="white-space:wrap; text-align:left;" id="TBL-2-2-3"  
+class="td11"><!--l. 234--><p class="noindent" >profile for User-Id                                                 </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-2-3-"><td  style="white-space:wrap; text-align:left;" id="TBL-2-3-1"  
+class="td11"><!--l. 235--><p class="noindent" ><span class="obeylines-h"><span class="verb"><span 
+class="cmtt-12">/people/{User-Id}/@self</span></span></span>        </td><td  style="white-space:nowrap; text-align:left;" id="TBL-2-3-2"  
+class="td11">DELETE</td><td  style="white-space:wrap; text-align:left;" id="TBL-2-3-3"  
+class="td11"><!--l. 235--><p class="noindent" >remove User                                                        </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-2-4-"><td  style="white-space:wrap; text-align:left;" id="TBL-2-4-1"  
+class="td11"><!--l. 236--><p class="noindent" ><span class="obeylines-h"><span class="verb"><span 
+class="cmtt-12">/people/{User-Id}/{Group-Id}</span></span></span>   </td><td  style="white-space:nowrap; text-align:left;" id="TBL-2-4-2"  
+class="td11">GET      </td><td  style="white-space:wrap; text-align:left;" id="TBL-2-4-3"  
+class="td11"><!--l. 236--><p class="noindent" >full profiles of group members                                 </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-2-5-"><td  style="white-space:wrap; text-align:left;" id="TBL-2-5-1"  
+class="td11"><!--l. 237--><p class="noindent" ><span class="obeylines-h"><span class="verb"></span></span>                               </td><td  style="white-space:nowrap; text-align:left;" id="TBL-2-5-2"  
+class="td11">POST    </td><td  style="white-space:wrap; text-align:left;" id="TBL-2-5-3"  
+class="td11"><!--l. 237--><p class="noindent" >Create relationship, target specified <br 
+class="newline" />by <span class="obeylines-h"><span class="verb"><span 
+class="cmtt-12">&#x003C;entry&#x003E;&#x003C;id&#x003E;</span></span></span> in body                                        </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-2-6-"><td  style="white-space:wrap; text-align:left;" id="TBL-2-6-1"  
+class="td11"><!--l. 238--><p class="noindent" >                               </td><td  style="white-space:nowrap; text-align:left;" id="TBL-2-6-2"  
+class="td11">POST    </td><td  style="white-space:wrap; text-align:left;" id="TBL-2-6-3"  
+class="td11"><!--l. 238--><p class="noindent" >Update Person                                                     </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-2-7-"><td  style="white-space:wrap; text-align:left;" id="TBL-2-7-1"  
+class="td11"><!--l. 239--><p class="noindent" ><span class="obeylines-h"><span class="verb"><span 
+class="cmtt-12">/people/{Initial-User-Id}/</span></span></span> <br 
+class="newline" /><span class="obeylines-h"><span class="verb"><span 
+class="cmtt-12">{Group-Id}/{Related-User-Id}</span></span></span>   </td><td  style="white-space:nowrap; text-align:left;" id="TBL-2-7-2"  
+class="td11">GET      </td><td  style="white-space:wrap; text-align:left;" id="TBL-2-7-3"  
+class="td11"><!--l. 239--><p class="noindent" >???                                                                    </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-2-8-"><td  style="white-space:wrap; text-align:left;" id="TBL-2-8-1"  
+class="td11"><!--l. 240--><p class="noindent" ><span class="obeylines-h"><span class="verb"><span 
+class="cmtt-12">/people/@supportedFields</span></span></span>       </td><td  style="white-space:nowrap; text-align:left;" id="TBL-2-8-2"  
+class="td11">GET      </td><td  style="white-space:wrap; text-align:left;" id="TBL-2-8-3"  
+class="td11"><!--l. 240--><p class="noindent" >list of supported person profile fields                         </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-2-9-"><td  style="white-space:wrap; text-align:left;" id="TBL-2-9-1"  
+class="td11"><!--l. 241--><p class="noindent" ><span class="obeylines-h"><span class="verb"><span 
+class="cmtt-12">/groups/{User-Id}[/{Group-Id}]</span></span></span> </td><td  style="white-space:nowrap; text-align:left;" id="TBL-2-9-2"  
+class="td11">GET      </td><td  style="white-space:wrap; text-align:left;" id="TBL-2-9-3"  
+class="td11"><!--l. 241--><p class="noindent" >one or all groups of a user                                      </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-2-10-"><td  style="white-space:wrap; text-align:left;" id="TBL-2-10-1"  
+class="td11"><!--l. 242--><p class="noindent" >                               </td><td  style="white-space:nowrap; text-align:left;" id="TBL-2-10-2"  
+class="td11">PUT      </td><td  style="white-space:wrap; text-align:left;" id="TBL-2-10-3"  
+class="td11"><!--l. 242--><p class="noindent" >update group                                                       </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-2-11-"><td  style="white-space:wrap; text-align:left;" id="TBL-2-11-1"  
+class="td11"><!--l. 243--><p class="noindent" >                               </td><td  style="white-space:nowrap; text-align:left;" id="TBL-2-11-2"  
+class="td11">DELETE</td><td  style="white-space:wrap; text-align:left;" id="TBL-2-11-3"  
+class="td11"><!--l. 243--><p class="noindent" >delete group                                                        </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-2-12-"><td  style="white-space:wrap; text-align:left;" id="TBL-2-12-1"  
+class="td11"><!--l. 244--><p class="noindent" ><span class="obeylines-h"><span class="verb"><span 
+class="cmtt-12">/groups/{User-Id}</span></span></span>              </td><td  style="white-space:nowrap; text-align:left;" id="TBL-2-12-2"  
+class="td11">POST    </td><td  style="white-space:wrap; text-align:left;" id="TBL-2-12-3"  
+class="td11"><!--l. 244--><p class="noindent" >create group                                                        </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-2-13-"><td  style="white-space:wrap; text-align:left;" id="TBL-2-13-1"  
+class="td11">                               </td></tr></table></div>
+<br /> <div class="caption" 
+><span class="id">Table&#x00A0;1: </span><span  
+class="content">URI fragments for peoples and groups in the OpenSocial REST API</span></div><!--tex4ht:label?: x10-130011 -->
+                                                                                         
+                                                                                         
+    </div><hr class="endfloat" />
+    </div>
+      <ul class="itemize1">
+      <li class="itemize">Collections are no entities of their own, but GET requests to entities returns lists of
+      full objects.</li></ul>
+    <div class="table">
+                                                                                         
+                                                                                         
+<!--l. 253--><p class="indent" >    <a 
+ id="x10-130022"></a><hr class="float"><div class="float" 
+>
+                                                                                         
+                                                                                         
+<div class="tabular"> <table id="TBL-3" class="tabular" 
+cellspacing="0" cellpadding="0"  
+><colgroup id="TBL-3-1g"><col 
+id="TBL-3-1"><col 
+id="TBL-3-2"><col 
+id="TBL-3-3"></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-3-1-"><td  style="white-space:wrap; text-align:left;" id="TBL-3-1-1"  
+class="td11"><!--l. 255--><p class="noindent" >URI fragment                                                   </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-1-2"  
+class="td11">Method</td><td  style="white-space:wrap; text-align:left;" id="TBL-3-1-3"  
+class="td11"><!--l. 255--><p class="noindent" >Description                                           </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-3-2-"><td  style="white-space:wrap; text-align:left;" id="TBL-3-2-1"  
+class="td11"><!--l. 257--><p class="noindent" ><span class="obeylines-h"><span class="verb"><span 
+class="cmtt-12">/albums/{User-Id}/@self</span></span></span>                     </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-2-2"  
+class="td11">POST  </td><td  style="white-space:wrap; text-align:left;" id="TBL-3-2-3"  
+class="td11"><!--l. 257--><p class="noindent" >create album                                         </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-3-3-"><td  style="white-space:wrap; text-align:left;" id="TBL-3-3-1"  
+class="td11"><!--l. 258--><p class="noindent" ><span class="obeylines-h"><span class="verb"><span 
+class="cmtt-12">/albums/{User-Id}/{Group-Id}[/Album-Id]*</span></span></span>    </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-3-2"  
+class="td11">GET    </td><td  style="white-space:wrap; text-align:left;" id="TBL-3-3-3"  
+class="td11"><!--l. 258--><p class="noindent" >one or multiple albums                            </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-3-4-"><td  style="white-space:wrap; text-align:left;" id="TBL-3-4-1"  
+class="td11"><!--l. 259--><p class="noindent" ><span class="obeylines-h"><span class="verb"><span 
+class="cmtt-12">/mediaItems/{User-Id}/{Group-Id}/{Album-Id}/</span></span></span>
+<br 
+class="newline" /><span class="obeylines-h"><span class="verb"><span 
+class="cmtt-12">{MediaItem-Id}</span></span></span>                              </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-4-2"  
+class="td11">GET    </td><td  style="white-space:wrap; text-align:left;" id="TBL-3-4-3"  
+class="td11"><!--l. 259--><p class="noindent" >one mediaitem                                       </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-3-5-"><td  style="white-space:wrap; text-align:left;" id="TBL-3-5-1"  
+class="td11"><!--l. 260--><p class="noindent" ><span class="obeylines-h"><span class="verb"><span 
+class="cmtt-12">/mediaItem/{User-Id}/@self/{Album-Id}</span></span></span> (sic!)    </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-5-2"  
+class="td11">POST  </td><td  style="white-space:wrap; text-align:left;" id="TBL-3-5-3"  
+class="td11"><!--l. 260--><p class="noindent" >create mediaitem                                    </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-3-6-"><td  style="white-space:wrap; text-align:left;" id="TBL-3-6-1"  
+class="td11">                                            </td></tr></table></div>
+<br /> <div class="caption" 
+><span class="id">Table&#x00A0;2: </span><span  
+class="content">URI fragments for albums and mediaitems in the OpenSocial REST API</span></div><!--tex4ht:label?: x10-130022 -->
+                                                                                         
+                                                                                         
+    </div><hr class="endfloat" />
+    </div>
+<!--l. 264--><p class="indent" >    The last URI is obviously missing an &#8220;s&#8221; behind mediaItem. This typo is present in the
+OpenSocial spec since Version 1.0, released in march 2010. This is of course not a big issue in itself,
+but rather a sign that the specification is too verbose and does specify things that should be self
+evident.
+<!--l. 271--><p class="indent" >    <span class="subparagraphHead"> <a 
  id="x10-140008"></a><span 
 class="cmbx-12">Conclusion</span></span>
     The so called REST API of OpenSocial is not restful but rather another RPC interface in
@@ -65,12 +216,12 @@ responses (2.1.2 REST Response). Even the structure of an HTTP URI is redefined 
 REST-Request-URI).
                                                                                          
                                                                                          
-    <!--l. 246--><div class="crosslinks"><p class="noindent">[<a 
+    <!--l. 284--><div class="crosslinks"><p class="noindent">[<a 
 href="restful_groupwarese9.html" >next</a>] [<a 
 href="restful_groupwarese7.html" >prev</a>] [<a 
 href="restful_groupwarese7.html#tailrestful_groupwarese7.html" >prev-tail</a>] [<a 
 href="restful_groupwarese8.html" >front</a>] [<a 
 href="restful_groupware.html#restful_groupwarese8.html" >up</a>] </p></div>
-<!--l. 246--><p class="indent" >    <a 
+<!--l. 284--><p class="indent" >    <a 
  id="tailrestful_groupwarese8.html"></a>   
 </body></html> 
