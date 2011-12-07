@@ -55,7 +55,7 @@ Why OpenSocial / Portable Contacts:
 \section{Existing Groupware data APIs}
 
 \subsection{IMAP (Kolab)}
-\section{Kolab and its use of IMAP}
+
 Kolab uses an IMAP server as the data store and
 synchronization protocol for calendar and contact informations. I want to
 compare this approach to a restful one.
@@ -120,7 +120,7 @@ very well to HTTP.
 The discussion also continued on the microformats mailing list
 \url{http://microformats.org/discuss/mail/microformats-rest/2006-April/thread.html#217}.
 
-see Amundsen2010 for a restful approach to properties.
+see \cite{Amundsen2010} for a restful approach to properties.
 
 Is ATOM an alternative to WebDAV?
 
@@ -134,18 +134,9 @@ Is ATOM an alternative to WebDAV?
 Tim Bray, http://www.imc.org/atom-protocol/mail-archive/msg11271.html
 
 
-
-Examples of APIs that use REST instead of WebDAV:
-\begin{itemize}
-\item Amazon S3 \url{http://awsmedia.s3.amazonaws.com/pdf/RESTandS3.pdf} \url{http://docs.amazonwebservices.com/AmazonS3/latest/dev/RESTAPI.html}
-
-\end{itemize}
-
-
-
 \subsection{PortableContacts aka OpenSocial}
 
-\section{Is OpenSocial restful?}
+\subsubsection{Is OpenSocial restful?}
 
 Roy Fielding wrote a blog post about the ``SocialSite REST API'', stating that
 it isn't restful at all but clearly an RPC style
@@ -208,13 +199,13 @@ standard.\cite[sec 3.3]{RFC3986} Another misfit can be seen in the URI fragment
 to retrieve one or multiple albums. In this case the 'c' part in the quoted
 definition above is actually a list of albums to retrieve separated by a slash.
 
-Fielding's second bullet point most likely refers to the specification of the
-\verb:X-HTTP-Method-Override: header. This header is a widely
+Fielding's second bullet point most likely refers to the
+\texttt{X-HTTP-Method-Override} header. This header is a widely
 used\footnote{\citeurl{http://www.subbu.org/blog/2008/07/another-rest-anti-pattern}{2011-12-06}}
-workaround to allow the use of other HTTP methods then GET and POST from HTML
+workaround to allow the use of other HTTP methods than GET and POST from HTML
 forms or through firewalls.
 
-The next two points again refers to a more serious issue:
+The next two points again refer to a more serious issue:
 
 \begin{quote}
   A REST API should spend almost all of its descriptive effort in defining the
@@ -232,7 +223,7 @@ which URIs for different actions. This means that the OpenSocial API is not
 simple or intuitive to use but requires a client developer to read a lot of
 specification, thus violating the simplicity property of a restful
 architecture. Since the URIs are fixed in the specification and necessarily also
-in clients the modifiability property is also violated.\cite[sec
+in clients, the modifiability property is also violated.\cite[sec
 2.3]{Fielding2000}
 
 The following tables give some examples of the specified URIs:
@@ -269,31 +260,32 @@ The following tables give some examples of the specified URIs:
   \label{tab:OSURIAlbums}
 \end{table}
 
-The last URI is obviously missing an ``s'' behind mediaItem. This typo is
-present in the OpenSocial spec since Version 1.0, released in march 2010. This
-is of course not a big issue in itself, but rather a sign that the specification
-is too verbose and does specify things that should be self evident.
+The last URI in \autoref{tab:OSURIAlbums} is obviously missing an ``s'' behind
+\texttt{mediaItem}. This typo is present and unfixed in the OpenSocial spec
+since Version 1.0, released in march 2010. This is of course not a big issue in
+itself, but rather a sign that the specification is too verbose and does
+over-specify things that should rather be auto-discovered through hyperlinks.
 
 Fielding mentions in a comment to the same blog post that the OpenSocial API
 ``could be made so [restful] with some relatively small changes'' but does not
-specify those. However some issues can easily be identified.
+specify these changes. However some issues can easily be identified.
 
 First the data structures defined in OpenSocial do not use URIs to refer to
 other resources. Instead they use Object-Ids that must then be inserted in the
-appropriate URI templates. Examples are the recipients, senderId, collectionIds
-of messages and the ownerId of an album. The person structure does not contain
-fields referencing other resources. Thus it does not obviously violate REST like
-the albums and messages. However it does so even worse since there are hidden
-references only defined out-of-band in the specification. One can retrieve the
-albums, relations or messages of a user by filling in the userId in one of the
-specified URI templates. If Users would just contain references to other
-resources related to a user, the specification could already be shortened a
-lot.
+appropriate URI templates. Examples are the \texttt{recipients},
+\texttt{senderId}, \texttt{collectionIds} of messages and the \texttt{ownerId}
+of albums. The person structure does not contain fields referencing other
+resources. Thus it does not obviously violate REST like the albums and
+messages. However it does so even worse since there are hidden references only
+defined out-of-band in the specification. One can retrieve the albums, relations
+or messages of a user by filling in the \texttt{userId} in one of the specified
+URI templates. If Users would just contain references to other resources related
+to a user, the specification could already be shortened a lot.
 
 Another missed opportunity for a much more intuitive API is the relation of
 media items and albums. This seems to be poster child example for a collection
-(album) entry (media item) relation which could have made use of the
-hierarchical character of URI paths. OpenSocial however requires the client
+(album) to collection-element (media item) relation which could have made use of
+the hierarchical character of URI paths. OpenSocial however requires the client
 developer to use two different URI templates. (\autoref{tab:OSURIAlbums})
 
 A not so small change to OpenSocial would be to either use already standardized
