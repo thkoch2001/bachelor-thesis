@@ -52,6 +52,49 @@ Why OpenSocial / Portable Contacts:
 
 \section{Advantages of REST for Groupware data}
 
+The REST style is motivated by the argument that its application would help to provide certain attributes for an architecture.\cite[sec 5.1]{Fielding2000}
+
+Maybe not so important for a companies internal Groupware: Scalability (in terms of users), Network performance, Efficiency, 
+
+\begin{itemize}
+\item Cachability can keep the data available also in offline mode
+\item Simplicity helps to develop glue code between different systems
+\item Modifiability allows to adapt the Groupware to changes in the organization
+\item Reliability
+\item Administrativ scalability
+\end{itemize}
+
+\section{Evaluation of APIs}
+
+\subsubsection{Algermissen's Classification of HTTP-based APIs}
+\label{sec:algerm-class-http}
+
+Jan Algermissen, proposes a ``Classification of HTTP-based APIs'' in February 2010.\footnote{
+\citeurl{http://nordsc.com/ext/classification_of_http_based_apis.html}{2011-12-08}} 
+He identifies and names a five level order of HTTP based APIs. Each level adds
+one constraint to be obeyed. The last level obeys all five constraints and is
+RESTful.~(\autoref{tab:algermissenclassification})
+
+\begin{table}[h]
+  \begin{tabular}{p{0.15\textwidth} p{0.3\textwidth} p{0.4\textwidth}}
+    level name & constraint violated & violation description \\
+    \hline \\
+    WS-* &   Identification of Resources & Only service endpoint is identified by URI. No resources exposed. \\
+    RPC URI-Tunneling &    Manipulation of Resources through Representations & SOAP body contains operation name, message not transferred to manipulate resource state. \\
+    HTTP-based Type I &    Self-Descriptive Messages & Message semantics depend on action specified in message body. \\
+    HTTP-based Type II &    Hypermedia as the Engine of Application State & Application state machine known at design time. \\
+  \end{tabular}
+  \caption{Classification of HTTP-based APIs after Algermissen}
+  \label{tab:algermissenclassification}
+\end{table}
+
+In addition to that, Algermissen also provides a list of ``Effect on System
+Properties and Cost'' of the different API styles and acknowledges that the
+initial costs of developing a REST API may be higher compared to the other
+styles but lower in the long run.
+
+
+
 \section{Existing Groupware data APIs}
 
 \subsection{IMAP (Kolab)}
@@ -312,6 +355,15 @@ representations.\footnote{compare Bill de Hora, Extensions v Envelopes. 11/2009 
   \citeurl{http://www.dehora.net/journal/2009/11/28/extensions-v-envelopes}{2011-21-07}}
 Consequently the newest OpenSocial specification deprecates any reference to the
 ATOM format.
+
+In Algermissen's classification (~\ref{sec:algerm-class-http}), the OpenSocial
+REST API would actually be ``HTTP-based Type I'' due to the lack of media types
+and direct hyper links between related resources. Algermissen writes that this
+level has the lowest possible initial cost of all HTTP APIs. Or in other words:
+The OpenSocial specification authors did not have to invest a lot to come up
+with this API specification but maintenance and evolution cost may be medium or
+high.
+
 
 \section{Persistency for Groupware Data}
 Relational Databases vs. NoSQL databases vs. plain files
