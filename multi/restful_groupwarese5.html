@@ -1,36 +1,40 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"  
   "http://www.w3.org/TR/html4/loose.dtd">  
 <html > 
-<head><title>Synchronizing a large collection</title> 
+<head><title>Persistency for Groupware Data</title> 
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"> 
 <meta name="generator" content="TeX4ht (http://www.cse.ohio-state.edu/~gurari/TeX4ht/)"> 
 <meta name="originator" content="TeX4ht (http://www.cse.ohio-state.edu/~gurari/TeX4ht/)"> 
 <!-- html,2 --> 
 <meta name="src" content="restful_groupware.tex"> 
-<meta name="date" content="2011-12-07 19:43:00"> 
+<meta name="date" content="2011-12-08 17:28:00"> 
 <link rel="stylesheet" type="text/css" href="restful_groupware.css"> 
 </head><body 
 >
-    <!--l. 325--><div class="crosslinks"><p class="noindent">[<a 
-href="restful_groupwarese11.html" >next</a>] [<a 
+    <!--l. 368--><div class="crosslinks"><p class="noindent">[<a 
+href="restful_groupwarese12.html" >next</a>] [<a 
 href="restful_groupwarese4.html" >prev</a>] [<a 
 href="restful_groupwarese4.html#tailrestful_groupwarese4.html" >prev-tail</a>] [<a 
-href="#tailrestful_groupwarese5.html">tail</a>] [<a 
-href="restful_groupware.html#restful_groupwarese10.html" >up</a>] </p></div>
+href="restful_groupwarese4.html#tailrestful_groupwarese5.html">tail</a>] [<a 
+href="restful_groupware.html#restful_groupwarese11.html" >up</a>] </p></div>
     <h3 class="sectionHead"><span class="titlemark">5.  </span> <a 
- id="x12-120005"></a>Synchronizing a large collection</h3>
-<!--l. 327--><p class="noindent" >How to efficiently synchronize a large collection of contacts with the server without checking each
-contact for changes?
-<!--l. 329--><p class="indent" >    Portable Contacts has a filter &#8220;updatedSince&#8221;.
-<!--l. 331--><p class="indent" >    How is synchronization done in CardDAV?
-                                                                                         
-                                                                                         
-    <!--l. 333--><div class="crosslinks"><p class="noindent">[<a 
-href="restful_groupwarese11.html" >next</a>] [<a 
+ id="x13-130005"></a>Persistency for Groupware Data</h3>
+<!--l. 369--><p class="noindent" >Relational Databases vs. NoSQL databases vs. plain files
+<!--l. 371--><p class="indent" >    Relational databases are not practical for contacts, events or todos. Common patterns in
+systems that use relational DBs for that purpose:
+      <ul class="itemize1">
+      <li class="itemize">artificial limits of entries, e.g. only 3 email addresses per contact, because there are
+      only three columns email1, email2 and email3.
+      </li>
+      <li class="itemize">Fields for custom data like custom1 to customX
+      </li>
+      <li class="itemize">EAV pattern: tables like: id, foreign_id, type, value</li></ul>
+<!--l. 377--><div class="crosslinks"><p class="noindent">[<a 
+href="restful_groupwarese12.html" >next</a>] [<a 
 href="restful_groupwarese4.html" >prev</a>] [<a 
 href="restful_groupwarese4.html#tailrestful_groupwarese4.html" >prev-tail</a>] [<a 
 href="restful_groupwarese5.html" >front</a>] [<a 
-href="restful_groupware.html#restful_groupwarese10.html" >up</a>] </p></div>
-<!--l. 333--><p class="indent" >    <a 
+href="restful_groupware.html#restful_groupwarese11.html" >up</a>] </p></div>
+<!--l. 377--><p class="indent" >    <a 
  id="tailrestful_groupwarese5.html"></a>  
 </body></html> 
