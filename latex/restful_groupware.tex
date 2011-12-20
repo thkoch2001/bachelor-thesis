@@ -384,9 +384,84 @@ How is synchronization done in CardDAV?
 
 \section{Mediatypes}
 
-% http://blog.programmableweb.com/2011/11/18/rest-api-design-putting-the-type-in-content-type/
-% http://www.wrml.org Web Resource Modeling Language
+\begin{quote}
+  To some extent, people get REST wrong because I failed to include enough
+  detail on media type design within my dissertation.~--~Roy T. Fielding\footnote
+  {\citeurl{http://roy.gbiv.com/untangled/2008/rest-apis-must-be-hypertext-driven}{2011-12-20}}
+\end{quote}
 
+The usage of standardized media types is one key difference between an API and a
+restful API. \cite[sec. 5.2.1.2]{Fielding2000} Only if the client has knowledge
+about the media type can it do something meaningful with it besides just
+receiving it. In that sense, the often used mime types application/xml or
+application/json are not really media types. They don't tell the browser or user
+anything meaningful beside the \emph{syntax} of the data.\footnote{
+\citeurl{http://blog.programmableweb.com/2011/11/18/rest-api-design-putting-the-type-in-content-type}{2011-21-20}
+and Web Resource Modeling Language \citeurl{http://www.wrml.org}{2011-12-20} both by Mark Massé
+}
+
+But to do anything meaningful with the data, the client programmer must normally
+look up the meaning or \emph{semantic} of the data in the API documentation. The
+data therefor fails the self-descriptive constraint of a REST.
+
+Compare this with a mime type like \texttt{application/atom+xml}. It specifies
+the syntax (xml) and the semantic (atom) of the data. Of course somebody once
+needed to read the atom specification and program the client with the knowledge
+of how to process this media type. The purpose of standardized media types
+however is that there is a limited number of them and that they are reused by many
+sites and clients.
+
+Large sites like Google, Facebook or Twitter can successfully attract enough
+developers to read their specifications and program clients accordingly. Usually
+one can also find client libraries that can help a lot. REST however envisions a
+decentralized web in which parties can interact without previous knowledge of
+each other. This becomes possible through the usage of well known predefined
+media types.
+
+\subsection{xml vs. json}
+
+The application section of the IANA mime type registration has 294 entries
+ending in ``+xml'' and only 3 ending in
+``+json''.\footnote{\citeurl{http://www.iana.org/assignments/media-types/application/index.html}{2011-12-20}}
+This stands in contrast to the rise of public json APIs and the decline of XML
+APIs.\footnote{\citeurl{http://blog.programmableweb.com/2011/05/25/1-in-5-apis-say-bye-xml/}{2011-12-20}}
+
+JSON is often preferred as a format over XML because it is perceived as easier
+to parse, process and smaller in size. XML in comparison is seen as complicate,
+slow to process and larger in size. A strong argument for JSON as the preferred
+format for javascript applications is that JSON is a subset of javascript.
+
+
+\subsection{Syntax vs. Semantic}
+
+Version 3 of vCard was published in 1998\cite{RFC2425} only a few months after
+the W3C published Version 1.0 of XML\cite{Paoli:98:XR} and eight years before
+JSON became an official standard.\cite{RFC4627}
+
+XML standards:
+  xCal, xCard, XMPP, Atom
+
+\url{http://en.wikipedia.org/wiki/ECMAScript_for_XML} (E4X) makes XML a first class language construct 
+
+\begin{table}
+  \begin{tabular}{l c c c c c}
+    type of data & XML  & JSON                      & semantic          & microformat & comment \\
+    Calendar     & xCal & Google calendar API       &                   & hCalendar & other: iCalendar  \\
+    Contact      & xCard & portable contacts, jCard & friend of a friend & hCard & other: vCard \\
+    Resume       & HR XML &                          & Description of a Career & hResume & \\    
+  \end{tabular}
+  \caption{data in different formats}
+  \label{tab:data-formats}
+\end{table}
+
+Open-Xchange provides an (unrestful) HTTP/JSON API which is used by its
+javascript
+frontend.\footnote{\citeurl{http://oxpedia.org/index.php?title=HTTP_API}{2011-19-12}}
+The comprehensive documentation does not indicate whether the data structures
+for tasks, appointments, reminders and contacts were inspired by any
+standards. In any case the API documentation is a good example of the need for
+standard mime types in JSON format. The use case for this API also shows
+similarities to the use of OpenSocial for intranet frontends.
 
 \subsection{Updates with alternative Mediatypes}
 How to handle updates, if the mediatypes are not isomorph?
@@ -400,6 +475,188 @@ Which fields of portable contacts are derived from vCard: \url{http://wiki.porta
 \begin{quote}
   No single data representation is ideal for every client. This protocol defines representations for each resource in three widely supported formats, JSON [RFC4627], XML, and Atom [RFC4287] / AtomPub [RFC5023], using a set of generic mapping rules. The mapping rules allow a server to write to a single interface rather than implementing the protocol three times.
 \end{quote}\cite[Core API Server]{OSSpec2.0.1}
+
+% microformats to json converter \url{http://microformatique.com/optimus/}
+
+
+In 2007, a project called microjson wanted to standardize json representations of microformat data structures.\footnote{\citeurl{http://notizblog.org/2007/09/16/microjson-microformats-in-json/}{2011-12-19}} 
+
+The project identified the need for a json schema:\footnote{\citeurl{http://web.archive.org/web/20080524003749/http://microjson.org/wiki/Schemas}{2022-12-19}}
+\begin{quote}
+  If there are standard microJSON formats for transfer of certain datasets, there will be a need to validate that data to ensure that it is infact valid format. To validate a format you need something that details the structure, data content types and required data. Sounds like we'll be needing a schema for each microJSON format. 
+\end{quote}
+
+
+jCard example from microjson.org\footnote{\citeurl{http://web.archive.org/web/20080517003233/http://microjson.org/wiki/JCard}{2011-12-19}}
+\begin{verbatim}
+{
+"vcard":{
+  "name":{
+    "given":"John",
+    "additional":"Paul",
+    "family":"Smith"
+  },
+  "org":"Company Corp",
+  "email":"john@companycorp.com",
+  "address":{
+    "street":"50 Main Street",
+    "locality":"Cityville",
+    "region":"Stateshire",
+    "postalCode":"1234abc",
+    "country":"Someplace"
+  },
+  "tel":"111-222-333",
+  "aim":"johnsmith",
+  "yim":"smithjohn"
+}
+\end{verbatim}
+
+\subsection{Example: vCard}
+
+\begin{verbatim}
+   <?xml version="1.0" encoding="UTF-8"?>
+   <vcards xmlns="urn:ietf:params:xml:ns:vcard-4.0">
+     <vcard>
+       <fn><text>Simon Perreault</text></fn>
+       <n>
+         <surname>Perreault</surname>
+         <given>Simon</given>
+         <additional/>
+         <prefix/>
+         <suffix>ing. jr</suffix>
+         <suffix>M.Sc.</suffix>
+       </n>
+       <bday><date>--0203</date></bday>
+       <anniversary>
+         <date-time>20090808T1430-0500</date-time>
+       </anniversary>
+       <gender><sex>M</sex></gender>
+       <lang>
+         <parameters><pref><integer>1</integer></pref></parameters>
+         <language-tag>fr</language-tag>
+       </lang>
+       <lang>
+         <parameters><pref><integer>2</integer></pref></parameters>
+         <language-tag>en</language-tag>
+       </lang>
+       <org>
+         <parameters><type><text>work</text></type></parameters>
+         <text>Viagenie</text>
+       </org>
+       <adr>
+         <parameters>
+           <type><text>work</text></type>
+           <label><text>Simon Perreault
+   2875 boul. Laurier, suite D2-630
+   Quebec, QC, Canada
+   G1V 2M2</text></label>
+         </parameters>
+         <pobox/>
+         <ext/>
+         <street>2875 boul. Laurier, suite D2-630</street>
+         <locality>Quebec</locality>
+         <region>QC</region>
+         <code>G1V 2M2</code>
+         <country>Canada</country>
+       </adr>
+       <tel>
+         <parameters>
+           <type>
+             <text>work</text>
+             <text>voice</text>
+           </type>
+         </parameters>
+         <uri>tel:+1-418-656-9254;ext=102</uri>
+       </tel>
+       <tel>
+         <parameters>
+           <type>
+             <text>work</text>
+             <text>text</text>
+             <text>voice</text>
+             <text>cell</text>
+             <text>video</text>
+           </type>
+         </parameters>
+         <uri>tel:+1-418-262-6501</uri>
+       </tel>
+       <email>
+         <parameters><type><text>work</text></type></parameters>
+         <text>simon.perreault@viagenie.ca</text>
+       </email>
+       <geo>
+         <parameters><type><text>work</text></type></parameters>
+         <uri>geo:46.766336,-71.28955</uri>
+       </geo>
+       <key>
+         <parameters><type><text>work</text></type></parameters>
+         <uri>http://www.viagenie.ca/simon.perreault/simon.asc</uri>
+       </key>
+       <tz><text>America/Montreal</text></tz>
+       <url>
+         <parameters><type><text>home</text></type></parameters>
+         <uri>http://nomis80.org</uri>
+       </url>
+     </vcard>
+   </vcards>
+\end{verbatim}
+
+\begin{verbatim}
+   <?xml version="1.0" encoding="UTF-8"?>
+   <vcards xmlns="urn:ietf:params:xml:ns:vcard-4.0">
+     <vcard>
+       <fn><text>Simon Perreault</text></fn>
+       <n>
+         <surname>Perreault</surname>
+         <given>Simon</given>
+         <suffix>ing. jr</suffix>
+         <suffix>M.Sc.</suffix>
+       </n>
+       <bday day="02" month="03" />
+       <anniversary format="date-time">20090808T1430-0500</anniversary>
+       <gender>M</gender>
+       <lang pref="1">fr</lang>
+       <lang pref="2">en</lang>
+       <org type="work">Viagenie</org>
+       <adr type="work">
+         <label>Simon Perreault
+   2875 boul. Laurier, suite D2-630
+   Quebec, QC, Canada
+   G1V 2M2</label>
+         <street>2875 boul. Laurier, suite D2-630</street>
+         <locality>Quebec</locality>
+         <region>QC</region>
+         <code>G1V 2M2</code>
+         <country>Canada</country>
+       </adr>
+       <tel>
+         <type>work</type>
+         <type>voice</type>
+         <uri>tel:+1-418-656-9254;ext=102</uri>
+       </tel>
+       <tel>
+         <type>work</type>
+         <type>text</type>
+         <type>voice</type>
+         <type>cell</type>
+         <type>video</type>
+         <uri>tel:+1-418-262-6501</uri>
+       </tel>
+       <email type="work">simon.perreault@viagenie.ca</email>
+       <geo type="work">
+         <uri>geo:46.766336,-71.28955</uri>
+       </geo>
+       <key type="work">
+         <uri>http://www.viagenie.ca/simon.perreault/simon.asc</uri>
+       </key>
+       <tz>America/Montreal</tz>
+       <url type="home">
+         <uri>http://nomis80.org</uri>
+       </url>
+     </vcard>
+   </vcards>
+\end{verbatim}
+
 
 \section{Hypermedia in RESTful applications}
 
@@ -453,6 +710,7 @@ https://launchpad.net/ubuntu/+source/dovecot-metadata-plugin/8-0ubuntu1
 % ATOM http://abdera.apache.org/ http://www.ibm.com/developerworks/xml/library/x-atompp3/ http://www.ibm.com/developerworks/xml/library/x-tipatom4/index.html
 
 % JSON: http://jackson.codehaus.org/ http://code.google.com/p/google-gson/
+% http://microformats.org/wiki/org.microformats.hCard
 
 \subsection{REST framework}
 Jersey recommended by \cite{Kaiser2011} above Restfulie and RESTeasy because of maturity and flexibility.
@@ -518,6 +776,9 @@ Portable Contacts test client at plaxo \url{http://www.plaxo.com/pdata/testClien
 
   % http://microformats.org/wiki/hcard
   \item[hCard]
+
+  % http://microformats.org/wiki/jcard
+  \item[jCard]
 
 \end{description}
 
@@ -607,6 +868,8 @@ Portable Contacts test client at plaxo \url{http://www.plaxo.com/pdata/testClien
 \subsection{out of scope}
 \begin{description}[\breaklabel\setleftmargin{1ex}]
 
+  % LDIF for person info
+
   % http://www.openmobilealliance.org/Technical/release_program/cab_v1_0.aspx
   \item[OMA Converged Address Book V1.0]
 
@@ -634,7 +897,6 @@ Portable Contacts test client at plaxo \url{http://www.plaxo.com/pdata/testClien
     organization dedicated to the development and promotion of a standard suite
     of XML specifications to enable e-business and the automation of human
     resources-related data exchanges.
-
 \end{description}
 
 
@@ -748,6 +1010,10 @@ Portable Contacts test client at plaxo \url{http://www.plaxo.com/pdata/testClien
   % obm.org http://en.wikipedia.org/wiki/OBM_Groupware
   \item[OBM Groupware]
     PHP, GPL
+
+  \item[Open-Xchange]
+    Java, 
+    In 2006 a Debian packaging attempt was canceled because upstream decided not to publish security updates for the open source version anymore.\footnote{\citeurl{http://web.archive.org/web/20100510133805/http://seraphyn.deveth.org/archives/10-Keine-Zukunft-in-der-freien-Version-von-Open-Exchange-auf-Debian.html}{2011-12-19}}
 
   % http://owncloud.org
   \item[owncloud]
