@@ -7,47 +7,434 @@
 <meta name="originator" content="TeX4ht (http://www.cse.ohio-state.edu/~gurari/TeX4ht/)"> 
 <!-- html,2 --> 
 <meta name="src" content="restful_groupware.tex"> 
-<meta name="date" content="2011-12-08 17:28:00"> 
+<meta name="date" content="2011-12-21 20:45:00"> 
 <link rel="stylesheet" type="text/css" href="restful_groupware.css"> 
 </head><body 
 >
     <!--l. 385--><div class="crosslinks"><p class="noindent">[<a 
-href="restful_groupwarese14.html" >next</a>] [<a 
 href="restful_groupwarese6.html" >prev</a>] [<a 
 href="restful_groupwarese6.html#tailrestful_groupwarese6.html" >prev-tail</a>] [<a 
 href="#tailrestful_groupwarese7.html">tail</a>] [<a 
 href="restful_groupware.html#restful_groupwarese13.html" >up</a>] </p></div>
     <h3 class="sectionHead"><span class="titlemark">7.  </span> <a 
  id="x15-150007"></a>Mediatypes</h3>
-<!--l. 391--><p class="noindent" >
+<!--l. 387--><p class="noindent" >
+      <div class="quote">
+      <!--l. 388--><p class="noindent" >To some extent, people get REST wrong because I failed to include enough detail
+      on media type design within my dissertation.&#x00A0;&#8211;&#x00A0;Roy T. Fielding</div>
+<!--l. 391--><p class="noindent" >from: Rest APIs must be hypertext driven<span class="footnote-mark"><a 
+href="restful_groupware16.html#fn7x0"><sup class="textsuperscript">7</sup></a></span><a 
+ id="x15-15001f7"></a> 
+<!--l. 394--><p class="indent" >    The usage of standardized media types is one key difference between an API and
+a restful API. <span class="cite">[<a 
+href="restful_groupwareli2.html#XFielding2000">Fie00</a>, sec. 5.2.1.2]</span> Only if the client has knowledge about the media
+type can it do something meaningful with it besides just receiving it. In that sense,
+the often used mime types application/xml or application/json are not really media
+types. They don&#8217;t tell the browser or user anything meaningful beside the <span 
+class="cmti-12">syntax </span>of the
+data.<span class="footnote-mark"><a 
+href="restful_groupware17.html#fn8x0"><sup class="textsuperscript">8</sup></a></span><a 
+ id="x15-15002f8"></a> 
+<!--l. 404--><p class="indent" >    But to do anything meaningful with the data, the client programmer must normally look up
+the meaning or <span 
+class="cmti-12">semantic </span>of the data in the API documentation. The data therefor fails the
+self-descriptive constraint of a REST.
+<!--l. 408--><p class="indent" >    Compare this with a mime type like <span 
+class="cmtt-12">application/atom+xml</span>. It specifies the syntax (xml) and
+the semantic (atom) of the data. Of course somebody once needed to read the atom specification
+and program the client with the knowledge of how to process this media type. The purpose of
+standardized media types however is that there is a limited number of them and that they are
+reused by many sites and clients.
+<!--l. 415--><p class="indent" >    Large sites like Google, Facebook or Twitter can successfully attract enough developers to read
+their specifications and program clients accordingly. Usually one can also find client libraries that
+can help a lot. REST however envisions a decentralized web in which parties can interact without
+previous knowledge of each other. This becomes possible through the usage of well known
+predefined media types.
+<!--l. 422--><p class="noindent" >
     <h4 class="subsectionHead"><span class="titlemark">7.1.  </span> <a 
- id="x15-160007.1"></a>Updates with alternative Mediatypes</h4>
-<!--l. 392--><p class="noindent" >How to handle updates, if the mediatypes are not isomorph?
-<!--l. 394--><p class="indent" >    How does Google handle PATCH in the calendar API?
-<!--l. 396--><p class="noindent" >
+ id="x15-160007.1"></a>xml vs. json</h4>
+<!--l. 424--><p class="noindent" >The application section of the IANA mime type registration has 294 entries ending in &#8220;+xml&#8221; and only 3 ending
+in &#8220;+json&#8221;.<span class="footnote-mark"><a 
+href="restful_groupware18.html#fn9x0"><sup class="textsuperscript">9</sup></a></span><a 
+ id="x15-16001f9"></a> 
+This stands in contrast to the rise of public json APIs and the decline of XML
+                                                                                         
+                                                                                         
+APIs.<span class="footnote-mark"><a 
+href="restful_groupware19.html#fn10x0"><sup class="textsuperscript">10</sup></a></span><a 
+ id="x15-16002f10"></a> 
+<!--l. 430--><p class="indent" >    JSON is often preferred as a format over XML because it is perceived as easier to parse,
+process and smaller in size. XML in comparison is seen as complicate, slow to process and larger in
+size. A strong argument for JSON as the preferred format for javascript applications is that JSON
+is a subset of javascript.
+<!--l. 436--><p class="noindent" >
     <h4 class="subsectionHead"><span class="titlemark">7.2.  </span> <a 
- id="x15-170007.2"></a>Mediatype conversion</h4>
-<!--l. 398--><p class="noindent" >Which fields of portable contacts are derived from vCard:
+ id="x15-170007.2"></a>Syntax vs. Semantic</h4>
+<!--l. 438--><p class="noindent" >Examples for semantic issues that could be solved once and represented in different serialization
+formats: Not only provide fields for a birthday and birth location, also provide fields for date and place
+of death.<span class="footnote-mark"><a 
+href="restful_groupware20.html#fn11x0"><sup class="textsuperscript">11</sup></a></span><a 
+ id="x15-17001f11"></a> 
+or the difference between gender and sex and how it should be represented in contact
+data.<span class="footnote-mark"><a 
+href="restful_groupware21.html#fn12x0"><sup class="textsuperscript">12</sup></a></span><a 
+ id="x15-17002f12"></a> 
+<!--l. 447--><p class="indent" >    Version 3 of vCard was published in 1998<span class="cite">[<a 
+href="restful_groupwareli2.html#XRFC2425">HSD98</a>]</span> only a few months after the W3C
+published Version 1.0 of XML<span class="cite">[<a 
+href="restful_groupwareli2.html#XPaoli:98:XR">PSMB98</a>]</span> and eight years before JSON became an official
+standard.<span class="cite">[<a 
+href="restful_groupwareli2.html#XRFC4627">Cro06</a>]</span>
+<!--l. 451--><p class="indent" >    XML standards: xCal, xCard, XMPP, Atom
+<!--l. 454--><p class="indent" >    <a 
+href="http://en.wikipedia.org/wiki/ECMAScript_for_XML" class="url" ><span 
+class="cmtt-12">http://en.wikipedia.org/wiki/ECMAScript_for_XML</span></a> (E4X) makes XML a first class
+language construct
+    <div class="table">
+                                                                                         
+                                                                                         
+<!--l. 457--><p class="indent" >    <a 
+ id="x15-170034"></a><hr class="float"><div class="float" 
+>
+                                                                                         
+                                                                                         
+<div class="tabular"> <table id="TBL-5" class="tabular" 
+cellspacing="0" cellpadding="0"  
+><colgroup id="TBL-5-1g"><col 
+id="TBL-5-1"><col 
+id="TBL-5-2"><col 
+id="TBL-5-3"><col 
+id="TBL-5-4"><col 
+id="TBL-5-5"><col 
+id="TBL-5-6"></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-5-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-5-1-1"  
+class="td11">type of data</td><td  style="white-space:nowrap; text-align:center;" id="TBL-5-1-2"  
+class="td11">  XML   </td><td  style="white-space:nowrap; text-align:center;" id="TBL-5-1-3"  
+class="td11">        JSON            </td><td  style="white-space:nowrap; text-align:center;" id="TBL-5-1-4"  
+class="td11">      semantic          </td><td  style="white-space:nowrap; text-align:center;" id="TBL-5-1-5"  
+class="td11">microformat</td><td  style="white-space:nowrap; text-align:center;" id="TBL-5-1-6"  
+class="td11">   comment     </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-5-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-5-2-1"  
+class="td11">Calendar     </td><td  style="white-space:nowrap; text-align:center;" id="TBL-5-2-2"  
+class="td11">  xCal   </td><td  style="white-space:nowrap; text-align:center;" id="TBL-5-2-3"  
+class="td11"> Google calendar API  </td><td  style="white-space:nowrap; text-align:center;" id="TBL-5-2-4"  
+class="td11">                   </td><td  style="white-space:nowrap; text-align:center;" id="TBL-5-2-5"  
+class="td11"> hCalendar </td><td  style="white-space:nowrap; text-align:center;" id="TBL-5-2-6"  
+class="td11">other: iCalendar</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-5-3-"><td  style="white-space:nowrap; text-align:left;" id="TBL-5-3-1"  
+class="td11">Contact       </td><td  style="white-space:nowrap; text-align:center;" id="TBL-5-3-2"  
+class="td11"> xCard  </td><td  style="white-space:nowrap; text-align:center;" id="TBL-5-3-3"  
+class="td11">portable contacts, jCard</td><td  style="white-space:nowrap; text-align:center;" id="TBL-5-3-4"  
+class="td11">   friend of a friend    </td><td  style="white-space:nowrap; text-align:center;" id="TBL-5-3-5"  
+class="td11">   hCard    </td><td  style="white-space:nowrap; text-align:center;" id="TBL-5-3-6"  
+class="td11"> other: vCard  </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-5-4-"><td  style="white-space:nowrap; text-align:left;" id="TBL-5-4-1"  
+class="td11">Resume       </td><td  style="white-space:nowrap; text-align:center;" id="TBL-5-4-2"  
+class="td11">HR XML</td><td  style="white-space:nowrap; text-align:center;" id="TBL-5-4-3"  
+class="td11">                    </td><td  style="white-space:nowrap; text-align:center;" id="TBL-5-4-4"  
+class="td11">Description of a Career</td><td  style="white-space:nowrap; text-align:center;" id="TBL-5-4-5"  
+class="td11"> hResume  </td><td  style="white-space:nowrap; text-align:center;" id="TBL-5-4-6"  
+class="td11">              </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-5-5-"><td  style="white-space:nowrap; text-align:left;" id="TBL-5-5-1"  
+class="td11">           </td></tr></table></div>
+<br /> <div class="caption" 
+><span class="id">Table&#x00A0;4: </span><span  
+class="content">data in different formats</span></div><!--tex4ht:label?: x15-170034 -->
+                                                                                         
+                                                                                         
+    </div><hr class="endfloat" />
+    </div>
+<!--l. 467--><p class="indent" >    Open-Xchange provides an (unrestful) HTTP/JSON API which is used by its javascript
+frontend.<span class="footnote-mark"><a 
+href="restful_groupware22.html#fn13x0"><sup class="textsuperscript">13</sup></a></span><a 
+ id="x15-17004f13"></a> 
+The comprehensive documentation does not indicate whether the data structures for tasks,
+appointments, reminders and contacts were inspired by any standards. In any case the API
+documentation is a good example of the need for standard mime types in JSON format.
+The use case for this API also shows similarities to the use of OpenSocial for intranet
+frontends.
+    <h4 class="subsectionHead"><span class="titlemark">7.3.  </span> <a 
+ id="x15-180007.3"></a>Updates with alternative Mediatypes</h4>
+<!--l. 477--><p class="noindent" >How to handle updates, if the mediatypes are not isomorph?
+<!--l. 479--><p class="indent" >    How does Google handle PATCH in the calendar API?
+<!--l. 481--><p class="noindent" >
+    <h4 class="subsectionHead"><span class="titlemark">7.4.  </span> <a 
+ id="x15-190007.4"></a>Mediatype conversion</h4>
+<!--l. 483--><p class="noindent" >Which fields of portable contacts are derived from vCard:
 <a 
 href="http://wiki.portablecontacts.net/w/page/17776141/schema" class="url" ><span 
 class="cmtt-12">http://wiki.portablecontacts.net/w/page/17776141/schema</span></a>
-<!--l. 400--><p class="indent" >
+<!--l. 485--><p class="indent" >
       <div class="quote">
-      <!--l. 401--><p class="noindent" >No  single  data  representation  is  ideal  for  every  client.  This  protocol  defines
+      <!--l. 486--><p class="noindent" >No  single  data  representation  is  ideal  for  every  client.  This  protocol  defines
       representations  for  each  resource  in  three  widely  supported  formats,  JSON
       [RFC4627], XML, and Atom [RFC4287] / AtomPub [RFC5023], using a set of
       generic mapping rules. The mapping rules allow a server to write to a single
       interface rather than implementing the protocol three times.</div>
-<!--l. 402--><p class="noindent" ><span class="cite">[<a 
+<!--l. 487--><p class="noindent" ><span class="cite">[<a 
 href="restful_groupwareli2.html#XOSSpec2.0.1">Ope11</a>, Core API Server]</span>
+<!--l. 492--><p class="indent" >    In 2007, a project called microjson wanted to standardize json representations of microformat data
+structures.<span class="footnote-mark"><a 
+href="restful_groupware23.html#fn14x0"><sup class="textsuperscript">14</sup></a></span><a 
+ id="x15-19001f14"></a> 
+<!--l. 494--><p class="indent" >    The project identified the need for a json
+schema:<span class="footnote-mark"><a 
+href="restful_groupware24.html#fn15x0"><sup class="textsuperscript">15</sup></a></span><a 
+ id="x15-19002f15"></a> 
+      <div class="quote">
+      <!--l. 496--><p class="noindent" >If there are standard microJSON formats for transfer of certain datasets, there
+      will be a need to validate that data to ensure that it is infact valid format.
+      To  validate  a  format  you  need  something  that  details  the  structure,  data
+      content types and required data. Sounds like we&#8217;ll be needing a schema for each
+      microJSON format.</div>
+<!--l. 500--><p class="indent" >    jCard example from microjson.org<span class="footnote-mark"><a 
+href="restful_groupware25.html#fn16x0"><sup class="textsuperscript">16</sup></a></span><a 
+ id="x15-19003f16"></a> 
                                                                                          
                                                                                          
-    <!--l. 404--><div class="crosslinks"><p class="noindent">[<a 
-href="restful_groupwarese14.html" >next</a>] [<a 
+    <div class="verbatim" id="verbatim-1">
+{
+&#x00A0;<br />"vcard":{
+&#x00A0;<br />&#x00A0;&#x00A0;"name":{
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;"given":"John",
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;"additional":"Paul",
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;"family":"Smith"
+&#x00A0;<br />&#x00A0;&#x00A0;},
+&#x00A0;<br />&#x00A0;&#x00A0;"org":"Company&#x00A0;Corp",
+&#x00A0;<br />&#x00A0;&#x00A0;"email":"john@companycorp.com",
+&#x00A0;<br />&#x00A0;&#x00A0;"address":{
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;"street":"50&#x00A0;Main&#x00A0;Street",
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;"locality":"Cityville",
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;"region":"Stateshire",
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;"postalCode":"1234abc",
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;"country":"Someplace"
+&#x00A0;<br />&#x00A0;&#x00A0;},
+&#x00A0;<br />&#x00A0;&#x00A0;"tel":"111-222-333",
+&#x00A0;<br />&#x00A0;&#x00A0;"aim":"johnsmith",
+&#x00A0;<br />&#x00A0;&#x00A0;"yim":"smithjohn"
+&#x00A0;<br />}
+</div>
+<!--l. 522--><p class="nopar" >
+<!--l. 524--><p class="noindent" >
+    <h4 class="subsectionHead"><span class="titlemark">7.5.  </span> <a 
+ id="x15-200007.5"></a>Example: vCard</h4>
+                                                                                         
+                                                                                         
+    <div class="verbatim" id="verbatim-2">
+&#x00A0;&#x00A0;&#x00A0;&#x003C;?xml&#x00A0;version="1.0"&#x00A0;encoding="UTF-8"?&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x003C;vcards&#x00A0;xmlns="urn:ietf:params:xml:ns:vcard-4.0"&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;vcard&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;fn&#x003E;&#x003C;text&#x003E;Simon&#x00A0;Perreault&#x003C;/text&#x003E;&#x003C;/fn&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;n&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;surname&#x003E;Perreault&#x003C;/surname&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;given&#x003E;Simon&#x003C;/given&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;additional/&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;prefix/&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;suffix&#x003E;ing.&#x00A0;jr&#x003C;/suffix&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;suffix&#x003E;M.Sc.&#x003C;/suffix&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;/n&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;bday&#x003E;&#x003C;date&#x003E;--0203&#x003C;/date&#x003E;&#x003C;/bday&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;anniversary&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;date-time&#x003E;20090808T1430-0500&#x003C;/date-time&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;/anniversary&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;gender&#x003E;&#x003C;sex&#x003E;M&#x003C;/sex&#x003E;&#x003C;/gender&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;lang&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;parameters&#x003E;&#x003C;pref&#x003E;&#x003C;integer&#x003E;1&#x003C;/integer&#x003E;&#x003C;/pref&#x003E;&#x003C;/parameters&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;language-tag&#x003E;fr&#x003C;/language-tag&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;/lang&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;lang&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;parameters&#x003E;&#x003C;pref&#x003E;&#x003C;integer&#x003E;2&#x003C;/integer&#x003E;&#x003C;/pref&#x003E;&#x003C;/parameters&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;language-tag&#x003E;en&#x003C;/language-tag&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;/lang&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;org&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;parameters&#x003E;&#x003C;type&#x003E;&#x003C;text&#x003E;work&#x003C;/text&#x003E;&#x003C;/type&#x003E;&#x003C;/parameters&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;text&#x003E;Viagenie&#x003C;/text&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;/org&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;adr&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;parameters&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;type&#x003E;&#x003C;text&#x003E;work&#x003C;/text&#x003E;&#x003C;/type&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;label&#x003E;&#x003C;text&#x003E;Simon&#x00A0;Perreault
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;2875&#x00A0;boul.&#x00A0;Laurier,&#x00A0;suite&#x00A0;D2-630
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;Quebec,&#x00A0;QC,&#x00A0;Canada
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;G1V&#x00A0;2M2&#x003C;/text&#x003E;&#x003C;/label&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;/parameters&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;pobox/&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;ext/&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;street&#x003E;2875&#x00A0;boul.&#x00A0;Laurier,&#x00A0;suite&#x00A0;D2-630&#x003C;/street&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;locality&#x003E;Quebec&#x003C;/locality&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;region&#x003E;QC&#x003C;/region&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;code&#x003E;G1V&#x00A0;2M2&#x003C;/code&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;country&#x003E;Canada&#x003C;/country&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;/adr&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;tel&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;parameters&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;type&#x003E;
+                                                                                         
+                                                                                         
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;text&#x003E;work&#x003C;/text&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;text&#x003E;voice&#x003C;/text&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;/type&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;/parameters&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;uri&#x003E;tel:+1-418-656-9254;ext=102&#x003C;/uri&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;/tel&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;tel&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;parameters&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;type&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;text&#x003E;work&#x003C;/text&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;text&#x003E;text&#x003C;/text&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;text&#x003E;voice&#x003C;/text&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;text&#x003E;cell&#x003C;/text&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;text&#x003E;video&#x003C;/text&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;/type&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;/parameters&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;uri&#x003E;tel:+1-418-262-6501&#x003C;/uri&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;/tel&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;email&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;parameters&#x003E;&#x003C;type&#x003E;&#x003C;text&#x003E;work&#x003C;/text&#x003E;&#x003C;/type&#x003E;&#x003C;/parameters&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;text&#x003E;simon.perreault@viagenie.ca&#x003C;/text&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;/email&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;geo&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;parameters&#x003E;&#x003C;type&#x003E;&#x003C;text&#x003E;work&#x003C;/text&#x003E;&#x003C;/type&#x003E;&#x003C;/parameters&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;uri&#x003E;geo:46.766336,-71.28955&#x003C;/uri&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;/geo&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;key&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;parameters&#x003E;&#x003C;type&#x003E;&#x003C;text&#x003E;work&#x003C;/text&#x003E;&#x003C;/type&#x003E;&#x003C;/parameters&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;uri&#x003E;http://www.viagenie.ca/simon.perreault/simon.asc&#x003C;/uri&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;/key&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;tz&#x003E;&#x003C;text&#x003E;America/Montreal&#x003C;/text&#x003E;&#x003C;/tz&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;url&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;parameters&#x003E;&#x003C;type&#x003E;&#x003C;text&#x003E;home&#x003C;/text&#x003E;&#x003C;/type&#x003E;&#x003C;/parameters&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;uri&#x003E;http://nomis80.org&#x003C;/uri&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;/url&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;/vcard&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x003C;/vcards&#x003E;
+</div>
+<!--l. 612--><p class="nopar" >
+                                                                                         
+                                                                                         
+    <div class="verbatim" id="verbatim-3">
+&#x00A0;&#x00A0;&#x00A0;&#x003C;?xml&#x00A0;version="1.0"&#x00A0;encoding="UTF-8"?&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x003C;vcards&#x00A0;xmlns="urn:ietf:params:xml:ns:vcard-4.0"&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;vcard&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;fn&#x003E;&#x003C;text&#x003E;Simon&#x00A0;Perreault&#x003C;/text&#x003E;&#x003C;/fn&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;n&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;surname&#x003E;Perreault&#x003C;/surname&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;given&#x003E;Simon&#x003C;/given&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;suffix&#x003E;ing.&#x00A0;jr&#x003C;/suffix&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;suffix&#x003E;M.Sc.&#x003C;/suffix&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;/n&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;bday&#x00A0;day="02"&#x00A0;month="03"&#x00A0;/&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;anniversary&#x00A0;format="date-time"&#x003E;20090808T1430-0500&#x003C;/anniversary&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;gender&#x003E;M&#x003C;/gender&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;lang&#x00A0;pref="1"&#x003E;fr&#x003C;/lang&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;lang&#x00A0;pref="2"&#x003E;en&#x003C;/lang&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;org&#x00A0;type="work"&#x003E;Viagenie&#x003C;/org&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;adr&#x00A0;type="work"&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;label&#x003E;Simon&#x00A0;Perreault
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;2875&#x00A0;boul.&#x00A0;Laurier,&#x00A0;suite&#x00A0;D2-630
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;Quebec,&#x00A0;QC,&#x00A0;Canada
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;G1V&#x00A0;2M2&#x003C;/label&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;street&#x003E;2875&#x00A0;boul.&#x00A0;Laurier,&#x00A0;suite&#x00A0;D2-630&#x003C;/street&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;locality&#x003E;Quebec&#x003C;/locality&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;region&#x003E;QC&#x003C;/region&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;code&#x003E;G1V&#x00A0;2M2&#x003C;/code&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;country&#x003E;Canada&#x003C;/country&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;/adr&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;tel&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;type&#x003E;work&#x003C;/type&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;type&#x003E;voice&#x003C;/type&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;uri&#x003E;tel:+1-418-656-9254;ext=102&#x003C;/uri&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;/tel&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;tel&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;type&#x003E;work&#x003C;/type&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;type&#x003E;text&#x003C;/type&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;type&#x003E;voice&#x003C;/type&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;type&#x003E;cell&#x003C;/type&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;type&#x003E;video&#x003C;/type&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;uri&#x003E;tel:+1-418-262-6501&#x003C;/uri&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;/tel&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;email&#x00A0;type="work"&#x003E;simon.perreault@viagenie.ca&#x003C;/email&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;geo&#x00A0;type="work"&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;uri&#x003E;geo:46.766336,-71.28955&#x003C;/uri&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;/geo&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;key&#x00A0;type="work"&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;uri&#x003E;http://www.viagenie.ca/simon.perreault/simon.asc&#x003C;/uri&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;/key&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;tz&#x003E;America/Montreal&#x003C;/tz&#x003E;
+                                                                                         
+                                                                                         
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;url&#x00A0;type="home"&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;uri&#x003E;http://nomis80.org&#x003C;/uri&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;/url&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x003C;/vcard&#x003E;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x003C;/vcards&#x003E;
+</div>
+<!--l. 668--><p class="nopar" >
+<!--l. 670--><p class="noindent" >
+    <h4 class="subsectionHead"><span class="titlemark">7.6.  </span> <a 
+ id="x15-210007.6"></a>HFactor</h4>
+<!--l. 671--><p class="noindent" >Mike Amundsen defines a method to asses media types that he calls
+&#8220;HFactor&#8221;.<span class="footnote-mark"><a 
+href="restful_groupware26.html#fn17x0"><sup class="textsuperscript">17</sup></a></span><a 
+ id="x15-21001f17"></a> 
+The HFactor distinguishes different types of support for links and indicates which of those are
+provided by a reviewed media type.
+<!--l. 676--><p class="indent" >    Amundsen did reviews of a couple of media types. Unfortunately these do not include
+<span 
+class="cmtt-12">vcard+xml </span>or <span 
+class="cmtt-12">calendar+xml</span>. I&#8217;ll try to identify the HFactors of both here.
+<!--l. 680--><p class="indent" >    The different types of link support have two letter acronyms and fall in two categories:
+Link support values, with the first letter &#8220;L&#8221; and Control data support, first letter
+&#8220;C&#8221;.
+      <ul class="itemize1">
+      <li class="itemize">Link Support for
+           <ul class="itemize2">
+           <li class="itemize"><span 
+class="cmtt-12">LE </span>embedded links (HTTP GET)
+           </li>
+           <li class="itemize"><span 
+class="cmtt-12">LO </span>out-bound navigational links (HTTP GET)
+           </li>
+           <li class="itemize"><span 
+class="cmtt-12">LT </span>templated queries (HTTP GET)
+           </li>
+           <li class="itemize"><span 
+class="cmtt-12">LN </span>non-idempotent updates (HTTP POST)
+           </li>
+           <li class="itemize"><span 
+class="cmtt-12">LI </span>idempotent updates (HTTP PUT, DELETE)</li></ul>
+      </li>
+      <li class="itemize">Control Data Support to
+           <ul class="itemize2">
+           <li class="itemize"><span 
+class="cmtt-12">CR </span>modify control data for read requests (e.g. <span 
+class="cmtt-12">HTTP Accept-* </span>headers)
+           </li>
+           <li class="itemize"><span 
+class="cmtt-12">CU </span>modify control data for update requests (e. g. <span 
+class="cmtt-12">Content-* </span>headers)
+           </li>
+           <li class="itemize"><span 
+class="cmtt-12">CM   </span>indicate     the     interface     method     for     requests     (e.g.     HTTP
+           GET,POST,PUT,DELETE methods)
+           </li>
+           <li class="itemize"><span 
+class="cmtt-12">CL </span>add semantic meaning to link elements using link relations (e.g. HTML rel
+           attribute)</li></ul>
+                                                                                         
+                                                                                         
+      </li></ul>
+                                                                                         
+                                                                                         
+    <!--l. 702--><div class="crosslinks"><p class="noindent">[<a 
 href="restful_groupwarese6.html" >prev</a>] [<a 
 href="restful_groupwarese6.html#tailrestful_groupwarese6.html" >prev-tail</a>] [<a 
 href="restful_groupwarese7.html" >front</a>] [<a 
 href="restful_groupware.html#restful_groupwarese13.html" >up</a>] </p></div>
-<!--l. 404--><p class="indent" >    <a 
+<!--l. 702--><p class="indent" >    <a 
  id="tailrestful_groupwarese7.html"></a>   
 </body></html> 

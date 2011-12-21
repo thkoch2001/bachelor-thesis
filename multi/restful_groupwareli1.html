@@ -7,11 +7,11 @@
 <meta name="originator" content="TeX4ht (http://www.cse.ohio-state.edu/~gurari/TeX4ht/)"> 
 <!-- html,2 --> 
 <meta name="src" content="restful_groupware.tex"> 
-<meta name="date" content="2011-12-08 17:28:00"> 
+<meta name="date" content="2011-12-21 20:45:00"> 
 <link rel="stylesheet" type="text/css" href="restful_groupware.css"> 
 </head><body 
 >
-    <!--l. 35--><div class="crosslinks"><p class="noindent">[<a 
+    <!--l. 34--><div class="crosslinks"><p class="noindent">[<a 
 href="restful_groupwarese1.html" >next</a>] [<a 
 href="#tailrestful_groupwareli1.html">tail</a>] [<a 
 href="restful_groupware.html#restful_groupwareli1.html" >up</a>] </p></div>
@@ -45,66 +45,74 @@ href="restful_groupwarese6.html#x14-140006">Synchronizing a large collection</a>
 <br />    <span class="sectionToc" >7 <a 
 href="restful_groupwarese7.html#x15-150007">Mediatypes</a></span>
 <br />    &#x00A0;<span class="subsectionToc" >7.1 <a 
-href="restful_groupwarese7.html#x15-160007.1">Updates with alternative Mediatypes</a></span>
+href="restful_groupwarese7.html#x15-160007.1">xml vs. json</a></span>
 <br />    &#x00A0;<span class="subsectionToc" >7.2 <a 
-href="restful_groupwarese7.html#x15-170007.2">Mediatype conversion</a></span>
+href="restful_groupwarese7.html#x15-170007.2">Syntax vs. Semantic</a></span>
+<br />    &#x00A0;<span class="subsectionToc" >7.3 <a 
+href="restful_groupwarese7.html#x15-180007.3">Updates with alternative Mediatypes</a></span>
+<br />    &#x00A0;<span class="subsectionToc" >7.4 <a 
+href="restful_groupwarese7.html#x15-190007.4">Mediatype conversion</a></span>
+<br />    &#x00A0;<span class="subsectionToc" >7.5 <a 
+href="restful_groupwarese7.html#x15-200007.5">Example: vCard</a></span>
+<br />    &#x00A0;<span class="subsectionToc" >7.6 <a 
+href="restful_groupwarese7.html#x15-210007.6">HFactor</a></span>
 <br />    <span class="sectionToc" >8 <a 
-href="restful_groupwarese8.html#x16-180008">Hypermedia in RESTful applications</a></span>
+href="restful_groupwarese8.html#x27-220008">Hypermedia in RESTful applications</a></span>
 <br />    &#x00A0;<span class="subsectionToc" >8.1 <a 
-href="restful_groupwarese8.html#x16-190008.1">Hypermedia in OpenSocial</a></span>
+href="restful_groupwarese8.html#x27-230008.1">Hypermedia in OpenSocial</a></span>
 <br />    <span class="sectionToc" >9 <a 
-href="restful_groupwarese9.html#x17-200009">Selection of components</a></span>
+href="restful_groupwarese9.html#x28-240009">Selection of components</a></span>
 <br />    &#x00A0;<span class="subsectionToc" >9.1 <a 
-href="restful_groupwarese9.html#x17-210009.1">REST framework</a></span>
+href="restful_groupwarese9.html#x28-250009.1">REST framework</a></span>
 <br />    <span class="sectionToc" >10 <a 
-href="restful_groupwarese10.html#x18-2200010">Testing</a></span>
+href="restful_groupwarese10.html#x29-2600010">Testing</a></span>
 <br />    <span class="sectionToc" >A <a 
-href="restful_groupwarese11.html#x19-23000A">Standards</a></span>
+href="restful_groupwarese11.html#x30-27000A">Standards</a></span>
 <br />    &#x00A0;<span class="subsectionToc" >A.1 <a 
-href="restful_groupwarese11.html#x19-24000A.1">Contacts / Persons</a></span>
+href="restful_groupwarese11.html#x30-28000A.1">Contacts / Persons</a></span>
 <br />    &#x00A0;<span class="subsectionToc" >A.2 <a 
-href="restful_groupwarese11.html#x19-25000A.2">Calendaring</a></span>
+href="restful_groupwarese11.html#x30-29000A.2">Calendaring</a></span>
 <br />    &#x00A0;<span class="subsectionToc" >A.3 <a 
-href="restful_groupwarese11.html#x19-26000A.3">Scheduling</a></span>
+href="restful_groupwarese11.html#x30-30000A.3">Scheduling</a></span>
 <br />    &#x00A0;<span class="subsectionToc" >A.4 <a 
-href="restful_groupwarese11.html#x19-27000A.4">Relations and Links</a></span>
+href="restful_groupwarese11.html#x30-31000A.4">Relations and Links</a></span>
 <br />    &#x00A0;<span class="subsectionToc" >A.5 <a 
-href="restful_groupwarese11.html#x19-28000A.5">out of scope</a></span>
+href="restful_groupwarese11.html#x30-32000A.5">out of scope</a></span>
 <br />    <span class="sectionToc" >B <a 
-href="restful_groupwarese12.html#x20-29000B">People, Groups and Organizations</a></span>
+href="restful_groupwarese12.html#x31-33000B">People, Groups and Organizations</a></span>
 <br />    <span class="sectionToc" >C <a 
-href="restful_groupwarese13.html#x21-31000C">Implementations</a></span>
+href="restful_groupwarese13.html#x32-35000C">Implementations</a></span>
+                                                                                         
+                                                                                         
 <br />    &#x00A0;<span class="subsectionToc" >C.1 <a 
-href="restful_groupwarese13.html#x21-32000C.1">Servers</a></span>
+href="restful_groupwarese13.html#x32-36000C.1">Servers</a></span>
 <br />    &#x00A0;<span class="subsectionToc" >C.2 <a 
-href="restful_groupwarese13.html#x21-33000C.2">Clients</a></span>
+href="restful_groupwarese13.html#x32-37000C.2">Clients</a></span>
 <br />    &#x00A0;<span class="subsectionToc" >C.3 <a 
-href="restful_groupwarese13.html#x21-34000C.3">Web Services</a></span>
+href="restful_groupwarese13.html#x32-38000C.3">Web Services</a></span>
 <br />    &#x00A0;<span class="subsectionToc" >C.4 <a 
-href="restful_groupwarese13.html#x21-35000C.4">Portable Contacts</a></span>
+href="restful_groupwarese13.html#x32-39000C.4">Portable Contacts</a></span>
 <br />    <span class="sectionToc" >D <a 
-href="restful_groupwarese14.html#x22-36000D">Links</a></span>
+href="restful_groupwarese14.html#x34-40000D">Links</a></span>
 <br />    &#x00A0;<span class="subsectionToc" >D.1 <a 
-href="restful_groupwarese14.html#x22-37000D.1">Apache Shindig</a></span>
+href="restful_groupwarese14.html#x34-41000D.1">Apache Shindig</a></span>
 <br />    &#x00A0;<span class="subsectionToc" >D.2 <a 
-href="restful_groupwarese14.html#x22-38000D.2">Socialsite</a></span>
+href="restful_groupwarese14.html#x34-42000D.2">Socialsite</a></span>
 <br />    <span class="sectionToc" >E <a 
-href="restful_groupwarese15.html#x23-39000E">TODO</a></span>
-                                                                                         
-                                                                                         
+href="restful_groupwarese15.html#x35-43000E">TODO</a></span>
     </div> <div 
 class="abstract" 
 >
-<!--l. 36--><p class="indent" >
+<!--l. 35--><p class="indent" >
 </div>
                                                                                          
                                                                                          
                                                                                          
                                                                                          
-    <!--l. 41--><div class="crosslinks"><p class="noindent">[<a 
+    <!--l. 40--><div class="crosslinks"><p class="noindent">[<a 
 href="restful_groupwarese1.html" >next</a>] [<a 
 href="restful_groupwareli1.html" >front</a>] [<a 
 href="restful_groupware.html#restful_groupwareli1.html" >up</a>] </p></div>
-<!--l. 41--><p class="indent" >    <a 
+<!--l. 40--><p class="indent" >    <a 
  id="tailrestful_groupwareli1.html"></a>  
 </body></html> 
