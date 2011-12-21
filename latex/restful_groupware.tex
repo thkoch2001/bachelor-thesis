@@ -4,7 +4,6 @@
 \usepackage[utf8]{inputenc}			% Zeichensatzkodierung
 \usepackage{url}
 \usepackage{graphicx}
-\usepackage[colorlinks=false, pdfborder={0 0 0}]{hyperref}
 \usepackage{amsmath}
 \usepackage{multicol}
 \usepackage{glossaries}
@@ -16,9 +15,9 @@
 \setcounter{secnumdepth}{3} %Bis zu welcher Gliederungsebene nummeriert werden soll gibt dieser Befehl vor. In diesem Falle werden \section, \subsection und \subsubsection nummereiert.
 \setcounter{tocdepth}{3} %Bis zu welcher Ebene Einträge ins Inhaltsverzeichnis aufgenommen werden. In diesem Beispiel ebenfalls bis Ebene drei (\subsubsection). Ein durch \paragraph ausgewiesener Abschnitt wird demnach nicht im Inhaltsverzeichnis auftauchen. 
 
+\usepackage[colorlinks=false, pdfborder={0 0 0}, plainpages=false]{hyperref}
+
 \newcommand{\citeurl}[2]{\url{#1} (#2)}
-
-
 
 \begin{document}
 %\titlehead{}
@@ -351,7 +350,8 @@ data. However this wrapping does not build extend and reuse ATOM semantics as
 proposed above but just puts the OpenSocial data structures inside the
 entry/content element of ATOM. This kind of misuse of ATOM does of course not
 deliver any advantage on top of the existing plain JSON or XML
-representations.\footnote{compare Bill de Hora, Extensions v Envelopes. 11/2009 \newline
+representations.\footnote{compare Bill de Hora, Extensions v Envelopes. 11/2009 
+%\newline
   \citeurl{http://www.dehora.net/journal/2009/11/28/extensions-v-envelopes}{2011-21-07}}
 Consequently the newest OpenSocial specification deprecates any reference to the
 ATOM format.
@@ -386,9 +386,10 @@ How is synchronization done in CardDAV?
 
 \begin{quote}
   To some extent, people get REST wrong because I failed to include enough
-  detail on media type design within my dissertation.~--~Roy T. Fielding\footnote
-  {\citeurl{http://roy.gbiv.com/untangled/2008/rest-apis-must-be-hypertext-driven}{2011-12-20}}
+  detail on media type design within my dissertation.~--~Roy T. Fielding
 \end{quote}
+from: Rest APIs must be hypertext driven\footnote
+  {\citeurl{http://roy.gbiv.com/untangled/2008/rest-apis-must-be-hypertext-driven}{2011-12-20}}
 
 The usage of standardized media types is one key difference between an API and a
 restful API. \cite[sec. 5.2.1.2]{Fielding2000} Only if the client has knowledge
@@ -424,7 +425,7 @@ The application section of the IANA mime type registration has 294 entries
 ending in ``+xml'' and only 3 ending in
 ``+json''.\footnote{\citeurl{http://www.iana.org/assignments/media-types/application/index.html}{2011-12-20}}
 This stands in contrast to the rise of public json APIs and the decline of XML
-APIs.\footnote{\citeurl{http://blog.programmableweb.com/2011/05/25/1-in-5-apis-say-bye-xml/}{2011-12-20}}
+APIs.\footnote{\citeurl{http://blog.programmableweb.com/2011/05/25/1-in-5-apis-say-bye-xml/}{2011-12-20} \citeurl{http://www.readwriteweb.com/cloud/2011/03/programmable-web-apis-popping.php}{2011-12-21}}
 
 JSON is often preferred as a format over XML because it is perceived as easier
 to parse, process and smaller in size. XML in comparison is seen as complicate,
@@ -433,6 +434,15 @@ format for javascript applications is that JSON is a subset of javascript.
 
 
 \subsection{Syntax vs. Semantic}
+
+Examples for semantic issues that could be solved once and represented in
+different serialization formats: Not only provide fields for a birthday and
+birth location, also provide fields for date and place of
+death.\footnote{\citeurl{https://datatracker.ietf.org/doc/draft-ietf-vcarddav-birth-death-extensions/}{2011-12-20}}
+or the difference between gender and sex and how it should be represented in
+contact
+data.\footnote{\citeurl{http://www.ietf.org/mail-archive/web/vcarddav/current/msg01778.html}{2011-12-20}}
+
 
 Version 3 of vCard was published in 1998\cite{RFC2425} only a few months after
 the W3C published Version 1.0 of XML\cite{Paoli:98:XR} and eight years before
@@ -657,6 +667,37 @@ jCard example from microjson.org\footnote{\citeurl{http://web.archive.org/web/20
    </vcards>
 \end{verbatim}
 
+\subsection{HFactor}
+Mike Amundsen defines a method to asses media types that he calls
+``HFactor''.\footnote{\citeurl{http://amundsen.com/hypermedia/}{2011-12-21}} The
+HFactor distinguishes different types of support for links and indicates which
+of those are provided by a reviewed media type.
+
+Amundsen did reviews of a couple of media types. Unfortunately these do not
+include \texttt{vcard+xml} or \texttt{calendar+xml}. I'll try to identify the
+HFactors of both here.
+
+The different types of link support have two letter acronyms and fall in two
+categories: Link support values, with the first letter ``L'' and Control data
+support, first letter ``C''.
+
+\begin{itemize}
+\item Link Support for
+  \begin{itemize}
+  \item \texttt{LE} embedded links (HTTP GET)
+  \item \texttt{LO} out-bound navigational links (HTTP GET)
+  \item \texttt{LT} templated queries (HTTP GET)
+  \item \texttt{LN} non-idempotent updates (HTTP POST)
+  \item \texttt{LI} idempotent updates (HTTP PUT, DELETE) 
+  \end{itemize}
+\item Control Data Support to
+  \begin{itemize}
+  \item \texttt{CR} modify control data for read requests (e.g. \texttt{HTTP Accept-*} headers)
+  \item \texttt{CU} modify control data for update requests (e. g. \texttt{Content-*} headers)
+  \item \texttt{CM} indicate the interface method for requests (e.g. HTTP GET,POST,PUT,DELETE methods)
+  \item \texttt{CL} add semantic meaning to link elements using link relations (e.g. HTML rel attribute)
+  \end{itemize}
+\end{itemize}
 
 \section{Hypermedia in RESTful applications}
 
@@ -870,12 +911,28 @@ Portable Contacts test client at plaxo \url{http://www.plaxo.com/pdata/testClien
 
   % LDIF for person info
 
+  % http://www.hr-xml.org
+  % http://de.wikipedia.org/wiki/HR-XML  
+  \item[HR XML]
+
+    The HR-XML Consortium is the only independent, non-profit, volunteer-led
+    organization dedicated to the development and promotion of a standard suite
+    of XML specifications to enable e-business and the automation of human
+    resources-related data exchanges.
+
   % http://www.openmobilealliance.org/Technical/release_program/cab_v1_0.aspx
   \item[OMA Converged Address Book V1.0]
 
     Standard by the Open Mobile Alliance defining data structures and
     synchronization of contact data. It references vCard.
   
+  % http://en.wikipedia.org/wiki/Open_Collaboration_Services
+  \item[Open Collaboration Services]
+
+    Also contains data structures for persons and events but does not reuse any
+    known standard. See this thread:
+    \url{http://lists.freedesktop.org/archives/ocs/2011-December/000136.html}
+
   % http://www.w3.org/TR/contacts-api
   \item[W3C Contacts API]
 
@@ -889,14 +946,6 @@ Portable Contacts test client at plaxo \url{http://www.plaxo.com/pdata/testClien
   % http://www.w3.org/2000/10/swap/pim/contact
   \item[W3C PIM ontology]
 
-  % http://www.hr-xml.org
-  % http://de.wikipedia.org/wiki/HR-XML  
-  \item[HR XML]
-
-    The HR-XML Consortium is the only independent, non-profit, volunteer-led
-    organization dedicated to the development and promotion of a standard suite
-    of XML specifications to enable e-business and the automation of human
-    resources-related data exchanges.
 \end{description}
 
 
@@ -935,6 +984,9 @@ Portable Contacts test client at plaxo \url{http://www.plaxo.com/pdata/testClien
     extensions and CALSIFY (Calendaring and Scheduling Standards Simplification)
     Working Groups. She is also the author of a book on WebDAV and co-author of
     CalDAV, an open and interoperable protocol for calendar access and sharing.
+
+  \item[Mike Amundsen]
+    \url{http://amundsen.com}
 
   \item[Peter Saint-Andre <stpeter@stpeter.im>]
 
@@ -1090,6 +1142,7 @@ Portable Contacts test client at plaxo \url{http://www.plaxo.com/pdata/testClien
 \item \url{http://www.vogella.de/articles/REST/article.html} REST with Java (JAX-RS) using Jersey - Tutorial
 \item \url{https://addons.mozilla.org/de/firefox/addon/restclient/}
 \item \url{http://dataportability.org/} still active?
+\item \url{http://tech.groups.yahoo.com/group/rest-discuss/messages/17242?threaded=1&m=e&var=1&tidx=1} REST and Semantic
 % http://exist.sourceforge.net/
 % http://wiki.davical.org/w/CardDAV/Configuration/Well-known_URLs
 % https://github.com/karl/monket-google-calendar A simplified UI for Google Calendar.
