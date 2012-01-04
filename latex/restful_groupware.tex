@@ -8,6 +8,8 @@
 \usepackage{multicol}
 \usepackage{glossaries}
 \usepackage{expdlist}
+\usepackage{subfig}
+\usepackage{listings}
 
 \usepackage{setspace} % Anderthalbfacher Zeilenabstand ist Standard in den meisten Seminararbeiten. Das Paket setspace ermöglicht ein einfaches Umstellen von normalem, anderthalbfachen oder sogar doppeltem Zeilenabstand. 
 \usepackage[paper=a4paper,inner=25mm,outer=20mm,top=15mm,bottom=20mm]{geometry} %Das geometry Paket dient zur Einrichtung der Seiten. Hier werden die jeweiligen Seitenränder angegeben. Diese wWerte sollten durch die jeweiligen Vorgaben des Seminarleiters oder Instituts ersetzt werden.
@@ -38,6 +40,9 @@
 \newpage{}
 
 \section{Motivation}
+
+Experiences with Android and Data in the cloud
+\url{http://keithp.com/blogs/calypso}
 
 Why vCard/CardDav: many clients
 
@@ -365,6 +370,16 @@ with this API specification but maintenance and evolution cost may be medium or
 high.
 
 
+\section{ATOM}
+
+Google's Data API extends ATOM?
+Calendar feeds are available as ATOM with the published entry set to the date of the event.
+
+WebDAV vs. ATOM:
+\url{http://intertwingly.net/wiki/pie/WebDav}
+\url{http://intertwingly.net/wiki/pie/WebDavVsAtom}
+google webdav atom
+
 \section{Persistency for Groupware Data}
 Relational Databases vs. NoSQL databases vs. plain files
 
@@ -391,6 +406,8 @@ How is synchronization done in CardDAV?
 from: Rest APIs must be hypertext driven\footnote
   {\citeurl{http://roy.gbiv.com/untangled/2008/rest-apis-must-be-hypertext-driven}{2011-12-20}}
 
+\subsection{Syntax vs. Semantic}
+
 The usage of standardized media types is one key difference between an API and a
 restful API. \cite[sec. 5.2.1.2]{Fielding2000} Only if the client has knowledge
 about the media type can it do something meaningful with it besides just
@@ -401,9 +418,10 @@ anything meaningful beside the \emph{syntax} of the data.\footnote{
 and Web Resource Modeling Language \citeurl{http://www.wrml.org}{2011-12-20} both by Mark Massé
 }
 
-But to do anything meaningful with the data, the client programmer must normally
-look up the meaning or \emph{semantic} of the data in the API documentation. The
-data therefor fails the self-descriptive constraint of a REST.
+To do anything meaningful with plain json or xml, the client programmer must
+normally look up the meaning or \emph{semantic} of the data in the API
+documentation. The data therefor fails the self-descriptive constraint of
+REST.
 
 Compare this with a mime type like \texttt{application/atom+xml}. It specifies
 the syntax (xml) and the semantic (atom) of the data. Of course somebody once
@@ -430,18 +448,57 @@ APIs.\footnote{\citeurl{http://blog.programmableweb.com/2011/05/25/1-in-5-apis-s
 JSON is often preferred as a format over XML because it is perceived as easier
 to parse, process and smaller in size. XML in comparison is seen as complicate,
 slow to process and larger in size. A strong argument for JSON as the preferred
-format for javascript applications is that JSON is a subset of javascript.
+format for JavaScript applications is that JSON is a subset of JavaScript.
+
+A drawback of this mismatch between the preference of media type designers and
+API consumers is a possible duplication of work and incompatibilities across
+different APIs. If two developers independently take the same XML media type as
+a model to develop a JSON format, they can still come up with different
+results. There is no standard mapping from XML schemes to JSON structures.
+
+Instead, possible mappings have to trade of the preservation of all structural
+information against the ``friendliness'' of the resulting JSON
+structure.\cite{Boyer2011} Without going into detail, a JSON structure can be
+seen as friendly if it makes best use of JSON's data types, is compact and easy
+to process. \autoref{fig:waysmapxmljson} shows two different examples how to map
+data from XML to JSON with one of them using JSON number values, being more
+compact and probably easier to process.
+
+\begin{figure}
+\captionsetup[subfloat]{justification=raggedright,singlelinecheck=false}
+\small{
+\subfloat[XML fragment]{
+  \begin{minipage}[b]{0.25\linewidth}
+    \lstinputlisting{snippets/xml2json_xml}    
+  \end{minipage}
+}
+\subfloat[unfriendly JSON]{
+  \begin{minipage}[b]{0.4\linewidth}
+    \lstinputlisting{snippets/xml2json_json1}
+  \end{minipage}
+}
+\subfloat[less(?) unfriendly JSON]{
+  \begin{minipage}[b]{0.25\linewidth}
+    \lstinputlisting{snippets/xml2json_json2}
+  \end{minipage}
+}
+}
+  \caption{different ways to map XML to JSON}
+  \label{fig:waysmapxmljson}
+\end{figure}
 
 
-\subsection{Syntax vs. Semantic}
 
-Examples for semantic issues that could be solved once and represented in
-different serialization formats: Not only provide fields for a birthday and
-birth location, also provide fields for date and place of
-death.\footnote{\citeurl{https://datatracker.ietf.org/doc/draft-ietf-vcarddav-birth-death-extensions/}{2011-12-20}}
-or the difference between gender and sex and how it should be represented in
-contact
-data.\footnote{\citeurl{http://www.ietf.org/mail-archive/web/vcarddav/current/msg01778.html}{2011-12-20}}
+ in the area of semantic
+standardization. Questions whether and how contact information should also hold
+space for the place of birth and place and date of death of a
+person\footnote{\citeurl{https://datatracker.ietf.org/doc/draft-ietf-vcarddav-birth-death-extensions/}{2011-12-20}}
+are independent from a data serialization format. So is the question whether and
+how to specify the sex or gender of a
+person.\footnote{\citeurl{http://www.ietf.org/mail-archive/web/vcarddav/current/msg01778.html}{2011-12-20}}
+
+
+
 
 
 Version 3 of vCard was published in 1998\cite{RFC2425} only a few months after
@@ -498,7 +555,7 @@ The project identified the need for a json schema:\footnote{\citeurl{http://web.
 
 
 jCard example from microjson.org\footnote{\citeurl{http://web.archive.org/web/20080517003233/http://microjson.org/wiki/JCard}{2011-12-19}}
-\begin{verbatim}
+\begin{lstlisting}
 {
 "vcard":{
   "name":{
@@ -519,11 +576,11 @@ jCard example from microjson.org\footnote{\citeurl{http://web.archive.org/web/20
   "aim":"johnsmith",
   "yim":"smithjohn"
 }
-\end{verbatim}
+\end{lstlisting}
 
 \subsection{Example: vCard}
 
-\begin{verbatim}
+\begin{lstlisting}
    <?xml version="1.0" encoding="UTF-8"?>
    <vcards xmlns="urn:ietf:params:xml:ns:vcard-4.0">
      <vcard>
@@ -609,9 +666,9 @@ jCard example from microjson.org\footnote{\citeurl{http://web.archive.org/web/20
        </url>
      </vcard>
    </vcards>
-\end{verbatim}
+\end{lstlisting}
 
-\begin{verbatim}
+\begin{lstlisting}
    <?xml version="1.0" encoding="UTF-8"?>
    <vcards xmlns="urn:ietf:params:xml:ns:vcard-4.0">
      <vcard>
@@ -665,7 +722,7 @@ jCard example from microjson.org\footnote{\citeurl{http://web.archive.org/web/20
        </url>
      </vcard>
    </vcards>
-\end{verbatim}
+\end{lstlisting}
 
 \subsection{HFactor}
 Mike Amundsen defines a method to asses media types that he calls
@@ -758,6 +815,21 @@ Jersey recommended by \cite{Kaiser2011} above Restfulie and RESTeasy because of 
 
 % http://www.torsten-horn.de/techdocs/jee-rest.htm RESTful Web Services mit JAX-RS und Jersey
 
+Jersey has a atompub-contact client/server example app.
+
+\subsection{VCard}
+
+% http://sourceforge.net/projects/vcard4j is dead since 5
+% years. http://sourceforge.net/projects/mime-dir-j forked and updated and is
+% now also abandoned.
+% http://sourceforge.net/projects/jpim/ dead since 2 years.
+% active:
+% http://code.google.com/p/android-vcard 
+% http://sourceforge.net/projects/cardme/
+% http://wiki.modularity.net.au/ical4j/index.php?title=VCard (easily extendable to XML, JSON)
+
+
+
 \section{Testing}
 How to test the ReST/CardDAV interface?
 
@@ -778,7 +850,6 @@ Portable Contacts test client at plaxo \url{http://www.plaxo.com/pdata/testClien
 \begin{description}[\breaklabel\setleftmargin{1ex}]
 
   \item[RFC 6450 vCard Format Specification]
-
     This document defines the vCard data format for representing and exchanging
     a variety of information about individuals and other entities (e.g.,
     formatted and structured name and delivery addresses, email address,
@@ -787,7 +858,6 @@ Portable Contacts test client at plaxo \url{http://www.plaxo.com/pdata/testClien
     2739.
 
   \item[RFC 6351 xCard: vCard XML Representation]
-
     This document defines the XML schema of the vCard data format. 
 
   % http://portablecontacts.net/draft-spec.html
@@ -796,7 +866,6 @@ Portable Contacts test client at plaxo \url{http://www.plaxo.com/pdata/testClien
   % Mozilla erwägt PoCo http://groups.google.com/group/mozilla.dev.webapi/browse_thread/thread/3bd36f73336ce783?pli=1
   % https://code.google.com/apis/contacts/docs/poco/1.0/developers_guide.html
   \item[Portable Contacts, OpenSocial] 
-
     Portable Contacts defines contact data structures and a ReST API. It has
     been integrated in the OpenSocial standard.
 
@@ -812,7 +881,6 @@ Portable Contacts test client at plaxo \url{http://www.plaxo.com/pdata/testClien
 
   % http://xmlns.com/foaf/spec/
   \item[Friend of a friend (FOAF)] 
-
     FOAF is a 
 
   % http://microformats.org/wiki/hcard
@@ -973,6 +1041,9 @@ Portable Contacts test client at plaxo \url{http://www.plaxo.com/pdata/testClien
   \item[Eliot Lear <lear@cisco.com>]
       IETF Calsify WG chair
 
+  \item[Julian Reschke <julian.reschke@gmx.de>]
+% Julian Reschke, WebDAV Experte, RFC 5995, greenbytes GmbH,Hafenweg 16, 48155 Münster , Germany
+
   \item[Lisa Dusseault]
       
     Lisa Dusseault is a development manager and standards architect at the Open
@@ -985,8 +1056,19 @@ Portable Contacts test client at plaxo \url{http://www.plaxo.com/pdata/testClien
     Working Groups. She is also the author of a book on WebDAV and co-author of
     CalDAV, an open and interoperable protocol for calendar access and sharing.
 
-  \item[Mike Amundsen]
+  \item[Mark Nottingham]
+%  http://www.mnot.net/personal/
+
+  \item[Mike Amundsen <mamund@yahoo.com>]
     \url{http://amundsen.com}
+
+  \item[Mike Conley]
+
+    \url{http://mikeconley.ca/blog/}
+    % Email: mike.d.conley@gmail.com
+    % Twitter: http://www.twitter.com/mike_conley
+    % IRC: You can usually find me on Freenode as m_conley
+    working on a new address book for Thunderbird: \url{https://wiki.mozilla.org/Thunderbird/tb-planning}
 
   \item[Peter Saint-Andre <stpeter@stpeter.im>]
 
@@ -999,19 +1081,10 @@ Portable Contacts test client at plaxo \url{http://www.plaxo.com/pdata/testClien
     http://josephsmarr.com
     http://anyasq.com/79-im-a-technical-lead-on-the-google+-team
 
-  \item[Mike Conley]
-
-    \url{http://mikeconley.ca/blog/}
-    % Email: mike.d.conley@gmail.com
-    % Twitter: http://www.twitter.com/mike_conley
-    % IRC: You can usually find me on Freenode as m_conley
-    working on a new address book for Thunderbird: \url{https://wiki.mozilla.org/Thunderbird/tb-planning}
-
-
 % http://notizblog.org/2011/11/17/the-long-term-failure-of-openweb/
 
-% Julian Reschke, WebDAV Experte, RFC 5995, greenbytes GmbH,Hafenweg 16, 48155 Münster , Germany
-% Mark Nottingham http://www.mnot.net/personal/
+
+
 
 \end{description}
 
@@ -1025,7 +1098,6 @@ Portable Contacts test client at plaxo \url{http://www.plaxo.com/pdata/testClien
 % http://en.wikipedia.org/wiki/List_of_applications_with_iCalendar_support
 % http://syncevolution.org/
 % http://www.janrain.com/solutions/supported-networks
-% http://vcard4j.sourceforge.net/
 % http://code.google.com/p/caldav4j/
 % http://www.webdav.org/projects/
 % http://en.wikipedia.org/wiki/CardDAV
@@ -1100,6 +1172,8 @@ Portable Contacts test client at plaxo \url{http://www.plaxo.com/pdata/testClien
 
   % http://en.wikipedia.org/wiki/Zarafa_%28software%29
   \item[Zarafa]
+     PHP, MySQL
+     IIRC it uses an Entity-Attribute-Value pattern to store its data in the relational db.
 
   % http://en.wikipedia.org/wiki/Zimbra
   \item[Zimbra]
@@ -1121,6 +1195,10 @@ Portable Contacts test client at plaxo \url{http://www.plaxo.com/pdata/testClien
 
     CardDAV via SoCO connector \url{http://www.sogo.nu/fr/downloads/frontends.html}
 
+  \item[WebiCal]
+   % http://code.google.com/p/webical/
+     Java, YUI, Web frontend for a CalDAV server, uses iCal4J
+
   \item[Evolution, Evolution Data Server]
   \item[KDE Kontact, Akonadi]
 
@@ -1133,7 +1211,7 @@ Portable Contacts test client at plaxo \url{http://www.plaxo.com/pdata/testClien
 \subsection{Web Services}
 % Google Calendar http://code.google.com/apis/calendar/caldav/
 
-\subsection{Portable Contacts}
+\subsection{Others}
 
 \section{Links}
 
