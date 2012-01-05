@@ -369,6 +369,21 @@ The OpenSocial specification authors did not have to invest a lot to come up
 with this API specification but maintenance and evolution cost may be medium or
 high.
 
+\subsection{Others}
+
+\begin{quotation}
+  [\ldots] CAP failed because most of the active implementors at the 
+time felt it had become too complex to implement - partly because it 
+required implementing a "brand new" protocol (BEEP). The upshot of that was 
+the CalDAV effort, which was based on an existing fairly well understood 
+protocol - WebDAV. One of the benefits of using WebDAV was that it was easy 
+to take "off the shelf" WebDAV software (server and client) and get a basic 
+CalDAV implementation done very quickly. Indeed, several months after 
+CalDAV was published, CalConnect held an interop event at which several 
+server and client implementations were present and demonstrated basic 
+interoperability - something that would have been hard to achieve with CAP.
+\end{quotation}
+-- Cyrus Daboo\footnote{\citeurl{http://lists.calconnect.org/pipermail/caldeveloper-l/2012-January/000135.html}{2012-01-04}}
 
 \section{ATOM}
 
@@ -379,6 +394,30 @@ WebDAV vs. ATOM:
 \url{http://intertwingly.net/wiki/pie/WebDav}
 \url{http://intertwingly.net/wiki/pie/WebDavVsAtom}
 google webdav atom
+
+\section{Design and implementation of a restful Contacts API}
+
+\subsection{Requirements}
+% Server site search
+% Access Control 
+% restful: one entry point, reuse of existing protocols and media types
+% easy to understand and implement
+These requirements include the features of CardDAV.\cite[sec. 1]{RFC6352} The
+CardDAV RFC mentions its disadvantage of a missing specification for ``change
+notification''. An ATOM based approach on the other hand can make use of already existing protocols and infrastructure for this purpose, most notable Pubsubhubbub.\footnote{\citeurl{http://code.google.com/p/pubsubhubbub/}{2012-1-5}}
+
+Versioning and Locking, which are provided by WebDAV are not a requirement.
+
+\subsection{Related Work}
+
+Rob Yates:
+CalATOM \citeurl{http://robubu.com/?p=6}{2012-01-05}
+CardATOM \citeurl{http://robubu.com/?p=10}{2012-01-05}
+
+
+DOAP-over-ATOM \citeurl{http://web.archive.org/web/20070927230857/http://www.codezoo.com/about/doap_over_atom.csp}{2012-01-05}
+
+Google Data API also uses ATOM, but extends the ATOM format with new elements instead of putting all of the content in the content element of an atom entry.\footnote{\citeurl{http://web.archive.org/web/20081120001246/http://www.snellspace.com/wp/?p=314}{2012-01-05}}
 
 \section{Persistency for Groupware Data}
 Relational Databases vs. NoSQL databases vs. plain files
@@ -829,6 +868,13 @@ Jersey has a atompub-contact client/server example app.
 % http://wiki.modularity.net.au/ical4j/index.php?title=VCard (easily extendable to XML, JSON)
 
 
+ical4j 
+best documented
+best code
+is used by 
+most active
+also supports icalendar
+is immutable!!!
 
 \section{Testing}
 How to test the ReST/CardDAV interface?
