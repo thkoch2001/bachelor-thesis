@@ -490,6 +490,11 @@ Microsoft specification FeedSync (formerly Simple Sharing Extension) \url{http:/
 
 \section{Mediatypes}
 
+% http://amundsen.com/hypermedia/
+% http://martinfowler.com/articles/richardsonMaturityModel.html
+% http://code.google.com/p/implementing-rest/wiki/RMM
+% http://looselyconnected.wordpress.com/2011/03/09/the-richardson-maturity-model-of-rest-and-roy-fielding/
+
 \begin{quote}
   To some extent, people get REST wrong because I failed to include enough
   detail on media type design within my dissertation.~--~Roy T. Fielding
@@ -612,7 +617,7 @@ XML standards:
   \label{tab:data-formats}
 \end{table}
 
-% Activity Streams in XML, JSON
+Activity Streams has been defined from the beginning as an XML (ATOM) and JSON format.\footnote{\citeurl{http://activitystrea.ms/}{2012-01-21}}
 
 Open-Xchange provides an (unrestful) HTTP/JSON API which is used by its
 javascript
@@ -622,6 +627,17 @@ for tasks, appointments, reminders and contacts were inspired by any
 standards. In any case the API documentation is a good example of the need for
 standard mime types in JSON format. The use case for this API also shows
 similarities to the use of OpenSocial for intranet frontends.
+
+\begin{itemize}
+\item \url{http://blog.jclark.com/}
+\item \url{http://code.google.com/p/jaql/wiki/Builtin_functions#xml}
+\item \url{http://www.webmasterworld.com/xml/3603303.htm}
+\item \url{http://www.xml.com/pub/a/2006/05/31/converting-between-xml-and-json.html?page=3}
+\item \url{http://goessner.net/download/prj/jsonxml/}
+\item \url{http://www.w3.org/2011/10/integration-workshop/agenda.html}
+\item \url{http://jsonml.org/}
+
+\end{itemize}
 
 \subsection{Updates with alternative Mediatypes}
 How to handle updates, if the mediatypes are not isomorph?
@@ -1390,6 +1406,12 @@ Portable Contacts test client at plaxo \url{http://www.plaxo.com/pdata/testClien
 \item \url{http://dataportability.org/} still active?
 \item \url{http://tech.groups.yahoo.com/group/rest-discuss/messages/17242?threaded=1&m=e&var=1&tidx=1} REST and Semantic
 \item \url{http://stackoverflow.com/questions/2669926/practical-advice-on-using-jersey-and-guice-for-restful-service}
+\item \url{http://macstrac.blogspot.com/2009/01/jax-rs-as-one-web-framework-to-rule.html}
+\item \href{http://keithp.com/blogs/calypso/}{Calypso — CalDAV/CardDAV/WebDAV for Android and Evolution}
+\item \url{http://www.xfront.com/files/articles-1.html}
+\item \url{http://buzzword.org.uk/swignition/uf}
+\item \url{http://json-schema.org/}
+\item \href{http://www.rddl.org/}{Resource Directory Description Language (RDDL)}
 % http://exist.sourceforge.net/
 % http://wiki.davical.org/w/CardDAV/Configuration/Well-known_URLs
 % https://github.com/karl/monket-google-calendar A simplified UI for Google Calendar.
@@ -1423,6 +1445,8 @@ Videos about some 2.0 OS features \url{http://groups.google.com/group/opensocial
 OS and RDF \url{http://groups.google.com/group/opensocial-and-gadgets-spec/browse_thread/thread/20f62d627003509b}
 
 OpenSocial Development Environment (OSDE, Eclipse Plugin)  \url{https://sites.google.com/site/opensocialdevenv}
+
+\url{https://cwiki.apache.org/confluence/display/SHINDIG/Providing+your+own+data+service+implementation}
 
 \subsection{Socialsite}
 
