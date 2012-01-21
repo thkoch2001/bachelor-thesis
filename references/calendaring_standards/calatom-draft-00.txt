@@ -1,0 +1,781 @@
+Network Working Group                                 September 29, 2006
+Internet-Draft
+Intended status: Standards Track
+Expires: April 2, 2007
+
+
+                                CalAtom
+                   draft-yates-atompub-calatom-00.txt
+
+Status of this Memo
+
+   By submitting this Internet-Draft, each author represents that any
+   applicable patent or other IPR claims of which he or she is aware
+   have been or will be disclosed, and any of which he or she becomes
+   aware will be disclosed, in accordance with Section 6 of BCP 79.
+
+   Internet-Drafts are working documents of the Internet Engineering
+   Task Force (IETF), its areas, and its working groups.  Note that
+   other groups may also distribute working documents as Internet-
+   Drafts.
+
+   Internet-Drafts are draft documents valid for a maximum of six months
+   and may be updated, replaced, or obsoleted by other documents at any
+   time.  It is inappropriate to use Internet-Drafts as reference
+   material or to cite them other than as "work in progress."
+
+   The list of current Internet-Drafts can be accessed at
+   http://www.ietf.org/ietf/1id-abstracts.txt.
+
+   The list of Internet-Draft Shadow Directories can be accessed at
+   http://www.ietf.org/shadow.html.
+
+   This Internet-Draft will expire on April 2, 2007.
+
+Copyright Notice
+
+   Copyright (C) The Internet Society (2006).
+
+Abstract
+
+   CalAtom provides a remote api for calendars.  It utilizes the Atom
+   Publishing Protocol and xcal.
+
+
+
+
+
+
+
+
+
+                          Expires April 2, 2007                 [Page 1]
+
+Internet-Draft                   CalAtom                  September 2006
+
+
+Table of Contents
+
+   1.  Requirements notation  . . . . . . . . . . . . . . . . . . . .  3
+   2.  Introduction . . . . . . . . . . . . . . . . . . . . . . . . .  3
+   3.  CalAtom Collections  . . . . . . . . . . . . . . . . . . . . .  3
+   4.  Service Document in CalAtom  . . . . . . . . . . . . . . . . .  3
+     4.1.  Example  . . . . . . . . . . . . . . . . . . . . . . . . .  4
+     4.2.  Element Definitions  . . . . . . . . . . . . . . . . . . .  4
+       4.2.1.  The "f:feature" Element  . . . . . . . . . . . . . . .  5
+       4.2.2.  The "f:url" Element  . . . . . . . . . . . . . . . . .  6
+   5.  Creating and Editing Calendar Resources  . . . . . . . . . . .  6
+     5.1.  Creating Calendar Resources with POST  . . . . . . . . . .  6
+       5.1.1.  Example  . . . . . . . . . . . . . . . . . . . . . . .  7
+     5.2.  Modifying and Deleteing Calendar Resources . . . . . . . .  8
+   6.  Date Range Search  . . . . . . . . . . . . . . . . . . . . . .  8
+     6.1.  URI Construction . . . . . . . . . . . . . . . . . . . . .  8
+       6.1.1.  Example  . . . . . . . . . . . . . . . . . . . . . . .  9
+     6.2.  Search Response  . . . . . . . . . . . . . . . . . . . . . 10
+       6.2.1.  xcal Elements  . . . . . . . . . . . . . . . . . . . . 11
+   7.  Listing CalAtom Collection Members . . . . . . . . . . . . . . 11
+     7.1.  Example  . . . . . . . . . . . . . . . . . . . . . . . . . 11
+   8.  Repeating Events . . . . . . . . . . . . . . . . . . . . . . . 13
+   9.  Attachments  . . . . . . . . . . . . . . . . . . . . . . . . . 13
+   10. Security Considerations  . . . . . . . . . . . . . . . . . . . 13
+   11. Acknowledgements . . . . . . . . . . . . . . . . . . . . . . . 13
+   12. Normative References . . . . . . . . . . . . . . . . . . . . . 13
+   Author's Address . . . . . . . . . . . . . . . . . . . . . . . . . 13
+   Intellectual Property and Copyright Statements . . . . . . . . . . 14
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                          Expires April 2, 2007                 [Page 2]
+
+Internet-Draft                   CalAtom                  September 2006
+
+
+1.  Requirements notation
+
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+   document are to be interpreted as described in [RFC2119].
+
+
+2.  Introduction
+
+   The Atom Publishing Protocol (atompub) uses HTTP methods to edit and
+   author Member Resources.  Atompub Collections can contain Member
+   Resources with representations of arbitrary media type.  The Atom
+   Publishing Protocol defines Media Resources and Media Link Entries to
+   support the editing and authoring of Member Resources in media types
+   other than application/atom+xml.  This specification uses those
+   constructs together with the "application/calendar+xml" media type
+   (xcal) to provide a remote api for a Calendaring.  The api has been
+   designed to work with existing calendaring implementations.
+
+
+3.  CalAtom Collections
+
+   This specification defines Calendar Atom Collections (alternatively
+   referred to as CalAtom Collections).  These collections allow for the
+   editing and authoring of calendar data in its xcal representation and
+   provide calendar specific query operations.
+
+   CalAtom collections MUST support xcal representations of the calendar
+   data.  The xcal representations MUST contain one and only one VEVENT
+   calendar component.  Additionally the representation MUST NOT specify
+   the iCalendar METHOD property.
+
+
+4.  Service Document in CalAtom
+
+   For event management to occur, a client needs to first discover the
+   capabilities and locations of the available CalAtom Collections.  The
+   ATOM Publishing Protocols Service Documents are designed to support
+   this discovery process.
+
+   In addition to providing the standard collection details in the
+   Service document CalAtom collections MUST surface additional
+   information to indicate calendar specific capabilities.
+
+
+
+
+
+
+
+
+                          Expires April 2, 2007                 [Page 3]
+
+Internet-Draft                   CalAtom                  September 2006
+
+
+4.1.  Example
+
+<?xml version="1.0" encoding='utf-8'?>
+ <service xmlns="http://purl.org/atom/app#"
+  xmlns:atom="http://www.w3.org/2005/Atom"
+  xmlns:f="http://purl.org/atompub/features/1.0"
+  xmlns:ca="http://purl.org/calatom/draft-yates-atompub-calatom-00.txt">
+  <workspace>
+   <atom:title>Main Site</atom:title>
+   <collection
+    href="http://example.org/reilly/calendar" >
+    <atom:title>My Calendar</atom:title>
+    <accept>application/calendar+xml</accept>
+    <f:feature
+     ref="http://purl.org/calatom/draft-yates-atompub-calatom-00.txt">
+     <ca:url
+      rel="http://purl.prg/calatom/
+           draft-yates-atompub-calatom-00.txt/daterange"
+      template="http://example.org/reilly/calendar?
+       startdate={ca:startdate}&enddate={ca:enddate}"/>
+     </f:feature>
+    <categories
+     href="http://example.com/cats/forMain.cats" />
+    </collection>
+   <collection
+    href="http://example.org/reilly/pic" >
+    <atom:title>Pictures</atom:title>
+    <accept>image/*</accept>
+   </collection>
+  </workspace>
+ </service
+
+   This service document describes a single workspace that contains two
+   atom collections.  The first Workspace, called "Main Site", has two
+   collections called "My Calendar" and "Pictures" whose IRIs are
+   "http://example.org/reilly/calendar" and
+   "http://example.org/reilly/pic" respectively.  The "My Calendar"
+   collection includes an "accept" element indicating that a client can
+   post xcal media types to the Collection to create new members.
+   Additionally, two atom extensions are also present in the collection
+   element.  The "feature" element indicates that this collection
+   supports calatom and the "url" element provides a template used for
+   querying the calendar.
+
+4.2.  Element Definitions
+
+
+
+
+
+
+                          Expires April 2, 2007                 [Page 4]
+
+Internet-Draft                   CalAtom                  September 2006
+
+
+4.2.1.  The "f:feature" Element
+
+   A feature is an abstract behavior, function and capability supported
+   by an Atom Publishing Protocol server.  Examples of features that
+   might be supported by an APP server include support for a particular
+   set of Atom format extensions, a particular authentication scheme, or
+   a specific set of behaviors.  The presence of a f:feature element in
+   an app:collection element is an indication that the collection
+   supports the feature and may require that a client wishing to use the
+   endpoint use that feature.  Features are identified using permanent,
+   universally unique IRI's.
+
+        feature = element f:feature {
+          undefinedAttribute*,
+          attribute ref { atomNCName | atomUri },
+          (extensionElement*)
+        }
+
+   The "ref" attribute identifies a feature supported by a collection.
+   The value of "ref" MUST be a string that is non-empty and matches
+   either the "isegment-nz-nc" or the "IRI" production in [RFC3987].
+   Note that use of a relative reference other than a simple name is not
+   allowed.  If a name is given, implementations MUST consider the value
+   equivalent to the same name registered within the IANA Registry of
+   Publishing Features, and thus to the IRI that would be obtained by
+   appending the value of the ref attribute to the string
+   "http://www.iana.org/assignments/features/".  The value of the ref
+   attribute MUST be compared on a case-sensitive, character-by-
+   character basis.
+
+   The f:feature element MAY contain child elements and attributes other
+   than those defined in this specification.  Such "foreign markup" are
+   considered to be metadata applicable to the feature identified by the
+   f:feature element.  Software agents MUST NOT stop processing or
+   signal an error or change their behavior as a result of encountering
+   such foreign markup.
+
+   An app:collection element MAY contain zero or more f:feature elements
+   but MUST NOT contain more than one with the same ref attribute value.
+
+   CalAtom collections MUST contain an f:feature element with a "ref"
+   attribute set to
+   "http://purl.org/calatom/draft-yates-atompub-calatom-00.txt" <-- this
+   will be updated once the spec is finalized.  CalAtom collections MUST
+   also "accept" posts of media type application/calendar+xml.
+
+
+
+
+
+
+                          Expires April 2, 2007                 [Page 5]
+
+Internet-Draft                   CalAtom                  September 2006
+
+
+4.2.2.  The "f:url" Element
+
+   A url template provides a parameterized uri, typically used to
+   construct a search request.  Clients perform parameter substitution
+   to construct a de-referencable uri.
+
+        url = element ca:url {
+          undefinedAttribute*,
+          attribute rel { atomNCName | atomUri },
+          attribute template {atomUri},
+          (extensionElement*)
+        }
+
+   The "rel" attribute identifies a specific template/search type
+   supported by a collection, for example a "Date Range" query over
+   calendar resources.  The value of "rel" MUST be a string that is non-
+   empty and that matches the "IRI" production in [RFC3987].  The value
+   of the "rel" attribute MUST be compared on a case-sensitive,
+   character-by-character basis.
+
+   The "template" attribute contains a "URI Template" <--- reference
+   appropriate specification when available.  The client performs
+   parameter substitution on this template to construct a dereferencable
+   URI.
+
+   CalAtom collections MUST provide a ca:url element in the CalAtom
+   f:feature element with the "rel" attribute set to "http://purl.org/
+   calatom/draft-yates-atompub-calatom-00.txt/daterange" <---- updated
+   when the spec is released.  Clients use this value of the "rel"
+   attribute to identify the "Date Range" template URI.  The template
+   URI MUST contain ca:startdate and ca:enddate substitution parameters.
+   See the "Date Range Search" section below for definitions of the
+   substitution parameters.
+
+
+5.  Creating and Editing Calendar Resources
+
+5.1.  Creating Calendar Resources with POST
+
+   A client can POST an xcal media type of application/calendar+xml to a
+   CalAtom Collection.  Such a request creates two new resources - one
+   that corresponds to the xcal entity sent in the request, and an
+   associated Member Entry, called the CalAtom Media Link Entry.  See
+   section 9.5 of atompub for a complete description of Media Resources
+   and Media Link Entries.
+
+   The CalAtom Media Link Entry's "title" element SHOULD be populated
+   with the value of the "summary" element in the corresponding xcal
+
+
+
+                          Expires April 2, 2007                 [Page 6]
+
+Internet-Draft                   CalAtom                  September 2006
+
+
+   Media Resource.
+
+5.1.1.  Example
+
+   Below, the client sends a POST request containing a xcal
+   representation to the URI of the CalAtom collection.
+
+   POST /reilly/calendar HTTP/1.1
+   Host: example.org
+   User-Agent: Thingio/1.0
+   Content- Type: application/calendar+xml
+   Content-Length: nnn
+   <iCalendar xmlns="http://www.ietf.org/internet
+         -drafts/draft-ietf-calsch-many-xcal-02.txt">
+    <vcalendar version="2.0"
+       prodid="-//hacksw/handcal//NONSGML 1.0//EN">
+     <vevent>
+      <uid>20060901T130000Z-123401@host.com</uid>
+      <dtstamp>20060901T130000Z</dtstamp>
+      <dtstart>20060903T163000Z</dtstart>
+      <dtend>20060903T190000Z</dtend>
+      <summary>Annual Employee Review</summary>
+      <class>PRIVATE</class>
+      <categories>
+           <item>Business</item>
+           <item>Human Resources</item>
+      </categories>
+     </vevent>
+    </vcalendar>
+   </iCalendar>
+
+   The server signals a successful creation with a status code of 201.
+   The response includes a Location header indicating the Member URI of
+   the CalAtom Media Link Entry and a representation of that entry in
+   the body of the response.  The CalAtom Media Link Entry includes a
+   content element with a src attribute, and a link using the link
+   relation "edit-media" specifying the IRI to be used for modifying the
+   xcal Media Resource.
+
+
+
+
+
+
+
+
+
+
+
+
+
+                          Expires April 2, 2007                 [Page 7]
+
+Internet-Draft                   CalAtom                  September 2006
+
+
+   HTTP/1.1 201 Created
+   Date: Fri, 7 Oct 2005 17:17:11 GMT
+   Content-Length: nnn
+   Content-Type: application/atom+xml; charset="utf-8"
+   Content-Location: http://example.org/calendar/edit/1
+   Location: http://example.org/calendar/edit/1
+
+   <?xml version="1.0"?>
+   <entry xmlns="http://www.w3.org/2005/Atom">
+    <title>Annual Employee Review</title>
+    <id>urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a</id>
+    <updated>2005-10-07T17:17:08Z</updated>
+    <author><name>Daffy</name></author>
+    <summary type="text" />
+    <content type="application/calendar+xml"
+       src="http://example.org/calendar/1"/>
+    <link rel="edit-media"
+       href="http://example.org/calendar/edit/1" />
+   </entry>
+
+5.2.  Modifying and Deleteing Calendar Resources
+
+   CalAtom Media Link Entries i.e. entries that reference calendar
+   resources in CalAtom collections MUST contain an "edit-media" link
+   relation specifying the IRI to be used for modifying or deleting the
+   resource.  GET, PUT and DELETE operations as described in atompub
+   section 5.4 can then be used to view or manipulate the resource.
+   CalAtom collections MUST provide an "edit-media" link relation with
+   media-type application/calendar+xml and MAY provide alternative
+   represenations.
+
+
+6.  Date Range Search
+
+   Calendar applications most frequently display calendar events for a
+   given date range.  The "Date Range Search" allows a client to provide
+   the ranges start and end dates and returns the results in an atom
+   feed format.
+
+6.1.  URI Construction
+
+   CalAtom collections MUST provide a "Date Range Search" URI template
+   in the Atom Service Document.  Clients MUST replace the parameters in
+   this template to construct a URI.
+
+   Two parameters in the URI template are replaceable i.e. "ca:
+   startdate" and "ca:enddate".  These two parameters indicate a date
+   range.  When substituted the constructed URI is dereferenceable and
+
+
+
+                          Expires April 2, 2007                 [Page 8]
+
+Internet-Draft                   CalAtom                  September 2006
+
+
+   the server response MUST include CalAtom Media Link Entries that
+   reference a Calendar resource with an event who's start and end time
+   overlap the provided date range.
+
+6.1.1.  Example
+
+   In the following example the client requests all events that occur in
+   the month of September 2006.  The atompub introspection document
+   contains the following URI Template "http://example.org/reilly/
+   calendar?startdate={ca:startdate}&enddate={ca:enddate}".
+
+    GET /reilly/calendar
+     ?startdate=200609001T000000Z&enddate=200609001T115959Z HTTP/1.1
+    Host: example.org
+    User-Agent: Thingio/1.0
+    Accept: application/atom+xml
+
+   The client has substituted the parameters{ca:startdate} and {ca:
+   enddate}.  The server responds with the results in Atom Feed format.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                          Expires April 2, 2007                 [Page 9]
+
+Internet-Draft                   CalAtom                  September 2006
+
+
+   HTTP/1.1 200 OK
+   Date: Fri, 7 Oct 2005 17:17:11 GMT
+   Content-Length: nnn
+   Content-Type: application/atom+xml; charset="utf-8"
+   <?xml version="1.0" encoding="utf-8"?>
+    <feed xmlns="http://www.w3.org/2005/Atom"
+      xmlns:xcal="http://www.ietf.org/internet
+         -drafts/draft-ietf-calsch-many-xcal-02.txt">
+     <title>Calendar Events</title>
+     <updated>2003-12-13T18:30:02Z</updated>
+     <id>urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6</id>
+     <entry>
+      <title>Annual Employee Review</title>
+      <xcal:dtstart>20060901T130000Z</xcal:dtstart>
+      <xcal:dtend>20060903T190000Z</xcal:dtend>
+      <id>urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a</id>
+      <updated>2005-10-07T17:17:08Z</updated>
+      <author><name>Daffy</name></author>
+      <summary type="text" />
+      <content type="application/calendar+xml"
+       src="http://example.org/calendar/1"/>
+      <link rel="edit-media"
+       href="http://example.org/calendar/edit/1" />
+     </entry>
+     <entry>
+      <title>Annual Manger Review</title>
+      <xcal:dtstart>20060902T130000Z</xcal:dtstart>
+      <xcal:dtend>20060902T190000Z</xcal:dtend>
+      <id>urn:uuid:1225c645-cfb8-4ebb-aaaa-80da344efa6a</id>
+      <updated>2005-10-07T17:17:08Z</updated>
+      <author><name>Daffy</name></author>
+      <summary type="text" />
+      <content type="application/calendar+xml"
+       src="http://example.org/calendar/2"/>
+      <link rel="edit-media"
+       href="http://example.org/calendar/edit/2" />
+     </entry>
+    </feed>
+
+   The response contains two events, "Annual Employee Review" and
+   "Annual Manager Review" both occuring in September 06.  The CalAtom
+   Media Link Entries in the response also contain the "xcal:dtstart"
+   and "xcal:dtend" elements.
+
+6.2.  Search Response
+
+   The Date Range Search Response MUST provide representations in the
+   form of Atom Feed documents whose CalAtom media entries represent the
+
+
+
+                          Expires April 2, 2007                [Page 10]
+
+Internet-Draft                   CalAtom                  September 2006
+
+
+   Calendar Resources that qualify.  Each entry in the Feed Document
+   SHOULD have an atom:link element with a relation of "edit-media".
+   The Search Response MAY be paged, see section 10.1 atompub.
+
+6.2.1.  xcal Elements
+
+   The CalAtom media entries in the Date Range Search Response MUST
+   contain the following xcal elements as immediate children of the
+   "atom:entry" when the elements exist in the corresponding Calendar
+   Resource, "xcal:location", "xcal:dtstart", "xcal:dtend", "xcal:
+   status", "xcal:organizer".
+
+
+7.  Listing CalAtom Collection Members
+
+   CalAtom collections MUST respond to GET requests with a member
+   listing as outlined in atompub section 10.  Typically atom clients
+   use this default listing as their primary listing.  CalAtom clients
+   however will normally use the "Date Range Query" as their primary
+   listing of events.  It is, however, expected that the default
+   collection listing will be used to "synch" calendar clients with the
+   server.  Therefore in the default collection listing CalAtom Media
+   Entries SHOULD contain a full inline representation of the Media
+   Resource in media type application/calendar+xml.  The listing SHOULD
+   also be paged.
+
+7.1.  Example
+
+   Below is a sample default listing of a CalAtom Collection that
+   contains two events.
+
+      GET /reilly/calendar
+      Host: example.org
+      User-Agent: Thingio/1.0
+      Accept: application/atom+xml
+
+   The server responds as follows.
+
+     HTTP/1.1 200 OK
+     Date: Fri, 7 Oct 2005 17:17:11 GMT
+     Content-Length: nnn
+     Content-Type: application/atom+xml; charset="utf-8"
+     <?xml version="1.0" encoding="utf-8"?>
+      <feed xmlns="http://www.w3.org/2005/Atom">
+       <title>Calendar Events</title>
+       <updated>2003-12-13T18:30:02Z</updated>
+       <id>urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6</id>
+       <entry>
+
+
+
+                          Expires April 2, 2007                [Page 11]
+
+Internet-Draft                   CalAtom                  September 2006
+
+
+        <title>Annual Employee Review</title>
+        <id>urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a</id>
+        <updated>2005-10-07T17:17:08Z</updated>
+        <author><name>Daffy</name></author>
+        <summary type="text" />
+        <content type="application/calendar+xml">
+         <iCalendar xmlns="http://www.ietf.org/internet
+              -drafts/draft-ietf-calsch-many-xcal-02.txt">
+          <vcalendar version="2.0"
+            prodid="-//hacksw/handcal//NONSGML 1.0//EN">
+           <vevent>
+            <uid>20060901T130000Z-123401@host.com</uid>
+            <dtstamp>20060901T130000Z</dtstamp>
+            <dtstart>20060903T163000Z</dtstart>
+            <dtend>20060903T190000Z</dtend>
+            <summary>Annual Employee Review</summary>
+            <class>PRIVATE</class>
+            <categories>
+             <item>Business</item>
+             <item>Human Resources</item>
+            </categories>
+           </vevent>
+          </vcalendar>
+         </iCalendar>
+        </content>
+        <link rel="edit-media"
+         href="http://example.org/calendar/edit/1" />
+       </entry>
+       <entry>
+        <title>Annual Manger Review</title>
+        <id>urn:uuid:1225c645-cfb8-4ebb-aaaa-80da344efa6a</id>
+        <updated>2005-10-07T16:17:08Z</updated>
+        <author><name>Daffy</name></author>
+        <summary type="text" />
+        <content type="application/calendar+xml">
+         <iCalendar xmlns="http://www.ietf.org/internet
+              -drafts/draft-ietf-calsch-many-xcal-02.txt">
+          <vcalendar version="2.0"
+            prodid="-//hacksw/handcal//NONSGML 1.0//EN">
+           <vevent>
+            <uid>20060901T130000Z-123401@host.com</uid>
+            <dtstamp>20060901T130000Z</dtstamp>
+            <dtstart>20060903T163000Z</dtstart>
+            <dtend>20060903T190000Z</dtend>
+            <summary>Annual Manager Review</summary>
+            <class>PRIVATE</class>
+            <categories>
+             <item>Business</item>
+
+
+
+                          Expires April 2, 2007                [Page 12]
+
+Internet-Draft                   CalAtom                  September 2006
+
+
+             <item>Human Resources</item>
+            </categories>
+           </vevent>
+          </vcalendar>
+         </iCalendar>
+        </content>
+        <link rel="edit-media"
+         href="http://example.org/calendar/edit/2" />
+       </entry>
+      </feed>
+
+
+8.  Repeating Events
+
+   tbd.
+
+
+9.  Attachments
+
+   tbd.
+
+
+10.  Security Considerations
+
+   tbd.
+
+
+11.  Acknowledgements
+
+   Portions of the atompub specification have been included and adapted
+
+
+12.  Normative References
+
+   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", BCP 14, RFC 2119, March 1997.
+
+
+Author's Address
+
+
+
+
+
+
+
+
+
+
+
+
+                          Expires April 2, 2007                [Page 13]
+
+Internet-Draft                   CalAtom                  September 2006
+
+
+Full Copyright Statement
+
+   Copyright (C) The Internet Society (2006).
+
+   This document is subject to the rights, licenses and restrictions
+   contained in BCP 78, and except as set forth therein, the authors
+   retain all their rights.
+
+   This document and the information contained herein are provided on an
+   "AS IS" basis and THE CONTRIBUTOR, THE ORGANIZATION HE/SHE REPRESENTS
+   OR IS SPONSORED BY (IF ANY), THE INTERNET SOCIETY AND THE INTERNET
+   ENGINEERING TASK FORCE DISCLAIM ALL WARRANTIES, EXPRESS OR IMPLIED,
+   INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE
+   INFORMATION HEREIN WILL NOT INFRINGE ANY RIGHTS OR ANY IMPLIED
+   WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+
+
+Intellectual Property
+
+   The IETF takes no position regarding the validity or scope of any
+   Intellectual Property Rights or other rights that might be claimed to
+   pertain to the implementation or use of the technology described in
+   this document or the extent to which any license under such rights
+   might or might not be available; nor does it represent that it has
+   made any independent effort to identify any such rights.  Information
+   on the procedures with respect to rights in RFC documents can be
+   found in BCP 78 and BCP 79.
+
+   Copies of IPR disclosures made to the IETF Secretariat and any
+   assurances of licenses to be made available, or the result of an
+   attempt made to obtain a general license or permission for the use of
+   such proprietary rights by implementers or users of this
+   specification can be obtained from the IETF on-line IPR repository at
+   http://www.ietf.org/ipr.
+
+   The IETF invites any interested party to bring to its attention any
+   copyrights, patents or patent applications, or other proprietary
+   rights that may cover technology that may be required to implement
+   this standard.  Please address the information to the IETF at
+   ietf-ipr@ietf.org.
+
+
+Acknowledgment
+
+   Funding for the RFC Editor function is provided by the IETF
+   Administrative Support Activity (IASA).
+
+
+
+
+
+                          Expires April 2, 2007                [Page 14]
+

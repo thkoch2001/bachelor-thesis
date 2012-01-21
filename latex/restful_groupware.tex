@@ -395,10 +395,30 @@ WebDAV vs. ATOM:
 \url{http://intertwingly.net/wiki/pie/WebDavVsAtom}
 google webdav atom
 
+
+Why didn't ATOM succeed (more)? \citeurl{http://bitworking.org/news/425/atompub-is-a-failure}{2012-01-06}
+
+\begin{quote}
+Were I to propose CalDAV today it would probably be CalAtom  
+\end{quote}
+-- Lisa Dusseault, February 29, 2008\footnote{\citeurl{http://nih.blogspot.com/2008/02/nearly-two-years-ago-i-made-prediction.html}{2012-1-6}}
+
+\begin{quote}
+  I gave a big sigh of relief when I read that, and I hope that the CardDAV
+  folks take this to heart. Some parts of WebDAV (e.g., properties [\ldots])
+  deserve to be taken out back and shot -- although, as Lisa says, they were
+  necessary because of the state of the art at the time. That doesn't mean we
+  can't do better now.
+\end{quote}
+-- Ted Leung, March 6, 2008\footnote{\citeurl{http://www.sauria.com/blog/2008/03/06/google-contacts-and-carddav/}{2012-1-6}}
+% \subsection{ATOM Use cases}
+% http://swordapp.org/
+
+
 \section{Design and implementation of a restful Contacts API}
 
 \subsection{Requirements}
-% Server site search
+% Server site search - No. Google is also not part of the Web stack!
 % Access Control 
 % restful: one entry point, reuse of existing protocols and media types
 % easy to understand and implement
@@ -406,13 +426,30 @@ These requirements include the features of CardDAV.\cite[sec. 1]{RFC6352} The
 CardDAV RFC mentions its disadvantage of a missing specification for ``change
 notification''. An ATOM based approach on the other hand can make use of already existing protocols and infrastructure for this purpose, most notable Pubsubhubbub.\footnote{\citeurl{http://code.google.com/p/pubsubhubbub/}{2012-1-5}}
 
-Versioning and Locking, which are provided by WebDAV are not a requirement.
+Versioning and Locking, which are provided by WebDAV are not a
+requirement. Optimistic locking as provided by ``conditional'' put requests in
+HTTP is preferred first because it is an already widespread standard.
 
 \subsection{Related Work}
 
-Rob Yates:
-CalATOM \citeurl{http://robubu.com/?p=6}{2012-01-05}
+Rob Yates \url{mailto:robert_yates@us.ibm.com}:
+CalATOM \citeurl{http://robubu.com/?p=6}{2012-01-05} Draft:
 CardATOM \citeurl{http://robubu.com/?p=10}{2012-01-05}
+
+Rob Yates drafted a CalATOM
+specification.\cite{draft-yates-atompub-calatom-00.txt} It references another
+old draft (draft-snell-atompub-feature-12) to mark a collection as a CalATOM
+collection. This seems unnecessary since we can specify that a collection
+accepts calendar resources and thus marking a collection as a calendar.
+
+Furthermore the draft mentions a capability to query for events in a given time
+range. There is no equivalent for such a request for contacts.
+
+In rest the draft only repeats or references the atompub standard and the xcal
+format. This draft could therefor be seen as indication that the existing
+standards are almost sufficient to define GroupWare APIs.
+
+
 
 
 DOAP-over-ATOM \citeurl{http://web.archive.org/web/20070927230857/http://www.codezoo.com/about/doap_over_atom.csp}{2012-01-05}
@@ -435,6 +472,21 @@ How to efficiently synchronize a large collection of contacts with the server wi
 Portable Contacts has a filter ``updatedSince''.
 
 How is synchronization done in CardDAV?
+
+``Feed Paging for Efficient Feed Synchronization'' thread at ATOM-Syntax \url{http://www.imc.org/atom-syntax/mail-archive/msg20060.html}
+
+HTTP Delata encoding with Feed: \citeurl{http://www.wyman.us/main/2004/09/using_rfc3229_w.html}{2012-1-6}, implementations: \citeurl{http://www.wyman.us/main/2004/09/implementations.html}{2011-1-6}
+
+``There's also an advanced technique involving etags which keeps track of when
+each etag was issued and if an old etag is sent with the request then
+everything since then is sent back in the response. Someone will chime in
+with the reference.'' Eric Scheid, \citeurl{http://www.imc.org/atom-syntax/mail-archive/msg19832.html}{2012-1-6}
+
+
+Microsoft specification FeedSync (formerly Simple Sharing Extension) \url{http://feedsyncsamples.codeplex.com},
+ comment \url{http://notes.kateva.org/2008/01/microsoft-feedsync-what-heck-is-it-and.html}
+\url{http://web.archive.org/web/20081114142152/http://www.snellspace.com/wp/?p=818}
+
 
 \section{Mediatypes}
 
@@ -552,13 +604,15 @@ XML standards:
 \begin{table}
   \begin{tabular}{l c c c c c}
     type of data & XML  & JSON                      & semantic          & microformat & comment \\
-    Calendar     & xCal & Google calendar API       &                   & hCalendar & other: iCalendar  \\
+    Calendar     & xCal & Google calendar API       & \url{http://www.w3.org/TR/rdfcal} & hCalendar & other: iCalendar  \\
     Contact      & xCard & portable contacts, jCard & friend of a friend & hCard & other: vCard \\
     Resume       & HR XML &                          & Description of a Career & hResume & \\    
   \end{tabular}
   \caption{data in different formats}
   \label{tab:data-formats}
 \end{table}
+
+% Activity Streams in XML, JSON
 
 Open-Xchange provides an (unrestful) HTTP/JSON API which is used by its
 javascript
@@ -575,6 +629,32 @@ How to handle updates, if the mediatypes are not isomorph?
 How does Google handle PATCH in the calendar API?
 
 \subsection{Mediatype conversion}
+
+
+JSON formats for collections:
+Collection+JSON Mime-Type (approved in July 2011) by Mike Amundsen\footnote{\citeurl{http://amundsen.com/media-types/collection/}{2012-1-7}}
+JSON ATOM serialization implemented by Apache Abdera\footnote{\citeurl{http://www.ibm.com/developerworks/library/x-atom2json/index.html}{2012-1-7} \citeurl{https://cwiki.apache.org/ABDERA/json-serialization.html}{2012-1-7}}
+
+% http://blogs.oracle.com/sandoz/entry/jersey_and_abdera_with_a  http://weblogs.java.net/blog/mhadley/archive/2008/02/integrating_jer_2.html
+
+Some problems in loss-less conversion of ATOM to json:\cite{Snell2008}
+\begin{itemize}
+  \item JSON has no equivalent for the xml:lang attribute.
+  \item Dereferencable IRIs must be transformed to URIs.
+  \item URIs relative to an xml:base attribute must be resolved, also inside XHTML content elements.
+  \item Repeatable elements must be converted to arrays.
+  \item The ATOM date format (RFC 3339) differs from the JavaScript Date serialization.
+  \item ATOM content elements are versatile but should be represented more meaningful in JSON then just a plain String.
+  \item ATOM supports arbitrary extensions via namespaces.
+\end{itemize}
+
+RFC 5023  "Collections are represented as Atom Feeds"
+
+Is conneg (content negotiation) useful?
+No: Norman Walsh, 2003, it can lead to hard to debug bugs\citeurl{http://norman.walsh.name/2003/07/02/conneg}{2011-1-9},
+    Joe Gregorio, 2003,I can't communicate the mime type to request to a third service if I can only give an URI\citeurl{http://bitworking.org/news/WebServicesAndContentNegotiation}{2011-1-9}
+Yes: Jerome Louvel, 2006, I could additionally provide URIs that override the accept headers with query parameters like ?format=json.\citeurl{http://blog.noelios.com/2006/11/15/reconsidering-content-negotiation/}{2011-1-9}
+    
 
 Which fields of portable contacts are derived from vCard: \url{http://wiki.portablecontacts.net/w/page/17776141/schema}
 
@@ -849,12 +929,45 @@ https://launchpad.net/ubuntu/+source/dovecot-metadata-plugin/8-0ubuntu1
 % JSON: http://jackson.codehaus.org/ http://code.google.com/p/google-gson/
 % http://microformats.org/wiki/org.microformats.hCard
 
+% Universal ATOM client/server? http://code.google.com/p/dase/ (PHP/MySQL, Python client)
+% https://github.com/arktekk/atom-client
+
+% http://code.google.com/p/atombeat/ atombeat eXistDB, atompub, java, Uni Oxford, mostly written in XQuery, Spring based security
+% http://atomserver.codehaus.org Adds non standard and not restful extensions (e.g. feed aggregation with special URLs) inspired by GData, expects a relational database
+% more http://code.google.com/p/atomojo java atompub feed server on existDB 
+% http://atomhopper.org 
+% existDb has an own atompub impl http://exist-db.org/atompub.html
+
+
 \subsection{REST framework}
 Jersey recommended by \cite{Kaiser2011} above Restfulie and RESTeasy because of maturity and flexibility.
 
 % http://www.torsten-horn.de/techdocs/jee-rest.htm RESTful Web Services mit JAX-RS und Jersey
 
 Jersey has a atompub-contact client/server example app.
+
+Why not Jersey in the end?
+\begin{itemize}
+\item JAX-RS assumes, that Paths are defined on the classes that represent the resources.
+  \begin{itemize}
+  \item This couples the ``location'' of a resource to its implementation.
+  \item This leads to copied code. Given an URL pattern like
+    \verb:/{AUTHORITY}/{COLLECTION}/{ENTRY}:. In this case the resource classes
+    for authority, collection and entry would each need to parse the authority
+    section of the path.
+  \item If paths are not defined on resource classes, it is not possible to make use of JAX-RS' capabilities of declarative hyperlink building (@REF annotation).
+  \end{itemize}
+\item The dispatch to a request handler method has in our case three orthogonal
+  parameters: HTTP verb, Media type, path. It would be preferable to handle
+  these parameters independent of each other. The only way to handle at least
+  the path dispatch separately is with the help of sub resources. This still
+  leaves HTTP verb and Media type to be handled together.
+
+  The sub resource mechanism additionally suffers from the shortcoming that it does not allow to specify an empty path.\footnote{\citeurl{http://java.net/jira/browse/JERSEY-536}{2012-01-21}} This makes it impossible to return a sub resource and annotate a method that should handle the case that no additional path elements remain to be matched.
+
+\item Debugging is hard. It's not trivial to find out, why Jersey did not select a request handler or provider as the developer intended.
+\item Jersey's parameter injection can not be used together with a dependency injection framework like Guice or Spring.
+\end{itemize}
 
 \subsection{VCard}
 
@@ -880,6 +993,10 @@ is immutable!!!
 How to test the ReST/CardDAV interface?
 
 % http://code.google.com/p/rest-client/
+% http://bitworking.org/projects/apptestclient GUI based Atom Publishing Protocol Client
+% 
+
+% Jersey creates WADL documents for OPTION requests. http://wadl.java.net/ seems to provide clients
 
 Portable Contacts test client at plaxo \url{http://www.plaxo.com/pdata/testClient}
 
@@ -1087,6 +1204,11 @@ Portable Contacts test client at plaxo \url{http://www.plaxo.com/pdata/testClien
   \item[Eliot Lear <lear@cisco.com>]
       IETF Calsify WG chair
 
+  \item[James Snell]
+    \url{http://chmod777self.blogspot.com/}
+
+    Abdera committer
+
   \item[Julian Reschke <julian.reschke@gmx.de>]
 % Julian Reschke, WebDAV Experte, RFC 5995, greenbytes GmbH,Hafenweg 16, 48155 Münster , Germany
 
@@ -1267,6 +1389,7 @@ Portable Contacts test client at plaxo \url{http://www.plaxo.com/pdata/testClien
 \item \url{https://addons.mozilla.org/de/firefox/addon/restclient/}
 \item \url{http://dataportability.org/} still active?
 \item \url{http://tech.groups.yahoo.com/group/rest-discuss/messages/17242?threaded=1&m=e&var=1&tidx=1} REST and Semantic
+\item \url{http://stackoverflow.com/questions/2669926/practical-advice-on-using-jersey-and-guice-for-restful-service}
 % http://exist.sourceforge.net/
 % http://wiki.davical.org/w/CardDAV/Configuration/Well-known_URLs
 % https://github.com/karl/monket-google-calendar A simplified UI for Google Calendar.
@@ -1276,6 +1399,7 @@ Portable Contacts test client at plaxo \url{http://www.plaxo.com/pdata/testClien
 % https://github.com/jaliss/securesocial provides OAuth, OAuth2 and OpenID authentication for Play Framework
 % Oauth http://code.google.com/intl/de/apis/accounts/docs/OAuth2.html
 % Permissions compared. IMAP, WEBDAV, ... http://chandlerproject.org/bin/view/Journal/LisaDusseault20040409
+% Blog on calendar interop http://calendarswamp.blogspot.com
 
 \end{itemize}
 
