@@ -39,10 +39,295 @@
 \end{abstract}
 \newpage{}
 
+
 \section{Motivation}
 
-Experiences with Android and Data in the cloud
-\url{http://keithp.com/blogs/calypso}
+Although computers became ubiquitous for some time now, they still don't help
+their users with their most basic information management needs: Make contacts,
+calendars, notices and to do items available across different devices and share
+them with my peers.
+
+Existing solutions are either based on non-free software (Microsoft Outlook),
+brittle and unreliable\footnote{See comments on the individual projects in
+  appendix ...} or require the user to trust his personal data to the commercial
+interests of a multinational corporation.\footnote{Experiences with Android and Data in the cloud \citeurl{http://keithp.com/blogs/calypso}{?}}
+
+This work uses an ongoing effort to draft a meta model for restful
+applications. Applying this meta model to the domain of this work may provide
+further insights into its general applicability and fit.
+
+\section{Requirements}
+
+% restful: one entry point, reuse of existing protocols and media types
+% easy to understand and implement
+% Collections z.B. für Projekte könnten alle möglichen Typen konsumieren.
+These requirements include the features of CardDAV.\cite[sec. 1]{RFC6352}
+
+% SRS template from http://code.google.com/p/e-bibliophile/wiki/SRS
+\subsection{Scope}
+% This subsection should
+% a)Identify the software product(s) to be produced by name (e.g., Host DBMS, 
+% Report Generator, etc.);
+% b)Explain what the software product(s) will, and, if necessary, will not do;
+% c)Describe the application of the software being specified, including relevant 
+% benefits, objectives, and goals;
+% d)Be consistent with similar statements in higher level specifications 
+% (e.g., the system requirements specification), if they exist.
+
+This work defines a protocol to share 
+
+\subsection{Definitions}
+
+Kolab is the name of a software product ... TODO
+
+A couple of related terms and concepts exist that all more or less overlap with
+the functionality provided by Kolab: Groupware, Personal Information
+Management/Manager (PIM), Group Information Management (GIM), Computer-supported
+cooperative/collaborative work, Knowledge management, (Enterprise) Content
+Management.
+
+TODO: keinen der Terme benutzen.
+
+\subsection{General Requirements}
+% This subsection of the SRS should provide a summary of the major functions 
+% that the software will perform. For example, an SRS for an accounting program 
+% may use this part to address customer account maintenance, customer statement, 
+% and invoice preparation without mentioning the vast amount of detail that each 
+% of those functions requires.
+% Sometimes the function summary that is necessary for this part can be taken 
+% directly from the section of the higher level specification (if one exists) 
+% that allocates particular functions to the software product. Note that for the 
+% sake of clarity
+% a)The functions should be organized in a way that makes the list of functions 
+% understandable to the customer or to anyone else reading the document for the 
+% first time.
+% b)Textual or graphical methods can be used to show the different functions 
+% and their relationships. Such a diagram is not intended to show a design of 
+% a product, but simply shows the logical relationships among variables.
+
+\paragraph{Restful}
+The application should obey the constraints of a rest application as specified
+in \cite{Fielding2000}.
+
+TODO: 4 Grundconstraints von REST auflisten.
+
+The above constraints are not an end in itself but lead to the following
+required or desirable properties:
+
+\begin{itemize}
+\item Cacheability (5.1.4) can keep the data available also in offline mode, improves performance and scalability.
+\item Simplicity helps to develop glue code to connect the application to other systems or to extend it.
+\item Modifiability allows to adapt the Groupware to changes in the organization.
+\item Reliability should not need additional justification.
+\item Administrative scalability means that intermediary components can be deployed independent of the administrator of the main application.
+\end{itemize}
+
+Other outcomes described by Fielding that may not be of importance for the
+present work are: scalability in terms of users, network performance and
+efficiency.
+
+
+
+\subsection{User Classes and Characteristics}
+
+TODO: plain Web Browsers, Desktop applications (PIM Suites), JavaScript Gadgets/Widgets (see OpenSocial) probably with WebStorage\footnote{\citeurl{http://www.w3.org/TR/webstorage/}{2012-2-2}}
+
+\subsection{Operation Environment}
+
+The application is expected to be installed in a Java servlet container like Tomcat or Jetty and to contact a separate storage component. The primarily targeted storage component is an IMAP server with a Kolab conform set of groupware folders. However the design should not restrict the extension to a document database like CouchDB, plain files, relational or XML databases.
+
+\subsection{Design and Implementation Constraints}
+
+\subsection{Specific Requirements}
+
+
+
+\subsection{Excluded requirements}
+
+\paragraph{Search}
+It is not required that the server implements any means to search its data. It
+is not excluded that such a facility could be added later. It is however
+expected that searching could be implemented separately. This could be done
+either on a synchronizing client or as a separate system in the same
+administrative domain as the server.
+
+\paragraph{Performance optimization}
+The system is meant to inherit the benefits of a restful architecture. It should
+therefor be possible to attach separate caching intermediaries for read
+requests. Rather then concentrating on the performance of the implementation of
+read requests it should be taken care that the architecture supports external
+caching and thus avoids to serve the same read request multiple times.
+
+\paragraph{Access Control}
+The aspect of access control would broaden the scope of this work to
+wide. However it could be kept in mind, whether the proposed design could be
+enhanced by a separate access control design as proposed in
+\cite{conf/rest/GrafZLW11}.
+
+\paragraph{Versioning}
+WebDAV and therefor CalDAV and CardDAV support the versioning of resources as an
+extension to the HTTP protocol. Versioning is an important feature for a text
+authoring system that may have been the main target for the WebDAV protocol.  It
+does however seem to be of little use for the resources considered here. The
+resources are mostly created in one session by one user and seldom modified.
+
+\paragraph{Locking}
+As with Versioning, this is feature of WebDAV is not considered. Instead of
+locking a resource HTTP supports conditional updates and leaves conflict
+resolution to the client.
+
+\paragraph{Push notifications}
+This work does not include any means to actively notify (push) a client about
+changes happening on the server. The client needs to initiate a request (pull)
+to the server to look for changes. However separate solutions exist\footnote{most
+  notable PubSubHubBub
+  \citeurl{http://code.google.com/p/pubsubhubbub/}{2012-1-5}} to enable a push
+workflow on top of a feed based
+application.\cite{Wilde:2009:FQP:1693155.1693220} It may therefor not be seen as a disadvantage to omit push notifications as a requirement.\footnote{\cite[sec. 1]{RFC6352} explicitly mentions missing ``change notifications'' as a ``key disadvantage'' of CardDAV.}
+
+\section{Design}
+
+% The design must not support any possible use case but only restful web applications.
+
+% The life cycle of ResourceHandlers is for the application. They receive the called URL as part of the request context as a method parameter.
+% ResourceHandlers could be wired together at run time, instantiated with a set of handler functors which could carry their storage in their closure.
+% Specifying the media types handled by a handler function as annotations is verbose. If I have a method that handles contacts, I need to specify several media types. If a method handler can handle Contacts, Events and Todos, I need to repeat a lot of media types.
+
+% Handler functors return a tuppel of status code, headers set and response body.
+% Alternatively they can return early by throwing a special exception carrying a status code and a message.
+% Exceptions thrown from a ResourceHandler should be serialized in a way easily to consume for the client.
+
+% Concerns: Authorization, Logging, Trigger Message (to indexing system, subscribers), Measure execution time, Support Cross-Origin Resource Sharing (CORS)\footnote{\citeurl{http://www.w3.org/TR/cors/}{2012-2-2}}, Compression
+
+% The life cycle of a CollectionStorage is across individual requests to facilitate caching or database connection reuse.
+
+\subsection{Overview}
+
+\subsubsection{Structural and Behavioral Rest Model}
+
+Primary Resources: Contacts, Calendars, ...
+List Resources: 
+
+\subsubsection{AtomPub}
+
+
+Rob Yates \url{mailto:robert_yates@us.ibm.com}:
+CalATOM \citeurl{http://robubu.com/?p=6}{2012-01-05} Draft:
+CardATOM \citeurl{http://robubu.com/?p=10}{2012-01-05}
+
+Rob Yates drafted a CalATOM
+specification.\cite{draft-yates-atompub-calatom-00.txt} It references another
+old draft (draft-snell-atompub-feature-12) to mark a collection as a CalATOM
+collection. This seems unnecessary since we can specify that a collection
+accepts calendar resources and thus marking a collection as a calendar.
+
+Furthermore the draft mentions a capability to query for events in a given time
+range. There is no equivalent for such a request for contacts.
+
+In rest the draft only repeats or references the atompub standard and the xcal
+format. This draft could therefor be seen as indication that the existing
+standards are almost sufficient to define GroupWare APIs.
+
+Google Data API also uses ATOM, but puts their tags directly inside the ``atom:entry'' tag 
+instead of putting all of the content in the content element of an atom
+entry.\footnote{\citeurl{http://web.archive.org/web/20081120001246/http://www.snellspace.com/wp/?p=314}{2012-01-05}}
+
+
+
+\subsection{Components}
+
+\paragraph{Dispatcher}
+
+The dispatcher selects the Java method (see \ref{sec:components-actions}) that
+should handle the request. The selection can depend at least on the path
+component of the requested URI, the media types accepted by the client as
+indicated in the request's ACCEPT header and the HTTP verb.
+
+Every project implementing JAX-RS\cite{JAX-RS1.1} needs to have some kind of
+dispatcher component. The specification itself does not identify this
+component. It does however specify the algorithm a dispatcher needs to follow
+and a set of Java annotations which must be used to configure the
+dispatch. These annotations (PATH, GET for the HTTP verb and Produces) are
+demonstrated in listing \ref{fig:jaxrs-annotated-resource-example}.
+
+\begin{lstlisting}[label=fig:jaxrs-annotated-resource-example,
+                   language=java,
+                   caption={Example of a JAX-RS annotated Resource class (by Marek Potociar)}]
+@Path("atm/{cardId}")	
+public class AtmResource {	
+`  
+  @GET 	
+  @Path("balance")	
+  @Produces("text/plain")	
+  public String balance(@PathParam("cardId") String card,	
+                        @QueryParam("pin") String pin) {	
+    return Double.toString(getBalance(card, pin));	
+  }
+\end{lstlisting}
+ 
+Alternative approaches to configure the dispatcher are not designated by
+JAX-RS. One possible alternative would be to expose an API to manually add
+dispatch routes at runtime and remove the corresponding annotations from the
+source code. This could have several advantages\footnote{This section does not
+  intend to dispute the advantages of annotation based configuration.}:
+
+\begin{itemize}
+\item The path under which a resource type is served is decoupled from the code
+  defining the behavior of the resource. This could enable the reuse of resource
+  classes or methods in other contexts.
+\item The decision which media types can be consumed or produced may not depend
+  solely on the resource class or method. A resource method may work on a domain
+  specific data type and the set of supported media types may depend on the
+  available converter between media types and the data type. A photo album
+  resource may be able to consume any number of different image formats that
+  another framework can convert to an internal image representation.
+\item The list of supported media types could be created programmatically. This
+  enables reuse of set of equivalent media types or combination of media type
+  categories for example to combine the sets of image, video and audio media
+  types.
+\item The concept of resource classes could be replaced altogether. The life
+  cycle of a resource class in JAX-RS defaults to the request scope. During one
+  request only one resource method is called. Resource methods therefor by
+  default don't share state through resource class attributes. It would therefor
+  be possible to bind individual functors to dispatcher routes and thus
+  composing the equivalent of a resource class at runtime.
+\end{itemize}
+
+\paragraph{Actions}
+\label{sec:components-actions}
+
+An action is basically the code that should be executed to respond to a client
+request. An action receives all information about a request and is connected to
+the application. It can use and manipulate the application state and produces a
+data structure representing the response. It can be compared to the ``Request
+method'' defined in JAX-RS.
+
+\paragraph{ResourceConverters}
+\label{sec:components-resourceconverters}
+
+\paragraph{CollectionStorage}
+\label{sec:collectionstorage}
+
+The collection storage interface offers the necessary means to store and
+retrieve resources. For clarity this interface is not further broken down into a
+read-only part and a full read-write interface.
+
+A collection storage is instantiated with the knowledge of the collection it is
+responsible for. It therefor typically only returns resources that were
+previously stored through it although it may share its underlying persistency
+provider with other collection storage instances.
+
+The life cycle of a collection storage is scoped to the application. It is
+therefor possible to attach memory based caching to this component.
+
+\paragraph{GenericResourceAttributes}
+\label{sec:component-genericresourceattrib}
+
+
+
+\section{only draft below this section!}
+
+
 
 Why vCard/CardDav: many clients
 
@@ -54,19 +339,8 @@ Why OpenSocial / Portable Contacts:
 \end{itemize}
 
 
-\section{Advantages of REST for Groupware data}
 
-The REST style is motivated by the argument that its application would help to provide certain attributes for an architecture.\cite[sec 5.1]{Fielding2000}
 
-Maybe not so important for a companies internal Groupware: Scalability (in terms of users), Network performance, Efficiency, 
-
-\begin{itemize}
-\item Cachability can keep the data available also in offline mode
-\item Simplicity helps to develop glue code between different systems
-\item Modifiability allows to adapt the Groupware to changes in the organization
-\item Reliability
-\item Administrativ scalability
-\end{itemize}
 
 \section{Evaluation of APIs}
 
@@ -387,9 +661,6 @@ interoperability - something that would have been hard to achieve with CAP.
 
 \section{ATOM}
 
-Google's Data API extends ATOM?
-Calendar feeds are available as ATOM with the published entry set to the date of the event.
-
 WebDAV vs. ATOM:
 \url{http://intertwingly.net/wiki/pie/WebDav}
 \url{http://intertwingly.net/wiki/pie/WebDavVsAtom}
@@ -417,44 +688,27 @@ Were I to propose CalDAV today it would probably be CalAtom
 
 \section{Design and implementation of a restful Contacts API}
 
-\subsection{Requirements}
-% Server site search - No. Google is also not part of the Web stack!
-% Access Control 
-% restful: one entry point, reuse of existing protocols and media types
-% easy to understand and implement
-These requirements include the features of CardDAV.\cite[sec. 1]{RFC6352} The
-CardDAV RFC mentions its disadvantage of a missing specification for ``change
-notification''. An ATOM based approach on the other hand can make use of already existing protocols and infrastructure for this purpose, most notable Pubsubhubbub.\footnote{\citeurl{http://code.google.com/p/pubsubhubbub/}{2012-1-5}}
 
-Versioning and Locking, which are provided by WebDAV are not a
-requirement. Optimistic locking as provided by ``conditional'' put requests in
-HTTP is preferred first because it is an already widespread standard.
+
+
 
 \subsection{Related Work}
 
-Rob Yates \url{mailto:robert_yates@us.ibm.com}:
-CalATOM \citeurl{http://robubu.com/?p=6}{2012-01-05} Draft:
-CardATOM \citeurl{http://robubu.com/?p=10}{2012-01-05}
+\subsection{Design considerations}
 
-Rob Yates drafted a CalATOM
-specification.\cite{draft-yates-atompub-calatom-00.txt} It references another
-old draft (draft-snell-atompub-feature-12) to mark a collection as a CalATOM
-collection. This seems unnecessary since we can specify that a collection
-accepts calendar resources and thus marking a collection as a calendar.
+\subsubsection{inline feeds or feeds with links?}
 
-Furthermore the draft mentions a capability to query for events in a given time
-range. There is no equivalent for such a request for contacts.
+\begin{itemize}
 
-In rest the draft only repeats or references the atompub standard and the xcal
-format. This draft could therefor be seen as indication that the existing
-standards are almost sufficient to define GroupWare APIs.
+\item feeds could be dynamically created and inline only those entries that the client has not yet seen as indicated by the provided ETag or timestamp.
+\item Feeds with links will most probably result in many further requests by the client to get the individual entries
+\item Inline feeds may cause unnecessary work and deliver entries that the client has already seen
+\item A compromise could be to provide the first page of a paginated feed with links and all additional pages with inlined entries
+\end{itemize}
 
+A final decision about this subject should be done based on utilization and performance data of a real world installation.
 
-
-
-DOAP-over-ATOM \citeurl{http://web.archive.org/web/20070927230857/http://www.codezoo.com/about/doap_over_atom.csp}{2012-01-05}
-
-Google Data API also uses ATOM, but extends the ATOM format with new elements instead of putting all of the content in the content element of an atom entry.\footnote{\citeurl{http://web.archive.org/web/20081120001246/http://www.snellspace.com/wp/?p=314}{2012-01-05}}
+\subsubsection{Client Design considerations}
 
 \section{Persistency for Groupware Data}
 Relational Databases vs. NoSQL databases vs. plain files
@@ -494,6 +748,13 @@ Microsoft specification FeedSync (formerly Simple Sharing Extension) \url{http:/
 % http://martinfowler.com/articles/richardsonMaturityModel.html
 % http://code.google.com/p/implementing-rest/wiki/RMM
 % http://looselyconnected.wordpress.com/2011/03/09/the-richardson-maturity-model-of-rest-and-roy-fielding/
+
+% identifies the support of different media types to represent one resource "can complicate and
+% hinder the interoperability" and "requires more maintenance effort".
+
+% Different categories of media types:
+% CSV, binary/plain text, large binary (video), tree (XML/JSON)
+% Media types for human consumption have a greater variety in form, structure, content while media types for computer consumption may be more complex?
 
 \begin{quote}
   To some extent, people get REST wrong because I failed to include enough
@@ -643,6 +904,12 @@ similarities to the use of OpenSocial for intranet frontends.
 How to handle updates, if the mediatypes are not isomorph?
 
 How does Google handle PATCH in the calendar API?
+
+Schnittmenge der Medientypen identifizieren
+
+Einen kanonischen Medientypen festlegen für Updates?
+
+Erweiterungsmöglichkeiten v. Medientypen nutzen um Isomorphie herzustellen
 
 \subsection{Mediatype conversion}
 
@@ -891,7 +1158,47 @@ support, first letter ``C''.
   \end{itemize}
 \end{itemize}
 
+\section{Reusable components}
+
+% We have a namespace at our disposal. HTTP suggests to interpret the path component of this namespace in a hierarchic way.
+% The URI must be mapped to a resource, independent of the requested media type or HTTP verb. 
+% It therefor makes sense to do the interpretation of the URI or the path independent from Media type or HTTP verb dispatch.
+
+% wilde-fqas argues that feeds (collections) provide a general enough abstraction 
+
+Responsibilites of a media type aware code:
+\begin{itemize}
+\item validate
+\item provide accessors to read, write
+\item serialize, deserialize
+\item converters to other formats
+\item accessors to common interfaces (projection), e.g. common generic resource attributes or common attributes of a contact
+\end{itemize}
+% Attributes of a resource could be virtual or derived, e.g. the size of an image is derived from the binary image data.
+% Images also contain additional data that could be exposed as attributes.
+
+Motivation für wiederverwendbare Komponenten im Zusammenhang mit Schreier: Möglichst wenig Code zu generieren, generierter Code benutzt wiederverwendbaren Code.
+
+Candidate areas for re-usability:
+\begin{itemize}
+\item link building, URL parsing
+\item HTML form building, parsing
+\item generic properties of resources, id
+\item resource types
+\item question to storage: does resource still match ETag? Has changed since?
+\item all links of a resource: Link: intern/extern/undefined, href, rel, title, text, media type
+\item bool function matchesMediaType(), getMediaType() auf WrappedEntry
+\item Prüfung, ob ein Update durchgeführt werden soll, gemäß ETAG, ifnotchanged
+\item Möglichkeit, DatenKlassen mit DatenTypen zu definieren wie in eZ Publish um automatische Views und Edit Ansichten zu ermöglichen.
+\item Creation of resources: POST to collection with SLUG Header, PUT to URI, normalization of SLUG Header
+\item Pagination (building and parsing of next and previous URIs, implementation of RFC5005), querying the collections entries provider with the correct parameters (offset, limit).
+\item Storage interface with transaction support. An application may for example need to notify an indexing component after some resource has been changed. -- No transaction support: Every action that must happen in a transaction together with the resource change must be handled by the storage layer, must be aware of the storage technologie.
+\end{itemize}
+Im Gegensatz zu Bildern, wie in \cite{Schreier:2011:MRA:1967428.1967434} können Kontakte komplett inline sein.
+
 \section{Hypermedia in RESTful applications}
+
+% Hat Kolab Hypermedia links in Kontakten, wie soll es sein mit xCard?
 
 % http://restpatterns.org/Articles/The_Hypermedia_Scale
 
@@ -1487,4 +1794,4 @@ support Plain Text Format (text/plain), RFC5147 URI fragment identifier for plai
 % ispell-dictionary: "american"
 % eval: (progn (flyspell-mode 1) (outline-minor-mode 1) (goto-address-mode 1) (hide-body))
 % End:
-%  LocalWords:  RESTful
+%  LocalWords:  RESTful programmatically
