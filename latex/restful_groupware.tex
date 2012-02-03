@@ -10,6 +10,7 @@
 \usepackage{expdlist}
 \usepackage{subfig}
 \usepackage{listings}
+\usepackage{tikz}
 
 \usepackage{setspace} % Anderthalbfacher Zeilenabstand ist Standard in den meisten Seminararbeiten. Das Paket setspace ermöglicht ein einfaches Umstellen von normalem, anderthalbfachen oder sogar doppeltem Zeilenabstand. 
 \usepackage[paper=a4paper,inner=25mm,outer=20mm,top=15mm,bottom=20mm]{geometry} %Das geometry Paket dient zur Einrichtung der Seiten. Hier werden die jeweiligen Seitenränder angegeben. Diese wWerte sollten durch die jeweiligen Vorgaben des Seminarleiters oder Instituts ersetzt werden.
@@ -57,6 +58,15 @@ applications. Applying this meta model to the domain of this work may provide
 further insights into its general applicability and fit.
 
 \section{Requirements}
+
+  \begin{itemize}
+  \item Lesen/Schreiben der verwalteten Resourcen: Kontakte, Kalender-Events, Todos, Journal-Einträge, Free-Busy, \ldots
+  \item Synchronisation von Collections für Offline-Nutzung
+  \item einfach zu implementieren (vgl. CalDAV, CardDAV, IMAP) $\rightarrow$ ReST
+  \item Standardkonform $\rightarrow$ xCard, xCal, ATOM
+  \item nutzbar durch JavaScript: JSON basierte Medientypen
+  \item Groupware Elemente: Kontakte, Kalender-Events, Todos, Journal-Einträge, Free-Busy
+  \end{itemize}
 
 % restful: one entry point, reuse of existing protocols and media types
 % easy to understand and implement
@@ -132,6 +142,8 @@ efficiency.
 
 TODO: plain Web Browsers, Desktop applications (PIM Suites), JavaScript Gadgets/Widgets (see OpenSocial) probably with WebStorage\footnote{\citeurl{http://www.w3.org/TR/webstorage/}{2012-2-2}}
 
+Aus den verschiedenen Benutzerern leitet sich ab, dass verschiedene Medientypen unterstützt werden sollen: xCard, JSON, HTML
+
 \subsection{Operation Environment}
 
 The application is expected to be installed in a Java servlet container like Tomcat or Jetty and to contact a separate storage component. The primarily targeted storage component is an IMAP server with a Kolab conform set of groupware folders. However the design should not restrict the extension to a document database like CouchDB, plain files, relational or XML databases.
@@ -185,6 +197,226 @@ to the server to look for changes. However separate solutions exist\footnote{mos
 workflow on top of a feed based
 application.\cite{Wilde:2009:FQP:1693155.1693220} It may therefor not be seen as a disadvantage to omit push notifications as a requirement.\footnote{\cite[sec. 1]{RFC6352} explicitly mentions missing ``change notifications'' as a ``key disadvantage'' of CardDAV.}
 
+
+\section{Media Types}
+% http://amundsen.com/hypermedia/
+% http://martinfowler.com/articles/richardsonMaturityModel.html
+% http://code.google.com/p/implementing-rest/wiki/RMM
+% http://looselyconnected.wordpress.com/2011/03/09/the-richardson-maturity-model-of-rest-and-roy-fielding/
+
+
+\begin{quote}
+  To some extent, people get REST wrong because I failed to include enough
+  detail on media type design within my dissertation.~--~Roy T. Fielding
+\end{quote}
+from: Rest APIs must be hypertext driven\footnote
+  {\citeurl{http://roy.gbiv.com/untangled/2008/rest-apis-must-be-hypertext-driven}{2011-12-20}}
+
+\cite[sec. 7.2]{Pautasso:2008:RWS:1367497.1367606} identifies the support of different media types as an issue that "can complicate and hinder the interoperability" and "requires more maintenance effort".
+
+\cite{Davis:2011:XTR:1967428.1967437} proposes a XML based REST framework that uses XForms, XQuery, XProc, XSLT and an XML database. It can benefit from the constraint that it only supports XML based media types. It is to be seen, which ideas from this work could be reused in the case of a broader variety of supported media types.
+
+\subsection{Syntax vs. Semantic}
+
+The usage of standardized media types is one key difference between an API and a
+restful API. \cite[sec. 5.2.1.2]{Fielding2000} Only if the client has knowledge
+about the media type can it do something meaningful with it besides just
+receiving it. In that sense, the often used mime types application/xml or
+application/json are not really media types. They don't tell the browser or user
+anything meaningful beside the \emph{syntax} of the data.\footnote{
+\citeurl{http://blog.programmableweb.com/2011/11/18/rest-api-design-putting-the-type-in-content-type}{2011-21-20}
+and Web Resource Modeling Language \citeurl{http://www.wrml.org}{2011-12-20} both by Mark Massé
+}
+
+To do anything meaningful with plain json or xml, the client programmer must
+normally look up the meaning or \emph{semantic} of the data in the API
+documentation. The data therefor fails the self-descriptive constraint of
+REST.
+
+Compare this with a mime type like \texttt{application/atom+xml}. It specifies
+the syntax (xml) and the semantic (atom) of the data. Of course somebody once
+needed to read the atom specification and program the client with the knowledge
+of how to process this media type. The purpose of standardized media types
+however is that there is a limited number of them and that they are reused by many
+sites and clients.
+
+Large sites like Google, Facebook or Twitter can successfully attract enough
+developers to read their specifications and program clients accordingly. Usually
+one can also find client libraries that can help a lot. REST however envisions a
+decentralized web in which parties can interact without previous knowledge of
+each other. This becomes possible through the usage of well known predefined
+media types.
+
+%  in the area of semantic
+% standardization. Questions whether and how contact information should also hold
+% space for the place of birth and place and date of death of a
+% person\footnote{\citeurl{https://datatracker.ietf.org/doc/draft-ietf-vcarddav-birth-death-extensions/}{2011-12-20}}
+% are independent from a data serialization format. So is the question whether and
+% how to specify the sex or gender of a
+% person.\footnote{\citeurl{http://www.ietf.org/mail-archive/web/vcarddav/current/msg01778.html}{2011-12-20}}
+
+
+\subsection{Data Models of Media Types}
+
+TODO:
+\begin{itemize}
+\item Ein generelles Daten Modell wäre hilfreich, um alle Medien Typen darauf zu projezieren und mit einer solchen Projektion dann innerhalb der Applikation zu arbeiten
+\item Ein allgemeines Datenmodell könnte auch eine Hilfe sein als Zwischenschritt für Conversions zwischen Medientypen
+\item Es gibt kein allgemeines, sinnvolles Datenmodell für alle Medientypen
+\item Trotzdem können bestimmte hilfreiche Generalisierungen vorgenommen werden
+  \begin{itemize}
+  \item Die meisten Resourcen haben bestimmte generische Metadaten die entweder im Medientyp kodiert werden können oder mit dem Medientyp zusammen persistiert werden müssen
+  \item Diese Metadaten finden sich auch in atom:entry wieder und sind: Autor, Updated, Titel, Summary, etag, id, name, links
+  \item Transitional Links vs Structural Links: \url{http://java.net/projects/jax-rs-spec/pages/Hypermedia}
+  \item Different categories of data: CSV, binary/plain text, large binary (video), tree (XML/JSON) (Referenz?)
+
+
+  \end{itemize}
+\end{itemize}
+
+\subsubsection{XML vs. JSON}
+
+This section investigates the two most common data models used by media types
+and the issues that arise if an application needs to support both of them.
+
+The application section of the IANA mime type registration has 294 entries
+ending in ``+xml'' and only 3 ending in
+``+json''.\footnote{\citeurl{http://www.iana.org/assignments/media-types/application/index.html}{2011-12-20}}
+This stands in contrast to the rise of public JSON APIs and the decline of XML
+APIs.\footnote{\citeurl{http://blog.programmableweb.com/2011/05/25/1-in-5-apis-say-bye-xml/}{2011-12-20} \citeurl{http://www.readwriteweb.com/cloud/2011/03/programmable-web-apis-popping.php}{2011-12-21}}
+
+Web developers often prefer JSON over XML because it is perceived as easier to
+parse, process and smaller in size. XML in comparison is seen as complicate,
+slow to process and larger in size. A strong argument for JSON as the preferred
+format for JavaScript applications is that JSON is a subset of
+JavaScript.\footnote{ECMAScript for XML (E4X) makes XML a first class language
+  construct in the browser but is only supported by Mozilla
+  \citeurl{http://en.wikipedia.org/wiki/ECMAScript_for_XML}{2012-2-2}}
+
+A drawback of this mismatch between the preference of media type designers and
+API consumers is a possible duplication of work and incompatibilities across
+different APIs. If two developers independently take the same XML media type as
+a model to develop a JSON format, they can still come up with different
+results. There is no standard mapping from XML schemes to JSON structures.
+
+Instead, possible mappings have to trade of the preservation of all structural
+information against the ``friendliness'' of the resulting JSON
+structure.\cite{Boyer2011} Without going into detail, a JSON structure can be
+seen as friendly if it makes best use of JSON's data types, is compact and easy
+to process. \autoref{fig:waysmapxmljson} shows two different examples how to map
+data from XML to JSON with one of them using JSON number values, being more
+compact and probably easier to process.
+
+\begin{figure}
+\captionsetup[subfloat]{justification=raggedright,singlelinecheck=false}
+\small{
+\subfloat[XML fragment]{
+  \begin{minipage}[b]{0.25\linewidth}
+    \lstinputlisting{snippets/xml2json_xml}    
+  \end{minipage}
+}
+\subfloat[unfriendly JSON]{
+  \begin{minipage}[b]{0.4\linewidth}
+    \lstinputlisting{snippets/xml2json_json1}
+  \end{minipage}
+}
+\subfloat[less(?) unfriendly JSON]{
+  \begin{minipage}[b]{0.25\linewidth}
+    \lstinputlisting{snippets/xml2json_json2}
+  \end{minipage}
+}
+}
+  \caption{different ways to map XML to JSON}
+  \label{fig:waysmapxmljson}
+\end{figure}
+
+Activity Streams has avoided the misalignment of an official XML format and an unofficial JSON deviate by defining an XML (ATOM) and JSON format from the beginning.\footnote{\citeurl{http://activitystrea.ms/}{2012-01-21}}
+
+\subsection{vCard, iCalendar, xCard and xCal}
+
+TODO:
+\begin{itemize}
+\item Textbasierte vs. XML Formate
+\end{itemize}
+
+Version 3 of vCard was published in 1998\cite{RFC2425} only a few months after
+the W3C published Version 1.0 of XML\cite{Paoli:98:XR} and eight years before
+JSON became an official standard.\cite{RFC4627}
+
+\subsubsection{Hypermedia Support}
+
+\begin{figure}[h]
+  \usetikzlibrary{positioning,arrows,fit}
+  \usetikzlibrary{decorations.pathmorphing,backgrounds,fit,decorations.pathreplacing}
+  \begin{tikzpicture}
+    [doc/.style={rectangle,draw=blue!30,fill=blue!20, node distance=6em}]
+    \node[doc] (svc) [] {ServiceDoc};
+    \node[doc] (collect) [below=of svc,text width=5em] {Contacts Collection}
+      edge [<-] node {} (svc)
+      edge [->, loop left] node {next} (collect);
+
+    \node[doc] (calcollect) [below right=of svc,text width=5em] {Calendar Collection}
+      edge [<-] node {} (svc);
+
+    \node[doc] (entry) [below=of collect] {Entry (xCard)}
+      edge [<-] node {1..n} (collect)
+      edge [->] node [text width=5em] {personal calendar} (calcollect)
+      edge [->, loop left] node {related xCards} (entry);
+
+    \node[doc] (event) [below=of calcollect] {Entry (xCal event)}
+      edge [<-] node {1..n} (calcollect)
+      edge [->] node [below right] {participants} (entry);
+
+
+  \end{tikzpicture}
+  \caption{Hypermedia support in xCard and xCal}
+\end{figure}
+
+
+\subsection{Derived JSON formats for PIM data}
+
+TODO Übereinstimmungen und Unterschiede vCard, portable contacts: Which fields of portable contacts are derived from vCard: \url{http://wiki.portablecontacts.net/w/page/17776141/schema}
+
+Calendar Formate nur kurz
+
+\subsection{Media Types for Collections}
+
+Vergleich ATOM mit Medientyp Collection+JSON
+
+JSON formats for collections:
+Collection+JSON Mime-Type (approved in July 2011) by Mike Amundsen\footnote{\citeurl{http://amundsen.com/media-types/collection/}{2012-1-7}}
+JSON ATOM serialization implemented by Apache Abdera\footnote{\citeurl{http://www.ibm.com/developerworks/library/x-atom2json/index.html}{2012-1-7} \citeurl{https://cwiki.apache.org/ABDERA/json-serialization.html}{2012-1-7}}
+
+
+Some problems in loss-less conversion of ATOM to json:\cite{Snell2008}
+\begin{itemize}
+  \item JSON has no equivalent for the xml:lang attribute.
+  \item Dereferencable IRIs must be transformed to URIs.
+  \item URIs relative to an xml:base attribute must be resolved, also inside XHTML content elements.
+  \item Repeatable elements must be converted to arrays.
+  \item The ATOM date format (RFC 3339) differs from the JavaScript Date serialization.
+  \item ATOM content elements are versatile but should be represented more meaningful in JSON then just a plain String.
+  \item ATOM supports arbitrary extensions via namespaces.
+\end{itemize}
+
+\subsection{Media Type conversion}
+
+Konvertieren zwischen verschiedenen Representationen die nach aussen gegeben werden vs. Konvertieren zwischen äußerer Representation und Representation für die Datenbank.
+
+An welchen Punkten in der Architektur muss/kann/soll konvertiert werden?
+
+\subsection{Updates with non isomorphic Media Types}
+How to handle updates, if the mediatypes are not isomorph?
+
+How does Google handle PATCH in the calendar API?
+
+Schnittmenge der Medientypen identifizieren
+
+Einen kanonischen Medientypen festlegen für Updates?
+
+Erweiterungsmöglichkeiten v. Medientypen nutzen um Isomorphie herzustellen
+
+
 \section{Design}
 
 % The design must not support any possible use case but only restful web applications.
@@ -205,11 +437,12 @@ application.\cite{Wilde:2009:FQP:1693155.1693220} It may therefor not be seen as
 
 \subsubsection{Structural and Behavioral Rest Model}
 
+TODO Modelierung der Anwendung mit dem Meta Model nach Schreier.
+
 Primary Resources: Contacts, Calendars, ...
 List Resources: 
 
-\subsubsection{AtomPub}
-
+\subsubsection{AtomPub for PIM data}
 
 Rob Yates \url{mailto:robert_yates@us.ibm.com}:
 CalATOM \citeurl{http://robubu.com/?p=6}{2012-01-05} Draft:
@@ -231,8 +464,6 @@ standards are almost sufficient to define GroupWare APIs.
 Google Data API also uses ATOM, but puts their tags directly inside the ``atom:entry'' tag 
 instead of putting all of the content in the content element of an atom
 entry.\footnote{\citeurl{http://web.archive.org/web/20081120001246/http://www.snellspace.com/wp/?p=314}{2012-01-05}}
-
-
 
 \subsection{Components}
 
@@ -325,57 +556,28 @@ therefor possible to attach memory based caching to this component.
 
 
 
-\section{only draft below this section!}
 
+\subsection{Detailed Design Considerations}
+\subsubsection{Inline feeds or feeds with links?}
 
+ATOM entries can either carry the full content inline in the content tag or link to the content.
 
-Why vCard/CardDav: many clients
-
-Why OpenSocial / Portable Contacts:
 \begin{itemize}
-\item used by Google, LinkedIn,
-\item used in Enterprise applications like Attlassian tools (Jira, Confluence, ...), Nuxeo CMS, ...
-\item OpenSocial can be used to implement inhouse portals and populate it with data from the companies GroupWare
+
+\item feeds could be dynamically created and inline only those entries that the client has not yet seen as indicated by the provided ETag or timestamp.
+\item Feeds with links will most probably result in many further requests by the client to get the individual entries
+\item Inline feeds may cause unnecessary work and deliver entries that the client has already seen
+\item A compromise could be to provide the first page of a paginated feed with links and all additional pages with inlined entries
 \end{itemize}
 
+A final decision about this subject should be done based on utilization and performance data of a real world installation.
 
+\subsection{Client Design}
 
+What needs a client to know, how does it need to work?
 
-
-\section{Evaluation of APIs}
-
-\subsubsection{Algermissen's Classification of HTTP-based APIs}
-\label{sec:algerm-class-http}
-
-Jan Algermissen, proposes a ``Classification of HTTP-based APIs'' in February 2010.\footnote{
-\citeurl{http://nordsc.com/ext/classification_of_http_based_apis.html}{2011-12-08}} 
-He identifies and names a five level order of HTTP based APIs. Each level adds
-one constraint to be obeyed. The last level obeys all five constraints and is
-RESTful.~(\autoref{tab:algermissenclassification})
-
-\begin{table}[h]
-  \begin{tabular}{p{0.15\textwidth} p{0.3\textwidth} p{0.4\textwidth}}
-    level name & constraint violated & violation description \\
-    \hline \\
-    WS-* &   Identification of Resources & Only service endpoint is identified by URI. No resources exposed. \\
-    RPC URI-Tunneling &    Manipulation of Resources through Representations & SOAP body contains operation name, message not transferred to manipulate resource state. \\
-    HTTP-based Type I &    Self-Descriptive Messages & Message semantics depend on action specified in message body. \\
-    HTTP-based Type II &    Hypermedia as the Engine of Application State & Application state machine known at design time. \\
-  \end{tabular}
-  \caption{Classification of HTTP-based APIs after Algermissen}
-  \label{tab:algermissenclassification}
-\end{table}
-
-In addition to that, Algermissen also provides a list of ``Effect on System
-Properties and Cost'' of the different API styles and acknowledges that the
-initial costs of developing a REST API may be higher compared to the other
-styles but lower in the long run.
-
-
-
-\section{Existing Groupware data APIs}
-
-\subsection{IMAP (Kolab)}
+\subsection{Related work}
+\subsubsection{IMAP used by Kolab}
 
 Kolab uses an IMAP server as the data store and
 synchronization protocol for calendar and contact informations. I want to
@@ -409,11 +611,26 @@ Disadvantages of IMAP:
 \item IMAP issues found by the chandler project http://chandlerproject.org/bin/view/Jungle/IntrinsicIMAPIssues
 \end{itemize}
 
-\subsection{WebDAV, CalDAV, CardDAV}
 
-\subsubsection{Is WebDAV restful?}
 
-Roy Fielding says no: \url{http://tech.groups.yahoo.com/group/rest-discuss/message/5874}
+\subsubsection{WebDAV, CalDAV, CardDAV}
+
+\begin{quote}
+Were I to propose CalDAV today it would probably be CalAtom  
+\end{quote}
+-- Lisa Dusseault, February 29, 2008\footnote{\citeurl{http://nih.blogspot.com/2008/02/nearly-two-years-ago-i-made-prediction.html}{2012-1-6}}
+
+\begin{quote}
+  I gave a big sigh of relief when I read that, and I hope that the CardDAV
+  folks take this to heart. Some parts of WebDAV (e.g., properties [\ldots])
+  deserve to be taken out back and shot -- although, as Lisa says, they were
+  necessary because of the state of the art at the time. That doesn't mean we
+  can't do better now.
+\end{quote}
+-- Ted Leung, March 6, 2008\footnote{\citeurl{http://www.sauria.com/blog/2008/03/06/google-contacts-and-carddav/}{2012-1-6}}
+
+
+Roy Fielding says WebDAV is not restful: \url{http://tech.groups.yahoo.com/group/rest-discuss/message/5874}
 
 \begin{quotation}
 PROP* methods conflict with REST because they prevent
@@ -454,10 +671,7 @@ Is ATOM an alternative to WebDAV?
 \end{quote}
 Tim Bray, http://www.imc.org/atom-protocol/mail-archive/msg11271.html
 
-
-\subsection{PortableContacts aka OpenSocial}
-
-\subsubsection{Is OpenSocial restful?}
+\subsubsection{OpenSocial}
 
 Roy Fielding wrote a blog post about the ``SocialSite REST API'', stating that
 it isn't restful at all but clearly an RPC style
@@ -643,7 +857,9 @@ The OpenSocial specification authors did not have to invest a lot to come up
 with this API specification but maintenance and evolution cost may be medium or
 high.
 
-\subsection{Others}
+\subsubsection{CAP}
+
+RFC 4324 "Calendar Access Protocol (CAP)"
 
 \begin{quotation}
   [\ldots] CAP failed because most of the active implementors at the 
@@ -659,56 +875,99 @@ interoperability - something that would have been hard to achieve with CAP.
 \end{quotation}
 -- Cyrus Daboo\footnote{\citeurl{http://lists.calconnect.org/pipermail/caldeveloper-l/2012-January/000135.html}{2012-01-04}}
 
-\section{ATOM}
+\section{Reusable Components}
 
-WebDAV vs. ATOM:
-\url{http://intertwingly.net/wiki/pie/WebDav}
-\url{http://intertwingly.net/wiki/pie/WebDavVsAtom}
-google webdav atom
+Reuse is of course in general a good thing. In the context of Model Driven
+Development (MDD) and code generation it is especially import to identify code
+that is general enough to be provided by a library of framework and does not
+need to be generated.
 
-
-Why didn't ATOM succeed (more)? \citeurl{http://bitworking.org/news/425/atompub-is-a-failure}{2012-01-06}
-
-\begin{quote}
-Were I to propose CalDAV today it would probably be CalAtom  
-\end{quote}
--- Lisa Dusseault, February 29, 2008\footnote{\citeurl{http://nih.blogspot.com/2008/02/nearly-two-years-ago-i-made-prediction.html}{2012-1-6}}
-
-\begin{quote}
-  I gave a big sigh of relief when I read that, and I hope that the CardDAV
-  folks take this to heart. Some parts of WebDAV (e.g., properties [\ldots])
-  deserve to be taken out back and shot -- although, as Lisa says, they were
-  necessary because of the state of the art at the time. That doesn't mean we
-  can't do better now.
-\end{quote}
--- Ted Leung, March 6, 2008\footnote{\citeurl{http://www.sauria.com/blog/2008/03/06/google-contacts-and-carddav/}{2012-1-6}}
-% \subsection{ATOM Use cases}
-% http://swordapp.org/
-
-
-\section{Design and implementation of a restful Contacts API}
+Minimizing the generated code also minimizes the extend of drawbacks associated
+with code generation, most importantly conflicts between updates by the code
+generator and manual modification.
 
 
 
+% We have a namespace at our disposal. HTTP suggests to interpret the path component of this namespace in a hierarchic way.
+% The URI must be mapped to a resource, independent of the requested media type or HTTP verb. 
+% It therefor makes sense to do the interpretation of the URI or the path independent from Media type or HTTP verb dispatch.
 
+% wilde-fqas argues that feeds (collections) provide a general enough abstraction 
 
-\subsection{Related Work}
-
-\subsection{Design considerations}
-
-\subsubsection{inline feeds or feeds with links?}
-
+Concerns regarding Media Types that needs to be implemented differently for each different Media Type:
 \begin{itemize}
+\item validate the Media Type
+\item provide accessors to read, write parts of the Media Type
+\item serialize, deserialize the whole Media Type
+\item converters to other formats
+\item accessors to common interfaces (projection), e.g. common generic resource attributes or common attributes of a contact
+\end{itemize}
+% Attributes of a resource could be virtual or derived, e.g. the size of an image is derived from the binary image data.
+% Images also contain additional data that could be exposed as attributes.
 
-\item feeds could be dynamically created and inline only those entries that the client has not yet seen as indicated by the provided ETag or timestamp.
-\item Feeds with links will most probably result in many further requests by the client to get the individual entries
-\item Inline feeds may cause unnecessary work and deliver entries that the client has already seen
-\item A compromise could be to provide the first page of a paginated feed with links and all additional pages with inlined entries
+
+
+Candidate areas for re-usability:
+\begin{itemize}
+\item link building, URL parsing
+\item HTML form building, parsing
+\item generic properties of resources, id
+\item resource types
+\item question to storage: does resource still match ETag? Has changed since?
+\item all links of a resource: Link: intern/extern/undefined, href, rel, title, text, media type
+\item bool function matchesMediaType(), getMediaType() auf WrappedEntry
+\item Prüfung, ob ein Update durchgeführt werden soll, gemäß ETAG, ifnotchanged
+\item Möglichkeit, DatenKlassen mit DatenTypen zu definieren wie in eZ Publish um automatische Views und Edit Ansichten zu ermöglichen.
+\item Creation of resources: POST to collection with SLUG Header, PUT to URI, normalization of SLUG Header
+\item Pagination (building and parsing of next and previous URIs, implementation of RFC5005), querying the collections entries provider with the correct parameters (offset, limit).
+\item Storage interface with transaction support. An application may for example need to notify an indexing component after some resource has been changed. -- No transaction support: Every action that must happen in a transaction together with the resource change must be handled by the storage layer, must be aware of the storage technologie.
 \end{itemize}
 
-A final decision about this subject should be done based on utilization and performance data of a real world installation.
+% Im Gegensatz zu Bildern, wie in \cite{Schreier:2011:MRA:1967428.1967434} können Kontakte komplett inline sein.
 
-\subsubsection{Client Design considerations}
+
+\appendix
+
+Why vCard/CardDav: many clients
+
+Why OpenSocial / Portable Contacts:
+\begin{itemize}
+\item used by Google, LinkedIn,
+\item used in Enterprise applications like Attlassian tools (Jira, Confluence, ...), Nuxeo CMS, ...
+\item OpenSocial can be used to implement inhouse portals and populate it with data from the companies GroupWare
+\end{itemize}
+
+\section{Evaluation of APIs}
+
+\subsubsection{Algermissen's Classification of HTTP-based APIs}
+\label{sec:algerm-class-http}
+
+Jan Algermissen, proposes a ``Classification of HTTP-based APIs'' in February 2010.\footnote{
+\citeurl{http://nordsc.com/ext/classification_of_http_based_apis.html}{2011-12-08}} 
+He identifies and names a five level order of HTTP based APIs. Each level adds
+one constraint to be obeyed. The last level obeys all five constraints and is
+RESTful.~(\autoref{tab:algermissenclassification})
+
+\begin{table}[h]
+  \begin{tabular}{p{0.15\textwidth} p{0.3\textwidth} p{0.4\textwidth}}
+    level name & constraint violated & violation description \\
+    \hline \\
+    WS-* &   Identification of Resources & Only service endpoint is identified by URI. No resources exposed. \\
+    RPC URI-Tunneling &    Manipulation of Resources through Representations & SOAP body contains operation name, message not transferred to manipulate resource state. \\
+    HTTP-based Type I &    Self-Descriptive Messages & Message semantics depend on action specified in message body. \\
+    HTTP-based Type II &    Hypermedia as the Engine of Application State & Application state machine known at design time. \\
+  \end{tabular}
+  \caption{Classification of HTTP-based APIs after Algermissen}
+  \label{tab:algermissenclassification}
+\end{table}
+
+In addition to that, Algermissen also provides a list of ``Effect on System
+Properties and Cost'' of the different API styles and acknowledges that the
+initial costs of developing a REST API may be higher compared to the other
+styles but lower in the long run.
+
+
+
 
 \section{Persistency for Groupware Data}
 Relational Databases vs. NoSQL databases vs. plain files
@@ -736,136 +995,12 @@ each etag was issued and if an old etag is sent with the request then
 everything since then is sent back in the response. Someone will chime in
 with the reference.'' Eric Scheid, \citeurl{http://www.imc.org/atom-syntax/mail-archive/msg19832.html}{2012-1-6}
 
-
 Microsoft specification FeedSync (formerly Simple Sharing Extension) \url{http://feedsyncsamples.codeplex.com},
  comment \url{http://notes.kateva.org/2008/01/microsoft-feedsync-what-heck-is-it-and.html}
 \url{http://web.archive.org/web/20081114142152/http://www.snellspace.com/wp/?p=818}
 
 
-\section{Mediatypes}
-
-% http://amundsen.com/hypermedia/
-% http://martinfowler.com/articles/richardsonMaturityModel.html
-% http://code.google.com/p/implementing-rest/wiki/RMM
-% http://looselyconnected.wordpress.com/2011/03/09/the-richardson-maturity-model-of-rest-and-roy-fielding/
-
-% identifies the support of different media types to represent one resource "can complicate and
-% hinder the interoperability" and "requires more maintenance effort".
-
-% Different categories of media types:
-% CSV, binary/plain text, large binary (video), tree (XML/JSON)
-% Media types for human consumption have a greater variety in form, structure, content while media types for computer consumption may be more complex?
-
-\begin{quote}
-  To some extent, people get REST wrong because I failed to include enough
-  detail on media type design within my dissertation.~--~Roy T. Fielding
-\end{quote}
-from: Rest APIs must be hypertext driven\footnote
-  {\citeurl{http://roy.gbiv.com/untangled/2008/rest-apis-must-be-hypertext-driven}{2011-12-20}}
-
-\subsection{Syntax vs. Semantic}
-
-The usage of standardized media types is one key difference between an API and a
-restful API. \cite[sec. 5.2.1.2]{Fielding2000} Only if the client has knowledge
-about the media type can it do something meaningful with it besides just
-receiving it. In that sense, the often used mime types application/xml or
-application/json are not really media types. They don't tell the browser or user
-anything meaningful beside the \emph{syntax} of the data.\footnote{
-\citeurl{http://blog.programmableweb.com/2011/11/18/rest-api-design-putting-the-type-in-content-type}{2011-21-20}
-and Web Resource Modeling Language \citeurl{http://www.wrml.org}{2011-12-20} both by Mark Massé
-}
-
-To do anything meaningful with plain json or xml, the client programmer must
-normally look up the meaning or \emph{semantic} of the data in the API
-documentation. The data therefor fails the self-descriptive constraint of
-REST.
-
-Compare this with a mime type like \texttt{application/atom+xml}. It specifies
-the syntax (xml) and the semantic (atom) of the data. Of course somebody once
-needed to read the atom specification and program the client with the knowledge
-of how to process this media type. The purpose of standardized media types
-however is that there is a limited number of them and that they are reused by many
-sites and clients.
-
-Large sites like Google, Facebook or Twitter can successfully attract enough
-developers to read their specifications and program clients accordingly. Usually
-one can also find client libraries that can help a lot. REST however envisions a
-decentralized web in which parties can interact without previous knowledge of
-each other. This becomes possible through the usage of well known predefined
-media types.
-
-\subsection{xml vs. json}
-
-The application section of the IANA mime type registration has 294 entries
-ending in ``+xml'' and only 3 ending in
-``+json''.\footnote{\citeurl{http://www.iana.org/assignments/media-types/application/index.html}{2011-12-20}}
-This stands in contrast to the rise of public json APIs and the decline of XML
-APIs.\footnote{\citeurl{http://blog.programmableweb.com/2011/05/25/1-in-5-apis-say-bye-xml/}{2011-12-20} \citeurl{http://www.readwriteweb.com/cloud/2011/03/programmable-web-apis-popping.php}{2011-12-21}}
-
-JSON is often preferred as a format over XML because it is perceived as easier
-to parse, process and smaller in size. XML in comparison is seen as complicate,
-slow to process and larger in size. A strong argument for JSON as the preferred
-format for JavaScript applications is that JSON is a subset of JavaScript.
-
-A drawback of this mismatch between the preference of media type designers and
-API consumers is a possible duplication of work and incompatibilities across
-different APIs. If two developers independently take the same XML media type as
-a model to develop a JSON format, they can still come up with different
-results. There is no standard mapping from XML schemes to JSON structures.
-
-Instead, possible mappings have to trade of the preservation of all structural
-information against the ``friendliness'' of the resulting JSON
-structure.\cite{Boyer2011} Without going into detail, a JSON structure can be
-seen as friendly if it makes best use of JSON's data types, is compact and easy
-to process. \autoref{fig:waysmapxmljson} shows two different examples how to map
-data from XML to JSON with one of them using JSON number values, being more
-compact and probably easier to process.
-
-\begin{figure}
-\captionsetup[subfloat]{justification=raggedright,singlelinecheck=false}
-\small{
-\subfloat[XML fragment]{
-  \begin{minipage}[b]{0.25\linewidth}
-    \lstinputlisting{snippets/xml2json_xml}    
-  \end{minipage}
-}
-\subfloat[unfriendly JSON]{
-  \begin{minipage}[b]{0.4\linewidth}
-    \lstinputlisting{snippets/xml2json_json1}
-  \end{minipage}
-}
-\subfloat[less(?) unfriendly JSON]{
-  \begin{minipage}[b]{0.25\linewidth}
-    \lstinputlisting{snippets/xml2json_json2}
-  \end{minipage}
-}
-}
-  \caption{different ways to map XML to JSON}
-  \label{fig:waysmapxmljson}
-\end{figure}
-
-
-
- in the area of semantic
-standardization. Questions whether and how contact information should also hold
-space for the place of birth and place and date of death of a
-person\footnote{\citeurl{https://datatracker.ietf.org/doc/draft-ietf-vcarddav-birth-death-extensions/}{2011-12-20}}
-are independent from a data serialization format. So is the question whether and
-how to specify the sex or gender of a
-person.\footnote{\citeurl{http://www.ietf.org/mail-archive/web/vcarddav/current/msg01778.html}{2011-12-20}}
-
-
-
-
-
-Version 3 of vCard was published in 1998\cite{RFC2425} only a few months after
-the W3C published Version 1.0 of XML\cite{Paoli:98:XR} and eight years before
-JSON became an official standard.\cite{RFC4627}
-
-XML standards:
-  xCal, xCard, XMPP, Atom
-
-\url{http://en.wikipedia.org/wiki/ECMAScript_for_XML} (E4X) makes XML a first class language construct 
+\section{Media Types}
 
 \begin{table}
   \begin{tabular}{l c c c c c}
@@ -878,58 +1013,16 @@ XML standards:
   \label{tab:data-formats}
 \end{table}
 
-Activity Streams has been defined from the beginning as an XML (ATOM) and JSON format.\footnote{\citeurl{http://activitystrea.ms/}{2012-01-21}}
 
-Open-Xchange provides an (unrestful) HTTP/JSON API which is used by its
-javascript
-frontend.\footnote{\citeurl{http://oxpedia.org/index.php?title=HTTP_API}{2011-19-12}}
-The comprehensive documentation does not indicate whether the data structures
-for tasks, appointments, reminders and contacts were inspired by any
-standards. In any case the API documentation is a good example of the need for
-standard mime types in JSON format. The use case for this API also shows
-similarities to the use of OpenSocial for intranet frontends.
-
-\begin{itemize}
-\item \url{http://blog.jclark.com/}
-\item \url{http://code.google.com/p/jaql/wiki/Builtin_functions#xml}
-\item \url{http://www.webmasterworld.com/xml/3603303.htm}
-\item \url{http://www.xml.com/pub/a/2006/05/31/converting-between-xml-and-json.html?page=3}
-\item \url{http://goessner.net/download/prj/jsonxml/}
-\item \url{http://www.w3.org/2011/10/integration-workshop/agenda.html}
-\item \url{http://jsonml.org/}
-
-\end{itemize}
-
-\subsection{Updates with alternative Mediatypes}
-How to handle updates, if the mediatypes are not isomorph?
-
-How does Google handle PATCH in the calendar API?
-
-Schnittmenge der Medientypen identifizieren
-
-Einen kanonischen Medientypen festlegen für Updates?
-
-Erweiterungsmöglichkeiten v. Medientypen nutzen um Isomorphie herzustellen
-
-\subsection{Mediatype conversion}
-
-
-JSON formats for collections:
-Collection+JSON Mime-Type (approved in July 2011) by Mike Amundsen\footnote{\citeurl{http://amundsen.com/media-types/collection/}{2012-1-7}}
-JSON ATOM serialization implemented by Apache Abdera\footnote{\citeurl{http://www.ibm.com/developerworks/library/x-atom2json/index.html}{2012-1-7} \citeurl{https://cwiki.apache.org/ABDERA/json-serialization.html}{2012-1-7}}
-
-% http://blogs.oracle.com/sandoz/entry/jersey_and_abdera_with_a  http://weblogs.java.net/blog/mhadley/archive/2008/02/integrating_jer_2.html
-
-Some problems in loss-less conversion of ATOM to json:\cite{Snell2008}
-\begin{itemize}
-  \item JSON has no equivalent for the xml:lang attribute.
-  \item Dereferencable IRIs must be transformed to URIs.
-  \item URIs relative to an xml:base attribute must be resolved, also inside XHTML content elements.
-  \item Repeatable elements must be converted to arrays.
-  \item The ATOM date format (RFC 3339) differs from the JavaScript Date serialization.
-  \item ATOM content elements are versatile but should be represented more meaningful in JSON then just a plain String.
-  \item ATOM supports arbitrary extensions via namespaces.
-\end{itemize}
+% Open-Xchange provides an (unrestful) HTTP/JSON API which is used by its
+% javascript
+% frontend.\footnote{\citeurl{http://oxpedia.org/index.php?title=HTTP_API}{2011-19-12}}
+% The comprehensive documentation does not indicate whether the data structures
+% for tasks, appointments, reminders and contacts were inspired by any
+% standards. In any case the API documentation is a good example of the need for
+% standard mime types in JSON format. The use case for this API also shows
+% similarities to the use of OpenSocial for intranet frontends.
+\subsection{Media Type conversion}
 
 RFC 5023  "Collections are represented as Atom Feeds"
 
@@ -938,8 +1031,6 @@ No: Norman Walsh, 2003, it can lead to hard to debug bugs\citeurl{http://norman.
     Joe Gregorio, 2003,I can't communicate the mime type to request to a third service if I can only give an URI\citeurl{http://bitworking.org/news/WebServicesAndContentNegotiation}{2011-1-9}
 Yes: Jerome Louvel, 2006, I could additionally provide URIs that override the accept headers with query parameters like ?format=json.\citeurl{http://blog.noelios.com/2006/11/15/reconsidering-content-negotiation/}{2011-1-9}
     
-
-Which fields of portable contacts are derived from vCard: \url{http://wiki.portablecontacts.net/w/page/17776141/schema}
 
 \begin{quote}
   No single data representation is ideal for every client. This protocol defines representations for each resource in three widely supported formats, JSON [RFC4627], XML, and Atom [RFC4287] / AtomPub [RFC5023], using a set of generic mapping rules. The mapping rules allow a server to write to a single interface rather than implementing the protocol three times.
@@ -1158,43 +1249,6 @@ support, first letter ``C''.
   \end{itemize}
 \end{itemize}
 
-\section{Reusable components}
-
-% We have a namespace at our disposal. HTTP suggests to interpret the path component of this namespace in a hierarchic way.
-% The URI must be mapped to a resource, independent of the requested media type or HTTP verb. 
-% It therefor makes sense to do the interpretation of the URI or the path independent from Media type or HTTP verb dispatch.
-
-% wilde-fqas argues that feeds (collections) provide a general enough abstraction 
-
-Responsibilites of a media type aware code:
-\begin{itemize}
-\item validate
-\item provide accessors to read, write
-\item serialize, deserialize
-\item converters to other formats
-\item accessors to common interfaces (projection), e.g. common generic resource attributes or common attributes of a contact
-\end{itemize}
-% Attributes of a resource could be virtual or derived, e.g. the size of an image is derived from the binary image data.
-% Images also contain additional data that could be exposed as attributes.
-
-Motivation für wiederverwendbare Komponenten im Zusammenhang mit Schreier: Möglichst wenig Code zu generieren, generierter Code benutzt wiederverwendbaren Code.
-
-Candidate areas for re-usability:
-\begin{itemize}
-\item link building, URL parsing
-\item HTML form building, parsing
-\item generic properties of resources, id
-\item resource types
-\item question to storage: does resource still match ETag? Has changed since?
-\item all links of a resource: Link: intern/extern/undefined, href, rel, title, text, media type
-\item bool function matchesMediaType(), getMediaType() auf WrappedEntry
-\item Prüfung, ob ein Update durchgeführt werden soll, gemäß ETAG, ifnotchanged
-\item Möglichkeit, DatenKlassen mit DatenTypen zu definieren wie in eZ Publish um automatische Views und Edit Ansichten zu ermöglichen.
-\item Creation of resources: POST to collection with SLUG Header, PUT to URI, normalization of SLUG Header
-\item Pagination (building and parsing of next and previous URIs, implementation of RFC5005), querying the collections entries provider with the correct parameters (offset, limit).
-\item Storage interface with transaction support. An application may for example need to notify an indexing component after some resource has been changed. -- No transaction support: Every action that must happen in a transaction together with the resource change must be handled by the storage layer, must be aware of the storage technologie.
-\end{itemize}
-Im Gegensatz zu Bildern, wie in \cite{Schreier:2011:MRA:1967428.1967434} können Kontakte komplett inline sein.
 
 \section{Hypermedia in RESTful applications}
 
@@ -1325,7 +1379,7 @@ Portable Contacts test client at plaxo \url{http://www.plaxo.com/pdata/testClien
 
 \url{http://code.google.com/p/rest-assured/} \url{http://restfuse.com/}
 
-\appendix
+
 
 \section{Standards}
 \subsection{Contacts / Persons}
@@ -1530,7 +1584,14 @@ Portable Contacts test client at plaxo \url{http://www.plaxo.com/pdata/testClien
   \item[James Snell]
     \url{http://chmod777self.blogspot.com/}
 
-    Abdera committer
+    Apache Abdera committer, OpenSocial, IBM
+
+  \item[Joseph Smarr]
+
+    former Plaxo now Google
+    presentation about portable contacts at vcarddav wg http://tools.ietf.org/agenda/74/slides/vcarddav-2.pdf
+    http://josephsmarr.com
+    http://anyasq.com/79-im-a-technical-lead-on-the-google+-team
 
   \item[Julian Reschke <julian.reschke@gmx.de>]
 % Julian Reschke, WebDAV Experte, RFC 5995, greenbytes GmbH,Hafenweg 16, 48155 Münster , Germany
@@ -1564,13 +1625,6 @@ Portable Contacts test client at plaxo \url{http://www.plaxo.com/pdata/testClien
   \item[Peter Saint-Andre <stpeter@stpeter.im>]
 
     IETF Calsify WG area director
-
-  \item[Joseph Smarr]
-
-    former Plaxo now Google
-    presentation about portable contacts at vcarddav wg http://tools.ietf.org/agenda/74/slides/vcarddav-2.pdf
-    http://josephsmarr.com
-    http://anyasq.com/79-im-a-technical-lead-on-the-google+-team
 
 % http://notizblog.org/2011/11/17/the-long-term-failure-of-openweb/
 
@@ -1719,6 +1773,7 @@ Portable Contacts test client at plaxo \url{http://www.plaxo.com/pdata/testClien
 \item \url{http://buzzword.org.uk/swignition/uf}
 \item \url{http://json-schema.org/}
 \item \href{http://www.rddl.org/}{Resource Directory Description Language (RDDL)}
+\item \url{http://blogs.oracle.com/sandoz/entry/jersey_and_abdera_with_a}  \url{http://weblogs.java.net/blog/mhadley/archive/2008/02/integrating_jer_2.html}
 % http://exist.sourceforge.net/
 % http://wiki.davical.org/w/CardDAV/Configuration/Well-known_URLs
 % https://github.com/karl/monket-google-calendar A simplified UI for Google Calendar.
@@ -1734,7 +1789,26 @@ Portable Contacts test client at plaxo \url{http://www.plaxo.com/pdata/testClien
 
 IANA link relations registry \url{http://www.iana.org/assignments/link-relations/link-relations.xml}
 
+\subsection{ATOM}
 ATOM landscape overview \url{http://dret.typepad.com/dretblog/atom-landscape.html}
+WebDAV vs. ATOM:
+\url{http://intertwingly.net/wiki/pie/WebDav}
+\url{http://intertwingly.net/wiki/pie/WebDavVsAtom}
+google webdav atom
+Why didn't ATOM succeed (more)? \citeurl{http://bitworking.org/news/425/atompub-is-a-failure}{2012-01-06}
+% http://swordapp.org/
+
+\subsection{XML and JSON}
+
+\begin{itemize}
+\item \url{http://blog.jclark.com/}
+\item \url{http://code.google.com/p/jaql/wiki/Builtin_functions#xml}
+\item \url{http://www.webmasterworld.com/xml/3603303.htm}
+\item \url{http://www.xml.com/pub/a/2006/05/31/converting-between-xml-and-json.html?page=3}
+\item \url{http://goessner.net/download/prj/jsonxml/}
+\item \url{http://www.w3.org/2011/10/integration-workshop/agenda.html}
+\item \url{http://jsonml.org/}
+\end{itemize}
 
 \subsection{Apache Shindig}
 RPC vs. REST API for Shindig/OpenSocial: \url{http://groups.google.com/group/opensocial-and-gadgets-spec/browse_thread/thread/a4ddf7cd09f90237/5cfa1658e1c1d698?lnk=gst&q=rest#5cfa1658e1c1d698}, \url{http://groups.google.com/group/opensocial-and-gadgets-spec/browse_thread/thread/d1a5627fb6e686ce/d27d47dee92a87b2} One argument was support for batching. A restful batching proposal didn't get consensus: \url{https://docs.google.com/View?docid=dc43mmng_23fdbpp7hd&pli=1}
