@@ -11,11 +11,13 @@
 \usepackage{subfig}
 \usepackage{listings}
 \usepackage{tikz}
+  \usetikzlibrary{positioning,arrows,fit}
+  \usetikzlibrary{decorations.pathmorphing,backgrounds,fit,decorations.pathreplacing}
 
 \usepackage{setspace} % Anderthalbfacher Zeilenabstand ist Standard in den meisten Seminararbeiten. Das Paket setspace ermöglicht ein einfaches Umstellen von normalem, anderthalbfachen oder sogar doppeltem Zeilenabstand. 
 \usepackage[paper=a4paper,inner=25mm,outer=20mm,top=15mm,bottom=20mm]{geometry} %Das geometry Paket dient zur Einrichtung der Seiten. Hier werden die jeweiligen Seitenränder angegeben. Diese wWerte sollten durch die jeweiligen Vorgaben des Seminarleiters oder Instituts ersetzt werden.
 \setlength{\parindent}{1.7em} %Neue Abschnitte werden mit hängendem Einzug gesetzt, parindent definiert. um wie viel der Absat eingerückt wird. Die Einheit em ist abhängig vom verwendeten Zeichensatz und daher absoluten Werten in mm oder cm vorzuziehen. 
-\setcounter{secnumdepth}{3} %Bis zu welcher Gliederungsebene nummeriert werden soll gibt dieser Befehl vor. In diesem Falle werden \section, \subsection und \subsubsection nummereiert.
+\setcounter{secnumdepth}{4} %Bis zu welcher Gliederungsebene nummeriert werden soll gibt dieser Befehl vor. In Falle 3 werden \section, \subsection und \subsubsection nummereiert.
 \setcounter{tocdepth}{3} %Bis zu welcher Ebene Einträge ins Inhaltsverzeichnis aufgenommen werden. In diesem Beispiel ebenfalls bis Ebene drei (\subsubsection). Ein durch \paragraph ausgewiesener Abschnitt wird demnach nicht im Inhaltsverzeichnis auftauchen. 
 
 \usepackage[colorlinks=false, pdfborder={0 0 0}, plainpages=false]{hyperref}
@@ -23,6 +25,11 @@
 \newcommand{\citeurl}[2]{\url{#1} (#2)}
 
 \begin{document}
+\lstset{ %
+  language=Java,
+  float=tb
+}
+
 %\titlehead{}
 %\subject{subject}
 \title{}
@@ -41,7 +48,7 @@
 \newpage{}
 
 
-\section{Motivation}
+\section{Introduction and Motivation}
 
 Although computers became ubiquitous for some time now, they still don't help
 their users with their most basic information management needs: Make contacts,
@@ -59,19 +66,6 @@ further insights into its general applicability and fit.
 
 \section{Requirements}
 
-  \begin{itemize}
-  \item Lesen/Schreiben der verwalteten Resourcen: Kontakte, Kalender-Events, Todos, Journal-Einträge, Free-Busy, \ldots
-  \item Synchronisation von Collections für Offline-Nutzung
-  \item einfach zu implementieren (vgl. CalDAV, CardDAV, IMAP) $\rightarrow$ ReST
-  \item Standardkonform $\rightarrow$ xCard, xCal, ATOM
-  \item nutzbar durch JavaScript: JSON basierte Medientypen
-  \item Groupware Elemente: Kontakte, Kalender-Events, Todos, Journal-Einträge, Free-Busy
-  \end{itemize}
-
-% restful: one entry point, reuse of existing protocols and media types
-% easy to understand and implement
-% Collections z.B. für Projekte könnten alle möglichen Typen konsumieren.
-These requirements include the features of CardDAV.\cite[sec. 1]{RFC6352}
 
 % SRS template from http://code.google.com/p/e-bibliophile/wiki/SRS
 \subsection{Scope}
@@ -115,6 +109,44 @@ TODO: keinen der Terme benutzen.
 % and their relationships. Such a diagram is not intended to show a design of 
 % a product, but simply shows the logical relationships among variables.
 
+\begin{itemize}
+  \item Lesen/Schreiben der verwalteten Resourcen: Kontakte, Kalender-Events, Todos, Journal-Einträge, Free-Busy, \ldots
+  \item Synchronisation von Collections für Offline-Nutzung
+  \item einfach zu implementieren (vgl. CalDAV, CardDAV, IMAP) $\rightarrow$ ReST
+  \item Standardkonform $\rightarrow$ xCard, xCal, ATOM
+  \item nutzbar durch JavaScript: JSON basierte Medientypen
+  \item Groupware Elemente: Kontakte, Kalender-Events, Todos, Journal-Einträge, Free-Busy
+\end{itemize}
+
+% restful: one entry point, reuse of existing protocols and media types
+% easy to understand and implement
+% Collections z.B. für Projekte könnten alle möglichen Typen konsumieren.
+
+\paragraph{Replacement for CardDAV}
+
+The web application should provide at least the same features as the CardDAV
+protocol. It should be demonstrated that a restful application can serve for the
+same purpose and thus that the additional complexity of WebDAV and CardDAV is
+not necessary.
+
+The standard lists the supposed features of CardDAV\cite[sec. 1]{RFC6352}:
+
+\begin{enumerate}
+\item Ability to use multiple address books with hierarchical layout.
+\item Ability to control access to individual address books and address entries
+  as per WebDAV Access Control List (ACL) [RFC3744].
+\item Principal collections can be used to enumerate and query other users on
+  the system as per WebDAV ACL [RFC3744].
+\item Server-side searching of address data, avoiding the need for clients to
+  download an entire address book in order to do a quick address 'expansion'
+  operation.
+\item Well-defined internationalization support through WebDAV's use of XML.
+\item Use of vCards [RFC2426] for well-defined address schema to enhance client
+  interoperability.
+\item Many limited clients (e.g., mobile devices) contain an HTTP stack that
+  makes implementing WebDAV much easier than other protocols.
+\end{enumerate}
+
 \paragraph{Restful}
 The application should obey the constraints of a rest application as specified
 in \cite{Fielding2000}.
@@ -152,7 +184,15 @@ The application is expected to be installed in a Java servlet container like Tom
 
 \subsection{Specific Requirements}
 
+\paragraph{Nested and mixed collections}
+The design should not unnecessarily hinder that collections could be nested or
+contain different kinds of media types, e.g. calendar items and contacts. 
 
+\cite[sec. 5.2]{RFC6352} forbids nested and mixed collections to ease the
+implementation of clients. However both may make sense in certain scenarios and
+the protocol should not exclude such scenarios. A collection could for example
+represent all items related to a project, which include contacts, events, todos
+and notes.
 
 \subsection{Excluded requirements}
 
@@ -345,9 +385,8 @@ JSON became an official standard.\cite{RFC4627}
 
 \subsubsection{Hypermedia Support}
 
-\begin{figure}[h]
-  \usetikzlibrary{positioning,arrows,fit}
-  \usetikzlibrary{decorations.pathmorphing,backgrounds,fit,decorations.pathreplacing}
+\begin{figure}[tb]
+
   \begin{tikzpicture}
     [doc/.style={rectangle,draw=blue!30,fill=blue!20, node distance=6em}]
     \node[doc] (svc) [] {ServiceDoc};
@@ -482,7 +521,6 @@ dispatch. These annotations (PATH, GET for the HTTP verb and Produces) are
 demonstrated in listing \ref{fig:jaxrs-annotated-resource-example}.
 
 \begin{lstlisting}[label=fig:jaxrs-annotated-resource-example,
-                   language=java,
                    caption={Example of a JAX-RS annotated Resource class (by Marek Potociar)}]
 @Path("atm/{cardId}")	
 public class AtmResource {	
@@ -550,6 +588,120 @@ provider with other collection storage instances.
 
 The life cycle of a collection storage is scoped to the application. It is
 therefor possible to attach memory based caching to this component.
+
+\paragraph{Preparsed Request Components}
+\label{sec:prep-requ-comp}
+
+It seems like an obvious fact that could not be further deduced, that any
+response action to a request must be preluded by a parsing of the request. In
+the case of a REST application this parsing could be further divided in two
+steps:
+\begin{enumerate}
+\item Parse URI, Accept Header and HTTP verb to select the Resource method
+\item Resource method specific parsing as defined by annotations or done in the
+  Resource method
+\end{enumerate}
+
+JAX-RS defines only rudimentary support for the second step by means of
+inflexible annotations. Listing \ref{fig:jaxrs-annotated-queryparams} shows the
+verbosity of parsing a set of standard query parameters for a search
+interface. An alternative is shown in listing \ref{fig:request-components}. The
+parsing of query parameters is delegated to the class
+SearchRequest.\footnote{The QueryParams class is supposed to be an easy
+  interface to access query parameters and apply rudimentary validation in one
+  step.} The request method ``handleGet'' can access the parameters easily
+through the injected SearchRequest instance.
+
+\begin{lstlisting}[label=fig:jaxrs-annotated-queryparams,
+                   caption={Verbosity of parsing Requests with JAX-RS}]
+@Get public Response get(@QueryParam("query") String query,
+                         @QueryParam("sort-by") String sortBy,
+                         @QueryParam("offset") int offset,
+                         @QueryParam("limit") int limit ) {
+\end{lstlisting}
+
+\begin{lstlisting}[label=fig:request-components,
+                   caption={Separating Request parsing from the Resource method}]
+@GET @Inject
+public Response handleGet(SearchRequest sr) { ... }
+
+@RequestScoped
+public class SearchRequest {
+    public final String query, sortBy;
+    public final int offset, limit;
+    
+    @Inject public SearchRequest(QueryParams qp) {
+        query = qp.getNotEmpty("query");
+        sortBy = qp.getOrElse("sort-by", "score");
+        offset = qp.getPositiveIntOrElse("offset", 0);
+        limit = qp.getPositiveIntOrElse("limit", -1);
+    }
+}
+\end{lstlisting}
+
+The main advantages of this approach would be:
+
+\begin{itemize}
+\item Classes parsing commonly used query parameters can be reused.
+\item The request method declaration gets much easier to read.
+\item Sophisticated validation can be applied without obfuscating the request method.
+\end{itemize}
+
+\paragraph{Exkurs: Driving Dependency Injection further}
+Paragraph \ref{sec:prep-requ-comp} used dependency injection to cause the
+instantiation of a request scoped class that prepares information for the
+request method (``handleGet'' in the example). This idea could be extended.
+
+The information from the SearchRequest class is probably just forwarded by
+``handleGet'' to another component that executes the search on a given
+collection. Thus the request methot is ultimately interested on the search
+result set to transform it into a response. Consequently the ``handleGet''
+method could use dependency injection to request the result set and only start
+working on this. Figure \ref{fig:dependency-injection-pipeline} visualizes the
+hypothetic dependency graph of an application specific ResultSet class.
+
+\begin{figure}[tb]
+  \begin{tikzpicture}
+    [doc/.style={rectangle,draw=blue!30,fill=blue!20, node distance=4.5em}]
+
+    \node[doc] (uriinfo) [] {UriInfo};
+    \node[doc] (queryparams) [below=of uriinfo] {QueryParams}
+      edge [<-] node [left] {depends on} (uriinfo);
+
+    \node[doc] (searchrequest) [below=of queryparams] {SearchRequest}
+      edge [<-] node [left] {parses} (queryparams);
+
+    \node[doc] (pathparams) [right=of uriinfo] {PathParams}
+      edge [<-] node [above] {depends on} (uriinfo);
+
+    \node[doc] (database) [right=of pathparams] {Database};
+
+    \node[doc] (collection) [below=of pathparams] {CollectionStorage}
+      edge [<-] node [right] {connected to} (database)
+      edge [<-] node [right,text width=5em] {collection specified by URI path} (pathparams);
+
+    \node[doc] (searchservice) [below=of collection] {SearchService}
+      edge [<-] node [right,text width=5em] {searches on collection} (collection);
+
+    \node[doc] (resultset) [below=of searchservice] {ResultSet}
+      edge [<-] node [left,text width=5em] {search parameters} (searchrequest)
+      edge [<-] node [right] {produced by} (searchservice);
+  \end{tikzpicture}
+  \caption{Building a processing pipeline with Dependency Injection}
+  \label{fig:dependency-injection-pipeline}
+\end{figure}
+
+The figure shows how the CollectionStorage to search on is identified by the URI
+path and the search parameters by the SearchRequest class of listing
+\ref{fig:request-components}. The dependency injection is configured to produce
+a ResultSet class by executing a SearchService with the request scoped
+CollectionStorage and SearchRequest.
+
+The idea might be an alternative implementation of processing pipelines as
+proposed in \cite{Davis:2011:XTR:1967428.1967437} and worth exploring in a
+separate work. One advantage of this approach would be that the processing
+pipeline is defined and configured in the same language then the rest of the
+application.
 
 \paragraph{GenericResourceAttributes}
 \label{sec:component-genericresourceattrib}
@@ -1868,4 +2020,4 @@ support Plain Text Format (text/plain), RFC5147 URI fragment identifier for plai
 % ispell-dictionary: "american"
 % eval: (progn (flyspell-mode 1) (outline-minor-mode 1) (goto-address-mode 1) (hide-body))
 % End:
-%  LocalWords:  RESTful programmatically
+%  LocalWords:  RESTful programmatically instantiation hypothetic
