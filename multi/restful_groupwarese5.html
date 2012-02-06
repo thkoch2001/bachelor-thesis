@@ -1,40 +1,93 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"  
   "http://www.w3.org/TR/html4/loose.dtd">  
 <html > 
-<head><title>Persistency for Groupware Data</title> 
+<head><title>Reusable Components</title> 
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"> 
 <meta name="generator" content="TeX4ht (http://www.cse.ohio-state.edu/~gurari/TeX4ht/)"> 
 <meta name="originator" content="TeX4ht (http://www.cse.ohio-state.edu/~gurari/TeX4ht/)"> 
 <!-- html,2 --> 
 <meta name="src" content="restful_groupware.tex"> 
-<meta name="date" content="2011-12-21 20:45:00"> 
+<meta name="date" content="2012-02-06 19:58:00"> 
 <link rel="stylesheet" type="text/css" href="restful_groupware.css"> 
 </head><body 
 >
-    <!--l. 368--><div class="crosslinks"><p class="noindent">[<a 
-href="restful_groupwarese12.html" >next</a>] [<a 
+    <!--l. 1060--><div class="crosslinks"><p class="noindent">[<a 
 href="restful_groupwarese4.html" >prev</a>] [<a 
 href="restful_groupwarese4.html#tailrestful_groupwarese4.html" >prev-tail</a>] [<a 
-href="restful_groupwarese4.html#tailrestful_groupwarese5.html">tail</a>] [<a 
-href="restful_groupware.html#restful_groupwarese11.html" >up</a>] </p></div>
+href="#tailrestful_groupwarese5.html">tail</a>] [<a 
+href="restful_groupware.html# " >up</a>] </p></div>
     <h3 class="sectionHead"><span class="titlemark">5.  </span> <a 
- id="x13-130005"></a>Persistency for Groupware Data</h3>
-<!--l. 369--><p class="noindent" >Relational Databases vs. NoSQL databases vs. plain files
-<!--l. 371--><p class="indent" >    Relational databases are not practical for contacts, events or todos. Common patterns in
-systems that use relational DBs for that purpose:
+ id="x32-530005"></a>Reusable Components</h3>
+<!--l. 1062--><p class="noindent" >Reuse is of course in general a good thing. In the context of Model Driven Development (MDD)
+and code generation it is especially import to identify code that is general enough to be provided
+by a library of framework and does not need to be generated.
+<!--l. 1067--><p class="indent" >    Minimizing the generated code also minimizes the extend of drawbacks associated with code
+generation, most importantly conflicts between updates by the code generator and manual
+modification.
+<!--l. 1079--><p class="indent" >    Concerns regarding Media Types that needs to be implemented differently for each different
+Media Type:
       <ul class="itemize1">
-      <li class="itemize">artificial limits of entries, e.g. only 3 email addresses per contact, because there are
-      only three columns email1, email2 and email3.
+      <li class="itemize">validate the Media Type
       </li>
-      <li class="itemize">Fields for custom data like custom1 to customX
+      <li class="itemize">provide accessors to read, write parts of the Media Type
       </li>
-      <li class="itemize">EAV pattern: tables like: id, foreign_id, type, value</li></ul>
-<!--l. 377--><div class="crosslinks"><p class="noindent">[<a 
-href="restful_groupwarese12.html" >next</a>] [<a 
+      <li class="itemize">serialize, deserialize the whole Media Type
+      </li>
+      <li class="itemize">converters to other formats
+      </li>
+      <li class="itemize">accessors to common interfaces (projection), e.g. common generic resource attributes
+      or common attributes of a contact</li></ul>
+<!--l. 1092--><p class="indent" >    Candidate areas for re-usability:
+      <ul class="itemize1">
+      <li class="itemize">link building, URL parsing
+      </li>
+      <li class="itemize">HTML form building, parsing
+      </li>
+      <li class="itemize">generic properties of resources, id
+      </li>
+      <li class="itemize">resource types
+      </li>
+      <li class="itemize">question to storage: does resource still match ETag? Has changed since?
+      </li>
+      <li class="itemize">all links of a resource: Link: intern/extern/undefined, href, rel, title, text, media type
+      </li>
+      <li class="itemize">bool function matchesMediaType(), getMediaType() auf WrappedEntry
+                                                                                         
+                                                                                         
+      </li>
+      <li class="itemize">Prüfung, ob ein Update durchgeführt werden soll, gemäß ETAG, ifnotchanged
+      </li>
+      <li class="itemize">Möglichkeit,  DatenKlassen  mit  DatenTypen  zu  definieren  wie  in  eZ  Publish  um
+      automatische Views und Edit Ansichten zu ermöglichen.
+      </li>
+      <li class="itemize">Creation  of  resources:  POST  to  collection  with  SLUG  Header,  PUT  to  URI,
+      normalization of SLUG Header
+      </li>
+      <li class="itemize">Pagination  (building  and  parsing  of  next  and  previous  URIs,  implementation  of
+      RFC5005), querying the collections entries provider with the correct parameters (offset,
+      limit).
+      </li>
+      <li class="itemize">Storage interface with transaction support. An application may for example need to
+      notify an indexing component after some resource has been changed. &#8211; No transaction
+      support: Every action that must happen in a transaction together with the resource
+      change must be handled by the storage layer, must be aware of the storage technologie.</li></ul>
+<!--l. 1113--><p class="indent" >    Why vCard/CardDav: many clients
+<!--l. 1115--><p class="indent" >    Why OpenSocial / Portable Contacts:
+      <ul class="itemize1">
+      <li class="itemize">used by Google, LinkedIn,
+      </li>
+      <li class="itemize">used in Enterprise applications like Attlassian tools (Jira, Confluence, ...), Nuxeo CMS,
+      ...
+      </li>
+      <li class="itemize">OpenSocial can be used to implement inhouse portals and populate it with data from
+      the companies GroupWare</li></ul>
+                                                                                         
+                                                                                         
+    <!--l. 1122--><div class="crosslinks"><p class="noindent">[<a 
 href="restful_groupwarese4.html" >prev</a>] [<a 
 href="restful_groupwarese4.html#tailrestful_groupwarese4.html" >prev-tail</a>] [<a 
 href="restful_groupwarese5.html" >front</a>] [<a 
-href="restful_groupware.html#restful_groupwarese11.html" >up</a>] </p></div>
-<!--l. 377--><p class="indent" >    <a 
+href="restful_groupware.html# " >up</a>] </p></div>
+<!--l. 1122--><p class="indent" >    <a 
  id="tailrestful_groupwarese5.html"></a>  
 </body></html> 

@@ -7,11 +7,11 @@
 <meta name="originator" content="TeX4ht (http://www.cse.ohio-state.edu/~gurari/TeX4ht/)"> 
 <!-- html,2 --> 
 <meta name="src" content="restful_groupware.tex"> 
-<meta name="date" content="2011-12-21 20:45:00"> 
+<meta name="date" content="2012-02-06 19:58:00"> 
 <link rel="stylesheet" type="text/css" href="restful_groupware.css"> 
 </head><body 
 >
-    <!--l. 34--><div class="crosslinks"><p class="noindent">[<a 
+    <!--l. 50--><div class="crosslinks"><p class="noindent">[<a 
 href="restful_groupwarese1.html" >next</a>] [<a 
 href="#tailrestful_groupwareli1.html">tail</a>] [<a 
 href="restful_groupware.html#restful_groupwareli1.html" >up</a>] </p></div>
@@ -19,100 +19,158 @@ href="restful_groupware.html#restful_groupwareli1.html" >up</a>] </p></div>
  id="x2-1000"></a>Contents</h3>
     <div class="tableofcontents">
     <span class="sectionToc" >1 <a 
-href="restful_groupwarese1.html#x3-20001">Motivation</a></span>
+href="restful_groupwarese1.html#x3-20001">Introduction and Motivation</a></span>
 <br />    <span class="sectionToc" >2 <a 
-href="restful_groupwarese2.html#x4-30002">Advantages of REST for Groupware data</a></span>
+href="restful_groupwarese2.html#x6-30002">Requirements</a></span>
+<br />    &#x00A0;<span class="subsectionToc" >2.1 <a 
+href="restful_groupwarese2.html#x6-40002.1">Scope</a></span>
+<br />    &#x00A0;<span class="subsectionToc" >2.2 <a 
+href="restful_groupwarese2.html#x6-50002.2">Definitions</a></span>
+<br />    &#x00A0;<span class="subsectionToc" >2.3 <a 
+href="restful_groupwarese2.html#x6-60002.3">General Requirements</a></span>
+<br />    &#x00A0;<span class="subsectionToc" >2.4 <a 
+href="restful_groupwarese2.html#x6-90002.4">User Classes and Characteristics</a></span>
+<br />    &#x00A0;<span class="subsectionToc" >2.5 <a 
+href="restful_groupwarese2.html#x6-100002.5">Operation Environment</a></span>
+<br />    &#x00A0;<span class="subsectionToc" >2.6 <a 
+href="restful_groupwarese2.html#x6-110002.6">Design and Implementation Constraints</a></span>
+<br />    &#x00A0;<span class="subsectionToc" >2.7 <a 
+href="restful_groupwarese2.html#x6-120002.7">Specific Requirements</a></span>
+<br />    &#x00A0;<span class="subsectionToc" >2.8 <a 
+href="restful_groupwarese2.html#x6-140002.8">Excluded requirements</a></span>
 <br />    <span class="sectionToc" >3 <a 
-href="restful_groupwarese3.html#x5-40003">Evaluation of APIs</a></span>
-<br />    &#x00A0;&#x00A0;<span class="subsubsectionToc" >3.0.1 <a 
-href="restful_groupwarese3.html#x5-50003.0.1" id="QQ2-5-5">Algermissen&#8217;s Classification of HTTP-based APIs</a></span>
+href="restful_groupwarese3.html#x10-210003">Media Types</a></span>
+<br />    &#x00A0;<span class="subsectionToc" >3.1 <a 
+href="restful_groupwarese3.html#x10-220003.1">Syntax vs. Semantic</a></span>
+<br />    &#x00A0;<span class="subsectionToc" >3.2 <a 
+href="restful_groupwarese3.html#x10-230003.2">Data Models of Media Types</a></span>
+                                                                                         
+                                                                                         
+<br />    &#x00A0;&#x00A0;<span class="subsubsectionToc" >3.2.1 <a 
+href="restful_groupwarese3.html#x10-240003.2.1" id="QQ2-10-24">XML vs. JSON</a></span>
+<br />    &#x00A0;<span class="subsectionToc" >3.3 <a 
+href="restful_groupwarese3.html#x10-250003.3">vCard, iCalendar, xCard and xCal</a></span>
+<br />    &#x00A0;&#x00A0;<span class="subsubsectionToc" >3.3.1 <a 
+href="restful_groupwarese3.html#x10-260003.3.1" id="QQ2-10-26">Hypermedia Support</a></span>
+<br />    &#x00A0;<span class="subsectionToc" >3.4 <a 
+href="restful_groupwarese3.html#x10-270003.4">Derived JSON formats for PIM data</a></span>
+<br />    &#x00A0;<span class="subsectionToc" >3.5 <a 
+href="restful_groupwarese3.html#x10-280003.5">Media Types for Collections</a></span>
+<br />    &#x00A0;<span class="subsectionToc" >3.6 <a 
+href="restful_groupwarese3.html#x10-290003.6">Media Type conversion</a></span>
+<br />    &#x00A0;<span class="subsectionToc" >3.7 <a 
+href="restful_groupwarese3.html#x10-300003.7">Updates with non isomorphic Media Types</a></span>
 <br />    <span class="sectionToc" >4 <a 
-href="restful_groupwarese4.html#x7-60004">Existing Groupware data APIs</a></span>
+href="restful_groupwarese4.html#x19-310004">Design</a></span>
 <br />    &#x00A0;<span class="subsectionToc" >4.1 <a 
-href="restful_groupwarese4.html#x7-70004.1">IMAP (Kolab)</a></span>
+href="restful_groupwarese4.html#x19-320004.1">Overview</a></span>
+<br />    &#x00A0;&#x00A0;<span class="subsubsectionToc" >4.1.1 <a 
+href="restful_groupwarese4.html#x19-330004.1.1" id="QQ2-19-34">Structural and Behavioral Rest Model</a></span>
+<br />    &#x00A0;&#x00A0;<span class="subsubsectionToc" >4.1.2 <a 
+href="restful_groupwarese4.html#x19-340004.1.2" id="QQ2-19-35">AtomPub for PIM data</a></span>
 <br />    &#x00A0;<span class="subsectionToc" >4.2 <a 
-href="restful_groupwarese4.html#x7-80004.2">WebDAV, CalDAV, CardDAV</a></span>
+href="restful_groupwarese4.html#x19-350004.2">Components</a></span>
 <br />    &#x00A0;&#x00A0;<span class="subsubsectionToc" >4.2.1 <a 
-href="restful_groupwarese4.html#x7-90004.2.1" id="QQ2-7-10">Is WebDAV restful?</a></span>
+href="restful_groupwarese4.html#x19-360004.2.1" id="QQ2-19-37">Dispatcher</a></span>
+<br />    &#x00A0;&#x00A0;<span class="subsubsectionToc" >4.2.2 <a 
+href="restful_groupwarese4.html#x19-370004.2.2" id="QQ2-19-39">Other components</a></span>
 <br />    &#x00A0;<span class="subsectionToc" >4.3 <a 
-href="restful_groupwarese4.html#x7-100004.3">PortableContacts aka OpenSocial</a></span>
+href="restful_groupwarese4.html#x19-440004.3">Detailed Design Considerations</a></span>
 <br />    &#x00A0;&#x00A0;<span class="subsubsectionToc" >4.3.1 <a 
-href="restful_groupwarese4.html#x7-110004.3.1" id="QQ2-7-12">Is OpenSocial restful?</a></span>
+href="restful_groupwarese4.html#x19-450004.3.1" id="QQ2-19-50">Inline feeds or feeds with links?</a></span>
+<br />    &#x00A0;<span class="subsectionToc" >4.4 <a 
+href="restful_groupwarese4.html#x19-460004.4">Client Design</a></span>
+<br />    &#x00A0;<span class="subsectionToc" >4.5 <a 
+href="restful_groupwarese4.html#x19-470004.5">Related work</a></span>
+<br />    &#x00A0;&#x00A0;<span class="subsubsectionToc" >4.5.1 <a 
+href="restful_groupwarese4.html#x19-480004.5.1" id="QQ2-19-53">IMAP used by Kolab</a></span>
+<br />    &#x00A0;&#x00A0;<span class="subsubsectionToc" >4.5.2 <a 
+href="restful_groupwarese4.html#x19-490004.5.2" id="QQ2-19-54">WebDAV, CalDAV, CardDAV</a></span>
+<br />    &#x00A0;&#x00A0;<span class="subsubsectionToc" >4.5.3 <a 
+href="restful_groupwarese4.html#x19-500004.5.3" id="QQ2-19-55">OpenSocial</a></span>
+<br />    &#x00A0;&#x00A0;<span class="subsubsectionToc" >4.5.4 <a 
+href="restful_groupwarese4.html#x19-520004.5.4" id="QQ2-19-59">CAP</a></span>
 <br />    <span class="sectionToc" >5 <a 
-href="restful_groupwarese5.html#x13-130005">Persistency for Groupware Data</a></span>
-<br />    <span class="sectionToc" >6 <a 
-href="restful_groupwarese6.html#x14-140006">Synchronizing a large collection</a></span>
-<br />    <span class="sectionToc" >7 <a 
-href="restful_groupwarese7.html#x15-150007">Mediatypes</a></span>
-<br />    &#x00A0;<span class="subsectionToc" >7.1 <a 
-href="restful_groupwarese7.html#x15-160007.1">xml vs. json</a></span>
-<br />    &#x00A0;<span class="subsectionToc" >7.2 <a 
-href="restful_groupwarese7.html#x15-170007.2">Syntax vs. Semantic</a></span>
-<br />    &#x00A0;<span class="subsectionToc" >7.3 <a 
-href="restful_groupwarese7.html#x15-180007.3">Updates with alternative Mediatypes</a></span>
-<br />    &#x00A0;<span class="subsectionToc" >7.4 <a 
-href="restful_groupwarese7.html#x15-190007.4">Mediatype conversion</a></span>
-<br />    &#x00A0;<span class="subsectionToc" >7.5 <a 
-href="restful_groupwarese7.html#x15-200007.5">Example: vCard</a></span>
-<br />    &#x00A0;<span class="subsectionToc" >7.6 <a 
-href="restful_groupwarese7.html#x15-210007.6">HFactor</a></span>
-<br />    <span class="sectionToc" >8 <a 
-href="restful_groupwarese8.html#x27-220008">Hypermedia in RESTful applications</a></span>
-<br />    &#x00A0;<span class="subsectionToc" >8.1 <a 
-href="restful_groupwarese8.html#x27-230008.1">Hypermedia in OpenSocial</a></span>
-<br />    <span class="sectionToc" >9 <a 
-href="restful_groupwarese9.html#x28-240009">Selection of components</a></span>
-<br />    &#x00A0;<span class="subsectionToc" >9.1 <a 
-href="restful_groupwarese9.html#x28-250009.1">REST framework</a></span>
-<br />    <span class="sectionToc" >10 <a 
-href="restful_groupwarese10.html#x29-2600010">Testing</a></span>
+href="restful_groupwarese5.html#x32-530005">Reusable Components</a></span>
 <br />    <span class="sectionToc" >A <a 
-href="restful_groupwarese11.html#x30-27000A">Standards</a></span>
-<br />    &#x00A0;<span class="subsectionToc" >A.1 <a 
-href="restful_groupwarese11.html#x30-28000A.1">Contacts / Persons</a></span>
-<br />    &#x00A0;<span class="subsectionToc" >A.2 <a 
-href="restful_groupwarese11.html#x30-29000A.2">Calendaring</a></span>
-<br />    &#x00A0;<span class="subsectionToc" >A.3 <a 
-href="restful_groupwarese11.html#x30-30000A.3">Scheduling</a></span>
-<br />    &#x00A0;<span class="subsectionToc" >A.4 <a 
-href="restful_groupwarese11.html#x30-31000A.4">Relations and Links</a></span>
-<br />    &#x00A0;<span class="subsectionToc" >A.5 <a 
-href="restful_groupwarese11.html#x30-32000A.5">out of scope</a></span>
+href="restful_groupwarese6.html#x33-54000A">Evaluation of APIs</a></span>
+<br />    &#x00A0;&#x00A0;<span class="subsubsectionToc" >A.0.5 <a 
+href="restful_groupwarese6.html#x33-55000A.0.5" id="QQ2-33-62">Algermissen&#8217;s Classification of HTTP-based APIs</a></span>
 <br />    <span class="sectionToc" >B <a 
-href="restful_groupwarese12.html#x31-33000B">People, Groups and Organizations</a></span>
+href="restful_groupwarese7.html#x35-56000B">Persistency for Groupware Data</a></span>
 <br />    <span class="sectionToc" >C <a 
-href="restful_groupwarese13.html#x32-35000C">Implementations</a></span>
-                                                                                         
-                                                                                         
-<br />    &#x00A0;<span class="subsectionToc" >C.1 <a 
-href="restful_groupwarese13.html#x32-36000C.1">Servers</a></span>
-<br />    &#x00A0;<span class="subsectionToc" >C.2 <a 
-href="restful_groupwarese13.html#x32-37000C.2">Clients</a></span>
-<br />    &#x00A0;<span class="subsectionToc" >C.3 <a 
-href="restful_groupwarese13.html#x32-38000C.3">Web Services</a></span>
-<br />    &#x00A0;<span class="subsectionToc" >C.4 <a 
-href="restful_groupwarese13.html#x32-39000C.4">Portable Contacts</a></span>
+href="restful_groupwarese8.html#x36-57000C">Synchronizing a large collection</a></span>
 <br />    <span class="sectionToc" >D <a 
-href="restful_groupwarese14.html#x34-40000D">Links</a></span>
+href="restful_groupwarese9.html#x37-58000D">Media Types</a></span>
 <br />    &#x00A0;<span class="subsectionToc" >D.1 <a 
-href="restful_groupwarese14.html#x34-41000D.1">Apache Shindig</a></span>
+href="restful_groupwarese9.html#x37-59000D.1">Media Type conversion</a></span>
 <br />    &#x00A0;<span class="subsectionToc" >D.2 <a 
-href="restful_groupwarese14.html#x34-42000D.2">Socialsite</a></span>
+href="restful_groupwarese9.html#x37-60000D.2">Example: vCard</a></span>
+<br />    &#x00A0;<span class="subsectionToc" >D.3 <a 
+href="restful_groupwarese9.html#x37-61000D.3">HFactor</a></span>
 <br />    <span class="sectionToc" >E <a 
-href="restful_groupwarese15.html#x35-43000E">TODO</a></span>
+href="restful_groupwarese10.html#x42-62000E">Hypermedia in RESTful applications</a></span>
+<br />    &#x00A0;<span class="subsectionToc" >E.1 <a 
+href="restful_groupwarese10.html#x42-63000E.1">Hypermedia in OpenSocial</a></span>
+<br />    <span class="sectionToc" >F <a 
+href="restful_groupwarese11.html#x43-64000F">Selection of components</a></span>
+<br />    &#x00A0;<span class="subsectionToc" >F.1 <a 
+href="restful_groupwarese11.html#x43-65000F.1">REST framework</a></span>
+<br />    &#x00A0;<span class="subsectionToc" >F.2 <a 
+href="restful_groupwarese11.html#x43-66000F.2">VCard</a></span>
+<br />    <span class="sectionToc" >G <a 
+href="restful_groupwarese12.html#x45-67000G">Testing</a></span>
+<br />    <span class="sectionToc" >H <a 
+href="restful_groupwarese13.html#x46-68000H">Standards</a></span>
+<br />    &#x00A0;<span class="subsectionToc" >H.1 <a 
+href="restful_groupwarese13.html#x46-69000H.1">Contacts / Persons</a></span>
+<br />    &#x00A0;<span class="subsectionToc" >H.2 <a 
+href="restful_groupwarese13.html#x46-70000H.2">Calendaring</a></span>
+<br />    &#x00A0;<span class="subsectionToc" >H.3 <a 
+href="restful_groupwarese13.html#x46-71000H.3">Scheduling</a></span>
+<br />    &#x00A0;<span class="subsectionToc" >H.4 <a 
+href="restful_groupwarese13.html#x46-72000H.4">Relations and Links</a></span>
+<br />    &#x00A0;<span class="subsectionToc" >H.5 <a 
+href="restful_groupwarese13.html#x46-73000H.5">out of scope</a></span>
+<br />    <span class="sectionToc" >I <a 
+href="restful_groupwarese14.html#x47-74000I">People, Groups and Organizations</a></span>
+<br />    <span class="sectionToc" >J <a 
+href="restful_groupwarese15.html#x48-76000J">Implementations</a></span>
+<br />    &#x00A0;<span class="subsectionToc" >J.1 <a 
+href="restful_groupwarese15.html#x48-77000J.1">Servers</a></span>
+<br />    &#x00A0;<span class="subsectionToc" >J.2 <a 
+href="restful_groupwarese15.html#x48-78000J.2">Clients</a></span>
+<br />    &#x00A0;<span class="subsectionToc" >J.3 <a 
+href="restful_groupwarese15.html#x48-79000J.3">Web Services</a></span>
+<br />    &#x00A0;<span class="subsectionToc" >J.4 <a 
+href="restful_groupwarese15.html#x48-80000J.4">Others</a></span>
+<br />    <span class="sectionToc" >K <a 
+href="restful_groupwarese16.html#x50-81000K">Links</a></span>
+<br />    &#x00A0;<span class="subsectionToc" >K.1 <a 
+href="restful_groupwarese16.html#x50-82000K.1">ATOM</a></span>
+                                                                                         
+                                                                                         
+<br />    &#x00A0;<span class="subsectionToc" >K.2 <a 
+href="restful_groupwarese16.html#x50-83000K.2">XML and JSON</a></span>
+<br />    &#x00A0;<span class="subsectionToc" >K.3 <a 
+href="restful_groupwarese16.html#x50-84000K.3">Apache Shindig</a></span>
+<br />    &#x00A0;<span class="subsectionToc" >K.4 <a 
+href="restful_groupwarese16.html#x50-85000K.4">Socialsite</a></span>
+<br />    <span class="sectionToc" >L <a 
+href="restful_groupwarese17.html#x51-86000L">TODO</a></span>
     </div> <div 
 class="abstract" 
 >
-<!--l. 35--><p class="indent" >
+<!--l. 51--><p class="indent" >
 </div>
                                                                                          
                                                                                          
                                                                                          
                                                                                          
-    <!--l. 40--><div class="crosslinks"><p class="noindent">[<a 
+    <!--l. 57--><div class="crosslinks"><p class="noindent">[<a 
 href="restful_groupwarese1.html" >next</a>] [<a 
 href="restful_groupwareli1.html" >front</a>] [<a 
 href="restful_groupware.html#restful_groupwareli1.html" >up</a>] </p></div>
-<!--l. 40--><p class="indent" >    <a 
+<!--l. 57--><p class="indent" >    <a 
  id="tailrestful_groupwareli1.html"></a>  
 </body></html> 
