@@ -25,9 +25,15 @@
 \newcommand{\citeurl}[2]{\url{#1} (#2)}
 
 \begin{document}
+\lstnewenvironment{javalisting}[1][]
+  {\lstset{language=Java,float=tb,#1}}% \begin{javalisting}[...]
+  {} % \end{javalisting}
+
 \lstset{ %
   language=Java,
-  float=tb
+  float=tb,
+  frame=single,
+  captionpos=b
 }
 
 %\titlehead{}
@@ -347,28 +353,28 @@ to process. \autoref{fig:waysmapxmljson} shows two different examples how to map
 data from XML to JSON with one of them using JSON number values, being more
 compact and probably easier to process.
 
-\begin{figure}
-\captionsetup[subfloat]{justification=raggedright,singlelinecheck=false}
-\small{
-\subfloat[XML fragment]{
-  \begin{minipage}[b]{0.25\linewidth}
-    \lstinputlisting{snippets/xml2json_xml}    
-  \end{minipage}
-}
-\subfloat[unfriendly JSON]{
-  \begin{minipage}[b]{0.4\linewidth}
-    \lstinputlisting{snippets/xml2json_json1}
-  \end{minipage}
-}
-\subfloat[less(?) unfriendly JSON]{
-  \begin{minipage}[b]{0.25\linewidth}
-    \lstinputlisting{snippets/xml2json_json2}
-  \end{minipage}
-}
-}
-  \caption{different ways to map XML to JSON}
-  \label{fig:waysmapxmljson}
-\end{figure}
+%\begin{figure}
+%\captionsetup[subfloat]{justification=raggedright,singlelinecheck=false}
+%\small{
+%\subfloat[XML fragment]{
+%  \begin{minipage}[b]{0.25\linewidth}
+%    \lstinputlisting{snippets/xml2json_xml}    
+%  \end{minipage}
+%} 
+%\subfloat[unfriendly JSON]{
+%  \begin{minipage}[b]{0.4\linewidth}
+%    \lstinputlisting{snippets/xml2json_json1}
+%  \end{minipage}
+%}
+%\subfloat[less(?) unfriendly JSON]{
+%  \begin{minipage}[b]{0.25\linewidth}
+%    \lstinputlisting{snippets/xml2json_json2}
+%  \end{minipage}
+%}
+%}
+%  \caption{different ways to map XML to JSON}
+%  \label{fig:waysmapxmljson}
+%\end{figure}
 
 Activity Streams has avoided the misalignment of an official XML format and an unofficial JSON deviate by defining an XML (ATOM) and JSON format from the beginning.\footnote{\citeurl{http://activitystrea.ms/}{2012-01-21}}
 
@@ -506,7 +512,7 @@ entry.\footnote{\citeurl{http://web.archive.org/web/20081120001246/http://www.sn
 
 \subsection{Components}
 
-\paragraph{Dispatcher}
+\subsubsection{Dispatcher}
 
 The dispatcher selects the Java method (see \ref{sec:components-actions}) that
 should handle the request. The selection can depend at least on the path
@@ -520,7 +526,7 @@ and a set of Java annotations which must be used to configure the
 dispatch. These annotations (PATH, GET for the HTTP verb and Produces) are
 demonstrated in listing \ref{fig:jaxrs-annotated-resource-example}.
 
-\begin{lstlisting}[label=fig:jaxrs-annotated-resource-example,
+\begin{javalisting}[label=fig:jaxrs-annotated-resource-example,
                    caption={Example of a JAX-RS annotated Resource class (by Marek Potociar)}]
 @Path("atm/{cardId}")	
 public class AtmResource {	
@@ -532,13 +538,16 @@ public class AtmResource {
                         @QueryParam("pin") String pin) {	
     return Double.toString(getBalance(card, pin));	
   }
-\end{lstlisting}
+\end{javalisting}
  
 Alternative approaches to configure the dispatcher are not designated by
 JAX-RS. One possible alternative would be to expose an API to manually add
 dispatch routes at runtime and remove the corresponding annotations from the
-source code. This could have several advantages\footnote{This section does not
-  intend to dispute the advantages of annotation based configuration.}:
+source code. This could have several advantages\footnote{Dispatching in Restlet
+  can be programmed
+  \citeurl{http://wiki.restlet.org/docs_2.1/13-restlet/27-restlet/326-restlet.html}{2012-2-6}. An
+  API for Jersey 2.0 is in
+  development. \citeurl{http://java.net/jira/browse/JERSEY-842}{2012-2-6}}:
 
 \begin{itemize}
 \item The path under which a resource type is served is decoupled from the code
@@ -561,6 +570,22 @@ source code. This could have several advantages\footnote{This section does not
   be possible to bind individual functors to dispatcher routes and thus
   composing the equivalent of a resource class at runtime.
 \end{itemize}
+
+TODO:
+
+The dispatching as defined in JAX-RS does not define any facility for a resource
+method to decline its possibility to handle a method at runtime. Such a facility
+could either be implemented by a boolean precondition method associated with the
+resource method or by a special Exception type that would restart the request
+dispatch but this time ignoring the method that threw the exception. If no
+alternative request method could be found, the Exception would be propagated and
+subsequently transformed into an appropriate error response.
+
+Thus it would be possible to define generic and special purpose request methods
+even for cases where the static JAX-RS dispatch algorithm does not provide
+sufficient granularity.
+
+\subsubsection{Other components}
 
 \paragraph{Actions}
 \label{sec:components-actions}
@@ -612,15 +637,15 @@ SearchRequest.\footnote{The QueryParams class is supposed to be an easy
   step.} The request method ``handleGet'' can access the parameters easily
 through the injected SearchRequest instance.
 
-\begin{lstlisting}[label=fig:jaxrs-annotated-queryparams,
+\begin{javalisting}[label=fig:jaxrs-annotated-queryparams,
                    caption={Verbosity of parsing Requests with JAX-RS}]
 @Get public Response get(@QueryParam("query") String query,
                          @QueryParam("sort-by") String sortBy,
                          @QueryParam("offset") int offset,
                          @QueryParam("limit") int limit ) {
-\end{lstlisting}
+\end{javalisting}
 
-\begin{lstlisting}[label=fig:request-components,
+\begin{javalisting}[label=fig:request-components,
                    caption={Separating Request parsing from the Resource method}]
 @GET @Inject
 public Response handleGet(SearchRequest sr) { ... }
@@ -637,7 +662,7 @@ public class SearchRequest {
         limit = qp.getPositiveIntOrElse("limit", -1);
     }
 }
-\end{lstlisting}
+\end{javalisting}
 
 The main advantages of this approach would be:
 
@@ -646,6 +671,11 @@ The main advantages of this approach would be:
 \item The request method declaration gets much easier to read.
 \item Sophisticated validation can be applied without obfuscating the request method.
 \end{itemize}
+
+This approach is possible to implement for example with the dependency injection
+support provided by the Jersey
+framework.\footnote{\citeurl{http://codahale.com/what-makes-jersey-interesting-parameter-classes/}{2012-2-5},
+  \citeurl{http://codahale.com/what-makes-jersey-interesting-injection-providers/}{2012-2-5}}
 
 \paragraph{Exkurs: Driving Dependency Injection further}
 Paragraph \ref{sec:prep-requ-comp} used dependency injection to cause the
@@ -1496,6 +1526,21 @@ Why not Jersey in the end?
 
 \item Debugging is hard. It's not trivial to find out, why Jersey did not select a request handler or provider as the developer intended.
 \item Jersey's parameter injection can not be used together with a dependency injection framework like Guice or Spring.
+\end{itemize}
+
+Comments on Restlet:
+\begin{itemize}
+\item A couple of core classes of Restlet extend a class called Restlet whose
+  purpose is only vaguely defined but the type inheritance does not correspond
+  to an ``is-a'' relationship. This might indicate a questionable architecture
+  of the framework.
+\item Classes in Restlet are generally mutable. The Javadocs of several classes,
+  e.g. org.restlet.Restlet and subclasses even come with a warning note but do
+  not expose any information about the thread-safety of their methods:
+  \begin{quote}
+    Concurrency note: instances of this class or its subclasses can be invoked by several threads at the same time and therefore must be thread-safe. You should be especially careful when storing state in member variables. 
+  \end{quote}
+\item 
 \end{itemize}
 
 \subsection{VCard}
