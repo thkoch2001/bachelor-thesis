@@ -135,7 +135,7 @@ protocol. It should be demonstrated that a restful application can serve for the
 same purpose and thus that the additional complexity of WebDAV and CardDAV is
 not necessary.
 
-The standard lists the supposed features of CardDAV\cite[sec. 1]{RFC6352}:
+The standard lists the supposed main features of CardDAV\cite[sec. 1]{RFC6352}:
 
 \begin{enumerate}
 \item Ability to use multiple address books with hierarchical layout.
@@ -152,6 +152,11 @@ The standard lists the supposed features of CardDAV\cite[sec. 1]{RFC6352}:
 \item Many limited clients (e.g., mobile devices) contain an HTTP stack that
   makes implementing WebDAV much easier than other protocols.
 \end{enumerate}
+
+There are some minor features of CardDAV, that are mainly inherited from WebDAV
+and whose general usefulness outside of the scope of a content management system
+could be argued. See \autoref{sec:excluded-requirements} for a discussion of
+those.
 
 \paragraph{Restful}
 The application should obey the constraints of a rest application as specified
@@ -201,7 +206,7 @@ represent all items related to a project, which include contacts, events, todos
 and notes.
 
 \subsection{Excluded requirements}
-
+\label{sec:excluded-requirements}
 \paragraph{Search}
 It is not required that the server implements any means to search its data. It
 is not excluded that such a facility could be added later. It is however
@@ -222,12 +227,38 @@ wide. However it could be kept in mind, whether the proposed design could be
 enhanced by a separate access control design as proposed in
 \cite{conf/rest/GrafZLW11}.
 
+\paragraph{Copying and Moving}
+WebDAV introduces the HTTP verbs to COPY and MOVE. The usefulness of such
+functionality must of course be compared to the complexity of the implementation
+and the drawback of incompatibility to plain HTTP.
+
+It is possible to enhance a restful API with copy and move functionality without
+extending HTTP. The only requirement is that additional hyperlinks can be
+attached to the resources of the API. Allamaraju \cite[Ch. 11]{Allamaraju_2010} proposes
+``controller resources'' that act on POST requests and are linked from the
+resources they act on. Custom link relations are used to indicate the semantic
+of the controller resource.
+
+This work does not include initial support for copy or move.
+
 \paragraph{Versioning}
 WebDAV and therefor CalDAV and CardDAV support the versioning of resources as an
 extension to the HTTP protocol. Versioning is an important feature for a text
 authoring system that may have been the main target for the WebDAV protocol.  It
 does however seem to be of little use for the resources considered here. The
 resources are mostly created in one session by one user and seldom modified.
+
+\paragraph{Make Collections}
+WebDAV introduces the MKCOL HTTP verb to create collections. CardDAV recommends
+that implementations support this to allow users to ``organize their data
+better''. An alternative would be to make use of ATOM categories for
+grouping. Instead of creating a new (empty) collection the user would thus
+create a contact resource with a new category. An ATOM service document could
+then link to a new (virtual) collection that only contains and accepts resources
+of this category.
+
+TODO: What are the proposed ways to create collections?
+Post a feed to the service document? Put a new service document? Put a feed document to the desired location?
 
 \paragraph{Locking}
 As with Versioning, this is feature of WebDAV is not considered. Instead of
@@ -417,12 +448,35 @@ JSON became an official standard.\cite{RFC4627}
   \caption{Hypermedia support in xCard and xCal}
 \end{figure}
 
+The iCalendar standard defines a several properties that can link to external
+representations of the properties value by specifying an ``Alternate Text
+Representation'' parameter. These are comment, summary, description, contact,
+location, resources. The properties attendee and organizer can have a
+``Directory Entry Reference'' parameter that should contain an URI to a person
+resource. One property that can not be dereferenced is ``Related To'': It only
+contains the globally unique identifier of another calendar component.
+
+One problem that arises with the use of hyperlinks in personal information
+management is identification across administrative boundaries. Take for example
+an event that gets sent from one organization to another and contains hyperlinks
+to person representations. These hyperlinks most likely point to an internal
+addressbook of the organization and may not be accessible by the receiver of the
+event information. The receiver however may have his own addressbook containing
+information about the person.
 
 \subsection{Derived JSON formats for PIM data}
 
 TODO Übereinstimmungen und Unterschiede vCard, portable contacts: Which fields of portable contacts are derived from vCard: \url{http://wiki.portablecontacts.net/w/page/17776141/schema}
 
 Calendar Formate nur kurz
+
+\subsection{Microdata}
+\label{sec:microdata}
+TODO Microformats could also be useful to markup data elements in a (X)HTML
+summmary of an Atom entry. In this case a web client could use the data from the
+summary in a tabular view without fetching the full enclosed data in case it is
+not contained in the content tag.
+
 
 \subsection{Media Types for Collections}
 
@@ -480,6 +534,33 @@ Erweiterungsmöglichkeiten v. Medientypen nutzen um Isomorphie herzustellen
 
 \subsection{Overview}
 
+\subsection{Interactions}
+\subsubsection{Discovery of Collections}
+\subsubsection{Synchronizing Collections}
+\subsubsection{Modifying Resources}
+
+TODO Atompub requires the client to download the full representation before
+editing. This however could be avoided, if the feed would contain etags,
+probably as attributes to the link tag.
+
+Google adds an etag attribute to the entry tag in its data api.\footnote{\citeurl{http://code.google.com/apis/gdata/docs/2.0/reference.html\#ResourceVersioning}{2012-2-13}}
+
+\subsubsection{Special Reports, Search}
+TODO 
+full text search in contacts -> OpenSearch
+
+The client can compare the update time of any entry with the update time of an entry that it may have cached to avoid unnecessary loading.
+
+complete collections \cite{RFC5005} for months, weeks, days, time ranges
+ - should not contain full representations but etags
+
+TODO It would be good, if OpenSearch links would already be available in the service document to avoid loading the feed.
+TODO Google://opensearch service document
+
+Microdata (\autoref{sec:microdata}) enhanced summaries could be used by the client to display the results list.
+
+OpenSearch already defines an extension to limit a search to a time range.\footnote{\citeurl{http://www.opensearch.org/Specifications/OpenSearch/Extensions/Time/1.0/Draft_1}{2012-2-13}}
+
 \subsubsection{Structural and Behavioral Rest Model}
 
 TODO Modelierung der Anwendung mit dem Meta Model nach Schreier.
@@ -509,6 +590,20 @@ standards are almost sufficient to define GroupWare APIs.
 Google Data API also uses ATOM, but puts their tags directly inside the ``atom:entry'' tag 
 instead of putting all of the content in the content element of an atom
 entry.\footnote{\citeurl{http://web.archive.org/web/20081120001246/http://www.snellspace.com/wp/?p=314}{2012-01-05}}
+
+\begin{itemize}
+\item Atom entries could contain multiple link tags referring to alternative
+  representations of the resource with different (media) type attributes.
+\item The synchronization algorithm is so simple that it does not even warrant an activity diagram:
+  \begin{quote}
+    Consume all entries of a (paged\footnote{RFC 5005 - Feed Paging and
+      Archiving}) feed unless you see an entry older then the newest entry from
+    your last synchronization run.
+  \end{quote}
+\item If the content of the entry is presented inline then the client does not
+  know the etag of the resource representation? TODO
+\end{itemize}
+
 
 \subsection{Components}
 
@@ -543,11 +638,17 @@ public class AtmResource {
 Alternative approaches to configure the dispatcher are not designated by
 JAX-RS. One possible alternative would be to expose an API to manually add
 dispatch routes at runtime and remove the corresponding annotations from the
-source code. This could have several advantages\footnote{Dispatching in Restlet
-  can be programmed
-  \citeurl{http://wiki.restlet.org/docs_2.1/13-restlet/27-restlet/326-restlet.html}{2012-2-6}. An
-  API for Jersey 2.0 is in
-  development. \citeurl{http://java.net/jira/browse/JERSEY-842}{2012-2-6}}:
+source code. 
+
+This approach is indeed implemented e.g. by
+Restlet\footnote{\citeurl{http://wiki.restlet.org/docs_2.1/13-restlet/27-restlet/326-restlet.html}{2012-2-6}},
+Apache Wink\footnote{called ``Dynamic Resources''
+  \citeurl{http://incubator.apache.org/wink/1.1/html/5.1 Registration and
+    Configuration.html}{2012-2-7}} and probably others. Jersey 2.0 is also
+expected to provide an API for the
+dispatcher.\footnote{\citeurl{http://java.net/jira/browse/JERSEY-842}{2012-2-6}}:
+
+Advantages of a dynamic dispatcher configuration would be:
 
 \begin{itemize}
 \item The path under which a resource type is served is decoupled from the code
@@ -556,9 +657,9 @@ source code. This could have several advantages\footnote{Dispatching in Restlet
 \item The decision which media types can be consumed or produced may not depend
   solely on the resource class or method. A resource method may work on a domain
   specific data type and the set of supported media types may depend on the
-  available converter between media types and the data type. A photo album
+  available converter between media types and the data type. A photo album for example
   resource may be able to consume any number of different image formats that
-  another framework can convert to an internal image representation.
+  a separate component can convert to an internal image representation.
 \item The list of supported media types could be created programmatically. This
   enables reuse of set of equivalent media types or combination of media type
   categories for example to combine the sets of image, video and audio media
@@ -585,6 +686,136 @@ Thus it would be possible to define generic and special purpose request methods
 even for cases where the static JAX-RS dispatch algorithm does not provide
 sufficient granularity.
 
+While all this flexibility can provide many advantages it has to be kept in mind
+how the framework can gather enough knowledge to still help by autogenerating
+e.g. WADL documents and responses to HEAD and OPTION requests.
+
+\subsubsection{DataFacades handle different Media Types}
+
+
+hide the details of the Resource Representation from the resource method
+
+Resource methods have access to a DataHandler[2] that wraps the declared Media
+Type of the data and the DataSource. Users can then request Facades to the data
+from the DataHandler. The DataHandler has access to a registry of Facade
+factories.
+
+    Facades provide read-only access to the data
+    Facades can depend on other Facades and thus reuse work
+    Facades could do:
+        Parse the InputStream with a common JSON/XML framework
+        Could check whether the data represents a concept like a contact or calendar item, independent from the underlying Media Type (vCard, xCard, portable contacts, iCal, xCal)
+        Could provide a transformation to another representation (XML<->JSON, xCard to portable contacts)
+        could extract generic informations from different media types: Title, Authors, Updated, Summary
+    A Facade (Java Interface) that provides access to the Name of a Contact Resource could be implemented by different classes that could work either on vCard, xCard or Portable Contacts. The resource method does not need to be aware or the original media type of the data.
+
+The concept is powerful because Facades can easily be added without changing existing classes. In JAX-RS the resource Method needs to decide, on which representation of the data it wants to work. With this concept, a resource method could use several different available Facades to access the data.
+
+A sketch of the API:
+
+\begin{javalisting}[label=fig:datafacades-api,
+                   caption={API of the DataFacades component}]
+interface FacadeFactory<T> { T build(DataHandler) }
+
+interface FacadeRegistry {
+  // Lookup in this map is first done for the full MediaType, then only for
+  // the Top level media Type and afterwards for */*
+  Map<MediaType, FacadeFactory>
+
+  Object getFacade(DataHandler, Class)
+
+  // calls itself recursively for transient dependencies
+  private hasFacade(DataHandler, Class)
+
+  register(FacadeFactory xy, Iterable<MediaType> matchingTypes, 
+           Iterable<Class> requiredDependencyFacades)
+  ))
+}
+
+class DataHandler {
+  private FacadeRegistry
+  private MediaType
+  private DataSource // encapsulates e.g. an InputStream
+
+  getFacade(Class) // delegate call to FacadeRegistry
+  hasFacade(Class) // delegate call to FacadeRegistry
+}  
+\end{javalisting}
+
+% Using a similar concept to build representations (request Facades) for different MediaTypes may not be worth the effort.
+% This would mostly be necessary to handle GET requests. GET requests however are expected to be idempotent and therefor should contain little to no internal side effects.
+% It therefor seems to be reasonable to provide one GET request method for every produced Media Type.
+% Specialized get requests may also execute faster than an approach that needs to dynamically build the processing pipeline.
+
+
+Comparison to slightly similar things:
+
+The JAF's (AWT's) java.awt.datatransfer.Transferable interface is similar, but
+has no concept of reuse or composition of a DataFlavor by another. It is
+designed with the needs of a Desktop clipboard in mind. No use of Generics.
+
+It is possible in JAX-RS to get a MessageBodyReader for the creation of another
+facade. The necessary code to do so however is verbose and every
+MessageBodyReader would again parse the message body InputStream without reuse
+of work already done by another MessageBodyReader.
+
+The concept shows similarities with Dependency Injection since dependencies of a
+facade are also provided by an external component. It may be possible that the
+concept could even be implemented on top of an existing Dependency Injection
+framework. Some aspects however may require extra care:
+
+\begin{itemize}
+\item Dependencies are parameterized with the Media Type of the data.
+\item The scope of an instance is bound to the DataHandler which in most cases may be equivalent to the Request scope, but this can't be guaranteed.
+\item Each DataHandler manages its own view of available classes.
+\end{itemize}
+
+\paragraph{Scala's type system}
+The proposed java class diagram in this section has the disadvantage that the
+availability of a facade can not be checked at compile time. It seems however,
+that a more advanced type system could help in this regard.
+
+Listing \ref{fig:facades-with-scala-types} demonstrates features of the Scala
+type system\cite{Odersky2011} that could be of interest here. In the example a
+post method handler has the requirement to access the posted data through the
+facades \lstinline:VCard: and \lstinline:TextSummary:. Additionally the data
+should be forwarded to an implementation of the trait Storage which has its own
+requirement for a facade.
+
+Scala's ``compound types'' feature is used in line \ref{line-scala-compound} to
+combine these requirements into an anonymous type. The ``type alias'' feature
+allows it to assign the identifier \lstinline:MessageBody: to this anonymous
+type and thus to keep the declaration of the \lstinline:post: method short and
+readable.
+
+\begin{javalisting}[label=fig:facades-with-scala-types,
+                   numbers=left,
+                   escapeinside={(*@}{@*)},
+                   caption={Implementing the facades approach with Scala's type system}]
+trait Storage[ReqFacade] {
+ def create(id: String,
+            body: DataHandler with FacadeFactory[ReqFacade])
+}
+
+class PostToCollection[StorageReqFacade]
+            (storage: Storage[StorageReqFacade]) {
+ type MessageBody = DataHandlery (*@\label{line-scala-compound}@*)
+                      with FacadeFactory[VCard] 
+                      with FacadeFactory[TextSummary]
+                      with FacadeFactory[StorageReqFacade]
+  
+ def post(body:MessageBody) : Response = {
+  ...
+  storage.create("id", body)
+  ...
+ }
+}
+\end{javalisting}
+
+This example shows that an advanced type systems may be able to considerably
+improve the presented facades approach. A more detailed study however is out of
+the scope of this work and the author's comprehension of type systems.
+
 \subsubsection{Other components}
 
 \paragraph{Actions}
@@ -596,8 +827,17 @@ the application. It can use and manipulate the application state and produces a
 data structure representing the response. It can be compared to the ``Request
 method'' defined in JAX-RS.
 
-\paragraph{ResourceConverters}
-\label{sec:components-resourceconverters}
+% With JAX-RS it is not possible to define resource methods in different
+% classes, i.e. annotating two different resource classes with the same path.
+
+It is desirable to reuse actions across different consumed media types. Typical
+tasks to perform in a POST or PUT resource method are:
+\begin{itemize}
+\item Transform the input format in a format suitable for the storage component.
+\item Check the validity of the received data.
+\item Extract information to be sent to another component, e.g. to notify users
+  about changes or to index the new data for search.
+\end{itemize}
 
 \paragraph{CollectionStorage}
 \label{sec:collectionstorage}
@@ -613,6 +853,22 @@ provider with other collection storage instances.
 
 The life cycle of a collection storage is scoped to the application. It is
 therefor possible to attach memory based caching to this component.
+
+The storage does not expose any support for transactions. Instead every method
+call represents one atomic action independent from other actions. Conditional
+request execution is therefor in the responsibility of the storage. Listing
+\ref{fig:evaluatepreconditions-concurrency}\footnote{found in the JAX-RS
+  specification on page 28.} shows a possibility for a lost update. Another
+request could have updated the resource between the etag check and the
+\lstinline:doUpdate(): call.
+
+\begin{javalisting}[label=fig:evaluatepreconditions-concurrency,
+                   caption={Potential lost-update problem with JAX-RS}]
+ResponseBuilder rb = request.evaluatePreconditions(etag);
+if (rb == null)
+  return doUpdate(foo);
+\end{javalisting}
+
 
 \paragraph{Preparsed Request Components}
 \label{sec:prep-requ-comp}
@@ -670,6 +926,9 @@ The main advantages of this approach would be:
 \item Classes parsing commonly used query parameters can be reused.
 \item The request method declaration gets much easier to read.
 \item Sophisticated validation can be applied without obfuscating the request method.
+\item Default values for unspecified input could depend on information only
+  available at runtime instead of being provided as static value to the
+  applications source code.
 \end{itemize}
 
 This approach is possible to implement for example with the dependency injection
