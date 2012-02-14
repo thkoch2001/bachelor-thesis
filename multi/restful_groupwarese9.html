@@ -7,22 +7,22 @@
 <meta name="originator" content="TeX4ht (http://www.cse.ohio-state.edu/~gurari/TeX4ht/)"> 
 <!-- html,2 --> 
 <meta name="src" content="restful_groupware.tex"> 
-<meta name="date" content="2012-02-06 19:58:00"> 
+<meta name="date" content="2012-02-14 12:24:00"> 
 <link rel="stylesheet" type="text/css" href="restful_groupware.css"> 
 </head><body 
 >
-    <!--l. 1185--><div class="crosslinks"><p class="noindent">[<a 
+    <!--l. 1444--><div class="crosslinks"><p class="noindent">[<a 
 href="restful_groupwarese8.html" >prev</a>] [<a 
 href="restful_groupwarese8.html#tailrestful_groupwarese8.html" >prev-tail</a>] [<a 
 href="#tailrestful_groupwarese9.html">tail</a>] [<a 
 href="restful_groupware.html# " >up</a>] </p></div>
     <h3 class="sectionHead"><span class="titlemark">D.  </span> <a 
- id="x37-58000D"></a>Media Types</h3>
+ id="x43-67000D"></a>Media Types</h3>
     <div class="table">
                                                                                          
                                                                                          
-<!--l. 1188--><p class="indent" >    <a 
- id="x37-580014"></a><hr class="float"><div class="float" 
+<!--l. 1447--><p class="indent" >    <a 
+ id="x43-670014"></a><hr class="float"><div class="float" 
 >
                                                                                          
                                                                                          
@@ -73,15 +73,15 @@ class="td11">              </td>
 class="td11">           </td></tr></table></div>
 <br /> <div class="caption" 
 ><span class="id">Table&#x00A0;4: </span><span  
-class="content">data in different formats</span></div><!--tex4ht:label?: x37-580014 -->
+class="content">data in different formats</span></div><!--tex4ht:label?: x43-670014 -->
                                                                                          
                                                                                          
     </div><hr class="endfloat" />
     </div>
     <h4 class="subsectionHead"><span class="titlemark">D.1.  </span> <a 
- id="x37-59000D.1"></a>Media Type conversion</h4>
-<!--l. 1209--><p class="noindent" >RFC 5023 &#8221;Collections are represented as Atom Feeds&#8221;
-<!--l. 1211--><p class="indent" >    Is conneg (content negotiation) useful? No: Norman Walsh, 2003, it can lead to hard to debug
+ id="x43-68000D.1"></a>Media Type conversion</h4>
+<!--l. 1468--><p class="noindent" >RFC 5023 &#8221;Collections are represented as Atom Feeds&#8221;
+<!--l. 1470--><p class="indent" >    Is conneg (content negotiation) useful? No: Norman Walsh, 2003, it can lead to hard to debug
 bugs<a 
 href="http://norman.walsh.name/2003/07/02/conneg" class="url" ><span 
 class="cmtt-12">http://norman.walsh.name/2003/07/02/conneg</span></a> (2011-1-9), Joe Gregorio, 2003,I
@@ -94,123 +94,123 @@ like ?format=json.<a
 href="http://blog.noelios.com/2006/11/15/reconsidering-content-negotiation/" class="url" ><span 
 class="cmtt-12">http://blog.noelios.com/2006/11/15/reconsidering-content-negotiation/</span></a>
 (2011-1-9)
-<!--l. 1217--><p class="indent" >
+<!--l. 1476--><p class="indent" >
       <div class="quote">
-      <!--l. 1218--><p class="noindent" >No  single  data  representation  is  ideal  for  every  client.  This  protocol  defines
+      <!--l. 1477--><p class="noindent" >No  single  data  representation  is  ideal  for  every  client.  This  protocol  defines
       representations  for  each  resource  in  three  widely  supported  formats,  JSON
       [RFC4627], XML, and Atom [RFC4287] / AtomPub [RFC5023], using a set of
       generic mapping rules. The mapping rules allow a server to write to a single
       interface rather than implementing the protocol three times.</div>
-<!--l. 1219--><p class="noindent" ><span class="cite">[<a 
+<!--l. 1478--><p class="noindent" ><span class="cite">[<a 
 href="restful_groupwareli2.html#XOSSpec2.0.1">Ope11</a>, Core API Server]</span>
-<!--l. 1224--><p class="indent" >    In 2007, a project called microjson wanted to standardize json representations of microformat data
+<!--l. 1483--><p class="indent" >    In 2007, a project called microjson wanted to standardize json representations of microformat data
 structures.<span class="footnote-mark"><a 
-href="restful_groupware38.html#fn27x0"><sup class="textsuperscript">27</sup></a></span><a 
- id="x37-59001f27"></a> 
-<!--l. 1226--><p class="indent" >    The project identified the need for a json
+href="restful_groupware44.html#fn33x0"><sup class="textsuperscript">33</sup></a></span><a 
+ id="x43-68001f33"></a> 
+<!--l. 1485--><p class="indent" >    The project identified the need for a json
 schema:<span class="footnote-mark"><a 
-href="restful_groupware39.html#fn28x0"><sup class="textsuperscript">28</sup></a></span><a 
- id="x37-59002f28"></a> 
+href="restful_groupware45.html#fn34x0"><sup class="textsuperscript">34</sup></a></span><a 
+ id="x43-68002f34"></a> 
       <div class="quote">
-      <!--l. 1228--><p class="noindent" >If there are standard microJSON formats for transfer of certain datasets, there
+      <!--l. 1487--><p class="noindent" >If there are standard microJSON formats for transfer of certain datasets, there
       will be a need to validate that data to ensure that it is infact valid format.
       To  validate  a  format  you  need  something  that  details  the  structure,  data
       content types and required data. Sounds like we&#8217;ll be needing a schema for each
       microJSON format.</div>
-<!--l. 1232--><p class="indent" >    jCard example from microjson.org<span class="footnote-mark"><a 
-href="restful_groupware40.html#fn29x0"><sup class="textsuperscript">29</sup></a></span><a 
- id="x37-59003f29"></a> 
-<!--l. 1233-->
+<!--l. 1491--><p class="indent" >    jCard example from microjson.org<span class="footnote-mark"><a 
+href="restful_groupware46.html#fn35x0"><sup class="textsuperscript">35</sup></a></span><a 
+ id="x43-68003f35"></a> 
+<!--l. 1492-->
     <div class="lstlisting" id="listing-1"><span class="label"><a 
- id="x37-59004r1"></a></span><span 
+ id="x43-68004r1"></a></span><span 
 class="cmsy-10x-x-120">{</span>&#x00A0;<br /><span class="label"><a 
- id="x37-59005r2"></a></span>&#8221;vcard&#8221;:<span 
+ id="x43-68005r2"></a></span>&#8221;vcard&#8221;:<span 
 class="cmsy-10x-x-120">{</span>&#x00A0;<br /><span class="label"><a 
- id="x37-59006r3"></a></span>&#x00A0;&#x00A0;&#8221;name&#8221;:<span 
+ id="x43-68006r3"></a></span>&#x00A0;&#x00A0;&#8221;name&#8221;:<span 
 class="cmsy-10x-x-120">{</span>&#x00A0;<br /><span class="label"><a 
- id="x37-59007r4"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#8221;given&#8221;:&#8221;John&#8221;,&#x00A0;<br /><span class="label"><a 
- id="x37-59008r5"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#8221;additional&#8221;:&#8221;Paul&#8221;,&#x00A0;<br /><span class="label"><a 
- id="x37-59009r6"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#8221;family&#8221;:&#8221;Smith&#8221;&#x00A0;<br /><span class="label"><a 
- id="x37-59010r7"></a></span>&#x00A0;&#x00A0;<span 
+ id="x43-68007r4"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#8221;given&#8221;:&#8221;John&#8221;,&#x00A0;<br /><span class="label"><a 
+ id="x43-68008r5"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#8221;additional&#8221;:&#8221;Paul&#8221;,&#x00A0;<br /><span class="label"><a 
+ id="x43-68009r6"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#8221;family&#8221;:&#8221;Smith&#8221;&#x00A0;<br /><span class="label"><a 
+ id="x43-68010r7"></a></span>&#x00A0;&#x00A0;<span 
 class="cmsy-10x-x-120">}</span>,&#x00A0;<br /><span class="label"><a 
- id="x37-59011r8"></a></span>&#x00A0;&#x00A0;&#8221;org&#8221;:&#8221;Company_Corp&#8221;,&#x00A0;<br /><span class="label"><a 
- id="x37-59012r9"></a></span>&#x00A0;&#x00A0;&#8221;email&#8221;:&#8221;john@companycorp.com&#8221;,&#x00A0;<br /><span class="label"><a 
- id="x37-59013r10"></a></span>&#x00A0;&#x00A0;&#8221;address&#8221;:<span 
+ id="x43-68011r8"></a></span>&#x00A0;&#x00A0;&#8221;org&#8221;:&#8221;Company_Corp&#8221;,&#x00A0;<br /><span class="label"><a 
+ id="x43-68012r9"></a></span>&#x00A0;&#x00A0;&#8221;email&#8221;:&#8221;john@companycorp.com&#8221;,&#x00A0;<br /><span class="label"><a 
+ id="x43-68013r10"></a></span>&#x00A0;&#x00A0;&#8221;address&#8221;:<span 
 class="cmsy-10x-x-120">{</span>&#x00A0;<br /><span class="label"><a 
- id="x37-59014r11"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#8221;street&#8221;:&#8221;50_Main_Street&#8221;,&#x00A0;<br /><span class="label"><a 
- id="x37-59015r12"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#8221;locality&#8221;:&#8221;Cityville&#8221;,&#x00A0;<br /><span class="label"><a 
- id="x37-59016r13"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#8221;region&#8221;:&#8221;Stateshire&#8221;,&#x00A0;<br /><span class="label"><a 
- id="x37-59017r14"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#8221;postalCode&#8221;:&#8221;1234abc&#8221;,&#x00A0;<br /><span class="label"><a 
- id="x37-59018r15"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#8221;country&#8221;:&#8221;Someplace&#8221;&#x00A0;<br /><span class="label"><a 
- id="x37-59019r16"></a></span>&#x00A0;&#x00A0;<span 
+ id="x43-68014r11"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#8221;street&#8221;:&#8221;50_Main_Street&#8221;,&#x00A0;<br /><span class="label"><a 
+ id="x43-68015r12"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#8221;locality&#8221;:&#8221;Cityville&#8221;,&#x00A0;<br /><span class="label"><a 
+ id="x43-68016r13"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#8221;region&#8221;:&#8221;Stateshire&#8221;,&#x00A0;<br /><span class="label"><a 
+ id="x43-68017r14"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#8221;postalCode&#8221;:&#8221;1234abc&#8221;,&#x00A0;<br /><span class="label"><a 
+ id="x43-68018r15"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#8221;country&#8221;:&#8221;Someplace&#8221;&#x00A0;<br /><span class="label"><a 
+ id="x43-68019r16"></a></span>&#x00A0;&#x00A0;<span 
 class="cmsy-10x-x-120">}</span>,&#x00A0;<br /><span class="label"><a 
- id="x37-59020r17"></a></span>&#x00A0;&#x00A0;&#8221;tel&#8221;:&#8221;111<span 
+ id="x43-68020r17"></a></span>&#x00A0;&#x00A0;&#8221;tel&#8221;:&#8221;111<span 
 class="cmsy-10x-x-120">-</span>222<span 
 class="cmsy-10x-x-120">-</span>333&#8221;,&#x00A0;<br /><span class="label"><a 
- id="x37-59021r18"></a></span>&#x00A0;&#x00A0;&#8221;aim&#8221;:&#8221;johnsmith&#8221;,&#x00A0;<br /><span class="label"><a 
- id="x37-59022r19"></a></span>&#x00A0;&#x00A0;&#8221;yim&#8221;:&#8221;smithjohn&#8221;&#x00A0;<br /><span class="label"><a 
- id="x37-59023r20"></a></span><span 
+ id="x43-68021r18"></a></span>&#x00A0;&#x00A0;&#8221;aim&#8221;:&#8221;johnsmith&#8221;,&#x00A0;<br /><span class="label"><a 
+ id="x43-68022r19"></a></span>&#x00A0;&#x00A0;&#8221;yim&#8221;:&#8221;smithjohn&#8221;&#x00A0;<br /><span class="label"><a 
+ id="x43-68023r20"></a></span><span 
 class="cmsy-10x-x-120">}</span>
     
     </div>
                                                                                          
                                                                                          
-<!--l. 1256--><p class="noindent" >
+<!--l. 1515--><p class="noindent" >
     <h4 class="subsectionHead"><span class="titlemark">D.2.  </span> <a 
- id="x37-60000D.2"></a>Example: vCard</h4>
-    <!--l. 1258-->
+ id="x43-69000D.2"></a>Example: vCard</h4>
+    <!--l. 1517-->
     <div class="lstlisting" id="listing-2"><span class="label"><a 
- id="x37-60001r1"></a></span>&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69001r1"></a></span>&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>?xml&#x00A0;version=&#8221;1.0&#8221;&#x00A0;encoding=&#8221;UTF<span 
 class="cmsy-10x-x-120">-</span>8&#8221;?<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60002r2"></a></span>&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69002r2"></a></span>&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>vcards&#x00A0;xmlns=&#8221;urn:ietf:params:xml:ns:vcard<span 
 class="cmsy-10x-x-120">-</span>4.0&#8221;<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60003r3"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69003r3"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>vcard<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60004r4"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69004r4"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>fn<span 
 class="cmmi-12">&#x003E;&#x003C;</span>text<span 
 class="cmmi-12">&#x003E;</span>Simon&#x00A0;Perreault<span 
 class="cmmi-12">&#x003C;</span>/text<span 
 class="cmmi-12">&#x003E;&#x003C;</span>/fn<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60005r5"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69005r5"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>n<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60006r6"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69006r6"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>surname<span 
 class="cmmi-12">&#x003E;</span>Perreault<span 
 class="cmmi-12">&#x003C;</span>/surname<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60007r7"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69007r7"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>given<span 
 class="cmmi-12">&#x003E;</span>Simon<span 
 class="cmmi-12">&#x003C;</span>/given<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60008r8"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69008r8"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>additional/<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60009r9"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69009r9"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>prefix/<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60010r10"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69010r10"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>suffix<span 
 class="cmmi-12">&#x003E;</span>ing.&#x00A0;jr<span 
 class="cmmi-12">&#x003C;</span>/suffix<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60011r11"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69011r11"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>suffix<span 
 class="cmmi-12">&#x003E;</span>M.Sc.<span 
 class="cmmi-12">&#x003C;</span>/suffix<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60012r12"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69012r12"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>/n<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60013r13"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69013r13"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>bday<span 
 class="cmmi-12">&#x003E;&#x003C;</span>date<span 
 class="cmmi-12">&#x003E;</span><span 
@@ -219,10 +219,10 @@ class="cmsy-10x-x-120">-</span>0203<span
 class="cmmi-12">&#x003C;</span>/date<span 
 class="cmmi-12">&#x003E;&#x003C;</span>/bday<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60014r14"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69014r14"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>anniversary<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60015r15"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69015r15"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>date<span 
 class="cmsy-10x-x-120">-</span>time<span 
 class="cmmi-12">&#x003E;</span>20090808T1430<span 
@@ -230,20 +230,20 @@ class="cmsy-10x-x-120">-</span>0500<span
 class="cmmi-12">&#x003C;</span>/date<span 
 class="cmsy-10x-x-120">-</span>time<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60016r16"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69016r16"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>/anniversary<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60017r17"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69017r17"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>gender<span 
 class="cmmi-12">&#x003E;&#x003C;</span>sex<span 
 class="cmmi-12">&#x003E;</span>M<span 
 class="cmmi-12">&#x003C;</span>/sex<span 
 class="cmmi-12">&#x003E;&#x003C;</span>/gender<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60018r18"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69018r18"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>lang<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60019r19"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69019r19"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>parameters<span 
 class="cmmi-12">&#x003E;&#x003C;</span>pref<span 
 class="cmmi-12">&#x003E;&#x003C;</span>integer<span 
@@ -252,20 +252,20 @@ class="cmmi-12">&#x003C;</span>/integer<span
 class="cmmi-12">&#x003E;&#x003C;</span>/pref<span 
 class="cmmi-12">&#x003E;&#x003C;</span>/parameters<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60020r20"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69020r20"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>language<span 
 class="cmsy-10x-x-120">-</span>tag<span 
 class="cmmi-12">&#x003E;</span>fr<span 
 class="cmmi-12">&#x003C;</span>/language<span 
 class="cmsy-10x-x-120">-</span>tag<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60021r21"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69021r21"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>/lang<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60022r22"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69022r22"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>lang<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60023r23"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69023r23"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>parameters<span 
 class="cmmi-12">&#x003E;&#x003C;</span>pref<span 
 class="cmmi-12">&#x003E;&#x003C;</span>integer<span 
@@ -274,20 +274,20 @@ class="cmmi-12">&#x003C;</span>/integer<span
 class="cmmi-12">&#x003E;&#x003C;</span>/pref<span 
 class="cmmi-12">&#x003E;&#x003C;</span>/parameters<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60024r24"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69024r24"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>language<span 
 class="cmsy-10x-x-120">-</span>tag<span 
 class="cmmi-12">&#x003E;</span>en<span 
 class="cmmi-12">&#x003C;</span>/language<span 
 class="cmsy-10x-x-120">-</span>tag<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60025r25"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69025r25"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>/lang<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60026r26"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69026r26"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>org<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60027r27"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69027r27"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>parameters<span 
 class="cmmi-12">&#x003E;&#x003C;</span>type<span 
 class="cmmi-12">&#x003E;&#x003C;</span>text<span 
@@ -296,104 +296,104 @@ class="cmmi-12">&#x003C;</span>/text<span
 class="cmmi-12">&#x003E;&#x003C;</span>/type<span 
 class="cmmi-12">&#x003E;&#x003C;</span>/parameters<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60028r28"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69028r28"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>text<span 
 class="cmmi-12">&#x003E;</span>Viagenie<span 
 class="cmmi-12">&#x003C;</span>/text<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60029r29"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69029r29"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>/org<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60030r30"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69030r30"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>adr<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60031r31"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69031r31"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>parameters<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60032r32"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69032r32"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>type<span 
 class="cmmi-12">&#x003E;&#x003C;</span>text<span 
 class="cmmi-12">&#x003E;</span>work<span 
 class="cmmi-12">&#x003C;</span>/text<span 
 class="cmmi-12">&#x003E;&#x003C;</span>/type<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60033r33"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69033r33"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span><span 
 class="cmbx-12">label</span><span 
 class="cmmi-12">&#x003E;&#x003C;</span>text<span 
 class="cmmi-12">&#x003E;</span>Simon&#x00A0;Perreault&#x00A0;<br /><span class="label"><a 
- id="x37-60034r34"></a></span>&#x00A0;&#x00A0;&#x00A0;2875&#x00A0;boul.&#x00A0;Laurier,&#x00A0;suite&#x00A0;D2<span 
+ id="x43-69034r34"></a></span>&#x00A0;&#x00A0;&#x00A0;2875&#x00A0;boul.&#x00A0;Laurier,&#x00A0;suite&#x00A0;D2<span 
 class="cmsy-10x-x-120">-</span>630&#x00A0;<br /><span class="label"><a 
- id="x37-60035r35"></a></span>&#x00A0;&#x00A0;&#x00A0;Quebec,&#x00A0;QC,&#x00A0;Canada&#x00A0;<br /><span class="label"><a 
- id="x37-60036r36"></a></span>&#x00A0;&#x00A0;&#x00A0;G1V&#x00A0;2M2<span 
+ id="x43-69035r35"></a></span>&#x00A0;&#x00A0;&#x00A0;Quebec,&#x00A0;QC,&#x00A0;Canada&#x00A0;<br /><span class="label"><a 
+ id="x43-69036r36"></a></span>&#x00A0;&#x00A0;&#x00A0;G1V&#x00A0;2M2<span 
 class="cmmi-12">&#x003C;</span>/text<span 
 class="cmmi-12">&#x003E;&#x003C;</span>/<span 
 class="cmbx-12">label</span><span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60037r37"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69037r37"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>/parameters<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60038r38"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69038r38"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>pobox/<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60039r39"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69039r39"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>ext/<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60040r40"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69040r40"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>street<span 
 class="cmmi-12">&#x003E;</span>2875&#x00A0;boul.&#x00A0;Laurier,&#x00A0;suite&#x00A0;D2<span 
 class="cmsy-10x-x-120">-</span>630<span 
 class="cmmi-12">&#x003C;</span>/street<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60041r41"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69041r41"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>locality<span 
 class="cmmi-12">&#x003E;</span>Quebec<span 
 class="cmmi-12">&#x003C;</span>/locality<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60042r42"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69042r42"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>region<span 
 class="cmmi-12">&#x003E;</span>QC<span 
 class="cmmi-12">&#x003C;</span>/region<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60043r43"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69043r43"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>code<span 
 class="cmmi-12">&#x003E;</span>G1V&#x00A0;2M2<span 
 class="cmmi-12">&#x003C;</span>/code<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60044r44"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69044r44"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>country<span 
 class="cmmi-12">&#x003E;</span>Canada<span 
 class="cmmi-12">&#x003C;</span>/country<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60045r45"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69045r45"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>/adr<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60046r46"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69046r46"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>tel<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60047r47"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69047r47"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>parameters<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60048r48"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69048r48"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>type<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60049r49"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69049r49"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>text<span 
 class="cmmi-12">&#x003E;</span>work<span 
 class="cmmi-12">&#x003C;</span>/text<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60050r50"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69050r50"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>text<span 
 class="cmmi-12">&#x003E;</span>voice<span 
 class="cmmi-12">&#x003C;</span>/text<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60051r51"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69051r51"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>/type<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60052r52"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69052r52"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>/parameters<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60053r53"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69053r53"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>uri<span 
 class="cmmi-12">&#x003E;</span>tel:+1<span 
 class="cmsy-10x-x-120">-</span>418<span 
@@ -401,50 +401,50 @@ class="cmsy-10x-x-120">-</span>656<span
 class="cmsy-10x-x-120">-</span>9254;ext=102<span 
 class="cmmi-12">&#x003C;</span>/uri<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60054r54"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69054r54"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>/tel<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60055r55"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69055r55"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>tel<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60056r56"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69056r56"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>parameters<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60057r57"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69057r57"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>type<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60058r58"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69058r58"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>text<span 
 class="cmmi-12">&#x003E;</span>work<span 
 class="cmmi-12">&#x003C;</span>/text<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60059r59"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69059r59"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>text<span 
 class="cmmi-12">&#x003E;</span>text<span 
 class="cmmi-12">&#x003C;</span>/text<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60060r60"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69060r60"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>text<span 
 class="cmmi-12">&#x003E;</span>voice<span 
 class="cmmi-12">&#x003C;</span>/text<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60061r61"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69061r61"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>text<span 
 class="cmmi-12">&#x003E;</span>cell<span 
 class="cmmi-12">&#x003C;</span>/text<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60062r62"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69062r62"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>text<span 
 class="cmmi-12">&#x003E;</span>video<span 
 class="cmmi-12">&#x003C;</span>/text<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60063r63"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69063r63"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>/type<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60064r64"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69064r64"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>/parameters<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60065r65"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69065r65"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>uri<span 
 class="cmmi-12">&#x003E;</span>tel:+1<span 
 class="cmsy-10x-x-120">-</span>418<span 
@@ -452,13 +452,13 @@ class="cmsy-10x-x-120">-</span>262<span
 class="cmsy-10x-x-120">-</span>6501<span 
 class="cmmi-12">&#x003C;</span>/uri<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60066r66"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69066r66"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>/tel<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60067r67"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69067r67"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>email<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60068r68"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69068r68"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>parameters<span 
 class="cmmi-12">&#x003E;&#x003C;</span>type<span 
 class="cmmi-12">&#x003E;&#x003C;</span>text<span 
@@ -467,18 +467,18 @@ class="cmmi-12">&#x003C;</span>/text<span
 class="cmmi-12">&#x003E;&#x003C;</span>/type<span 
 class="cmmi-12">&#x003E;&#x003C;</span>/parameters<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60069r69"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69069r69"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>text<span 
 class="cmmi-12">&#x003E;</span>simon.perreault@viagenie.ca<span 
 class="cmmi-12">&#x003C;</span>/text<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60070r70"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69070r70"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>/email<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60071r71"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69071r71"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>geo<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60072r72"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69072r72"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>parameters<span 
 class="cmmi-12">&#x003E;&#x003C;</span>type<span 
 class="cmmi-12">&#x003E;&#x003C;</span>text<span 
@@ -487,19 +487,19 @@ class="cmmi-12">&#x003C;</span>/text<span
 class="cmmi-12">&#x003E;&#x003C;</span>/type<span 
 class="cmmi-12">&#x003E;&#x003C;</span>/parameters<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60073r73"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69073r73"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>uri<span 
 class="cmmi-12">&#x003E;</span>geo:46.766336,<span 
 class="cmsy-10x-x-120">-</span>71.28955<span 
 class="cmmi-12">&#x003C;</span>/uri<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60074r74"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69074r74"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>/geo<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60075r75"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69075r75"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>key<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60076r76"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69076r76"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>parameters<span 
 class="cmmi-12">&#x003E;&#x003C;</span>type<span 
 class="cmmi-12">&#x003E;&#x003C;</span>text<span 
@@ -508,7 +508,7 @@ class="cmmi-12">&#x003C;</span>/text<span
 class="cmmi-12">&#x003E;&#x003C;</span>/type<span 
 class="cmmi-12">&#x003E;&#x003C;</span>/parameters<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60077r77"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69077r77"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>uri<span 
 class="cmmi-12">&#x003E;</span>http:<span 
 class="cmti-12">//</span><span 
@@ -529,20 +529,20 @@ class="cmmi-12">&#x003C;</span><span
 class="cmti-12">/</span><span 
 class="cmti-12">uri</span><span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60078r78"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69078r78"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>/key<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60079r79"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69079r79"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>tz<span 
 class="cmmi-12">&#x003E;&#x003C;</span>text<span 
 class="cmmi-12">&#x003E;</span>America/Montreal<span 
 class="cmmi-12">&#x003C;</span>/text<span 
 class="cmmi-12">&#x003E;&#x003C;</span>/tz<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60080r80"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69080r80"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>url<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60081r81"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69081r81"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>parameters<span 
 class="cmmi-12">&#x003E;&#x003C;</span>type<span 
 class="cmmi-12">&#x003E;&#x003C;</span>text<span 
@@ -551,7 +551,7 @@ class="cmmi-12">&#x003C;</span>/text<span
 class="cmmi-12">&#x003E;&#x003C;</span>/type<span 
 class="cmmi-12">&#x003E;&#x003C;</span>/parameters<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60082r82"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69082r82"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>uri<span 
 class="cmmi-12">&#x003E;</span>http:<span 
 class="cmti-12">//</span><span 
@@ -562,150 +562,150 @@ class="cmmi-12">&#x003C;</span><span
 class="cmti-12">/</span><span 
 class="cmti-12">uri</span><span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60083r83"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69083r83"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>/url<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60084r84"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69084r84"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>/vcard<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60085r85"></a></span>&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69085r85"></a></span>&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>/vcards<span 
 class="cmmi-12">&#x003E;</span>
     
     </div>
-    <!--l. 1346-->
+    <!--l. 1605-->
     <div class="lstlisting" id="listing-3"><span class="label"><a 
- id="x37-60086r1"></a></span>&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69086r1"></a></span>&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>?xml&#x00A0;version=&#8221;1.0&#8221;&#x00A0;encoding=&#8221;UTF<span 
 class="cmsy-10x-x-120">-</span>8&#8221;?<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60087r2"></a></span>&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69087r2"></a></span>&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>vcards&#x00A0;xmlns=&#8221;urn:ietf:params:xml:ns:vcard<span 
 class="cmsy-10x-x-120">-</span>4.0&#8221;<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60088r3"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69088r3"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>vcard<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60089r4"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69089r4"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>fn<span 
 class="cmmi-12">&#x003E;&#x003C;</span>text<span 
 class="cmmi-12">&#x003E;</span>Simon&#x00A0;Perreault<span 
 class="cmmi-12">&#x003C;</span>/text<span 
 class="cmmi-12">&#x003E;&#x003C;</span>/fn<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60090r5"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69090r5"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>n<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60091r6"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69091r6"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>surname<span 
 class="cmmi-12">&#x003E;</span>Perreault<span 
 class="cmmi-12">&#x003C;</span>/surname<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60092r7"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69092r7"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>given<span 
 class="cmmi-12">&#x003E;</span>Simon<span 
 class="cmmi-12">&#x003C;</span>/given<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60093r8"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69093r8"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>suffix<span 
 class="cmmi-12">&#x003E;</span>ing.&#x00A0;jr<span 
 class="cmmi-12">&#x003C;</span>/suffix<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60094r9"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69094r9"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>suffix<span 
 class="cmmi-12">&#x003E;</span>M.Sc.<span 
 class="cmmi-12">&#x003C;</span>/suffix<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60095r10"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69095r10"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>/n<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60096r11"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69096r11"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>bday&#x00A0;day=&#8221;02&#8221;&#x00A0;month=&#8221;03&#8221;&#x00A0;/<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60097r12"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69097r12"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>anniversary&#x00A0;format=&#8221;date<span 
 class="cmsy-10x-x-120">-</span>time&#8221;<span 
 class="cmmi-12">&#x003E;</span>20090808T1430<span 
 class="cmsy-10x-x-120">-</span>0500<span 
 class="cmmi-12">&#x003C;</span>/anniversary<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60098r13"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69098r13"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>gender<span 
 class="cmmi-12">&#x003E;</span>M<span 
 class="cmmi-12">&#x003C;</span>/gender<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60099r14"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69099r14"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>lang&#x00A0;pref=&#8221;1&#8221;<span 
 class="cmmi-12">&#x003E;</span>fr<span 
 class="cmmi-12">&#x003C;</span>/lang<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60100r15"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69100r15"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>lang&#x00A0;pref=&#8221;2&#8221;<span 
 class="cmmi-12">&#x003E;</span>en<span 
 class="cmmi-12">&#x003C;</span>/lang<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60101r16"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69101r16"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>org&#x00A0;type=&#8221;work&#8221;<span 
 class="cmmi-12">&#x003E;</span>Viagenie<span 
 class="cmmi-12">&#x003C;</span>/org<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60102r17"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69102r17"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>adr&#x00A0;type=&#8221;work&#8221;<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60103r18"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69103r18"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span><span 
 class="cmbx-12">label</span><span 
 class="cmmi-12">&#x003E;</span>Simon&#x00A0;Perreault&#x00A0;<br /><span class="label"><a 
- id="x37-60104r19"></a></span>&#x00A0;&#x00A0;&#x00A0;2875&#x00A0;boul.&#x00A0;Laurier,&#x00A0;suite&#x00A0;D2<span 
+ id="x43-69104r19"></a></span>&#x00A0;&#x00A0;&#x00A0;2875&#x00A0;boul.&#x00A0;Laurier,&#x00A0;suite&#x00A0;D2<span 
 class="cmsy-10x-x-120">-</span>630&#x00A0;<br /><span class="label"><a 
- id="x37-60105r20"></a></span>&#x00A0;&#x00A0;&#x00A0;Quebec,&#x00A0;QC,&#x00A0;Canada&#x00A0;<br /><span class="label"><a 
- id="x37-60106r21"></a></span>&#x00A0;&#x00A0;&#x00A0;G1V&#x00A0;2M2<span 
+ id="x43-69105r20"></a></span>&#x00A0;&#x00A0;&#x00A0;Quebec,&#x00A0;QC,&#x00A0;Canada&#x00A0;<br /><span class="label"><a 
+ id="x43-69106r21"></a></span>&#x00A0;&#x00A0;&#x00A0;G1V&#x00A0;2M2<span 
 class="cmmi-12">&#x003C;</span>/<span 
 class="cmbx-12">label</span><span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60107r22"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69107r22"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>street<span 
 class="cmmi-12">&#x003E;</span>2875&#x00A0;boul.&#x00A0;Laurier,&#x00A0;suite&#x00A0;D2<span 
 class="cmsy-10x-x-120">-</span>630<span 
 class="cmmi-12">&#x003C;</span>/street<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60108r23"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69108r23"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>locality<span 
 class="cmmi-12">&#x003E;</span>Quebec<span 
 class="cmmi-12">&#x003C;</span>/locality<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60109r24"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69109r24"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>region<span 
 class="cmmi-12">&#x003E;</span>QC<span 
 class="cmmi-12">&#x003C;</span>/region<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60110r25"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69110r25"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>code<span 
 class="cmmi-12">&#x003E;</span>G1V&#x00A0;2M2<span 
 class="cmmi-12">&#x003C;</span>/code<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60111r26"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69111r26"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>country<span 
 class="cmmi-12">&#x003E;</span>Canada<span 
 class="cmmi-12">&#x003C;</span>/country<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60112r27"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69112r27"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>/adr<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60113r28"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69113r28"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>tel<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60114r29"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69114r29"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>type<span 
 class="cmmi-12">&#x003E;</span>work<span 
 class="cmmi-12">&#x003C;</span>/type<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60115r30"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69115r30"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>type<span 
 class="cmmi-12">&#x003E;</span>voice<span 
 class="cmmi-12">&#x003C;</span>/type<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60116r31"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69116r31"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>uri<span 
 class="cmmi-12">&#x003E;</span>tel:+1<span 
 class="cmsy-10x-x-120">-</span>418<span 
@@ -713,38 +713,38 @@ class="cmsy-10x-x-120">-</span>656<span
 class="cmsy-10x-x-120">-</span>9254;ext=102<span 
 class="cmmi-12">&#x003C;</span>/uri<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60117r32"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69117r32"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>/tel<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60118r33"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69118r33"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>tel<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60119r34"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69119r34"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>type<span 
 class="cmmi-12">&#x003E;</span>work<span 
 class="cmmi-12">&#x003C;</span>/type<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60120r35"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69120r35"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>type<span 
 class="cmmi-12">&#x003E;</span>text<span 
 class="cmmi-12">&#x003C;</span>/type<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60121r36"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69121r36"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>type<span 
 class="cmmi-12">&#x003E;</span>voice<span 
 class="cmmi-12">&#x003C;</span>/type<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60122r37"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69122r37"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>type<span 
 class="cmmi-12">&#x003E;</span>cell<span 
 class="cmmi-12">&#x003C;</span>/type<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60123r38"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69123r38"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>type<span 
 class="cmmi-12">&#x003E;</span>video<span 
 class="cmmi-12">&#x003C;</span>/type<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60124r39"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69124r39"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>uri<span 
 class="cmmi-12">&#x003E;</span>tel:+1<span 
 class="cmsy-10x-x-120">-</span>418<span 
@@ -752,30 +752,30 @@ class="cmsy-10x-x-120">-</span>262<span
 class="cmsy-10x-x-120">-</span>6501<span 
 class="cmmi-12">&#x003C;</span>/uri<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60125r40"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69125r40"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>/tel<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60126r41"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69126r41"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>email&#x00A0;type=&#8221;work&#8221;<span 
 class="cmmi-12">&#x003E;</span>simon.perreault@viagenie.ca<span 
 class="cmmi-12">&#x003C;</span>/email<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60127r42"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69127r42"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>geo&#x00A0;type=&#8221;work&#8221;<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60128r43"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69128r43"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>uri<span 
 class="cmmi-12">&#x003E;</span>geo:46.766336,<span 
 class="cmsy-10x-x-120">-</span>71.28955<span 
 class="cmmi-12">&#x003C;</span>/uri<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60129r44"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69129r44"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>/geo<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60130r45"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69130r45"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>key&#x00A0;type=&#8221;work&#8221;<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60131r46"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69131r46"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>uri<span 
 class="cmmi-12">&#x003E;</span>http:<span 
 class="cmti-12">//</span><span 
@@ -796,18 +796,18 @@ class="cmmi-12">&#x003C;</span><span
 class="cmti-12">/</span><span 
 class="cmti-12">uri</span><span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60132r47"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69132r47"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>/key<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60133r48"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69133r48"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>tz<span 
 class="cmmi-12">&#x003E;</span>America/Montreal<span 
 class="cmmi-12">&#x003C;</span>/tz<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60134r49"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69134r49"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>url&#x00A0;type=&#8221;home&#8221;<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60135r50"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69135r50"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>uri<span 
 class="cmmi-12">&#x003E;</span>http:<span 
 class="cmti-12">//</span><span 
@@ -818,31 +818,31 @@ class="cmmi-12">&#x003C;</span><span
 class="cmti-12">/</span><span 
 class="cmti-12">uri</span><span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60136r51"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69136r51"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>/url<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60137r52"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69137r52"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>/vcard<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x37-60138r53"></a></span>&#x00A0;&#x00A0;&#x00A0;<span 
+ id="x43-69138r53"></a></span>&#x00A0;&#x00A0;&#x00A0;<span 
 class="cmmi-12">&#x003C;</span>/vcards<span 
 class="cmmi-12">&#x003E;</span>
     
     </div>
-<!--l. 1402--><p class="noindent" >
+<!--l. 1661--><p class="noindent" >
     <h4 class="subsectionHead"><span class="titlemark">D.3.  </span> <a 
- id="x37-61000D.3"></a>HFactor</h4>
-<!--l. 1403--><p class="noindent" >Mike Amundsen defines a method to asses media types that he calls
+ id="x43-70000D.3"></a>HFactor</h4>
+<!--l. 1662--><p class="noindent" >Mike Amundsen defines a method to asses media types that he calls
 &#8220;HFactor&#8221;.<span class="footnote-mark"><a 
-href="restful_groupware41.html#fn30x0"><sup class="textsuperscript">30</sup></a></span><a 
- id="x37-61001f30"></a> 
+href="restful_groupware47.html#fn36x0"><sup class="textsuperscript">36</sup></a></span><a 
+ id="x43-70001f36"></a> 
 The HFactor distinguishes different types of support for links and indicates which of those are
 provided by a reviewed media type.
-<!--l. 1408--><p class="indent" >    Amundsen did reviews of a couple of media types. Unfortunately these do not include
+<!--l. 1667--><p class="indent" >    Amundsen did reviews of a couple of media types. Unfortunately these do not include
 <span 
 class="cmtt-12">vcard+xml </span>or <span 
 class="cmtt-12">calendar+xml</span>. I&#8217;ll try to identify the HFactors of both here.
-<!--l. 1412--><p class="indent" >    The different types of link support have two letter acronyms and fall in two categories:
+<!--l. 1671--><p class="indent" >    The different types of link support have two letter acronyms and fall in two categories:
 Link support values, with the first letter &#8220;L&#8221; and Control data support, first letter
 &#8220;C&#8221;.
       <ul class="itemize1">
@@ -885,11 +885,11 @@ class="cmtt-12">CL </span>add semantic meaning to link elements using link relat
       </li></ul>
                                                                                          
                                                                                          
-    <!--l. 1435--><div class="crosslinks"><p class="noindent">[<a 
+    <!--l. 1694--><div class="crosslinks"><p class="noindent">[<a 
 href="restful_groupwarese8.html" >prev</a>] [<a 
 href="restful_groupwarese8.html#tailrestful_groupwarese8.html" >prev-tail</a>] [<a 
 href="restful_groupwarese9.html" >front</a>] [<a 
 href="restful_groupware.html# " >up</a>] </p></div>
-<!--l. 1435--><p class="indent" >    <a 
+<!--l. 1694--><p class="indent" >    <a 
  id="tailrestful_groupwarese9.html"></a>   
 </body></html> 
