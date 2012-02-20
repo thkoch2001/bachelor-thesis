@@ -293,7 +293,7 @@ from: Rest APIs must be hypertext driven\footnote
 
 \cite{Davis:2011:XTR:1967428.1967437} proposes a XML based REST framework that uses XForms, XQuery, XProc, XSLT and an XML database. It can benefit from the constraint that it only supports XML based media types. It is to be seen, which ideas from this work could be reused in the case of a broader variety of supported media types.
 
-\subsection{Syntax vs. Semantic}
+\subsection{Syntax vs. Semantic (Vocabulary)}
 
 The usage of standardized media types is one key difference between an API and a
 restful API. \cite[sec. 5.2.1.2]{Fielding2000} Only if the client has knowledge
@@ -470,12 +470,106 @@ TODO Übereinstimmungen und Unterschiede vCard, portable contacts: Which fields 
 
 Calendar Formate nur kurz
 
-\subsection{Microdata}
+\subsection{Microformats, Microdata, RDFa}
 \label{sec:microdata}
-TODO Microformats could also be useful to markup data elements in a (X)HTML
-summmary of an Atom entry. In this case a web client could use the data from the
-summary in a tabular view without fetching the full enclosed data in case it is
-not contained in the content tag.
+
+HTML documents are primarily meant to be rendered by browsers and interpreted by
+humans. It is hard for a computer to interpret the meaning of text and data
+included in an HTML document. Microformats, Microdata and RDFa define ways to
+add additional meta data to HTML that allows computers to identify structured
+data in HTML without having an impact on the rendering.\cite{Tennison2012}
+
+There is not yet an established term to refer to the three different
+formats. Practitioners use ``structured data
+languages''\footnote{\citeurl{http://manu.sporny.org/2011/uber-comparison-rdfa-md-uf/}{2012-2-20}},
+``machine-readable data format''\cite{Hickson2011}, ``structured data
+markup''\footnote{\citeurl{http://googlewebmastercentral.blogspot.com/2011/06/introducing-schemaorg-search-engines.html}{2012-2-20}}
+or just ``structured markup''. Scientific publications seem to use the term
+``Semantic annotation''\cite{instance7} to refer to HTML with machine readable
+semantic data. This work will use the term ``Semantic annotation format'' to
+refer to Microformats, Microdata, RDFa and similar formats.
+
+\subsubsection{Use Cases}
+
+One major use case for semantic annotations is to help search engines to better
+index the annotated site. The Microformats project was started by a blog search
+engine
+(Technorati)\footnote{\citeurl{http://tantek.com/log/2006/05.html}{2012-2-20}}
+and the recent schema.org effort came from the three big search engines Google,
+Bing and Yahoo. Another use case is demonstrated by the Firefox plugin
+``Operator''.\footnote{\citeurl{https://addons.mozilla.org/en-US/firefox/addon/operator/}{2012-2-20}}
+It allows to extract annotated entities from web pages. A user could thus import
+contact or event data from arbitrary web pages in his personal information
+manager with one click. Semantic annotations can also be used to make web
+content accessible to disabled people.\cite{Yesilada:2007:EDS:1279700.1279704}
+
+In the context of this work, Semantic annotations could be used inside the
+\lstinline:summary: tag of Atom entries. A consumer of a feed of contact
+elements could thus use the data extracted from the annotated summary data to
+provide a tabular overview of the entries even without fetching the associated
+media resource of the entry.
+
+TODO example
+
+A third use case is currently under development as part of the European Union
+Research Project ``Interactive Knowledge Stack'' (IKS) that builds a semantic
+content management stack. The sub-project ``Vienna IKS Editables''
+(VIE)\footnote{\citeurl{http://www.iks-project.eu/projects/vienna-iks-editables}{2012-2-20}}
+uses semantic annotations to make content on a web site editable. In a
+traditional content management system, content is editable via HTML forms that
+are available as separate sites in addition to the normal view.  The VIE
+Javascript library instead searches the HTML document for semantically annotated
+entities and dynamically builds editing interfaces for those. A modified entity
+can then be sent to the server via AJAX in a format called ``json-ld'' that
+serializes semantic data to
+JSON.\footnote{\citeurl{http://json-ld.org}{2012-2-20} the iana registration of
+  the mime type \lstinline:application/ld+json: is currently discussed}
+
+\subsubsection{Format selection}
+
+With at least three different formats, a developer needs to settle on one to
+implement.\footnote{It is possible to implement multiple formats in
+  parallel.\cite{Tennison2012}} A first consideration has to be the ability of
+expected consumers to handle the format, a second consideration the available
+tooling to produce a particular format. The different Semantic annotation formats
+impose certain requirements for the used HTML dialect. Microformats can be used
+with all versions of HTML, RDFa with XHTML or HTML5 and Microdata introduces
+special attributes that work only with HTML5.\cite{Tennison2012}
+
+Microdata is part of HTML5 and a standard effort of the W3C.\cite{Hickson2011}
+It is also backed up by the schema.org effort of Google and
+Microsoft.\footnote{\citeurl{http://schema.org/docs/gs.html\#microdata_why}{2012-2-17}}
+The schema.org vocabulary in turn has been mapped to the semantic world by
+researchers working on linked
+data.\footnote{\citeurl{http://schema.rdfs.org/about.html}{2012-2-17}} Thus by
+using Microdata with the schema.org vocabulary, the data can easily be combined
+with other semantic data. The rest of this work therefor concentrates on
+Microdata. Many good arguments to also consider RDFa can be found in the blog of
+Manu
+Sporny\footnote{\citeurl{http://manu.sporny.org/category/rdfa/}{2012-2-20}},
+chair of the RDF Web Applications Working Group at the World Wide Web
+Consortium.
+
+% detailed pro cons microdata vs. RFDa http://www.jenitennison.com/blog/node/165
+
+\subsubsection{Producing Semantically annotated HTML}
+
+A recent discussion of possibilities to produce semantically annotated HTML
+pages can be found in \cite[sec. 9.1.3]{DBLP:books/daglib/0023755}. The authors ``discern
+two different ways in which the Semantic Web plays a key role in current Web
+engineering approaches: one is by the creation of Web applications starting from
+semantically described data, and the second is by the generation of semantic
+annotations from the Web engineering process.''
+
+In the case of this work only the second way is of interest, since we don't
+assume the data to be persisted in a semantic model. As an example for this way
+the book describes a method developed as part of a larger ``Web Semantics Design
+Method''.  This method consists of two mappings. The first one is the ``data
+source mapping (DSM), which describes exactly how the reference ontology maps to
+the actual data source.'' The second mapping uses XPointer expressions to link
+HTML tags to elements of the reference ontology from the first mapping.
+
+
 
 
 \subsection{Media Types for Collections}
@@ -771,7 +865,7 @@ framework. Some aspects however may require extra care:
 \end{itemize}
 
 \paragraph{Scala's type system}
-The proposed java class diagram in this section has the disadvantage that the
+The proposed Java class diagram in this section has the disadvantage that the
 availability of a facade can not be checked at compile time. It seems however,
 that a more advanced type system could help in this regard.
 
