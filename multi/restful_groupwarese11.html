@@ -7,30 +7,30 @@
 <meta name="originator" content="TeX4ht (http://www.cse.ohio-state.edu/~gurari/TeX4ht/)"> 
 <!-- html,2 --> 
 <meta name="src" content="restful_groupware.tex"> 
-<meta name="date" content="2012-02-14 12:24:00"> 
+<meta name="date" content="2012-02-20 17:39:00"> 
 <link rel="stylesheet" type="text/css" href="restful_groupware.css"> 
 </head><body 
 >
-    <!--l. 1731--><div class="crosslinks"><p class="noindent">[<a 
+    <!--l. 1825--><div class="crosslinks"><p class="noindent">[<a 
 href="restful_groupwarese10.html" >prev</a>] [<a 
 href="restful_groupwarese10.html#tailrestful_groupwarese10.html" >prev-tail</a>] [<a 
 href="#tailrestful_groupwarese11.html">tail</a>] [<a 
 href="restful_groupware.html# " >up</a>] </p></div>
     <h3 class="sectionHead"><span class="titlemark">F.  </span> <a 
- id="x49-73000F"></a>Selection of components</h3>
-<!--l. 1733--><p class="noindent" >Apache Shindig for Open Social, includes client tests
-<!--l. 1735--><p class="indent" >    http://code.google.com/p/kolab-android/
-<!--l. 1737--><p class="indent" >    https://evolvis.org/projects/kolab-ws/
-<!--l. 1739--><p class="indent" >    http://packages.ubuntu.com/source/maverick/dovecot-metadata-plugin
+ id="x59-76000F"></a>Selection of components</h3>
+<!--l. 1827--><p class="noindent" >Apache Shindig for Open Social, includes client tests
+<!--l. 1829--><p class="indent" >    http://code.google.com/p/kolab-android/
+<!--l. 1831--><p class="indent" >    https://evolvis.org/projects/kolab-ws/
+<!--l. 1833--><p class="indent" >    http://packages.ubuntu.com/source/maverick/dovecot-metadata-plugin
 https://launchpad.net/ubuntu/+source/dovecot-metadata-plugin/8-0ubuntu1
-<!--l. 1760--><p class="noindent" >
+<!--l. 1854--><p class="noindent" >
     <h4 class="subsectionHead"><span class="titlemark">F.1.  </span> <a 
- id="x49-74000F.1"></a>REST framework</h4>
-<!--l. 1761--><p class="noindent" >Jersey recommended by <span class="cite">[<a 
+ id="x59-77000F.1"></a>REST framework</h4>
+<!--l. 1855--><p class="noindent" >Jersey recommended by <span class="cite">[<a 
 href="restful_groupwareli2.html#XKaiser2011">Kai11</a>]</span> above Restfulie and RESTeasy because of maturity and
 flexibility.
-<!--l. 1765--><p class="indent" >    Jersey has a atompub-contact client/server example app.
-<!--l. 1767--><p class="indent" >    Why not Jersey in the end?
+<!--l. 1859--><p class="indent" >    Jersey has a atompub-contact client/server example app.
+<!--l. 1861--><p class="indent" >    Why not Jersey in the end?
       <ul class="itemize1">
       <li class="itemize">JAX-RS assumes, that Paths are defined on the classes that represent the resources.
            <ul class="itemize2">
@@ -50,10 +50,10 @@ class="cmtt-12">/{AUTHORITY}/{COLLECTION}/{ENTRY}</span></span></span>. In this 
       independent of each other. The only way to handle at least the path dispatch separately is
       with the help of sub resources. This still leaves HTTP verb and Media type to be handled
       together.
-      <!--l. 1784--><p class="noindent" >The sub resource mechanism additionally suffers from the shortcoming that it does not allow to specify an
+      <!--l. 1878--><p class="noindent" >The sub resource mechanism additionally suffers from the shortcoming that it does not allow to specify an
       empty path.<span class="footnote-mark"><a 
-href="restful_groupware50.html#fn37x0"><sup class="textsuperscript">37</sup></a></span><a 
- id="x49-74001f37"></a> 
+href="restful_groupware60.html#fn47x0"><sup class="textsuperscript">47</sup></a></span><a 
+ id="x59-77001f47"></a> 
       This makes it impossible to return a sub resource and annotate a method that should handle
       the case that no additional path elements remain to be matched.
                                                                                          
@@ -64,7 +64,7 @@ href="restful_groupware50.html#fn37x0"><sup class="textsuperscript">37</sup></a>
       </li>
       <li class="itemize">Jersey&#8217;s parameter injection can not be used together with a dependency injection framework
       like Guice or Spring.</li></ul>
-<!--l. 1790--><p class="indent" >    Comments on Restlet:
+<!--l. 1884--><p class="indent" >    Comments on Restlet:
       <ul class="itemize1">
       <li class="itemize">A couple of core classes of Restlet extend a class called Restlet whose purpose is only
       vaguely defined but the type inheritance does not correspond to an &#8220;is-a&#8221; relationship.
@@ -74,22 +74,22 @@ href="restful_groupware50.html#fn37x0"><sup class="textsuperscript">37</sup></a>
       org.restlet.Restlet and subclasses even come with a warning note but do not expose any
       information about the thread-safety of their methods:
            <div class="quote">
-           <!--l. 1800--><p class="noindent" >Concurrency note: instances of this class or its subclasses can be invoked
+           <!--l. 1894--><p class="noindent" >Concurrency note: instances of this class or its subclasses can be invoked
            by several threads at the same time and therefore must be thread-safe. You
            should be especially careful when storing state in member variables.</div>
       </li>
       <li class="itemize"></li></ul>
-<!--l. 1805--><p class="noindent" >
+<!--l. 1899--><p class="noindent" >
     <h4 class="subsectionHead"><span class="titlemark">F.2.  </span> <a 
- id="x49-75000F.2"></a>VCard</h4>
-<!--l. 1817--><p class="noindent" >ical4j best documented best code is used by most active also supports icalendar is immutable!!!
+ id="x59-78000F.2"></a>VCard</h4>
+<!--l. 1911--><p class="noindent" >ical4j best documented best code is used by most active also supports icalendar is immutable!!!
                                                                                          
                                                                                          
-    <!--l. 1825--><div class="crosslinks"><p class="noindent">[<a 
+    <!--l. 1919--><div class="crosslinks"><p class="noindent">[<a 
 href="restful_groupwarese10.html" >prev</a>] [<a 
 href="restful_groupwarese10.html#tailrestful_groupwarese10.html" >prev-tail</a>] [<a 
 href="restful_groupwarese11.html" >front</a>] [<a 
 href="restful_groupware.html# " >up</a>] </p></div>
-<!--l. 1825--><p class="indent" >    <a 
+<!--l. 1919--><p class="indent" >    <a 
  id="tailrestful_groupwarese11.html"></a>   
 </body></html> 

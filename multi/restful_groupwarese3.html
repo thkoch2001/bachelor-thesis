@@ -7,12 +7,11 @@
 <meta name="originator" content="TeX4ht (http://www.cse.ohio-state.edu/~gurari/TeX4ht/)"> 
 <!-- html,2 --> 
 <meta name="src" content="restful_groupware.tex"> 
-<meta name="date" content="2012-02-14 12:24:00"> 
+<meta name="date" content="2012-02-20 17:39:00"> 
 <link rel="stylesheet" type="text/css" href="restful_groupware.css"> 
 </head><body 
 >
     <!--l. 278--><div class="crosslinks"><p class="noindent">[<a 
-href="restful_groupwarese17.html" >next</a>] [<a 
 href="restful_groupwarese2.html" >prev</a>] [<a 
 href="restful_groupwarese2.html#tailrestful_groupwarese2.html" >prev-tail</a>] [<a 
 href="#tailrestful_groupwarese3.html">tail</a>] [<a 
@@ -36,7 +35,7 @@ types. It is to be seen, which ideas from this work could be reused in the case 
 of supported media types.
 <!--l. 296--><p class="noindent" >
     <h4 class="subsectionHead"><span class="titlemark">3.1.  </span> <a 
- id="x10-240003.1"></a>Syntax vs. Semantic</h4>
+ id="x10-240003.1"></a>Syntax vs. Semantic (Vocabulary)</h4>
 <!--l. 298--><p class="noindent" >The usage of standardized media types is one key difference between an API and a
 restful API. <span class="cite">[<a 
 href="restful_groupwareli2.html#XFielding2000">Fie00</a>, sec. 5.2.1.2]</span> Only if the client has knowledge about the media
@@ -189,34 +188,137 @@ class="cmtt-12">http://wiki.portablecontacts.net/w/page/17776141/schema</span></
 <!--l. 471--><p class="indent" >    Calendar Formate nur kurz
 <!--l. 473--><p class="noindent" >
     <h4 class="subsectionHead"><span class="titlemark">3.5.  </span> <a 
- id="x10-300003.5"></a>Microdata</h4>
-<!--l. 475--><p class="noindent" >TODO Microformats could also be useful to markup data elements in a (X)HTML summmary of
-an Atom entry. In this case a web client could use the data from the summary in a tabular
-view without fetching the full enclosed data in case it is not contained in the content
-tag.
-<!--l. 481--><p class="noindent" >
-    <h4 class="subsectionHead"><span class="titlemark">3.6.  </span> <a 
- id="x10-310003.6"></a>Media Types for Collections</h4>
-<!--l. 483--><p class="noindent" >Vergleich ATOM mit Medientyp Collection+JSON
-<!--l. 485--><p class="indent" >    JSON formats for collections: Collection+JSON Mime-Type (approved in July 2011) by Mike
-Amundsen<span class="footnote-mark"><a 
+ id="x10-300003.5"></a>Microformats, Microdata, RDFa</h4>
+<!--l. 476--><p class="noindent" >HTML documents are primarily meant to be rendered by browsers and interpreted by humans. It
+is hard for a computer to interpret the meaning of text and data included in an HTML document.
+Microformats, Microdata and RDFa define ways to add additional meta data to HTML that
+allows computers to identify structured data in HTML without having an impact on the
+rendering.<span class="cite">[<a 
+href="restful_groupwareli2.html#XTennison2012">Ten12</a>]</span>
+<!--l. 482--><p class="indent" >    There is not yet an established term to refer to the three different formats. Practitioners use &#8220;structured
+data languages&#8221;<span class="footnote-mark"><a 
 href="restful_groupware17.html#fn12x0"><sup class="textsuperscript">12</sup></a></span><a 
- id="x10-31001f12"></a> 
+ id="x10-30001f12"></a> ,
+&#8220;machine-readable data format&#8221;<span class="cite">[<a 
+href="restful_groupwareli2.html#XHickson2011">Hic11</a>]</span>, &#8220;structured data
+markup&#8221;<span class="footnote-mark"><a 
+href="restful_groupware18.html#fn13x0"><sup class="textsuperscript">13</sup></a></span><a 
+ id="x10-30002f13"></a> 
+or just &#8220;structured markup&#8221;. Scientific publications seem to use the term &#8220;Semantic
+annotation&#8221;<span class="cite">[<a 
+href="restful_groupwareli2.html#Xinstance7">RGJ05</a>]</span> to refer to HTML with machine readable semantic data. This work will use
+the term &#8220;Semantic annotation format&#8221; to refer to Microformats, Microdata, RDFa and similar
+formats.
+<!--l. 492--><p class="noindent" >
+    <h5 class="subsubsectionHead"><span class="titlemark">3.5.1.  </span> <a 
+ id="x10-310003.5.1"></a>Use Cases</h5>
+<!--l. 494--><p class="noindent" >One major use case for semantic annotations is to help search engines to better index
+the annotated site. The Microformats project was started by a blog search engine
+                                                                                         
+                                                                                         
+(Technorati)<span class="footnote-mark"><a 
+href="restful_groupware19.html#fn14x0"><sup class="textsuperscript">14</sup></a></span><a 
+ id="x10-31001f14"></a> 
+and the recent schema.org effort came from the three big search engines Google,
+Bing and Yahoo. Another use case is demonstrated by the Firefox plugin
+&#8220;Operator&#8221;.<span class="footnote-mark"><a 
+href="restful_groupware20.html#fn15x0"><sup class="textsuperscript">15</sup></a></span><a 
+ id="x10-31002f15"></a> 
+It allows to extract annotated entities from web pages. A user could thus import contact or
+event data from arbitrary web pages in his personal information manager with one
+click. Semantic annotations can also be used to make web content accessible to disabled
+people.<span class="cite">[<a 
+href="restful_groupwareli2.html#XYesilada:2007:EDS:1279700.1279704">YSHG07</a>]</span>
+<!--l. 506--><p class="indent" >    In the context of this work, Semantic annotations could be used inside the <span class="lstinline">summary</span> tag of
+Atom entries. A consumer of a feed of contact elements could thus use the data extracted from the
+annotated summary data to provide a tabular overview of the entries even without fetching the
+associated media resource of the entry.
+<!--l. 512--><p class="indent" >    TODO example
+<!--l. 514--><p class="indent" >    A third use case is currently under development as part of the European
+Union Research Project &#8220;Interactive Knowledge Stack&#8221; (IKS) that builds a
+semantic content management stack. The sub-project &#8220;Vienna IKS Editables&#8221;
+(VIE)<span class="footnote-mark"><a 
+href="restful_groupware21.html#fn16x0"><sup class="textsuperscript">16</sup></a></span><a 
+ id="x10-31003f16"></a> 
+uses semantic annotations to make content on a web site editable. In a traditional content
+management system, content is editable via HTML forms that are available as separate sites in
+addition to the normal view. The VIE Javascript library instead searches the HTML document for
+semantically annotated entities and dynamically builds editing interfaces for those. A modified entity
+can then be sent to the server via AJAX in a format called &#8220;json-ld&#8221; that serializes semantic data to
+JSON.<span class="footnote-mark"><a 
+href="restful_groupware22.html#fn17x0"><sup class="textsuperscript">17</sup></a></span><a 
+ id="x10-31004f17"></a> 
+<!--l. 528--><p class="noindent" >
+    <h5 class="subsubsectionHead"><span class="titlemark">3.5.2.  </span> <a 
+ id="x10-320003.5.2"></a>Format selection</h5>
+<!--l. 530--><p class="noindent" >With at least three different formats, a developer needs to settle on one to
+implement.<span class="footnote-mark"><a 
+href="restful_groupware23.html#fn18x0"><sup class="textsuperscript">18</sup></a></span><a 
+ id="x10-32001f18"></a> 
+A first consideration has to be the ability of expected consumers to handle the format, a second
+consideration the available tooling to produce a particular format. The different Semantic
+annotation formats impose certain requirements for the used HTML dialect. Microformats can be
+used with all versions of HTML, RDFa with XHTML or HTML5 and Microdata introduces special
+attributes that work only with HTML5.<span class="cite">[<a 
+href="restful_groupwareli2.html#XTennison2012">Ten12</a>]</span>
+<!--l. 539--><p class="indent" >    Microdata is part of HTML5 and a standard effort of the
+W3C.<span class="cite">[<a 
+href="restful_groupwareli2.html#XHickson2011">Hic11</a>]</span> It is also backed up by the schema.org effort of Google and
+Microsoft.<span class="footnote-mark"><a 
+href="restful_groupware24.html#fn19x0"><sup class="textsuperscript">19</sup></a></span><a 
+ id="x10-32002f19"></a> 
+The schema.org vocabulary in turn has been mapped to the semantic world by researchers working on
+                                                                                         
+                                                                                         
+linked data.<span class="footnote-mark"><a 
+href="restful_groupware25.html#fn20x0"><sup class="textsuperscript">20</sup></a></span><a 
+ id="x10-32003f20"></a> 
+Thus by using Microdata with the schema.org vocabulary, the data can easily be combined
+with other semantic data. The rest of this work therefor concentrates on Microdata.
+Many good arguments to also consider RDFa can be found in the blog of Manu
+Sporny<span class="footnote-mark"><a 
+href="restful_groupware26.html#fn21x0"><sup class="textsuperscript">21</sup></a></span><a 
+ id="x10-32004f21"></a> ,
+chair of the RDF Web Applications Working Group at the World Wide Web Consortium.
+<!--l. 555--><p class="noindent" >
+    <h5 class="subsubsectionHead"><span class="titlemark">3.5.3.  </span> <a 
+ id="x10-330003.5.3"></a>Producing Semantically annotated HTML</h5>
+<!--l. 557--><p class="noindent" >A recent discussion of possibilities to produce semantically annotated HTML pages can be found in
+<span class="cite">[<a 
+href="restful_groupwareli2.html#XDBLP:books/daglib/0023755">CDDM09</a>, sec. 9.1.3]</span>. The authors &#8220;discern two different ways in which the Semantic Web plays a
+key role in current Web engineering approaches: one is by the creation of Web applications starting
+from semantically described data, and the second is by the generation of semantic annotations
+from the Web engineering process.&#8221;
+<!--l. 564--><p class="indent" >    In the case of this work only the second way is of interest, since we don&#8217;t assume the data to be
+persisted in a semantic model. As an example for this way the book describes a method
+developed as part of a larger &#8220;Web Semantics Design Method&#8221;. This method consists of two
+mappings. The first one is the &#8220;data source mapping (DSM), which describes exactly
+how the reference ontology maps to the actual data source.&#8221; The second mapping uses
+XPointer expressions to link HTML tags to elements of the reference ontology from the first
+mapping.
+<!--l. 575--><p class="noindent" >
+    <h4 class="subsectionHead"><span class="titlemark">3.6.  </span> <a 
+ id="x10-340003.6"></a>Media Types for Collections</h4>
+<!--l. 577--><p class="noindent" >Vergleich ATOM mit Medientyp Collection+JSON
+<!--l. 579--><p class="indent" >    JSON formats for collections: Collection+JSON Mime-Type (approved in July 2011) by Mike
+Amundsen<span class="footnote-mark"><a 
+href="restful_groupware27.html#fn22x0"><sup class="textsuperscript">22</sup></a></span><a 
+ id="x10-34001f22"></a> 
 JSON ATOM serialization implemented by Apache
 Abdera<span class="footnote-mark"><a 
-href="restful_groupware18.html#fn13x0"><sup class="textsuperscript">13</sup></a></span><a 
- id="x10-31002f13"></a> 
-<!--l. 490--><p class="indent" >    Some problems in loss-less conversion of ATOM to json:<span class="cite">[<a 
+href="restful_groupware28.html#fn23x0"><sup class="textsuperscript">23</sup></a></span><a 
+ id="x10-34002f23"></a> 
+<!--l. 584--><p class="indent" >    Some problems in loss-less conversion of ATOM to json:<span class="cite">[<a 
 href="restful_groupwareli2.html#XSnell2008">Sne08</a>]</span>
       <ul class="itemize1">
       <li class="itemize">JSON has no equivalent for the xml:lang attribute.
       </li>
       <li class="itemize">Dereferencable IRIs must be transformed to URIs.
-                                                                                         
-                                                                                         
       </li>
       <li class="itemize">URIs relative to an xml:base attribute must be resolved, also inside XHTML content
       elements.
+                                                                                         
+                                                                                         
       </li>
       <li class="itemize">Repeatable elements must be converted to arrays.
       </li>
@@ -226,28 +328,27 @@ href="restful_groupwareli2.html#XSnell2008">Sne08</a>]</span>
       JSON then just a plain String.
       </li>
       <li class="itemize">ATOM supports arbitrary extensions via namespaces.</li></ul>
-<!--l. 501--><p class="noindent" >
+<!--l. 595--><p class="noindent" >
     <h4 class="subsectionHead"><span class="titlemark">3.7.  </span> <a 
- id="x10-320003.7"></a>Media Type conversion</h4>
-<!--l. 503--><p class="noindent" >Konvertieren zwischen verschiedenen Representationen die nach aussen gegeben werden vs.
+ id="x10-350003.7"></a>Media Type conversion</h4>
+<!--l. 597--><p class="noindent" >Konvertieren zwischen verschiedenen Representationen die nach aussen gegeben werden vs.
 Konvertieren zwischen äußerer Representation und Representation für die Datenbank.
-<!--l. 505--><p class="indent" >    An welchen Punkten in der Architektur muss/kann/soll konvertiert werden?
-<!--l. 507--><p class="noindent" >
+<!--l. 599--><p class="indent" >    An welchen Punkten in der Architektur muss/kann/soll konvertiert werden?
+<!--l. 601--><p class="noindent" >
     <h4 class="subsectionHead"><span class="titlemark">3.8.  </span> <a 
- id="x10-330003.8"></a>Updates with non isomorphic Media Types</h4>
-<!--l. 508--><p class="noindent" >How to handle updates, if the mediatypes are not isomorph?
-<!--l. 510--><p class="indent" >    How does Google handle PATCH in the calendar API?
-<!--l. 512--><p class="indent" >    Schnittmenge der Medientypen identifizieren
-<!--l. 514--><p class="indent" >    Einen kanonischen Medientypen festlegen für Updates?
-<!--l. 516--><p class="indent" >    Erweiterungsmöglichkeiten v. Medientypen nutzen um Isomorphie herzustellen
+ id="x10-360003.8"></a>Updates with non isomorphic Media Types</h4>
+<!--l. 602--><p class="noindent" >How to handle updates, if the mediatypes are not isomorph?
+<!--l. 604--><p class="indent" >    How does Google handle PATCH in the calendar API?
+<!--l. 606--><p class="indent" >    Schnittmenge der Medientypen identifizieren
+<!--l. 608--><p class="indent" >    Einen kanonischen Medientypen festlegen für Updates?
+<!--l. 610--><p class="indent" >    Erweiterungsmöglichkeiten v. Medientypen nutzen um Isomorphie herzustellen
                                                                                          
                                                                                          
-    <!--l. 519--><div class="crosslinks"><p class="noindent">[<a 
-href="restful_groupwarese17.html" >next</a>] [<a 
+    <!--l. 613--><div class="crosslinks"><p class="noindent">[<a 
 href="restful_groupwarese2.html" >prev</a>] [<a 
 href="restful_groupwarese2.html#tailrestful_groupwarese2.html" >prev-tail</a>] [<a 
 href="restful_groupwarese3.html" >front</a>] [<a 
 href="restful_groupware.html#restful_groupwarese8.html" >up</a>] </p></div>
-<!--l. 519--><p class="indent" >    <a 
+<!--l. 613--><p class="indent" >    <a 
  id="tailrestful_groupwarese3.html"></a>   
 </body></html> 
