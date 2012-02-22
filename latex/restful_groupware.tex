@@ -29,6 +29,10 @@
   {\lstset{language=Java,float=tb,#1}}% \begin{javalisting}[...]
   {} % \end{javalisting}
 
+\lstnewenvironment{anylisting}[1][]
+  {\lstset{float=tb,#1}}% \begin{anylisting}[...]
+  {} % \end{anylisting}
+
 \lstset{ %
   language=Java,
   float=tb,
@@ -562,15 +566,74 @@ semantically described data, and the second is by the generation of semantic
 annotations from the Web engineering process.''
 
 In the case of this work only the second way is of interest, since we don't
-assume the data to be persisted in a semantic model. As an example for this way
-the book describes a method developed as part of a larger ``Web Semantics Design
-Method''.  This method consists of two mappings. The first one is the ``data
-source mapping (DSM), which describes exactly how the reference ontology maps to
-the actual data source.'' The second mapping uses XPointer expressions to link
-HTML tags to elements of the reference ontology from the first mapping.
+assume the data to be persisted in a semantic model and aim to generate semantic
+annotations. As an example for this way the book describes a method developed as
+part of a larger ``Web Semantics Design Method'' (WSDM).  This method consists
+of two mappings. The first one is the ``data source mapping (DSM), which
+describes exactly how the reference ontology maps to the actual data source.''
+The second mapping uses XPointer expressions to link HTML tags to elements of
+the reference ontology from the first mapping. Neither the book nor referenced
+papers however go in any more detail about the final step of generating the
+annotated HTML tags.
 
+One important point can be learned from the WSDM description. The production of
+semantically annotated HTML can become a lot easier if the entity is already
+available represented with the targeted vocabulary. A very naive approach to
+produce annotated HTML would be to just manually write the necessary attributes
+in the template and fill them with values from an arbitrary data object, as
+demonstrated in listing \ref{fig:naive-microdata-template}. Even with the
+conciseness of the used template language
+Jade\footnote{\citeurl{http://scalate.fusesource.org/documentation/jade-syntax.html}{2012-2-22}
+  Jade is the most concise among several supported template languages of the
+  Scalate Template Engine.}, the developer still has a lot to type.
 
+\begin{anylisting}[label=fig:naive-microdata-template,
+                   caption={Defining all Microdata attributes manually in an HTML template}]
+-@ var vcard: VCard
 
+div( itemscope itemtype="http://schema.org/Person" 
+     itemid=#{vcard.getProperty("uid")} )
+  span( itemprop="name" )
+    #{vcard.getProperty("fn")}
+  span( itemprop="telephone" ) 
+    #{vcard.getProperty("tel")}
+\end{anylisting}
+
+Compared to the above listing \ref{fig:microdata-template} shows a template
+using a data structure that is aware of the used Microdata vocabulary and wraps
+an instance of a typed Microdata item with its properties.. The
+\lstinline:scope: method of the Microdata interface will add the
+\lstinline:itemscope:, \lstinline:itemtype: and \lstinline:itemid: attributes to
+the nested \lstinline:div: element. The \lstinline:prop: method either augments
+a nested element as shown for the \lstinline:name: property or creates the
+correct nested element. The method adds the \lstinline:itemprop: attribute and
+puts the value for this property inside the element.
+
+\begin{anylisting}[label=fig:microdata-template,
+                   caption={Using a Microdata-aware data structure in a template}]
+-@ var md: MicroData
+
+= md.scope
+  div
+    = md.prop("name")
+      span( style="color:red" )
+    = md.prop("telephone")
+    = md.prop("email")
+\end{anylisting}
+
+An implementation of this approach must take care of a few
+peculiarities.\cite{Hickson2011} Some properties don't necessarily use simple
+\lstinline:span: elements, e.g. dates can be better expressed \lstinline:time:
+elements or URI values most likely appear in an
+\lstinline:a:,\lstinline:img:,\lstinline:link: or \lstinline:object:
+element. Property values could also be put in a \lstinline:content: attribute
+while the element's nested text content is optimized for human
+consumption. Items can be nested, e.g. an item of type PostalAddress could be
+nested inside a Person item.
+
+A template engine that should be extended as described above should allow to
+capture and manipulate nested HTML elements and to call methods of passed in
+objects.
 
 \subsection{Media Types for Collections}
 
