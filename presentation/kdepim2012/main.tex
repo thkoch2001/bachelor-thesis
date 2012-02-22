@@ -1,0 +1,137 @@
+\documentclass{beamer}
+%\usepackage{ngerman}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
+\usepackage{lmodern}
+\usepackage{pgf}
+\usepackage{verbatim}
+\usepackage{listings}
+\usepackage[]{hyperref} 
+\usepackage{multicol}
+\usepackage{wasysym}
+\usepackage{tikz}
+
+\setbeamersize{text margin left = 0.4em}
+\setbeamersize{text margin right = 0.4em}
+%\setbeamercovered{transparent}
+
+\title{Restful interface for Kolab}
+\subtitle{bachelor thesis}
+\institute{Fernuniversität Hagen}
+\date{\today}
+\author{Thomas Koch}
+
+\usetheme{boxes}
+\usecolortheme{dolphin}
+
+\AtBeginSection[]
+{
+   \begin{frame}
+       \frametitle{Outline}
+       \tableofcontents[currentsection]
+   \end{frame}
+}
+
+\begin{document}
+\begin{frame}
+  \maketitle{}
+\end{frame}
+
+% \begin{frame}{me}
+%   \begin{itemize}
+%   \item 5 years dev: PHP, Java, Hadoop, Crawler, CMS
+%   \item Relations: Debian, FSFE, Basic Income, ATTAC
+%   \item around 2006: eGroupWare
+%   \item Full time student again
+%   \end{itemize}
+% \end{frame}
+
+\begin{frame}{Restful PIM}
+  \begin{itemize}
+  \item Life is too short for WebDAV (CardDAV, CalDAV)
+  \item Design and prototype a restful groupware API
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Do you need\ldots}
+  \begin{itemize}
+  \item locking (remember CVS?)
+  \item versioning (for PIM data?)
+  \item additional HTTP verbs?
+  \item TooMuchSpecException, incompatibilites?
+  \item Push notifications? WebDAV hasn't. Atom has.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{What's restful?}
+  \ldots more then just HTTP!
+
+  Rule of thumb: If your API needs documentation, it's not restful.
+
+  \begin{itemize}
+  \item Just one entrance URI
+  \item Every concept (resource) identified by it's own discovarable URI
+  \item Just four methods: GET, PUT, DELETE, POST
+  \item All the magic in well known Media Types and Link Relations
+    \begin{itemize}
+    \item Atom feed (collection), xCal, HTML page, HAL - Hypertext Application Language
+    \item author, hub, search, replies, next, prev, up, copyright
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Rob Yates \url{robubu.com}: CalATOM, CardATOM}
+\begin{itemize}
+  \item existing standards: HTTP, Atom, AtomPub
+  \item widely deployed / implemented
+  \item kind of known by many developers
+  \item many optional features: Push notification, OpenID, oauth
+  \item principles not limited to PIM data: Project Management, Photo gallery
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\begin{quote}
+Were I to propose CalDAV today it would probably be CalAtom  
+\end{quote}
+-- Lisa Dusseault, February 29, 2008
+\end{frame}
+
+\begin{frame}{Synchronize}
+  \begin{quote}
+    Consume all entries of a (paged\footnote{RFC 5005 - Feed Paging and
+      Archiving}) feed unless you see an entry older then the newest entry from
+    your last synchronization run.
+  \end{quote}
+  Delete with tombstones (The Atom "deleted-entry" Element, draft-snell-atompub-tombstones)
+\end{frame}
+
+\begin{frame}{Edit while online}
+  \begin{itemize}
+  \item Check resource for update / retrieve etag
+  \item User edits
+  \item Conditional PUT request
+  \item Synchronize
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Edit while offline}
+  \begin{itemize}
+  \item Save changed resource localy, keep original
+  \item Go online
+  \item Synchronize
+  \item No conflict: Conditional PUT request for each changed resource
+  \item For Conflicts: Present 3-way merge to user (3 windows?)
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Why restful HTTP instead of IMAP?}
+  \begin{itemize}
+  \item HTTP (also) has security, parallel downloads, persistent connections, caching, compression, download continuation via ranges
+  \item Lisa Dusseault: HTTP Access to Email Stores \url{http://tools.ietf.org/id/draft-dusseault-httpmail-00.txt}
+  \item google://rest advantages (loose coupling, evolvable, caching, simple)
+  \item Read Fielding's thesis! (Chapters 4-5)
+  \end{itemize}
+\end{frame}
+\end{document}

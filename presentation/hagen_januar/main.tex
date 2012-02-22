@@ -1,0 +1,252 @@
+\documentclass{beamer}
+%\usepackage{ngerman}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
+\usepackage{lmodern}
+\usepackage{pgf}
+\usepackage{verbatim}
+\usepackage{listings}
+\usepackage[]{hyperref} 
+\usepackage{multicol}
+\usepackage{wasysym}
+\usepackage{tikz}
+
+\setbeamersize{text margin left = 0.4em}
+\setbeamersize{text margin right = 0.4em}
+%\setbeamercovered{transparent}
+
+\title{REST Schnittstelle für die Groupware Kolab}
+\subtitle{Bachelorarbeit}
+\date{\today}
+\author{Thomas Koch}
+
+\usetheme{boxes}
+\usecolortheme{dolphin}
+
+\AtBeginSection[]
+{
+   \begin{frame}
+       \frametitle{Outline}
+       \tableofcontents[currentsection]
+   \end{frame}
+}
+
+\begin{document}
+\begin{frame}
+  \maketitle{}
+\end{frame}
+
+\begin{frame}{Hintergrund: Kolab}
+  Freie Groupware, Auftragsentwicklung BSI, Auswärtiges Amt 2002
+
+  Wiederverwendung bestehender Komponenten: Cyrus IMAP, OpenLDAP, Postfix, \ldots + viel Perl Magie
+
+  Persistenz als Email-Anhang in IMAP Ordnern, Kommunikation über IMAP
+\end{frame}
+
+\begin{frame}{Schwerpunkte der Arbeit}
+  \begin{itemize}
+  \item Welche Komponenten der Implementierung können wiederverwendet werden, um verschiedene Medientypen zu unterstützen?
+  \item Inwieweit unterstützen die Medientypen Hyperlinks, sind also durch den Client erkundbar ohne out-of-band knowledge?
+  \end{itemize}  
+\end{frame}
+
+\begin{frame}{Persönliche Motivation}
+  \begin{center}
+    2012
+
+    Mein Adressbuch \& Kalender sind aus Papier.
+
+    IT Firmen mit freier Groupware: 0\%
+  \end{center}
+\end{frame}
+
+\begin{frame}{Anforderungen an die Implementierung}
+  \begin{itemize}
+  \item Lesen/Schreiben der verwalteten Resourcen: Kontakte, Kalender-Events, Todos, Journal-Einträge, Free-Busy, \ldots
+  \item Synchronisation von Collections für Offline-Nutzung
+  \item einfach zu implementieren (vgl. CalDAV, CardDAV, IMAP) $\rightarrow$ ReST
+  \item Standardkonform $\rightarrow$ xCard, xCal, ATOM
+  \item nutzbar durch JavaScript $\leadsto$ JSON basierte Medientypen
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Resourcen}
+  \begin{itemize}
+  \item Groupware Elemente: Kontakte, Kalender-Events, Todos, Journal-Einträge, Free-Busy
+  \item Collections dieser Elemente
+  \item Einstiegspunkt zum Auffinden der Collections
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Medientypen}
+  \begin{itemize}
+  \item   application/vcard+xml
+  \item   application/calendar+xml; component="VEVENT"
+  \item   application/calendar+xml; component="VTODO"
+  \item   application/calendar+xml; component="VJOURNAL"
+  \item   application/calendar+xml; component="VFREEBUSY"
+  \end{itemize}
+  + ATOM(Pub) für Collections, Sevice Documents
+
+  + (X)HTML ( +  Microformats ). Unterscheidung verschiedener HTML Varianten (view/edit)?
+
+  + JSON Alternativen, z.B. collection+json, portable contacts? 
+\end{frame}
+
+\begin{frame}[fragile]{ATOM Service Document (application/atomsvc+xml)} 
+  \begin{lstlisting}[language=xml]
+<service xml:base="http://example.org"
+  <workspace> <atom:title>Content Management
+    <collection href="blog/main" >
+      <atom:title>My Blog Entries
+      <categories href="cats/forMain.cats">
+    <collection href="gallery" >
+      <atom:title>Pictures
+      <accept>image/png <accept>image/jpeg
+
+  <workspace> <atom:title>Groupware
+    <collection href="groupware/contacts" >
+      <atom:title>Kontakte
+      <accept>application/vcard+xml
+
+  \end{lstlisting}
+\end{frame}
+
+\begin{frame}{Synchronisierung}
+  Feed Paging and Archiving, RFC 5005
+
+  The Atom "deleted-entry" Element, draft-snell-atompub-tombstones-13
+
+  Achtung: Server muß IDs gelöschter Einträge erinnern
+\end{frame}
+
+\section{Hypermedia Unterstützung}
+
+\begin{frame}{Hyperlinks}
+  \usetikzlibrary{positioning,arrows,fit}
+  \usetikzlibrary{decorations.pathmorphing,backgrounds,fit,decorations.pathreplacing}
+  \begin{center}
+  \begin{tikzpicture}
+    [doc/.style={rectangle,draw=blue!30,fill=blue!20, node distance=6em}]
+    \node[doc] (svc) [] {ServiceDoc};
+    \node[doc] (collect) [below=of svc,text width=5em] {Contacts Collection}
+      edge [<-] node {} (svc)
+      edge [->, loop left] node {next} (collect);
+
+    \node[doc] (calcollect) [below right=of svc,text width=5em] {Calendar Collection}
+      edge [<-] node {} (svc);
+
+    \node[doc] (entry) [below=of collect] {Entry (xCard)}
+      edge [<-] node {1..n} (collect)
+      edge [->] node [text width=5em] {personal calendar} (calcollect)
+      edge [->, loop left] node {related xCards} (entry);
+
+    \node[doc] (event) [below=of calcollect] {Entry (xCal event)}
+      edge [<-] node {1..n} (calcollect)
+      edge [->] node [below right] {participants} (entry);
+
+
+  \end{tikzpicture}
+  \end{center}
+\end{frame}
+
+\section{Wiederverwendbare Komponenten}
+\begin{frame}[fragile]{REST/ATOM framework}
+  Jersey (JAX-RS): zu allgemein, ungeeignetes Programmiermodell
+  \begin{lstlisting}
+@PATH("/{USER}/collections/{COLLECTION}/{ENTRY}")
+class EntryResource {
+  @PathParam{"USER"} String user;
+  @PathParam{"COLLECTION"} String collection;
+  @PathParam{"ENTRY"} String entry;
+  
+  @GET @PROVIDES("application/vcard+xml")
+  public VCard getVCard() {
+  \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Warum nicht Jersey (JAX-RS)?}
+\begin{itemize}
+\item JAX-RS: Resource Klassen definieren ihre Pfade
+  \begin{itemize}
+  \item Kopplung Resource zu Ort
+  \item Code Kopien: \verb:/{AUTHORITY}/{COLLECTION}/{ENTRY}:
+  \item Deklaratives Linkbuilding (@REF annotation) \lightning sub-resources
+  \end{itemize}
+\item 3 Parameter für dispatch: HTTP Verb, Medientyp, Pfad -- nicht unabhängig behandelbar
+\item schwer, Fehler nachzuvollziehen
+\item Konflikt zwischen Jersey und DI Container: Guice, Spring
+\item JAX-RS kennt keine Collections, Entries, Service documents
+\item JAX-RS kennt keine Semantik für GET, POST, PUT, DELETE
+\end{itemize}
+Alternative: Apache Abdera
+\end{frame}
+
+\begin{frame}{Apache Abdera / ATOM}
+  Abdera / ATOM kennt Resourcentypen: Collections, Entries, Service Documents, Categories
+
+  Abdera versteht GET, POST, PUT, DELETE, HEAD, OPTIONS
+
+  zu Implementieren: CollectionAdapter, WrappedEntry
+\end{frame}
+
+\begin{frame}[fragile]{generische Eigenschaften: interface WrappedEntry<T>}
+  \begin{lstlisting}
+    String getId() // eindeutig, konstant
+    String getName() // URI Bestandteil
+    String getTitle()
+    DateTime getUpdated()
+    Text getSummary(Factory, RequestContext)
+    boolean isMediaEntry()
+    Set<Person> getAuthors(Factory, RequestContext)
+    Content getContent(Factory, RequestContext)
+    T getWrappedEntry()
+  \end{lstlisting}
+\end{frame}
+
+\begin{frame}{followup Silvia}
+  ATOM bietet Werkzeugkasten von nützlichen Resourcetypen  
+
+  DSL zur Beschreibung von Rest Anwendungen?
+\end{frame}
+
+\section{Herausforderungen}
+
+\begin{frame}{Herausforderung: resource identifier}
+  unveränderlich, eindeutig, sinnvoll
+  \begin{itemize}
+  \item id(NAME) -- veränderlich, nicht eindeutig
+  \item UUID -- eindeutig, unveränderlich
+  \item user input -- unpraktisch, eindeutig?
+  \end{itemize}
+  Lösung: FULLNAME-UUID, EVENTTITLE-UUID
+
+  optional: HTTP redirect falls sich FULLNAME, EVENTTITLE ändert
+\end{frame}
+
+\begin{frame}{Medientypen nicht isomorph}
+  Portable Contacts vs. xCard
+
+  Google Calendar (Json) vs. xCal
+
+  \begin{itemize}
+  \item Nur einen kanonischen Medientypen für Updates zulassen? PATCH Verb?
+  \item Erweiterbarkeit von Medientypen nutzen (X-\ldots Elemente)
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Komplexität der Medientypen}
+  \begin{itemize}
+  \item eigenes, textbasiertes Serialisierungsformat (vCard)
+  \item 12 data types (text, date, date-time, int, language-tag, \ldots)
+  \item 11 property parameters: (lang, media type, sort-as, \ldots)
+  \item 36 properties mit erlaubten property parameters, data types
+  \item + Erweiterungen
+  \end{itemize}
+  Validierung eingehender Resourcen?
+
+  \ldots keine brauchbare Java Bibliothek
+\end{frame}
+\end{document}
