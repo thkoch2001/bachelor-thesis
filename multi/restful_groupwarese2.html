@@ -7,11 +7,11 @@
 <meta name="originator" content="TeX4ht (http://www.cse.ohio-state.edu/~gurari/TeX4ht/)"> 
 <!-- html,2 --> 
 <meta name="src" content="restful_groupware.tex"> 
-<meta name="date" content="2012-02-20 17:39:00"> 
+<meta name="date" content="2012-02-22 12:11:00"> 
 <link rel="stylesheet" type="text/css" href="restful_groupware.css"> 
 </head><body 
 >
-    <!--l. 73--><div class="crosslinks"><p class="noindent">[<a 
+    <!--l. 77--><div class="crosslinks"><p class="noindent">[<a 
 href="restful_groupwarese8.html" >next</a>] [<a 
 href="restful_groupwarese1.html" >prev</a>] [<a 
 href="restful_groupwarese1.html#tailrestful_groupwarese1.html" >prev-tail</a>] [<a 
@@ -19,20 +19,20 @@ href="#tailrestful_groupwarese2.html">tail</a>] [<a
 href="restful_groupware.html#restful_groupwarese4.html" >up</a>] </p></div>
     <h3 class="sectionHead"><span class="titlemark">2.  </span> <a 
  id="x6-30002"></a>Requirements</h3>
-<!--l. 77--><p class="noindent" >
+<!--l. 81--><p class="noindent" >
     <h4 class="subsectionHead"><span class="titlemark">2.1.  </span> <a 
  id="x6-40002.1"></a>Scope</h4>
-<!--l. 87--><p class="noindent" >This work defines a protocol to share
-<!--l. 89--><p class="noindent" >
+<!--l. 91--><p class="noindent" >This work defines a protocol to share
+<!--l. 93--><p class="noindent" >
     <h4 class="subsectionHead"><span class="titlemark">2.2.  </span> <a 
  id="x6-50002.2"></a>Definitions</h4>
-<!--l. 91--><p class="noindent" >Kolab is the name of a software product ... TODO
-<!--l. 93--><p class="indent" >    A couple of related terms and concepts exist that all more or less overlap with the functionality
+<!--l. 95--><p class="noindent" >Kolab is the name of a software product ... TODO
+<!--l. 97--><p class="indent" >    A couple of related terms and concepts exist that all more or less overlap with the functionality
 provided by Kolab: Groupware, Personal Information Management/Manager (PIM), Group
 Information Management (GIM), Computer-supported cooperative/collaborative work, Knowledge
 management, (Enterprise) Content Management.
-<!--l. 99--><p class="indent" >    TODO: keinen der Terme benutzen.
-<!--l. 101--><p class="noindent" >
+<!--l. 103--><p class="indent" >    TODO: keinen der Terme benutzen.
+<!--l. 105--><p class="noindent" >
     <h4 class="subsectionHead"><span class="titlemark">2.3.  </span> <a 
  id="x6-60002.3"></a>General Requirements</h4>
       <ul class="itemize1">
@@ -52,15 +52,15 @@ class="cmsy-10x-x-120">&#x2192; </span>xCard, xCal, ATOM
       <li class="itemize">Groupware Elemente: Kontakte, Kalender-Events, Todos, Journal-Einträge, Free-Busy</li></ul>
                                                                                          
                                                                                          
-<!--l. 131--><p class="noindent" ><span class="paragraphHead"><a 
+<!--l. 135--><p class="noindent" ><span class="paragraphHead"><a 
  id="x6-70002.3.0.1"></a><span 
 class="cmbx-12">Replacement for CardDAV</span></span>
     The web application should provide at least the same features as the CardDAV protocol. It
 should be demonstrated that a restful application can serve for the same purpose and thus that the
 additional complexity of WebDAV and CardDAV is not necessary.
-<!--l. 138--><p class="indent" >    The standard lists the supposed main features of CardDAV<span class="cite">[<a 
+<!--l. 142--><p class="indent" >    The standard lists the supposed main features of CardDAV<span class="cite">[<a 
 href="restful_groupwareli2.html#XRFC6352">Dab11</a>, sec. 1]</span>:
-<!--l. 140--><p class="indent" >
+<!--l. 144--><p class="indent" >
       <ol  class="enumerate1" >
       <li 
   class="enumerate" id="x6-7002x1">Ability to use multiple address books with hierarchical layout.
@@ -87,18 +87,18 @@ href="restful_groupwareli2.html#XRFC6352">Dab11</a>, sec. 1]</span>:
       <li 
   class="enumerate" id="x6-7014x7">Many  limited  clients  (e.g.,  mobile  devices)  contain  an  HTTP  stack  that  makes
       implementing WebDAV much easier than other protocols.</li></ol>
-<!--l. 156--><p class="indent" >    There are some minor features of CardDAV, that are mainly inherited from WebDAV and
+<!--l. 160--><p class="indent" >    There are some minor features of CardDAV, that are mainly inherited from WebDAV and
 whose general usefulness outside of the scope of a content management system could be argued.
 See <a 
 href="#x6-140002.8">2.8</a> for a discussion of those.
-<!--l. 161--><p class="noindent" ><span class="paragraphHead"><a 
+<!--l. 165--><p class="noindent" ><span class="paragraphHead"><a 
  id="x6-80002.3.0.2"></a><span 
 class="cmbx-12">Restful</span></span>
     The application should obey the constraints of a rest application as specified in
 <span class="cite">[<a 
 href="restful_groupwareli2.html#XFielding2000">Fie00</a>]</span>.
-<!--l. 165--><p class="indent" >    TODO: 4 Grundconstraints von REST auflisten.
-<!--l. 167--><p class="indent" >    The above constraints are not an end in itself but lead to the following required or desirable
+<!--l. 169--><p class="indent" >    TODO: 4 Grundconstraints von REST auflisten.
+<!--l. 171--><p class="indent" >    The above constraints are not an end in itself but lead to the following required or desirable
 properties:
       <ul class="itemize1">
       <li class="itemize">Cacheability  (5.1.4)  can  keep  the  data  available  also  in  offline  mode,  improves
@@ -115,54 +115,54 @@ properties:
       </li>
       <li class="itemize">Administrative  scalability  means  that  intermediary  components  can  be  deployed
       independent of the administrator of the main application.</li></ul>
-<!--l. 178--><p class="indent" >    Other outcomes described by Fielding that may not be of importance for the present work are:
+<!--l. 182--><p class="indent" >    Other outcomes described by Fielding that may not be of importance for the present work are:
 scalability in terms of users, network performance and efficiency.
-<!--l. 184--><p class="noindent" >
+<!--l. 188--><p class="noindent" >
     <h4 class="subsectionHead"><span class="titlemark">2.4.  </span> <a 
  id="x6-90002.4"></a>User Classes and Characteristics</h4>
-<!--l. 186--><p class="noindent" >TODO: plain Web Browsers, Desktop applications (PIM Suites), JavaScript Gadgets/Widgets (see OpenSocial)
+<!--l. 190--><p class="noindent" >TODO: plain Web Browsers, Desktop applications (PIM Suites), JavaScript Gadgets/Widgets (see OpenSocial)
 probably with WebStorage<span class="footnote-mark"><a 
 href="restful_groupware7.html#fn3x0"><sup class="textsuperscript">3</sup></a></span><a 
  id="x6-9001f3"></a> 
-<!--l. 188--><p class="indent" >    Aus den verschiedenen Benutzerern leitet sich ab, dass verschiedene Medientypen unterstützt
+<!--l. 192--><p class="indent" >    Aus den verschiedenen Benutzerern leitet sich ab, dass verschiedene Medientypen unterstützt
 werden sollen: xCard, JSON, HTML
-<!--l. 190--><p class="noindent" >
+<!--l. 194--><p class="noindent" >
     <h4 class="subsectionHead"><span class="titlemark">2.5.  </span> <a 
  id="x6-100002.5"></a>Operation Environment</h4>
-<!--l. 192--><p class="noindent" >The application is expected to be installed in a Java servlet container like Tomcat or Jetty and to
+<!--l. 196--><p class="noindent" >The application is expected to be installed in a Java servlet container like Tomcat or Jetty and to
 contact a separate storage component. The primarily targeted storage component is an IMAP
 server with a Kolab conform set of groupware folders. However the design should not restrict
 the extension to a document database like CouchDB, plain files, relational or XML
 databases.
-<!--l. 194--><p class="noindent" >
+<!--l. 198--><p class="noindent" >
     <h4 class="subsectionHead"><span class="titlemark">2.6.  </span> <a 
  id="x6-110002.6"></a>Design and Implementation Constraints</h4>
-<!--l. 196--><p class="noindent" >
+<!--l. 200--><p class="noindent" >
     <h4 class="subsectionHead"><span class="titlemark">2.7.  </span> <a 
  id="x6-120002.7"></a>Specific Requirements</h4>
-<!--l. 198--><p class="noindent" ><span class="paragraphHead"><a 
+<!--l. 202--><p class="noindent" ><span class="paragraphHead"><a 
  id="x6-130002.7.0.3"></a><span 
 class="cmbx-12">Nested and mixed collections</span></span>
     The design should not unnecessarily hinder that collections could be nested or contain different
 kinds of media types, e.g. calendar items and contacts.
                                                                                          
                                                                                          
-<!--l. 202--><p class="indent" >    <span class="cite">[<a 
+<!--l. 206--><p class="indent" >    <span class="cite">[<a 
 href="restful_groupwareli2.html#XRFC6352">Dab11</a>, sec. 5.2]</span> forbids nested and mixed collections to ease the implementation of clients.
 However both may make sense in certain scenarios and the protocol should not exclude such
 scenarios. A collection could for example represent all items related to a project, which include
 contacts, events, todos and notes.
-<!--l. 208--><p class="noindent" >
+<!--l. 212--><p class="noindent" >
     <h4 class="subsectionHead"><span class="titlemark">2.8.  </span> <a 
  id="x6-140002.8"></a>Excluded requirements</h4>
-<!--l. 210--><p class="noindent" ><span class="paragraphHead"><a 
+<!--l. 214--><p class="noindent" ><span class="paragraphHead"><a 
  id="x6-150002.8.0.4"></a><span 
 class="cmbx-12">Search</span></span>
     It is not required that the server implements any means to search its data. It is not excluded
 that such a facility could be added later. It is however expected that searching could be
 implemented separately. This could be done either on a synchronizing client or as a separate
 system in the same administrative domain as the server.
-<!--l. 217--><p class="noindent" ><span class="paragraphHead"><a 
+<!--l. 221--><p class="noindent" ><span class="paragraphHead"><a 
  id="x6-160002.8.0.5"></a><span 
 class="cmbx-12">Performance optimization</span></span>
     The system is meant to inherit the benefits of a restful architecture. It should therefor be
@@ -170,27 +170,27 @@ possible to attach separate caching intermediaries for read requests. Rather the
 the performance of the implementation of read requests it should be taken care that the
 architecture supports external caching and thus avoids to serve the same read request multiple
 times.
-<!--l. 224--><p class="noindent" ><span class="paragraphHead"><a 
+<!--l. 228--><p class="noindent" ><span class="paragraphHead"><a 
  id="x6-170002.8.0.6"></a><span 
 class="cmbx-12">Access Control</span></span>
     The aspect of access control would broaden the scope of this work to wide. However it could be
 kept in mind, whether the proposed design could be enhanced by a separate access control design
 as proposed in <span class="cite">[<a 
 href="restful_groupwareli2.html#Xconf/rest/GrafZLW11">GZLW11</a>]</span>.
-<!--l. 230--><p class="noindent" ><span class="paragraphHead"><a 
+<!--l. 234--><p class="noindent" ><span class="paragraphHead"><a 
  id="x6-180002.8.0.7"></a><span 
 class="cmbx-12">Copying and Moving</span></span>
     WebDAV introduces the HTTP verbs to COPY and MOVE. The usefulness of such
 functionality must of course be compared to the complexity of the implementation and the
 drawback of incompatibility to plain HTTP.
-<!--l. 235--><p class="indent" >    It is possible to enhance a restful API with copy and move functionality without extending
+<!--l. 239--><p class="indent" >    It is possible to enhance a restful API with copy and move functionality without extending
 HTTP. The only requirement is that additional hyperlinks can be attached to the resources of the
 API. Allamaraju <span class="cite">[<a 
 href="restful_groupwareli2.html#XAllamaraju_2010">All10</a>, Ch. 11]</span> proposes &#8220;controller resources&#8221; that act on POST requests and
 are linked from the resources they act on. Custom link relations are used to indicate the semantic
 of the controller resource.
-<!--l. 242--><p class="indent" >    This work does not include initial support for copy or move.
-<!--l. 244--><p class="noindent" ><span class="paragraphHead"><a 
+<!--l. 246--><p class="indent" >    This work does not include initial support for copy or move.
+<!--l. 248--><p class="noindent" ><span class="paragraphHead"><a 
  id="x6-190002.8.0.8"></a><span 
 class="cmbx-12">Versioning</span></span>
     WebDAV and therefor CalDAV and CardDAV support the versioning of resources as an
@@ -200,7 +200,7 @@ use for the resources considered here. The resources are mostly created in one s
 and seldom modified.
                                                                                          
                                                                                          
-<!--l. 251--><p class="noindent" ><span class="paragraphHead"><a 
+<!--l. 255--><p class="noindent" ><span class="paragraphHead"><a 
  id="x6-200002.8.0.9"></a><span 
 class="cmbx-12">Make Collections</span></span>
     WebDAV introduces the MKCOL HTTP verb to create collections. CardDAV recommends
@@ -209,15 +209,15 @@ would be to make use of ATOM categories for grouping. Instead of creating a new 
 collection the user would thus create a contact resource with a new category. An ATOM service
 document could then link to a new (virtual) collection that only contains and accepts resources of
 this category.
-<!--l. 260--><p class="indent" >    TODO: What are the proposed ways to create collections? Post a feed to the service
+<!--l. 264--><p class="indent" >    TODO: What are the proposed ways to create collections? Post a feed to the service
 document? Put a new service document? Put a feed document to the desired location?
-<!--l. 263--><p class="noindent" ><span class="paragraphHead"><a 
+<!--l. 267--><p class="noindent" ><span class="paragraphHead"><a 
  id="x6-210002.8.0.10"></a><span 
 class="cmbx-12">Locking</span></span>
     As with Versioning, this is feature of WebDAV is not considered. Instead of locking
 a resource HTTP supports conditional updates and leaves conflict resolution to the
 client.
-<!--l. 268--><p class="noindent" ><span class="paragraphHead"><a 
+<!--l. 272--><p class="noindent" ><span class="paragraphHead"><a 
  id="x6-220002.8.0.11"></a><span 
 class="cmbx-12">Push notifications</span></span>
     This work does not include any means to actively notify (push) a client about changes happening on
@@ -233,12 +233,12 @@ href="restful_groupware9.html#fn5x0"><sup class="textsuperscript">5</sup></a></s
  id="x6-22002f5"></a> 
                                                                                          
                                                                                          
-    <!--l. 278--><div class="crosslinks"><p class="noindent">[<a 
+    <!--l. 282--><div class="crosslinks"><p class="noindent">[<a 
 href="restful_groupwarese8.html" >next</a>] [<a 
 href="restful_groupwarese1.html" >prev</a>] [<a 
 href="restful_groupwarese1.html#tailrestful_groupwarese1.html" >prev-tail</a>] [<a 
 href="restful_groupwarese2.html" >front</a>] [<a 
 href="restful_groupware.html#restful_groupwarese4.html" >up</a>] </p></div>
-<!--l. 278--><p class="indent" >    <a 
+<!--l. 282--><p class="indent" >    <a 
  id="tailrestful_groupwarese2.html"></a>    
 </body></html> 
