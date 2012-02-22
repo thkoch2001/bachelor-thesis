@@ -57,8 +57,7 @@
 \end{abstract}
 \newpage{}
 
-
-\section{Introduction and Motivation}
+\section{Introduction}
 
 Although computers became ubiquitous for some time now, they still don't help
 their users with their most basic information management needs: Make contacts,
@@ -73,6 +72,317 @@ interests of a multinational corporation.\footnote{Experiences with Android and 
 This work uses an ongoing effort to draft a meta model for restful
 applications. Applying this meta model to the domain of this work may provide
 further insights into its general applicability and fit.
+
+\subsection{Definitions}
+
+Kolab is the name of a software product ... TODO
+
+A couple of related terms and concepts exist that all more or less overlap with
+the functionality provided by Kolab: Groupware, Personal Information
+Management/Manager (PIM), Group Information Management (GIM), Computer-supported
+cooperative/collaborative work, Knowledge management, (Enterprise) Content
+Management.
+
+TODO: keinen der Terme benutzen.
+
+\subsection{Related work}
+\subsubsection{IMAP used by Kolab}
+
+Kolab uses an IMAP server as the data store and
+synchronization protocol for calendar and contact informations. I want to
+compare this approach to a restful one.
+
+Advantages of IMAP:
+\begin{itemize}
+\item already there, since Mail uses it
+\item can store blobs/files so no need to map the iCal/vCard files to a relational scheme
+\item out of the box support for offline work and later synchronization (How does it solve editing conflicts?)
+\end{itemize}
+Disadvantages of IMAP:
+\begin{itemize}
+\item Complicate, 38 RFCs according to \url{http://de.wikipedia.org/wiki/Internet_Message_Access_Protocol} see also: \url{http://www.apps.ietf.org/rfc/ipoplist.html}
+\item All clients directly access the iCal/vCard files with no moderation layer in between. This means that no validation or normalization can be done. Schema updates can only be done if all clients cooperate.
+\item IMAP imposes a folder structure. Google's gmail is an example for another, tag based approach. Messages could have several tags. It is therefor hard to access Gmail via IMAP.
+\item Sam Varshavchik, the author of the courier Mail Transfer Agent explains the history of IMAP and claims that the IMAP standard is broken: http://www.courier-mta.org/fud/
+\item IMAP is so complicate that the IMAP wiki holds 10 pages of advises for IMAP client authors: http://www.imapwiki.org/ClientImplementation RFC 2683 ``IMAP4 Implementation Recommendations'' is a 23 pages document (cut 5 pages for verbosity) explaining how to implement another RFC standard. Is there any widely used standard that needs another RFC explaining how to implement it?
+\item \url{http://en.wikipedia.org/wiki/Internet_Message_Access_Protocol#Disadvantages}
+\item Some attempts to create a simpler alternative to IMAP:
+  \begin{itemize}
+  \item http://en.wikipedia.org/wiki/POP4
+  \item \url{http://en.wikipedia.org/wiki/Simple_Mail_Access_Protocol} also here http://www.courier-mta.org/cone/smap1.html
+  \item \url{http://en.wikipedia.org/wiki/Internet_Mail_2000}
+  \item HTTP restful: http://tools.ietf.org/id/draft-dusseault-httpmail-00.txt mailing list: https://www.ietf.org/mailman/listinfo/httpmail
+  \item BikINI is not IMAP http://bikini.caterva.org
+  \item Outlook uses HTTP to communicate with Hotmail
+  \item another rest mail proposal: http://www.prescod.net/rest/restmail/
+  \end{itemize}
+\item more rants: http://blog.gaborcselle.com/2010/02/how-to-replace-imap.html
+\item IMAP issues found by the chandler project http://chandlerproject.org/bin/view/Jungle/IntrinsicIMAPIssues
+\end{itemize}
+
+
+
+\subsubsection{WebDAV, CalDAV, CardDAV}
+
+\begin{quote}
+Were I to propose CalDAV today it would probably be CalAtom  
+\end{quote}
+-- Lisa Dusseault, February 29, 2008\footnote{\citeurl{http://nih.blogspot.com/2008/02/nearly-two-years-ago-i-made-prediction.html}{2012-1-6}}
+
+\begin{quote}
+  I gave a big sigh of relief when I read that, and I hope that the CardDAV
+  folks take this to heart. Some parts of WebDAV (e.g., properties [\ldots])
+  deserve to be taken out back and shot -- although, as Lisa says, they were
+  necessary because of the state of the art at the time. That doesn't mean we
+  can't do better now.
+\end{quote}
+-- Ted Leung, March 6, 2008\footnote{\citeurl{http://www.sauria.com/blog/2008/03/06/google-contacts-and-carddav/}{2012-1-6}}
+
+
+Roy Fielding says WebDAV is not restful: \url{http://tech.groups.yahoo.com/group/rest-discuss/message/5874}
+
+\begin{quotation}
+PROP* methods conflict with REST because they prevent
+important resources from having URIs and effectively double the
+number of methods for no good reason. Both Henrik and I argued
+against those methods at the time. It really doesn't matter
+how uniform they are because they break other aspects of the
+overall model, leading to further complications in versioning
+(WebDAV versioning is hopelessly complicated), access control
+(WebDAV ACLs are completely wrong for HTTP), and just about every
+other extension to WebDAV that has been proposed.
+
+[\ldots]
+
+The problem with MOVE is that it is actually an operation on two
+independent namespaces (the source collection and destination
+collection). The user must have permission to remove from the
+source collection and add to the destination collection, which
+can be a bit of a problem if they are in different authentication
+realms. COPY has a similar problem, but at least in that case
+only one namespace is modified. I don't think either of them map
+very well to HTTP.
+\end{quotation}
+
+The discussion also continued on the microformats mailing list
+\url{http://microformats.org/discuss/mail/microformats-rest/2006-April/thread.html#217}.
+
+see \cite{Amundsen2010} for a restful approach to properties.
+
+Is ATOM an alternative to WebDAV?
+
+\begin{quote}
+  AtomPub is different from DAV in two key respects:
+  \begin{itemize}
+  \item The client doesn't control where things go, the server does
+  \item It is allowed and expected that an AtomPub server will look at the incoming information and change it (generate ID, timestamps, sanitize HTML, etc)
+  \end{itemize}
+\end{quote}
+Tim Bray, http://www.imc.org/atom-protocol/mail-archive/msg11271.html
+
+\subsubsection{OpenSocial}
+
+Roy Fielding wrote a blog post about the ``SocialSite REST API'', stating that
+it isn't restful at all but clearly an RPC style
+API.\footnote{\citeurl{http://roy.gbiv.com/untangled/2008/rest-apis-must-be-hyperhtext-driven}{2011-12-06}}
+Fielding was referring to SocialSite, which is however an implementation of the
+OpenSocial specification. Dave Johnson, a contributor to SocialSite, reacted on
+this critique by opening a discussion on an OpenSocial mailing
+list:\footnote{\citeurl{http://groups.google.com/group/opensocial-and-gadgets-spec/browse_thread/thread/aff4ba7373e21284/201a413efa67c26e}{2011-12-06}}
+\begin{quote}
+  I must admit, it is not clear to me how OpenSocial REST API violates the six
+  rules that Roy stated.
+\end{quote}
+The above quote warrants a short comment. I also thought before, that REST would
+be so simple that there wouldn't be much need for further studying. Every web
+developer has some understanding of URIs, HTTP and a bit less of Hypermedia. So
+it is easy to fall into the trap that everything build on top of HTTP would be
+restful. Now however, after some more reading about REST, I can easily find
+violations of the REST constraints in the OpenSocial specification.
+
+Restful APIs are modeled around resources, their representations and links
+between them. The authors of the OpenSocial API however seem to have modeled
+their API around the concept of services:\cite[Social API Server, sec 2, Services]{OSSpec2.0.1}
+\begin{quote}
+  OpenSocial defines several services for providing access to a container's data.
+\end{quote}
+
+\paragraph{Fielding's critique}
+Fielding listed some rules that a restful API must obey, but did not give
+explicit examples how OpenSocial violates this rules. The following section will
+provide such examples.
+
+\begin{quote}
+  A REST API should not be dependent on any single communication protocol,
+  [\ldots] any protocol element that uses a URI for identification must allow
+  any URI scheme to be used for the sake of that identification.
+  \textit{[Failure here implies that identification is not separated from
+    interaction.]}
+\end{quote}
+
+OpenSocial defines a construct called ``REST-URI-Fragment'' which is a clear
+violation of the above rule. This URI fragment is simply an encoding of
+procedural parameters as elements of an HTTP URI:\cite[Core API Server, sec
+2.1.1.2.2, REST-URI-Fragment]{OSSpec2.0.1}
+
+\begin{quote}
+  Each service type defines an associated partial URI format. The base URI for
+  each service is found in the URI element associated with the service in the
+  discovery document. Each service type accepts parameters via the URL
+  path. Definitions are of the form:
+  
+  \verb:{a}/{b}/{c}:
+\end{quote}
+
+URIs can contain a query component that would be more appropriate to contain
+parameters. This would also have made it clearer to see that the specification
+actually defines services instead of resources. One test showing the misfit is
+to ask how dot-segments ('.' and '..') inside the URI fragment are interpreted
+and whether this conforms with the letter and spirit of the URI
+standard.\cite[sec 3.3]{RFC3986} Another misfit can be seen in the URI fragment
+to retrieve one or multiple albums. In this case the 'c' part in the quoted
+definition above is actually a list of albums to retrieve separated by a slash.
+
+Fielding's second bullet point most likely refers to the
+\texttt{X-HTTP-Method-Override} header. This header is a widely
+used\footnote{\citeurl{http://www.subbu.org/blog/2008/07/another-rest-anti-pattern}{2011-12-06}}
+workaround to allow the use of other HTTP methods than GET and POST from HTML
+forms or through firewalls.
+
+The next two points again refer to a more serious issue:
+
+\begin{quote}
+  A REST API should spend almost all of its descriptive effort in defining the
+  media type(s) used for representing resources and driving application
+  state[\ldots].  \textit{[Failure here implies that out-of-band information is
+    driving interaction instead of hypertext.]}  A REST API must not define
+  fixed resource names or hierarchies[\ldots] \textit{[Failure here implies that
+    clients are assuming a resource structure due to out-of band
+    information[\ldots]].}
+\end{quote}
+
+The OpenSocial specification contains a lot of out-of-band information
+describing how to form URIs to access information or which methods to use on
+which URIs for different actions. This means that the OpenSocial API is not
+simple or intuitive to use but requires a client developer to read a lot of
+specification, thus violating the simplicity property of a restful
+architecture. Since the URIs are fixed in the specification and necessarily also
+in clients, the modifiability property is also violated.\cite[sec
+2.3]{Fielding2000}
+
+The following tables give some examples of the specified URIs:
+
+\begin{table}[h]
+\begin{tabular}{p{6.5cm} l p{10cm}}
+  URI fragment & Method & Description \\
+  %\hline
+  \verb:/people/{User-Id}/@self: & GET & profile for User-Id \\
+  \verb:/people/{User-Id}/@self: & DELETE & remove User \\
+  \verb:/people/{User-Id}/{Group-Id}: & GET & full profiles of group members \\
+  \verb:: & POST & Create relationship, target specified \newline by \verb:<entry><id>: in body \\
+   & POST & Update Person \\
+  \verb:/people/{Initial-User-Id}/: \newline \verb:{Group-Id}/{Related-User-Id}: & GET & ??? \\
+  \verb:/people/@supportedFields: & GET & list of supported person profile fields \\
+  \verb:/groups/{User-Id}[/{Group-Id}]: & GET & one or all groups of a user \\
+   & PUT & update group \\
+   & DELETE & delete group \\
+  \verb:/groups/{User-Id}: & POST & create group \\
+\end{tabular}
+  \caption{URI fragments for peoples and groups in the OpenSocial REST API}
+\end{table}
+
+\begin{table}[h]
+\begin{tabular}{p{9.5cm} l p{8cm}}
+  URI fragment & Method & Description \\
+  %\hline
+  \verb:/albums/{User-Id}/@self: & POST & create album \\
+  \verb:/albums/{User-Id}/{Group-Id}[/Album-Id]*: & GET & one or multiple albums \\
+  \verb:/mediaItems/{User-Id}/{Group-Id}/{Album-Id}/: \newline \verb:{MediaItem-Id}: & GET & one mediaitem \\
+  \verb:/mediaItem/{User-Id}/@self/{Album-Id}: (sic!) & POST & create mediaitem \\
+\end{tabular}
+  \caption{URI fragments for albums and mediaitems in the OpenSocial REST API}
+  \label{tab:OSURIAlbums}
+\end{table}
+
+The last URI in \autoref{tab:OSURIAlbums} is obviously missing an ``s'' behind
+\texttt{mediaItem}. This typo is present and unfixed in the OpenSocial spec
+since Version 1.0, released in march 2010. This is of course not a big issue in
+itself, but rather a sign that the specification is too verbose and does
+over-specify things that should rather be auto-discovered through hyperlinks.
+
+Fielding mentions in a comment to the same blog post that the OpenSocial API
+``could be made so [restful] with some relatively small changes'' but does not
+specify these changes. However some issues can easily be identified.
+
+First the data structures defined in OpenSocial do not use URIs to refer to
+other resources. Instead they use Object-Ids that must then be inserted in the
+appropriate URI templates. Examples are the \texttt{recipients},
+\texttt{senderId}, \texttt{collectionIds} of messages and the \texttt{ownerId}
+of albums. The person structure does not contain fields referencing other
+resources. Thus it does not obviously violate REST like the albums and
+messages. However it does so even worse since there are hidden references only
+defined out-of-band in the specification. One can retrieve the albums, relations
+or messages of a user by filling in the \texttt{userId} in one of the specified
+URI templates. If Users would just contain references to other resources related
+to a user, the specification could already be shortened a lot.
+
+Another missed opportunity for a much more intuitive API is the relation of
+media items and albums. This seems to be poster child example for a collection
+(album) to collection-element (media item) relation which could have made use of
+the hierarchical character of URI paths. OpenSocial however requires the client
+developer to use two different URI templates. (\autoref{tab:OSURIAlbums})
+
+A not so small change to OpenSocial would be to either use already standardized
+and registered media types where possible or to register new types where
+necessary. It seems that there are some already existing media types that could
+be a good fit for OpenSocial but only miss a canonical json representation for
+easy consumption by javascript applications. These are vCard for
+persons,\footnote{OpenSocial persons are based on portable contacts which in
+  turn borrowed field names from vCards.} ATOM entries\cite{RFC4287} for
+messages, activities and media items and ATOM categories, collections or
+workspaces\cite{RFC5023} for albums and groups. It would probably be necessary
+to add extensions to the mentioned media types but vCard and ATOM both already
+anticipated this need and provided mechanisms to do so.
+
+The use of the ATOM format could promote the adoption of OpenSocial because
+developers could either reuse existing knowledge about ATOM or would be more
+motivated to learn about a system that is based on an already widespread
+format. In fact OpenSocial already mentions ATOM as a way to wrap OpenSocial
+data. However this wrapping does not build extend and reuse ATOM semantics as
+proposed above but just puts the OpenSocial data structures inside the
+entry/content element of ATOM. This kind of misuse of ATOM does of course not
+deliver any advantage on top of the existing plain JSON or XML
+representations.\footnote{compare Bill de Hora, Extensions v Envelopes. 11/2009 
+%\newline
+  \citeurl{http://www.dehora.net/journal/2009/11/28/extensions-v-envelopes}{2011-21-07}}
+Consequently the newest OpenSocial specification deprecates any reference to the
+ATOM format.
+
+In Algermissen's classification (~\ref{sec:algerm-class-http}), the OpenSocial
+REST API would actually be ``HTTP-based Type I'' due to the lack of media types
+and direct hyper links between related resources. Algermissen writes that this
+level has the lowest possible initial cost of all HTTP APIs. Or in other words:
+The OpenSocial specification authors did not have to invest a lot to come up
+with this API specification but maintenance and evolution cost may be medium or
+high.
+
+\subsubsection{CAP}
+
+RFC 4324 "Calendar Access Protocol (CAP)"
+
+\begin{quotation}
+  [\ldots] CAP failed because most of the active implementors at the 
+time felt it had become too complex to implement - partly because it 
+required implementing a "brand new" protocol (BEEP). The upshot of that was 
+the CalDAV effort, which was based on an existing fairly well understood 
+protocol - WebDAV. One of the benefits of using WebDAV was that it was easy 
+to take "off the shelf" WebDAV software (server and client) and get a basic 
+CalDAV implementation done very quickly. Indeed, several months after 
+CalDAV was published, CalConnect held an interop event at which several 
+server and client implementations were present and demonstrated basic 
+interoperability - something that would have been hard to achieve with CAP.
+\end{quotation}
+-- Cyrus Daboo\footnote{\citeurl{http://lists.calconnect.org/pipermail/caldeveloper-l/2012-January/000135.html}{2012-01-04}}
 
 \section{Requirements}
 
@@ -90,17 +400,6 @@ further insights into its general applicability and fit.
 
 This work defines a protocol to share 
 
-\subsection{Definitions}
-
-Kolab is the name of a software product ... TODO
-
-A couple of related terms and concepts exist that all more or less overlap with
-the functionality provided by Kolab: Groupware, Personal Information
-Management/Manager (PIM), Group Information Management (GIM), Computer-supported
-cooperative/collaborative work, Knowledge management, (Enterprise) Content
-Management.
-
-TODO: keinen der Terme benutzen.
 
 \subsection{General Requirements}
 % This subsection of the SRS should provide a summary of the major functions 
@@ -341,7 +640,7 @@ media types.
 
 TODO:
 \begin{itemize}
-\item Ein generelles Daten Modell wäre hilfreich, um alle Medien Typen darauf zu projezieren und mit einer solchen Projektion dann innerhalb der Applikation zu arbeiten
+\item Ein generelles Daten Modell wäre hilfreich, um alle Medien Typen darauf zu projezieren und mit einer solchen Projektion dann innerhalb der Applikation zu arbeiten (TODO Schreier: warum muss dass Datenmodell total allgemeingültig sein, reicht es nicht vielleicht auch für eine Domäne?)
 \item Ein allgemeines Datenmodell könnte auch eine Hilfe sein als Zwischenschritt für Conversions zwischen Medientypen
 \item Es gibt kein allgemeines, sinnvolles Datenmodell für alle Medientypen
 \item Trotzdem können bestimmte hilfreiche Generalisierungen vorgenommen werden
@@ -357,7 +656,7 @@ TODO:
 
 \subsubsection{XML vs. JSON}
 
-This section investigates the two most common data models used by media types
+This section investigates the two most common syntaxes used by media types
 and the issues that arise if an application needs to support both of them.
 
 The application section of the IANA mime type registration has 294 entries
@@ -366,19 +665,21 @@ ending in ``+xml'' and only 3 ending in
 This stands in contrast to the rise of public JSON APIs and the decline of XML
 APIs.\footnote{\citeurl{http://blog.programmableweb.com/2011/05/25/1-in-5-apis-say-bye-xml/}{2011-12-20} \citeurl{http://www.readwriteweb.com/cloud/2011/03/programmable-web-apis-popping.php}{2011-12-21}}
 
-Web developers often prefer JSON over XML because it is perceived as easier to
-parse, process and smaller in size. XML in comparison is seen as complicate,
-slow to process and larger in size. A strong argument for JSON as the preferred
-format for JavaScript applications is that JSON is a subset of
-JavaScript.\footnote{ECMAScript for XML (E4X) makes XML a first class language
+%Web developers often prefer JSON over XML because it is perceived as easier to
+%parse, process and smaller in size. XML in comparison is seen as complicate,
+%slow to process and larger in size. - keine Quellen
+A strong argument for JSON as the preferred format for public APIs may be that
+JSON is a subset of JavaScript and thus easily consumable in a web
+browser.\footnote{ECMAScript for XML (E4X) makes XML a first class language
   construct in the browser but is only supported by Mozilla
   \citeurl{http://en.wikipedia.org/wiki/ECMAScript_for_XML}{2012-2-2}}
 
 A drawback of this mismatch between the preference of media type designers and
 API consumers is a possible duplication of work and incompatibilities across
-different APIs. If two developers independently take the same XML media type as
-a model to develop a JSON format, they can still come up with different
-results. There is no standard mapping from XML schemes to JSON structures.
+different APIs. An author that wants to offer a public API as JSON is likely to
+find only an existing XML media type, but no one in JSON.  The situation would
+be eased, if a standard mapping from XML schemes to JSON would be possible, but
+that is not the case.
 
 Instead, possible mappings have to trade of the preservation of all structural
 information against the ``friendliness'' of the resulting JSON
@@ -388,30 +689,42 @@ to process. \autoref{fig:waysmapxmljson} shows two different examples how to map
 data from XML to JSON with one of them using JSON number values, being more
 compact and probably easier to process.
 
-%\begin{figure}
-%\captionsetup[subfloat]{justification=raggedright,singlelinecheck=false}
-%\small{
-%\subfloat[XML fragment]{
-%  \begin{minipage}[b]{0.25\linewidth}
-%    \lstinputlisting{snippets/xml2json_xml}    
-%  \end{minipage}
-%} 
-%\subfloat[unfriendly JSON]{
-%  \begin{minipage}[b]{0.4\linewidth}
-%    \lstinputlisting{snippets/xml2json_json1}
-%  \end{minipage}
-%}
-%\subfloat[less(?) unfriendly JSON]{
-%  \begin{minipage}[b]{0.25\linewidth}
-%    \lstinputlisting{snippets/xml2json_json2}
-%  \end{minipage}
-%}
-%}
-%  \caption{different ways to map XML to JSON}
-%  \label{fig:waysmapxmljson}
-%\end{figure}
+\begin{multicols}{3}
+\begin{lstlisting}[label=fig:waysmapxmljson,
+                  captionpos=t,
+                  caption={XML fragment}, frame=single]
+<lang pref="1"
+      id="fr" />
+<lang pref="3"
+      id="en" />
+\end{lstlisting}
+\columnbreak
+\begin{lstlisting}[title={unfriendly JSON}, frame=single,
+                  captionpos=t
+]
+"languages": [
+  { "id":"fr",
+    "pref":"1" },
+  { "id":"en",
+    "pref":"3" }
+]
+\end{lstlisting}
+\columnbreak
+\begin{lstlisting}[title={friendly JSON}, frame=single,
+                  captionpos=t
+]
+"languages": {
+  "fr":1,
+  "en":3
+}
+\end{lstlisting}
+\end{multicols}
 
 Activity Streams has avoided the misalignment of an official XML format and an unofficial JSON deviate by defining an XML (ATOM) and JSON format from the beginning.\footnote{\citeurl{http://activitystrea.ms/}{2012-01-21}}
+
+\subsubsection{Hypermedia Support in JSON}
+
+TODO: discuss HAL
 
 \subsection{vCard, iCalendar, xCard and xCal}
 
@@ -690,6 +1003,54 @@ Erweiterungsmöglichkeiten v. Medientypen nutzen um Isomorphie herzustellen
 % The life cycle of a CollectionStorage is across individual requests to facilitate caching or database connection reuse.
 
 \subsection{Overview}
+
+\subsection{Reusable Patterns and Components}
+
+Reuse is of course in general a good thing. In the context of Model Driven
+Development (MDD) and code generation it is especially import to identify code
+that is general enough to be provided by a library of framework and does not
+need to be generated.
+
+Minimizing the generated code also minimizes the extend of drawbacks associated
+with code generation, most importantly conflicts between updates by the code
+generator and manual modification.
+
+
+% We have a namespace at our disposal. HTTP suggests to interpret the path component of this namespace in a hierarchic way.
+% The URI must be mapped to a resource, independent of the requested media type or HTTP verb. 
+% It therefor makes sense to do the interpretation of the URI or the path independent from Media type or HTTP verb dispatch.
+
+% wilde-fqas argues that feeds (collections) provide a general enough abstraction 
+
+Concerns regarding Media Types that needs to be implemented differently for each different Media Type:
+\begin{itemize}
+\item validate the Media Type
+\item provide accessors to read, write parts of the Media Type
+\item serialize, deserialize the whole Media Type
+\item converters to other formats
+\item accessors to common interfaces (projection), e.g. common generic resource attributes or common attributes of a contact
+\end{itemize}
+% Attributes of a resource could be virtual or derived, e.g. the size of an image is derived from the binary image data.
+% Images also contain additional data that could be exposed as attributes.
+
+
+Candidate areas for re-usability:
+\begin{itemize}
+\item link building, URL parsing
+\item HTML form building, parsing
+\item generic properties of resources, id
+\item resource types
+\item question to storage: does resource still match ETag? Has changed since?
+\item all links of a resource: Link: intern/extern/undefined, href, rel, title, text, media type
+\item bool function matchesMediaType(), getMediaType() auf WrappedEntry
+\item Prüfung, ob ein Update durchgeführt werden soll, gemäß ETAG, ifnotchanged
+\item Möglichkeit, DatenKlassen mit DatenTypen zu definieren wie in eZ Publish um automatische Views und Edit Ansichten zu ermöglichen.
+\item Creation of resources: POST to collection with SLUG Header, PUT to URI, normalization of SLUG Header
+\item Pagination (building and parsing of next and previous URIs, implementation of RFC5005), querying the collections entries provider with the correct parameters (offset, limit).
+\item Storage interface with transaction support. An application may for example need to notify an indexing component after some resource has been changed. -- No transaction support: Every action that must happen in a transaction together with the resource change must be handled by the storage layer, must be aware of the storage technologie.
+\end{itemize}
+
+% Im Gegensatz zu Bildern, wie in \cite{Schreier:2011:MRA:1967428.1967434} können Kontakte komplett inline sein.
 
 \subsection{Interactions}
 \subsubsection{Discovery of Collections}
@@ -1174,354 +1535,9 @@ A final decision about this subject should be done based on utilization and perf
 
 What needs a client to know, how does it need to work?
 
-\subsection{Related work}
-\subsubsection{IMAP used by Kolab}
-
-Kolab uses an IMAP server as the data store and
-synchronization protocol for calendar and contact informations. I want to
-compare this approach to a restful one.
-
-Advantages of IMAP:
-\begin{itemize}
-\item already there, since Mail uses it
-\item can store blobs/files so no need to map the iCal/vCard files to a relational scheme
-\item out of the box support for offline work and later synchronization (How does it solve editing conflicts?)
-\end{itemize}
-Disadvantages of IMAP:
-\begin{itemize}
-\item Complicate, 38 RFCs according to \url{http://de.wikipedia.org/wiki/Internet_Message_Access_Protocol} see also: \url{http://www.apps.ietf.org/rfc/ipoplist.html}
-\item All clients directly access the iCal/vCard files with no moderation layer in between. This means that no validation or normalization can be done. Schema updates can only be done if all clients cooperate.
-\item IMAP imposes a folder structure. Google's gmail is an example for another, tag based approach. Messages could have several tags. It is therefor hard to access Gmail via IMAP.
-\item Sam Varshavchik, the author of the courier Mail Transfer Agent explains the history of IMAP and claims that the IMAP standard is broken: http://www.courier-mta.org/fud/
-\item IMAP is so complicate that the IMAP wiki holds 10 pages of advises for IMAP client authors: http://www.imapwiki.org/ClientImplementation RFC 2683 ``IMAP4 Implementation Recommendations'' is a 23 pages document (cut 5 pages for verbosity) explaining how to implement another RFC standard. Is there any widely used standard that needs another RFC explaining how to implement it?
-\item \url{http://en.wikipedia.org/wiki/Internet_Message_Access_Protocol#Disadvantages}
-\item Some attempts to create a simpler alternative to IMAP:
-  \begin{itemize}
-  \item http://en.wikipedia.org/wiki/POP4
-  \item \url{http://en.wikipedia.org/wiki/Simple_Mail_Access_Protocol} also here http://www.courier-mta.org/cone/smap1.html
-  \item \url{http://en.wikipedia.org/wiki/Internet_Mail_2000}
-  \item HTTP restful: http://tools.ietf.org/id/draft-dusseault-httpmail-00.txt mailing list: https://www.ietf.org/mailman/listinfo/httpmail
-  \item BikINI is not IMAP http://bikini.caterva.org
-  \item Outlook uses HTTP to communicate with Hotmail
-  \item another rest mail proposal: http://www.prescod.net/rest/restmail/
-  \end{itemize}
-\item more rants: http://blog.gaborcselle.com/2010/02/how-to-replace-imap.html
-\item IMAP issues found by the chandler project http://chandlerproject.org/bin/view/Jungle/IntrinsicIMAPIssues
-\end{itemize}
 
 
-
-\subsubsection{WebDAV, CalDAV, CardDAV}
-
-\begin{quote}
-Were I to propose CalDAV today it would probably be CalAtom  
-\end{quote}
--- Lisa Dusseault, February 29, 2008\footnote{\citeurl{http://nih.blogspot.com/2008/02/nearly-two-years-ago-i-made-prediction.html}{2012-1-6}}
-
-\begin{quote}
-  I gave a big sigh of relief when I read that, and I hope that the CardDAV
-  folks take this to heart. Some parts of WebDAV (e.g., properties [\ldots])
-  deserve to be taken out back and shot -- although, as Lisa says, they were
-  necessary because of the state of the art at the time. That doesn't mean we
-  can't do better now.
-\end{quote}
--- Ted Leung, March 6, 2008\footnote{\citeurl{http://www.sauria.com/blog/2008/03/06/google-contacts-and-carddav/}{2012-1-6}}
-
-
-Roy Fielding says WebDAV is not restful: \url{http://tech.groups.yahoo.com/group/rest-discuss/message/5874}
-
-\begin{quotation}
-PROP* methods conflict with REST because they prevent
-important resources from having URIs and effectively double the
-number of methods for no good reason. Both Henrik and I argued
-against those methods at the time. It really doesn't matter
-how uniform they are because they break other aspects of the
-overall model, leading to further complications in versioning
-(WebDAV versioning is hopelessly complicated), access control
-(WebDAV ACLs are completely wrong for HTTP), and just about every
-other extension to WebDAV that has been proposed.
-
-[\ldots]
-
-The problem with MOVE is that it is actually an operation on two
-independent namespaces (the source collection and destination
-collection). The user must have permission to remove from the
-source collection and add to the destination collection, which
-can be a bit of a problem if they are in different authentication
-realms. COPY has a similar problem, but at least in that case
-only one namespace is modified. I don't think either of them map
-very well to HTTP.
-\end{quotation}
-
-The discussion also continued on the microformats mailing list
-\url{http://microformats.org/discuss/mail/microformats-rest/2006-April/thread.html#217}.
-
-see \cite{Amundsen2010} for a restful approach to properties.
-
-Is ATOM an alternative to WebDAV?
-
-\begin{quote}
-  AtomPub is different from DAV in two key respects:
-  \begin{itemize}
-  \item The client doesn't control where things go, the server does
-  \item It is allowed and expected that an AtomPub server will look at the incoming information and change it (generate ID, timestamps, sanitize HTML, etc)
-  \end{itemize}
-\end{quote}
-Tim Bray, http://www.imc.org/atom-protocol/mail-archive/msg11271.html
-
-\subsubsection{OpenSocial}
-
-Roy Fielding wrote a blog post about the ``SocialSite REST API'', stating that
-it isn't restful at all but clearly an RPC style
-API.\footnote{\citeurl{http://roy.gbiv.com/untangled/2008/rest-apis-must-be-hyperhtext-driven}{2011-12-06}}
-Fielding was referring to SocialSite, which is however an implementation of the
-OpenSocial specification. Dave Johnson, a contributor to SocialSite, reacted on
-this critique by opening a discussion on an OpenSocial mailing
-list:\footnote{\citeurl{http://groups.google.com/group/opensocial-and-gadgets-spec/browse_thread/thread/aff4ba7373e21284/201a413efa67c26e}{2011-12-06}}
-\begin{quote}
-  I must admit, it is not clear to me how OpenSocial REST API violates the six
-  rules that Roy stated.
-\end{quote}
-The above quote warrants a short comment. I also thought before, that REST would
-be so simple that there wouldn't be much need for further studying. Every web
-developer has some understanding of URIs, HTTP and a bit less of Hypermedia. So
-it is easy to fall into the trap that everything build on top of HTTP would be
-restful. Now however, after some more reading about REST, I can easily find
-violations of the REST constraints in the OpenSocial specification.
-
-Restful APIs are modeled around resources, their representations and links
-between them. The authors of the OpenSocial API however seem to have modeled
-their API around the concept of services:\cite[Social API Server, sec 2, Services]{OSSpec2.0.1}
-\begin{quote}
-  OpenSocial defines several services for providing access to a container's data.
-\end{quote}
-
-\paragraph{Fielding's critique}
-Fielding listed some rules that a restful API must obey, but did not give
-explicit examples how OpenSocial violates this rules. The following section will
-provide such examples.
-
-\begin{quote}
-  A REST API should not be dependent on any single communication protocol,
-  [\ldots] any protocol element that uses a URI for identification must allow
-  any URI scheme to be used for the sake of that identification.
-  \textit{[Failure here implies that identification is not separated from
-    interaction.]}
-\end{quote}
-
-OpenSocial defines a construct called ``REST-URI-Fragment'' which is a clear
-violation of the above rule. This URI fragment is simply an encoding of
-procedural parameters as elements of an HTTP URI:\cite[Core API Server, sec
-2.1.1.2.2, REST-URI-Fragment]{OSSpec2.0.1}
-
-\begin{quote}
-  Each service type defines an associated partial URI format. The base URI for
-  each service is found in the URI element associated with the service in the
-  discovery document. Each service type accepts parameters via the URL
-  path. Definitions are of the form:
-  
-  \verb:{a}/{b}/{c}:
-\end{quote}
-
-URIs can contain a query component that would be more appropriate to contain
-parameters. This would also have made it clearer to see that the specification
-actually defines services instead of resources. One test showing the misfit is
-to ask how dot-segments ('.' and '..') inside the URI fragment are interpreted
-and whether this conforms with the letter and spirit of the URI
-standard.\cite[sec 3.3]{RFC3986} Another misfit can be seen in the URI fragment
-to retrieve one or multiple albums. In this case the 'c' part in the quoted
-definition above is actually a list of albums to retrieve separated by a slash.
-
-Fielding's second bullet point most likely refers to the
-\texttt{X-HTTP-Method-Override} header. This header is a widely
-used\footnote{\citeurl{http://www.subbu.org/blog/2008/07/another-rest-anti-pattern}{2011-12-06}}
-workaround to allow the use of other HTTP methods than GET and POST from HTML
-forms or through firewalls.
-
-The next two points again refer to a more serious issue:
-
-\begin{quote}
-  A REST API should spend almost all of its descriptive effort in defining the
-  media type(s) used for representing resources and driving application
-  state[\ldots].  \textit{[Failure here implies that out-of-band information is
-    driving interaction instead of hypertext.]}  A REST API must not define
-  fixed resource names or hierarchies[\ldots] \textit{[Failure here implies that
-    clients are assuming a resource structure due to out-of band
-    information[\ldots]].}
-\end{quote}
-
-The OpenSocial specification contains a lot of out-of-band information
-describing how to form URIs to access information or which methods to use on
-which URIs for different actions. This means that the OpenSocial API is not
-simple or intuitive to use but requires a client developer to read a lot of
-specification, thus violating the simplicity property of a restful
-architecture. Since the URIs are fixed in the specification and necessarily also
-in clients, the modifiability property is also violated.\cite[sec
-2.3]{Fielding2000}
-
-The following tables give some examples of the specified URIs:
-
-\begin{table}[h]
-\begin{tabular}{p{6.5cm} l p{10cm}}
-  URI fragment & Method & Description \\
-  %\hline
-  \verb:/people/{User-Id}/@self: & GET & profile for User-Id \\
-  \verb:/people/{User-Id}/@self: & DELETE & remove User \\
-  \verb:/people/{User-Id}/{Group-Id}: & GET & full profiles of group members \\
-  \verb:: & POST & Create relationship, target specified \newline by \verb:<entry><id>: in body \\
-   & POST & Update Person \\
-  \verb:/people/{Initial-User-Id}/: \newline \verb:{Group-Id}/{Related-User-Id}: & GET & ??? \\
-  \verb:/people/@supportedFields: & GET & list of supported person profile fields \\
-  \verb:/groups/{User-Id}[/{Group-Id}]: & GET & one or all groups of a user \\
-   & PUT & update group \\
-   & DELETE & delete group \\
-  \verb:/groups/{User-Id}: & POST & create group \\
-\end{tabular}
-  \caption{URI fragments for peoples and groups in the OpenSocial REST API}
-\end{table}
-
-\begin{table}[h]
-\begin{tabular}{p{9.5cm} l p{8cm}}
-  URI fragment & Method & Description \\
-  %\hline
-  \verb:/albums/{User-Id}/@self: & POST & create album \\
-  \verb:/albums/{User-Id}/{Group-Id}[/Album-Id]*: & GET & one or multiple albums \\
-  \verb:/mediaItems/{User-Id}/{Group-Id}/{Album-Id}/: \newline \verb:{MediaItem-Id}: & GET & one mediaitem \\
-  \verb:/mediaItem/{User-Id}/@self/{Album-Id}: (sic!) & POST & create mediaitem \\
-\end{tabular}
-  \caption{URI fragments for albums and mediaitems in the OpenSocial REST API}
-  \label{tab:OSURIAlbums}
-\end{table}
-
-The last URI in \autoref{tab:OSURIAlbums} is obviously missing an ``s'' behind
-\texttt{mediaItem}. This typo is present and unfixed in the OpenSocial spec
-since Version 1.0, released in march 2010. This is of course not a big issue in
-itself, but rather a sign that the specification is too verbose and does
-over-specify things that should rather be auto-discovered through hyperlinks.
-
-Fielding mentions in a comment to the same blog post that the OpenSocial API
-``could be made so [restful] with some relatively small changes'' but does not
-specify these changes. However some issues can easily be identified.
-
-First the data structures defined in OpenSocial do not use URIs to refer to
-other resources. Instead they use Object-Ids that must then be inserted in the
-appropriate URI templates. Examples are the \texttt{recipients},
-\texttt{senderId}, \texttt{collectionIds} of messages and the \texttt{ownerId}
-of albums. The person structure does not contain fields referencing other
-resources. Thus it does not obviously violate REST like the albums and
-messages. However it does so even worse since there are hidden references only
-defined out-of-band in the specification. One can retrieve the albums, relations
-or messages of a user by filling in the \texttt{userId} in one of the specified
-URI templates. If Users would just contain references to other resources related
-to a user, the specification could already be shortened a lot.
-
-Another missed opportunity for a much more intuitive API is the relation of
-media items and albums. This seems to be poster child example for a collection
-(album) to collection-element (media item) relation which could have made use of
-the hierarchical character of URI paths. OpenSocial however requires the client
-developer to use two different URI templates. (\autoref{tab:OSURIAlbums})
-
-A not so small change to OpenSocial would be to either use already standardized
-and registered media types where possible or to register new types where
-necessary. It seems that there are some already existing media types that could
-be a good fit for OpenSocial but only miss a canonical json representation for
-easy consumption by javascript applications. These are vCard for
-persons,\footnote{OpenSocial persons are based on portable contacts which in
-  turn borrowed field names from vCards.} ATOM entries\cite{RFC4287} for
-messages, activities and media items and ATOM categories, collections or
-workspaces\cite{RFC5023} for albums and groups. It would probably be necessary
-to add extensions to the mentioned media types but vCard and ATOM both already
-anticipated this need and provided mechanisms to do so.
-
-The use of the ATOM format could promote the adoption of OpenSocial because
-developers could either reuse existing knowledge about ATOM or would be more
-motivated to learn about a system that is based on an already widespread
-format. In fact OpenSocial already mentions ATOM as a way to wrap OpenSocial
-data. However this wrapping does not build extend and reuse ATOM semantics as
-proposed above but just puts the OpenSocial data structures inside the
-entry/content element of ATOM. This kind of misuse of ATOM does of course not
-deliver any advantage on top of the existing plain JSON or XML
-representations.\footnote{compare Bill de Hora, Extensions v Envelopes. 11/2009 
-%\newline
-  \citeurl{http://www.dehora.net/journal/2009/11/28/extensions-v-envelopes}{2011-21-07}}
-Consequently the newest OpenSocial specification deprecates any reference to the
-ATOM format.
-
-In Algermissen's classification (~\ref{sec:algerm-class-http}), the OpenSocial
-REST API would actually be ``HTTP-based Type I'' due to the lack of media types
-and direct hyper links between related resources. Algermissen writes that this
-level has the lowest possible initial cost of all HTTP APIs. Or in other words:
-The OpenSocial specification authors did not have to invest a lot to come up
-with this API specification but maintenance and evolution cost may be medium or
-high.
-
-\subsubsection{CAP}
-
-RFC 4324 "Calendar Access Protocol (CAP)"
-
-\begin{quotation}
-  [\ldots] CAP failed because most of the active implementors at the 
-time felt it had become too complex to implement - partly because it 
-required implementing a "brand new" protocol (BEEP). The upshot of that was 
-the CalDAV effort, which was based on an existing fairly well understood 
-protocol - WebDAV. One of the benefits of using WebDAV was that it was easy 
-to take "off the shelf" WebDAV software (server and client) and get a basic 
-CalDAV implementation done very quickly. Indeed, several months after 
-CalDAV was published, CalConnect held an interop event at which several 
-server and client implementations were present and demonstrated basic 
-interoperability - something that would have been hard to achieve with CAP.
-\end{quotation}
--- Cyrus Daboo\footnote{\citeurl{http://lists.calconnect.org/pipermail/caldeveloper-l/2012-January/000135.html}{2012-01-04}}
-
-\section{Reusable Components}
-
-Reuse is of course in general a good thing. In the context of Model Driven
-Development (MDD) and code generation it is especially import to identify code
-that is general enough to be provided by a library of framework and does not
-need to be generated.
-
-Minimizing the generated code also minimizes the extend of drawbacks associated
-with code generation, most importantly conflicts between updates by the code
-generator and manual modification.
-
-
-
-% We have a namespace at our disposal. HTTP suggests to interpret the path component of this namespace in a hierarchic way.
-% The URI must be mapped to a resource, independent of the requested media type or HTTP verb. 
-% It therefor makes sense to do the interpretation of the URI or the path independent from Media type or HTTP verb dispatch.
-
-% wilde-fqas argues that feeds (collections) provide a general enough abstraction 
-
-Concerns regarding Media Types that needs to be implemented differently for each different Media Type:
-\begin{itemize}
-\item validate the Media Type
-\item provide accessors to read, write parts of the Media Type
-\item serialize, deserialize the whole Media Type
-\item converters to other formats
-\item accessors to common interfaces (projection), e.g. common generic resource attributes or common attributes of a contact
-\end{itemize}
-% Attributes of a resource could be virtual or derived, e.g. the size of an image is derived from the binary image data.
-% Images also contain additional data that could be exposed as attributes.
-
-
-
-Candidate areas for re-usability:
-\begin{itemize}
-\item link building, URL parsing
-\item HTML form building, parsing
-\item generic properties of resources, id
-\item resource types
-\item question to storage: does resource still match ETag? Has changed since?
-\item all links of a resource: Link: intern/extern/undefined, href, rel, title, text, media type
-\item bool function matchesMediaType(), getMediaType() auf WrappedEntry
-\item Prüfung, ob ein Update durchgeführt werden soll, gemäß ETAG, ifnotchanged
-\item Möglichkeit, DatenKlassen mit DatenTypen zu definieren wie in eZ Publish um automatische Views und Edit Ansichten zu ermöglichen.
-\item Creation of resources: POST to collection with SLUG Header, PUT to URI, normalization of SLUG Header
-\item Pagination (building and parsing of next and previous URIs, implementation of RFC5005), querying the collections entries provider with the correct parameters (offset, limit).
-\item Storage interface with transaction support. An application may for example need to notify an indexing component after some resource has been changed. -- No transaction support: Every action that must happen in a transaction together with the resource change must be handled by the storage layer, must be aware of the storage technologie.
-\end{itemize}
-
-% Im Gegensatz zu Bildern, wie in \cite{Schreier:2011:MRA:1967428.1967434} können Kontakte komplett inline sein.
+\section{Summary and Conclusions}
 
 
 
