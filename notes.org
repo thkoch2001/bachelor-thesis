@@ -305,6 +305,8 @@ support, first letter ``C''.
   \end{itemize}
 \end{itemize}
 
+ezPublish or Drupal implement the dynamic object model, see Dirk Riehle
+
 * \section{Hypermedia in RESTful applications}
 
 % Hat Kolab Hypermedia links in Kontakten, wie soll es sein mit xCard?
