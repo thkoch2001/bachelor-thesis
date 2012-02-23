@@ -7,7 +7,7 @@
 <meta name="originator" content="TeX4ht (http://www.cse.ohio-state.edu/~gurari/TeX4ht/)"> 
 <!-- html,2 --> 
 <meta name="src" content="restful_groupware.tex"> 
-<meta name="date" content="2012-02-22 16:31:00"> 
+<meta name="date" content="2012-02-23 22:13:00"> 
 <link rel="stylesheet" type="text/css" href="restful_groupware.css"> 
 </head><body 
 >
@@ -124,26 +124,26 @@ contact a separate storage component. The primarily targeted storage component i
 server with a Kolab conform set of groupware folders. However the design should not restrict
 the extension to a document database like CouchDB, plain files, relational or XML
 databases.
-<!--l. 497--><p class="noindent" >
+<!--l. 501--><p class="noindent" >
     <h4 class="subsectionHead"><span class="titlemark">2.5  </span> <a 
  id="x14-170002.5"></a>Design and Implementation Constraints</h4>
-<!--l. 499--><p class="noindent" >
+<!--l. 503--><p class="noindent" >
     <h4 class="subsectionHead"><span class="titlemark">2.6  </span> <a 
  id="x14-180002.6"></a>Specific Requirements</h4>
-<!--l. 501--><p class="noindent" ><span class="paragraphHead"><a 
+<!--l. 505--><p class="noindent" ><span class="paragraphHead"><a 
  id="x14-190002.6.0.3"></a><span 
 class="cmbx-12">Nested and mixed collections</span></span>
     The design should not unnecessarily hinder that collections could be nested or contain different
 kinds of media types, e.g. calendar items and contacts.
-<!--l. 505--><p class="indent" >    <span class="cite">[<a 
+<!--l. 509--><p class="indent" >    <span class="cite">[<a 
 href="restful_groupwareli2.html#XRFC6352">Dab11</a>, sec. 5.2]</span> forbids nested and mixed collections to ease the implementation of clients.
 However both may make sense in certain scenarios and the protocol should not exclude such
 scenarios. A collection could for example represent all items related to a project, which include
 contacts, events, todos and notes.
-<!--l. 511--><p class="noindent" >
+<!--l. 515--><p class="noindent" >
     <h4 class="subsectionHead"><span class="titlemark">2.7  </span> <a 
  id="x14-200002.7"></a>Excluded requirements</h4>
-<!--l. 513--><p class="noindent" ><span class="paragraphHead"><a 
+<!--l. 517--><p class="noindent" ><span class="paragraphHead"><a 
  id="x14-210002.7.0.4"></a><span 
 class="cmbx-12">Search</span></span>
                                                                                          
@@ -152,7 +152,7 @@ class="cmbx-12">Search</span></span>
 that such a facility could be added later. It is however expected that searching could be
 implemented separately. This could be done either on a synchronizing client or as a separate
 system in the same administrative domain as the server.
-<!--l. 520--><p class="noindent" ><span class="paragraphHead"><a 
+<!--l. 524--><p class="noindent" ><span class="paragraphHead"><a 
  id="x14-220002.7.0.5"></a><span 
 class="cmbx-12">Performance optimization</span></span>
     The system is meant to inherit the benefits of a restful architecture. It should therefor be
@@ -160,27 +160,27 @@ possible to attach separate caching intermediaries for read requests. Rather the
 the performance of the implementation of read requests it should be taken care that the
 architecture supports external caching and thus avoids to serve the same read request multiple
 times.
-<!--l. 527--><p class="noindent" ><span class="paragraphHead"><a 
+<!--l. 531--><p class="noindent" ><span class="paragraphHead"><a 
  id="x14-230002.7.0.6"></a><span 
 class="cmbx-12">Access Control</span></span>
     The aspect of access control would broaden the scope of this work to wide. However it could be
 kept in mind, whether the proposed design could be enhanced by a separate access control design
 as proposed in <span class="cite">[<a 
 href="restful_groupwareli2.html#Xconf/rest/GrafZLW11">GZLW11</a>]</span>.
-<!--l. 533--><p class="noindent" ><span class="paragraphHead"><a 
+<!--l. 537--><p class="noindent" ><span class="paragraphHead"><a 
  id="x14-240002.7.0.7"></a><span 
 class="cmbx-12">Copying and Moving</span></span>
     WebDAV introduces the HTTP verbs to COPY and MOVE. The usefulness of such
 functionality must of course be compared to the complexity of the implementation and the
 drawback of incompatibility to plain HTTP.
-<!--l. 538--><p class="indent" >    It is possible to enhance a restful API with copy and move functionality without extending
+<!--l. 542--><p class="indent" >    It is possible to enhance a restful API with copy and move functionality without extending
 HTTP. The only requirement is that additional hyperlinks can be attached to the resources of the
 API. Allamaraju <span class="cite">[<a 
 href="restful_groupwareli2.html#XAllamaraju_2010">All10</a>, Ch. 11]</span> proposes &#8220;controller resources&#8221; that act on POST requests and
 are linked from the resources they act on. Custom link relations are used to indicate the semantic
 of the controller resource.
-<!--l. 545--><p class="indent" >    This work does not include initial support for copy or move.
-<!--l. 547--><p class="noindent" ><span class="paragraphHead"><a 
+<!--l. 549--><p class="indent" >    This work does not include initial support for copy or move.
+<!--l. 551--><p class="noindent" ><span class="paragraphHead"><a 
  id="x14-250002.7.0.8"></a><span 
 class="cmbx-12">Versioning</span></span>
     WebDAV and therefor CalDAV and CardDAV support the versioning of resources as an
@@ -188,7 +188,7 @@ extension to the HTTP protocol. Versioning is an important feature for a text au
 that may have been the main target for the WebDAV protocol. It does however seem to be of little
 use for the resources considered here. The resources are mostly created in one session by one user
 and seldom modified.
-<!--l. 554--><p class="noindent" ><span class="paragraphHead"><a 
+<!--l. 558--><p class="noindent" ><span class="paragraphHead"><a 
  id="x14-260002.7.0.9"></a><span 
 class="cmbx-12">Make Collections</span></span>
     WebDAV introduces the MKCOL HTTP verb to create collections. CardDAV recommends
@@ -197,17 +197,17 @@ would be to make use of ATOM categories for grouping. Instead of creating a new 
 collection the user would thus create a contact resource with a new category. An ATOM service
 document could then link to a new (virtual) collection that only contains and accepts resources of
 this category.
-<!--l. 563--><p class="indent" >    TODO: What are the proposed ways to create collections? Post a feed to the service
+<!--l. 567--><p class="indent" >    TODO: What are the proposed ways to create collections? Post a feed to the service
 document? Put a new service document? Put a feed document to the desired location?
                                                                                          
                                                                                          
-<!--l. 566--><p class="noindent" ><span class="paragraphHead"><a 
+<!--l. 570--><p class="noindent" ><span class="paragraphHead"><a 
  id="x14-270002.7.0.10"></a><span 
 class="cmbx-12">Locking</span></span>
     As with Versioning, this is feature of WebDAV is not considered. Instead of locking
 a resource HTTP supports conditional updates and leaves conflict resolution to the
 client.
-<!--l. 571--><p class="noindent" ><span class="paragraphHead"><a 
+<!--l. 575--><p class="noindent" ><span class="paragraphHead"><a 
  id="x14-280002.7.0.11"></a><span 
 class="cmbx-12">Push notifications</span></span>
     This work does not include any means to actively notify (push) a client about changes happening on
@@ -223,11 +223,11 @@ href="restful_groupware17.html#fn13x0"><sup class="textsuperscript">13</sup></a>
  id="x14-28002f13"></a> 
                                                                                          
                                                                                          
-    <!--l. 581--><div class="crosslinks"><p class="noindent">[<a 
+    <!--l. 585--><div class="crosslinks"><p class="noindent">[<a 
 href="restful_groupwarese1.html" >prev</a>] [<a 
 href="restful_groupwarese1.html#tailrestful_groupwarese1.html" >prev-tail</a>] [<a 
 href="restful_groupwarese2.html" >front</a>] [<a 
 href="restful_groupware.html# " >up</a>] </p></div>
-<!--l. 581--><p class="indent" >    <a 
+<!--l. 585--><p class="indent" >    <a 
  id="tailrestful_groupwarese2.html"></a>    
 </body></html> 
