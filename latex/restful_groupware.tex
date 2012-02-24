@@ -10,6 +10,8 @@
 \usepackage{expdlist}
 \usepackage{subfig}
 \usepackage{listings}
+% see http://tex.stackexchange.com/questions/35145/maintaining-layout-of-tikz-diagrams-with-tex4ht-converting-as-single-pictures
+\ifx\HCode\UnDef\else\def\pgfsysdriver{pgfsys-tex4ht.def}\fi
 \usepackage{tikz}
   \usetikzlibrary{positioning,arrows,fit}
   \usetikzlibrary{decorations.pathmorphing,backgrounds,fit,decorations.pathreplacing}
@@ -21,6 +23,12 @@
 \setcounter{tocdepth}{3} %Bis zu welcher Ebene Einträge ins Inhaltsverzeichnis aufgenommen werden. In diesem Beispiel ebenfalls bis Ebene drei (\subsubsection). Ein durch \paragraph ausgewiesener Abschnitt wird demnach nicht im Inhaltsverzeichnis auftauchen. 
 
 \usepackage[colorlinks=false, pdfborder={0 0 0}, plainpages=false]{hyperref}
+
+% http://tex.stackexchange.com/questions/9497/start-new-page-with-each-section
+\usepackage{titlesec}
+\newcommand{\sectionbreak}{\clearpage}
+
+\usepackage{tocbibind}
 
 \newcommand{\citeurl}[2]{\url{#1} (#2)}
 
@@ -62,16 +70,27 @@
 Although computers became ubiquitous for some time now, they still don't help
 their users with their most basic information management needs: Make contacts,
 calendars, notices and to do items available across different devices and share
-them with my peers.
+them with family and peers.
 
 Existing solutions are either based on non-free software (Microsoft Outlook),
 brittle and unreliable\footnote{See comments on the individual projects in
   appendix ...} or require the user to trust his personal data to the commercial
-interests of a multinational corporation.\footnote{Experiences with Android and Data in the cloud \citeurl{http://keithp.com/blogs/calypso}{?}}
+interests of a multinational corporation.
+%\footnote{Experiences with Android and Data in the cloud \citeurl{http://keithp.com/blogs/calypso}{?}}
 
-This work uses an ongoing effort to draft a meta model for restful
-applications. Applying this meta model to the domain of this work may provide
-further insights into its general applicability and fit.
+TODO Überleitung
+
+A section about OpenSocial (\autoref{sec:opensocial}) provides additional
+motivation for a restful API for social data. It also uses the opportunity to
+provide an alternative approach to explain the rest architecture by going into
+detail why OpenSocial is not restful.
+
+A few patterns or techniques are presented and proposed for reuse in other Rest
+applications to ease the support for multiple alternative Media types. Among
+these techniques are Dependency Injection to prepare resource method parameters
+(\autoref{sec:prep-requ-comp}), Resource Facades
+  (\autoref{sec:resourcefacades}), a programmable dispatcher
+  (\autoref{sec:dispatcher}).
 
 \subsection{Definitions}
 
@@ -181,6 +200,7 @@ Is ATOM an alternative to WebDAV?
 Tim Bray, http://www.imc.org/atom-protocol/mail-archive/msg11271.html
 
 \subsubsection{OpenSocial}
+\label{sec:opensocial}
 
 Roy Fielding wrote a blog post about the ``SocialSite REST API'', stating that
 it isn't restful at all but clearly an RPC style
@@ -1130,7 +1150,7 @@ entry.\footnote{\citeurl{http://web.archive.org/web/20081120001246/http://www.sn
 \subsection{Components}
 
 \subsubsection{Dispatcher}
-
+\label{sec:dispatcher}
 The dispatcher selects the Java method (see \ref{sec:components-actions}) that
 should handle the request. The selection can depend at least on the path
 component of the requested URI, the media types accepted by the client as
@@ -1213,7 +1233,7 @@ how the framework can gather enough knowledge to still help by autogenerating
 e.g. WADL documents and responses to HEAD and OPTION requests.
 
 \subsubsection{Resource Facades}
-
+\label{sec:resourcefacades}
 Fielding discerns between a resource and the representation of a resource in a
 certain format, ``selected dynamically based on the capabilities or desires of
 the recipient and the nature of the resource''.\cite[p. 87]{Fielding2000}
@@ -1553,7 +1573,7 @@ request execution is therefor in the responsibility of the storage. Listing
 \ref{fig:evaluatepreconditions-concurrency}\footnote{found in the JAX-RS
   specification on page 28.} shows a possibility for a lost update. Another
 request could have updated the resource between the etag check and the
-\lstinline:doUpdate(): call.
+\lstinline:doUpdate: call.
 
 \begin{javalisting}[label=fig:evaluatepreconditions-concurrency,
                    caption={Potential lost-update problem with JAX-RS}]
@@ -1561,7 +1581,6 @@ ResponseBuilder rb = request.evaluatePreconditions(etag);
 if (rb == null)
   return doUpdate(foo);
 \end{javalisting}
-
 
 \paragraph{Preparsed Request Components}
 \label{sec:prep-requ-comp}
@@ -1630,19 +1649,8 @@ framework.\footnote{\citeurl{http://codahale.com/what-makes-jersey-interesting-p
   \citeurl{http://codahale.com/what-makes-jersey-interesting-injection-providers/}{2012-2-5}}
 
 \paragraph{Exkurs: Driving Dependency Injection further}
-Paragraph \ref{sec:prep-requ-comp} used dependency injection to cause the
-instantiation of a request scoped class that prepares information for the
-request method (``handleGet'' in the example). This idea could be extended.
 
-The information from the SearchRequest class is probably just forwarded by
-``handleGet'' to another component that executes the search on a given
-collection. Thus the request methot is ultimately interested on the search
-result set to transform it into a response. Consequently the ``handleGet''
-method could use dependency injection to request the result set and only start
-working on this. Figure \ref{fig:dependency-injection-pipeline} visualizes the
-hypothetic dependency graph of an application specific ResultSet class.
-
-\begin{figure}[tb]
+\begin{figure}[tbph]
   \begin{tikzpicture}
     [doc/.style={rectangle,draw=blue!30,fill=blue!20, node distance=4.5em}]
 
@@ -1672,6 +1680,18 @@ hypothetic dependency graph of an application specific ResultSet class.
   \caption{Building a processing pipeline with Dependency Injection}
   \label{fig:dependency-injection-pipeline}
 \end{figure}
+
+Paragraph \ref{sec:prep-requ-comp} used dependency injection to cause the
+instantiation of a request scoped class that prepares information for the
+request method (``handleGet'' in the example). This idea could be extended.
+
+The information from the SearchRequest class is probably just forwarded by
+``handleGet'' to another component that executes the search on a given
+collection. Thus the request methot is ultimately interested on the search
+result set to transform it into a response. Consequently the ``handleGet''
+method could use dependency injection to request the result set and only start
+working on this. Figure \ref{fig:dependency-injection-pipeline} visualizes the
+hypothetic dependency graph of an application specific ResultSet class.
 
 The figure shows how the CollectionStorage to search on is identified by the URI
 path and the search parameters by the SearchRequest class of listing
@@ -1714,11 +1734,9 @@ What needs a client to know, how does it need to work?
 
 \section{Summary and Conclusions}
 
-
-
+\newpage
 \bibliography{references}{}
 \bibliographystyle{alphadin}
-
 \end{document}
 
 % Local Variables:
