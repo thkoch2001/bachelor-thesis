@@ -1,6 +1,7 @@
  
 /* start css.sty */
 .cmr-10{font-size:83%;}
+.cmssbx-10x-x-120{ font-family: sans-serif; font-weight: bold;}
 .cmr-17{font-size:141%;}
 .cmmi-12{font-style: italic;}
 .cmtt-12x-x-144{font-size:144%;font-family: monospace;}
@@ -10,11 +11,11 @@
 .cmtt-12{font-family: monospace;}
 .cmtt-12{font-family: monospace;}
 .cmr-10x-x-109{font-size:90%;}
+.cmr-8{font-size:66%;}
+.cmbx-12{ font-weight: bold;}
 .cmtt-10{font-size:83%;font-family: monospace;}
 .cmtt-10{font-family: monospace;}
 .cmtt-10{font-family: monospace;}
-.cmr-8{font-size:66%;}
-.cmbx-12{ font-weight: bold;}
 .cmti-12{ font-style: italic;}
 .small-caps{font-variant: small-caps; }
 p.noindent { text-indent: 0em }
@@ -147,5 +148,13 @@ div.longtable{text-align:center;}
 div.lstlisting{font-family: monospace; white-space: nowrap; margin-top:0.5em; margin-bottom:0.5em; }
 div.lstinputlisting{ font-family: monospace; white-space: nowrap; }
 .lstinputlisting .label{margin-right:0.5em;}
+ .foreignobject {line-height:100%; font-size:120%; font-family:STIXgeneral,Times,Symbol,cmr10,CMSY10,CMEX10;padding:0; margin:0; text-align:center; } 
+math {vertical-align:baseline; line-height:100%; font-size:100%; font-family:STIXGeneral,Times,Symbol, cmr10,cmsy10,cmex10,cmmi10; font-style: normal; margin:0; padding:0; }
+ .foreignobject {line-height:100%; font-size:120%; font-family:STIXgeneral,Times,Symbol,cmr10,CMSY10,CMEX10;padding:0; margin:0; text-align:center; } 
+math {vertical-align:baseline; line-height:100%; font-size:100%; font-family:STIXGeneral,Times,Symbol, cmr10,cmsy10,cmex10,cmmi10; font-style: normal; margin:0; padding:0; }
+ .foreignobject {line-height:100%; font-size:120%; font-family:STIXgeneral,Times,Symbol,cmr10,CMSY10,CMEX10;padding:0; margin:0; text-align:center; } 
+math {vertical-align:baseline; line-height:100%; font-size:100%; font-family:STIXGeneral,Times,Symbol, cmr10,cmsy10,cmex10,cmmi10; font-style: normal; margin:0; padding:0; }
+ .foreignobject {line-height:100%; font-size:120%; font-family:STIXgeneral,Times,Symbol,cmr10,CMSY10,CMEX10;padding:0; margin:0; text-align:center; } 
+math {vertical-align:baseline; line-height:100%; font-size:100%; font-family:STIXGeneral,Times,Symbol, cmr10,cmsy10,cmex10,cmmi10; font-style: normal; margin:0; padding:0; }
 /* end css.sty */
 

@@ -1,0 +1,416 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="no"?> 
+<?xml-stylesheet href="restful_groupware.css" type="text/css"?> 
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="321.2402pt" height="237.63565pt" viewBox="-65.8679 -218.93663 321.2402 237.63565 "> 
+<g transform="translate(0, 18.69902 ) scale(1,-1) translate(0,218.93663 )"> 
+                 <g> 
+ <g stroke="rgb(0.0%,0.0%,0.0%)"> 
+ <g fill="rgb(0.0%,0.0%,0.0%)"> 
+ <g stroke-width="0.4pt"> 
+ <g> 
+ </g> 
+ <g> 
+ <g> 
+ <g stroke="rgb(69.9997%,69.9997%,100.0%)"> 
+ <g fill="rgb(80.0003%,80.0003%,100.0%)"> 
+ <g> 
+ <g stroke="rgb(69.9997%,69.9997%,100.0%)"> 
+ <g fill="rgb(80.0003%,80.0003%,100.0%)"> 
+ <path d=" M  -22.35281 -8.08286 h  44.70563 v  16.16571 h  -44.70563 Z  " /> 
+ </g> 
+ </g> 
+ </g> 
+ <g> 
+ <g transform="matrix(1.0,0.0,0.0,1.0,-18.43661,-4.16666)"> 
+ <g fill="rgb(0.0%,0.0%,0.0%)"> 
+ <text style="stroke:none" transform="scale(1,-1) translate(18.43661,0)" text-anchor="middle"  font-size="12"> 
+UriInfo</text> 
+</g> 
+ </g> 
+ </g> 
+ </g> 
+ </g> 
+ </g> 
+ <g> 
+ <g stroke="rgb(69.9997%,69.9997%,100.0%)"> 
+ <g fill="rgb(80.0003%,80.0003%,100.0%)"> 
+ <g> 
+ <g stroke="rgb(69.9997%,69.9997%,100.0%)"> 
+ <g fill="rgb(80.0003%,80.0003%,100.0%)"> 
+ <path d=" M  -38.95264 -79.72299 h  77.90527 v  18.36569 h  -77.90527 Z  " /> 
+ </g> 
+ </g> 
+ </g> 
+ <g> 
+ <g transform="matrix(1.0,0.0,0.0,1.0,-35.03644,-73.47348)"> 
+ <g fill="rgb(0.0%,0.0%,0.0%)"> 
+ <text style="stroke:none" transform="scale(1,-1) translate(35.03644,0)" text-anchor="middle"  font-size="12"> 
+QueryParams</text> 
+</g> 
+ </g> 
+ </g> 
+ </g> 
+ </g> 
+ </g> 
+ <g> 
+ <path d=" M  0.0 -60.69731 L  0.0 -8.28285  " style="fill:none"/> 
+ <g> 
+ <g transform="matrix(0.0,-1.0,1.0,0.0,0.0,-60.69731)"> 
+ <g> 
+ <g stroke-width="0.31999pt"> 
+ <g stroke-dasharray="none" stroke-dashoffset="0.0pt"> 
+ <g stroke-linecap="round"> 
+ <g stroke-linejoin="round"> 
+ <path d=" M  -1.19998 1.59998 C  -1.09998 0.99998 0.0 0.09999 0.29999 0.0 C  0.0 -0.09999 -1.09998 -0.99998 -1.19998 -1.59998  " style="fill:none"/> 
+ </g> 
+ </g> 
+ </g> 
+ </g> 
+ </g> 
+ </g> 
+ </g> 
+ <g> 
+ <g> 
+ <g transform="matrix(1.0,0.0,0.0,1.0,-61.9517,-37.72008)"> 
+ <g fill="rgb(0.0%,0.0%,0.0%)"> 
+ <text style="stroke:none" transform="scale(1,-1) translate(28.91776,0)" text-anchor="middle"  font-size="12"> 
+depends on</text> 
+</g> 
+ </g> 
+ </g> 
+ </g> 
+ </g> 
+ <g> 
+ <g stroke="rgb(69.9997%,69.9997%,100.0%)"> 
+ <g fill="rgb(80.0003%,80.0003%,100.0%)"> 
+ <g> 
+ <g stroke="rgb(69.9997%,69.9997%,100.0%)"> 
+ <g fill="rgb(80.0003%,80.0003%,100.0%)"> 
+ <path d=" M  -41.23734 -151.49646 h  82.47467 v  18.49902 h  -82.47467 Z  " /> 
+ </g> 
+ </g> 
+ </g> 
+ <g> 
+ <g transform="matrix(1.0,0.0,0.0,1.0,-37.32114,-145.24695)"> 
+ <g fill="rgb(0.0%,0.0%,0.0%)"> 
+ <text style="stroke:none" transform="scale(1,-1) translate(37.32114,0)" text-anchor="middle"  font-size="12"> 
+SearchRequest</text> 
+</g> 
+ </g> 
+ </g> 
+ </g> 
+ </g> 
+ </g> 
+ <g> 
+ <path d=" M  0.0 -132.33745 L  0.0 -79.92299  " style="fill:none"/> 
+ <g> 
+ <g transform="matrix(0.0,-1.0,1.0,0.0,0.0,-132.33745)"> 
+ <g> 
+ <g stroke-width="0.31999pt"> 
+ <g stroke-dasharray="none" stroke-dashoffset="0.0pt"> 
+ <g stroke-linecap="round"> 
+ <g stroke-linejoin="round"> 
+ <path d=" M  -1.19998 1.59998 C  -1.09998 0.99998 0.0 0.09999 0.29999 0.0 C  0.0 -0.09999 -1.09998 -0.99998 -1.19998 -1.59998  " style="fill:none"/> 
+ </g> 
+ </g> 
+ </g> 
+ </g> 
+ </g> 
+ </g> 
+ </g> 
+ <g> 
+ <g> 
+ <g transform="matrix(1.0,0.0,0.0,1.0,-35.57976,-107.77689)"> 
+ <g fill="rgb(0.0%,0.0%,0.0%)"> 
+ <text style="stroke:none" transform="scale(1,-1) translate(15.73178,0)" text-anchor="middle"  font-size="12"> 
+parses</text> 
+</g> 
+ </g> 
+ </g> 
+ </g> 
+ </g> 
+ <g> 
+ <g stroke="rgb(69.9997%,69.9997%,100.0%)"> 
+ <g fill="rgb(80.0003%,80.0003%,100.0%)"> 
+ <g> 
+ <g stroke="rgb(69.9997%,69.9997%,100.0%)"> 
+ <g fill="rgb(80.0003%,80.0003%,100.0%)"> 
+ <path d=" M  75.62726 -8.08286 h  70.88593 v  16.16571 h  -70.88593 Z  " /> 
+ </g> 
+ </g> 
+ </g> 
+ <g> 
+ <g transform="matrix(1.0,0.0,0.0,1.0,79.54346,-4.16666)"> 
+ <g fill="rgb(0.0%,0.0%,0.0%)"> 
+ <text style="stroke:none" transform="scale(1,-1) translate(31.52676,0)" text-anchor="middle"  font-size="12"> 
+PathParams</text> 
+</g> 
+ </g> 
+ </g> 
+ </g> 
+ </g> 
+ </g> 
+ <g> 
+ <path d=" M  74.96727 0.0 L  22.55281 0.0  " style="fill:none"/> 
+ <g> 
+ <g transform="matrix(1.0,0.0,0.0,1.0,74.96727,0.0)"> 
+ <g> 
+ <g stroke-width="0.31999pt"> 
+ <g stroke-dasharray="none" stroke-dashoffset="0.0pt"> 
+ <g stroke-linecap="round"> 
+ <g stroke-linejoin="round"> 
+ <path d=" M  -1.19998 1.59998 C  -1.09998 0.99998 0.0 0.09999 0.29999 0.0 C  0.0 -0.09999 -1.09998 -0.99998 -1.19998 -1.59998  " style="fill:none"/> 
+ </g> 
+ </g> 
+ </g> 
+ </g> 
+ </g> 
+ </g> 
+ </g> 
+ <g> 
+ <g> 
+ <g transform="matrix(1.0,0.0,0.0,1.0,20.07228,6.44951)"> 
+ <g fill="rgb(0.0%,0.0%,0.0%)"> 
+ <text style="stroke:none" transform="scale(1,-1) translate(28.91776,0)" text-anchor="middle"  font-size="12"> 
+depends on</text> 
+</g> 
+ </g> 
+ </g> 
+ </g> 
+ </g> 
+ <g> 
+ <g stroke="rgb(69.9997%,69.9997%,100.0%)"> 
+ <g fill="rgb(80.0003%,80.0003%,100.0%)"> 
+ <g> 
+ <g stroke="rgb(69.9997%,69.9997%,100.0%)"> 
+ <g fill="rgb(80.0003%,80.0003%,100.0%)"> 
+ <path d=" M  199.78763 -8.08286 h  55.38467 v  16.16571 h  -55.38467 Z  " /> 
+ </g> 
+ </g> 
+ </g> 
+ <g> 
+ <g transform="matrix(1.0,0.0,0.0,1.0,203.70383,-4.16666)"> 
+ <g fill="rgb(0.0%,0.0%,0.0%)"> 
+ <text style="stroke:none" transform="scale(1,-1) translate(23.77614,0)" text-anchor="middle"  font-size="12"> 
+Database</text> 
+</g> 
+ </g> 
+ </g> 
+ </g> 
+ </g> 
+ </g> 
+ <g> 
+ <g stroke="rgb(69.9997%,69.9997%,100.0%)"> 
+ <g fill="rgb(80.0003%,80.0003%,100.0%)"> 
+ <g> 
+ <g stroke="rgb(69.9997%,69.9997%,100.0%)"> 
+ <g fill="rgb(80.0003%,80.0003%,100.0%)"> 
+ <path d=" M  62.11282 -79.85632 h  97.9148 v  18.49902 h  -97.9148 Z  " /> 
+ </g> 
+ </g> 
+ </g> 
+ <g> 
+ <g transform="matrix(1.0,0.0,0.0,1.0,66.02902,-73.60681)"> 
+ <g fill="rgb(0.0%,0.0%,0.0%)"> 
+ <text style="stroke:none" transform="scale(1,-1) translate(45.0412,0)" text-anchor="middle"  font-size="12"> 
+CollectionStorage</text> 
+</g> 
+ </g> 
+ </g> 
+ </g> 
+ </g> 
+ </g> 
+ <g> 
+ <path d=" M  127.03653 -60.91809 L  213.82672 -8.28285  " style="fill:none"/> 
+ <g> 
+ <g transform="matrix(-0.8575,-0.52005,0.52005,-0.8575,127.03653,-60.91809)"> 
+ <g> 
+ <g stroke-width="0.31999pt"> 
+ <g stroke-dasharray="none" stroke-dashoffset="0.0pt"> 
+ <g stroke-linecap="round"> 
+ <g stroke-linejoin="round"> 
+ <path d=" M  -1.19998 1.59998 C  -1.09998 0.99998 0.0 0.09999 0.29999 0.0 C  0.0 -0.09999 -1.09998 -0.99998 -1.19998 -1.59998  " style="fill:none"/> 
+ </g> 
+ </g> 
+ </g> 
+ </g> 
+ </g> 
+ </g> 
+ </g> 
+ <g> 
+ <g> 
+ <g transform="matrix(1.0,0.0,0.0,1.0,174.3506,-38.88673)"> 
+ <g fill="rgb(0.0%,0.0%,0.0%)"> 
+ <text style="stroke:none" transform="scale(1,-1) translate(32.63855,0)" text-anchor="middle"  font-size="12"> 
+connected to</text> 
+</g> 
+ </g> 
+ </g> 
+ </g> 
+ </g> 
+ <g> 
+ <path d=" M  111.07022 -60.69731 L  111.07022 -8.28285  " style="fill:none"/> 
+ <g> 
+ <g transform="matrix(0.0,-1.0,1.0,0.0,111.07022,-60.69731)"> 
+ <g> 
+ <g stroke-width="0.31999pt"> 
+ <g stroke-dasharray="none" stroke-dashoffset="0.0pt"> 
+ <g stroke-linecap="round"> 
+ <g stroke-linejoin="round"> 
+ <path d=" M  -1.19998 1.59998 C  -1.09998 0.99998 0.0 0.09999 0.29999 0.0 C  0.0 -0.09999 -1.09998 -0.99998 -1.19998 -1.59998  " style="fill:none"/> 
+ </g> 
+ </g> 
+ </g> 
+ </g> 
+ </g> 
+ </g> 
+ </g> 
+ <g> 
+ <g> 
+ <g transform="matrix(1.0,0.0,0.0,1.0,115.18642,-59.47008)"> 
+ <g fill="rgb(0.0%,0.0%,0.0%)"> 
+ <text style="stroke:none" transform="scale(1,-1) translate(29.3747,0)" text-anchor="middle"  font-size="12"> 
+collection
+specified
+by URI
+path</text> 
+</g> 
+ </g> 
+ </g> 
+ </g> 
+ </g> 
+ <g> 
+ <g stroke="rgb(69.9997%,69.9997%,100.0%)"> 
+ <g fill="rgb(80.0003%,80.0003%,100.0%)"> 
+ <g> 
+ <g stroke="rgb(69.9997%,69.9997%,100.0%)"> 
+ <g fill="rgb(80.0003%,80.0003%,100.0%)"> 
+ <path d=" M  72.23077 -149.29648 h  77.6789 v  16.16571 h  -77.6789 Z  " /> 
+ </g> 
+ </g> 
+ </g> 
+ <g> 
+ <g transform="matrix(1.0,0.0,0.0,1.0,76.14697,-145.38028)"> 
+ <g fill="rgb(0.0%,0.0%,0.0%)"> 
+ <text style="stroke:none" transform="scale(1,-1) translate(34.92325,0)" text-anchor="middle"  font-size="12"> 
+SearchService</text> 
+</g> 
+ </g> 
+ </g> 
+ </g> 
+ </g> 
+ </g> 
+ <g> 
+ <path d=" M  111.07022 -132.47078 L  111.07022 -80.05632  " style="fill:none"/> 
+ <g> 
+ <g transform="matrix(0.0,-1.0,1.0,0.0,111.07022,-132.47078)"> 
+ <g> 
+ <g stroke-width="0.31999pt"> 
+ <g stroke-dasharray="none" stroke-dashoffset="0.0pt"> 
+ <g stroke-linecap="round"> 
+ <g stroke-linejoin="round"> 
+ <path d=" M  -1.19998 1.59998 C  -1.09998 0.99998 0.0 0.09999 0.29999 0.0 C  0.0 -0.09999 -1.09998 -0.99998 -1.19998 -1.59998  " style="fill:none"/> 
+ </g> 
+ </g> 
+ </g> 
+ </g> 
+ </g> 
+ </g> 
+ </g> 
+ <g> 
+ <g> 
+ <g transform="matrix(1.0,0.0,0.0,1.0,115.18642,-117.9102)"> 
+ <g fill="rgb(0.0%,0.0%,0.0%)"> 
+ <text style="stroke:none" transform="scale(1,-1) translate(29.3747,0)" text-anchor="middle"  font-size="12"> 
+searches on
+collection</text> 
+</g> 
+ </g> 
+ </g> 
+ </g> 
+ </g> 
+ <g> 
+ <g stroke="rgb(69.9997%,69.9997%,100.0%)"> 
+ <g fill="rgb(80.0003%,80.0003%,100.0%)"> 
+ <g> 
+ <g stroke="rgb(69.9997%,69.9997%,100.0%)"> 
+ <g fill="rgb(80.0003%,80.0003%,100.0%)"> 
+ <path d=" M  82.56192 -218.73663 h  57.0166 v  16.16571 h  -57.0166 Z  " /> 
+ </g> 
+ </g> 
+ </g> 
+ <g> 
+ <g transform="matrix(1.0,0.0,0.0,1.0,86.47812,-214.82043)"> 
+ <g fill="rgb(0.0%,0.0%,0.0%)"> 
+ <text style="stroke:none" transform="scale(1,-1) translate(24.5921,0)" text-anchor="middle"  font-size="12"> 
+ResultSet</text> 
+</g> 
+ </g> 
+ </g> 
+ </g> 
+ </g> 
+ </g> 
+ <g> 
+ <path d=" M  97.23598 -202.12909 L  15.34232 -151.69646  " style="fill:none"/> 
+ <g> 
+ <g transform="matrix(0.8537,-0.52576,0.52576,0.8537,97.23598,-202.12909)"> 
+ <g> 
+ <g stroke-width="0.31999pt"> 
+ <g stroke-dasharray="none" stroke-dashoffset="0.0pt"> 
+ <g stroke-linecap="round"> 
+ <g stroke-linejoin="round"> 
+ <path d=" M  -1.19998 1.59998 C  -1.09998 0.99998 0.0 0.09999 0.29999 0.0 C  0.0 -0.09999 -1.09998 -0.99998 -1.19998 -1.59998  " style="fill:none"/> 
+ </g> 
+ </g> 
+ </g> 
+ </g> 
+ </g> 
+ </g> 
+ </g> 
+ <g> 
+ <g> 
+ <g transform="matrix(1.0,0.0,0.0,1.0,-6.3801,-187.28369)"> 
+ <g fill="rgb(0.0%,0.0%,0.0%)"> 
+ <text style="stroke:none" transform="scale(1,-1) translate(29.3747,0)" text-anchor="middle"  font-size="12"> 
+search
+parameters</text> 
+</g> 
+ </g> 
+ </g> 
+ </g> 
+ </g> 
+ <g> 
+ <path d=" M  111.07022 -201.91093 L  111.07022 -149.49648  " style="fill:none"/> 
+ <g> 
+ <g transform="matrix(0.0,-1.0,1.0,0.0,111.07022,-201.91093)"> 
+ <g> 
+ <g stroke-width="0.31999pt"> 
+ <g stroke-dasharray="none" stroke-dashoffset="0.0pt"> 
+ <g stroke-linecap="round"> 
+ <g stroke-linejoin="round"> 
+ <path d=" M  -1.19998 1.59998 C  -1.09998 0.99998 0.0 0.09999 0.29999 0.0 C  0.0 -0.09999 -1.09998 -0.99998 -1.19998 -1.59998  " style="fill:none"/> 
+ </g> 
+ </g> 
+ </g> 
+ </g> 
+ </g> 
+ </g> 
+ </g> 
+ <g> 
+ <g> 
+ <g transform="matrix(1.0,0.0,0.0,1.0,115.18642,-178.9337)"> 
+ <g fill="rgb(0.0%,0.0%,0.0%)"> 
+ <text style="stroke:none" transform="scale(1,-1) translate(31.82259,0)" text-anchor="middle"  font-size="12"> 
+produced by</text> 
+</g> 
+ </g> 
+ </g> 
+ </g> 
+ </g> 
+ </g> 
+ </g> 
+ </g> 
+ </g> 
+ </g> 
+ 
+                                                                                  </g> 
+</svg> 
