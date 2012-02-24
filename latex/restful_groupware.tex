@@ -1284,6 +1284,7 @@ Factories for requested Facades. A ResourceHandler must have been instantiated
 with at least one initial input Facade, e.g. an InputStream.
 
 \begin{javalisting}[label=fig:datafacades-api,
+                    float=p,
                    caption={API of the ResourceFacades component}]
 interface FacadeFactory<T> {
  T build(ResourceHandler resourceHandler);
@@ -1333,6 +1334,62 @@ interface ResourceHandler {
 }
 \end{javalisting}
 
+\autoref{fig:facade-ex-dependen} presents two example use cases for Facades. On
+the left site the request method might want to know the full name of a submitted
+contact resource. It therefor requests a Person facade. Different Person Facade
+factories are registered. The different factories in turn have each a dependency
+on an InputStream parameterized with a Media Type. The provided Media Type makes
+the resolution path unambiguous.
+
+The right site shows dependencies of Title and Summary Facades. Different
+Factories would be provided that knows to create meaningful titles and summaries
+for Persons, Events or Todo items independent of the original Media Types. A title of a person surely includes the full name, for an event the date and event title would be combined and a todo item could include the priority in the title.
+
+\begin{figure}[t]
+  \centering
+  \subfloat{
+  \begin{tikzpicture}
+    [doc/.style={rectangle,draw=blue!30,fill=blue!20, node distance=2em}]
+
+    \node[doc] (input) [] {InputStream};
+    \node[doc] (poco) [below left=of input,text width=4em] {Portable\-Contacts}
+      edge [<-] node [left,text width=2em] {application/ json} (input);
+
+    \node[doc] (vcard) [below=of input] {VCard}
+      edge [<-] node [left,text width=1em] {text/ vcard} (input);
+
+    \node[doc] (xcard) [below right=of input] {XCard}
+      edge [<-] node [right,text width=3em] {application/ vcard+xml} (input);
+
+    \node[doc] (person) [below=of vcard] {Person}
+      edge [<-] node [right] {} (poco)
+      edge [<-] node [right] {} (vcard)
+      edge [<-] node [right] {} (xcard);
+  \end{tikzpicture}  
+  }
+  \subfloat{
+  \begin{tikzpicture}
+    [doc/.style={rectangle,draw=blue!30,fill=blue!20, node distance=2em}]
+
+    \node[doc] (event) [] {Event};
+    \node[doc] (person) [left=of event] {Person};
+    \node[doc] (todo) [right=of event] {Todo Item};
+
+    \node[doc] () [below left=of event] {Title}
+      edge [<-] node [] {} (todo)
+      edge [<-] node [] {} (person)
+      edge [<-] node [] {} (event);
+
+    \node[doc] () [below right=of event] {Summary}
+      edge [<-] node [] {} (todo)
+      edge [<-] node [] {} (person)
+      edge [<-] node [] {} (event);
+  \end{tikzpicture}
+  }
+  \caption{Facade examples with dependencies}
+  \label{fig:facade-ex-dependen}
+\end{figure}
+
 
     % Facades provide read-only access to the data
     % Facades can depend on other Facades and thus reuse work
@@ -1353,12 +1410,18 @@ interface ResourceHandler {
 % It therefor seems to be reasonable to provide one GET request method for every produced Media Type.
 % Specialized get requests may also execute faster than an approach that needs to dynamically build the processing pipeline.
 
+
 \paragraph{Related work}
 \label{sec:resourcefacadesrelated-work}
 
-The JAF's (AWT's) java.awt.datatransfer.Transferable interface is similar, but
-has no concept of reuse or composition of a DataFlavor by another. It is
-designed with the needs of a Desktop clipboard in mind. No use of Generics.
+The idea for the Resource Facades concept was triggered by the use of the
+JavaBeans Activation
+Framework\footnote{\citeurl{http://www.oracle.com/technetwork/java/javase/downloads/index-135046.html}{2012-2-24}}
+(JAF) in the JAX-RS specification. In this framework the DataHandler interface
+provides access to available commands for a specific MediaType via the
+getCommand method. The framework however was designed with the needs of a
+Desktop clipboard in mind. Since JAF has been released for Java version 1.4 it
+also does neither support Generics nor uses the advantages of immutability.
 
 \cite{Pradel2008a} presents an approach and implementation in Scala to attach
 roles to arbitrary objects. The work achieves type safe roles without extending
@@ -1372,20 +1435,31 @@ interface. The Resource Facade approach presented here is slightly different in
 that creation of the facades is implemented independent from the facades
 themselves by the factory classes.
 
-It is possible in JAX-RS to get a MessageBodyReader for the creation of another
-facade. The necessary code to do so however is verbose and every
-MessageBodyReader would again parse the message body InputStream without reuse
-of work already done by another MessageBodyReader.
+JAX-RS provides the MessageBodyReader and -Writer interfaces. However these
+interfaces are expected to be used only once per request. The resource method
+afterwards needs to work with whatever interface was produced by the
+MessageBodyReader. There exists no facility to request additional
+transformations or facades of a Resource.
+
+It is possible in JAX-RS to request a MessageBodyReader instance from the
+javax.ws.rs.ext.Providers interface. This couldn't however help to get
+additional Facades since the InputStream has already been consumed.
 
 The concept shows similarities with Dependency Injection since dependencies of a
 facade are also provided by an external component. It may be possible that the
 concept could even be implemented on top of an existing Dependency Injection
-framework. Some aspects however may require extra care:
+framework.\footnote{Scala can provide Dependency Injection solely with language
+  features via the so called ``Cake
+  Pattern''. \citeurl{http://www.warski.org/blog/2011/04/di-in-scala-cake-pattern-pros-cons/}{2012-2-24}
+  or Odersky: ``Scalable Component Abstractions''} Some aspects however may
+require extra care:
 
 \begin{itemize}
-\item Dependencies are parameterized with the Media Type of the data.
-\item The scope of an instance is bound to the DataHandler which in most cases may be equivalent to the Request scope, but this can't be guaranteed.
-\item Each DataHandler manages its own view of available classes.
+\item Resolving the dependencies of Facade factories must consider the Media
+  Type of the input data.
+\item The scope of an instance is bound to the ResourceHandler which in most
+  cases may be equivalent to the Request scope, but this can't be guaranteed.
+\item Each ResourceHandler manages its own view of available Facades.
 \end{itemize}
 
 \paragraph{Scala's type system}
@@ -1430,9 +1504,10 @@ class PostToCollection[StorageReqFacade]
 }
 \end{javalisting}
 
-This example shows that an advanced type systems may be able to considerably
-improve the presented facades approach. A more detailed study however is out of
-the scope of this work and the author's comprehension of type systems.
+This example and the mentioned work on Scala roles shows that an advanced type
+systems may be able to considerably improve the presented facades approach. A
+more detailed study however is out of the scope of this work and the author's
+comprehension of type systems.
 
 \subsubsection{Other components}
 
