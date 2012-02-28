@@ -608,6 +608,8 @@ application.\cite{Wilde:2009:FQP:1693155.1693220} It may therefor not be seen as
 % http://code.google.com/p/implementing-rest/wiki/RMM
 % http://looselyconnected.wordpress.com/2011/03/09/the-richardson-maturity-model-of-rest-and-roy-fielding/
 
+% W3C note: coneg could forward with 302 to a specific representation like http://example.com/people/joe_smith.vcf 
+% \cite[sec. 2.1]{Sauermann2008}
 
 \begin{quote}
   To some extent, people get REST wrong because I failed to include enough
@@ -679,6 +681,8 @@ TODO:
 \end{itemize}
 
 \subsubsection{XML vs. JSON}
+
+% Data Meta Models http://dret.net/netdret/docs/wilde-cacm2008-document-design-matters/
 
 This section investigates the two most common syntaxes used by media types
 and the issues that arise if an application needs to support both of them.
@@ -973,7 +977,7 @@ capture and manipulate nested HTML elements and to call methods of passed in
 objects.
 
 \subsection{Media Types for Collections}
-
+\label{sec:media-types-coll}
 Vergleich ATOM mit Medientyp Collection+JSON
 
 JSON formats for collections:
@@ -991,6 +995,8 @@ Some problems in loss-less conversion of ATOM to json:\cite{Snell2008}
   \item ATOM content elements are versatile but should be represented more meaningful in JSON then just a plain String.
   \item ATOM supports arbitrary extensions via namespaces.
 \end{itemize}
+
+% http://code.google.com/apis/youtube/2.0/developers_guide_jsonc.html
 
 \subsection{Media Type conversion}
 
@@ -1078,7 +1084,96 @@ Candidate areas for re-usability:
 
 \subsection{Interactions}
 \subsubsection{Discovery of Collections}
+
+An ideal Rest API is accessed by one main URI and all other resources can be
+discovered by following links. A useful Media type to discover available
+collections is the Atom Service Document.\cite[sec. 8]{RFC5023} It contains
+links to collections organized in workspaces and annotated with meta data.
+
+A Groupware client most likely needs to discern the available collections by the
+contained resources as to consume and present them with the appropriate user
+interfaces for contacts, calendar data, etc. A first idea could be to use the
+Media types declared in the ``accept'' tag of a collection to identify types of
+collections. However the specification explicitly states that this tag
+``specifies a type of representation that can be POSTed to a Collection''. If a
+collection can only be read then no accept tag should be present and thus also
+not available for interpretation.
+
+\begin{anylisting}[label=fig:atom-category,
+                   caption={ATOM categories as used by Google and IBM to mark entry
+                            types and a proposal to use a standard scheme URI for type terms}]
+<atom:category scheme="http://schemas.google.com/g/2005#kind"
+               term="http://schemas.google.com/g/2005#contact" />
+
+<atom:category scheme="http://ibm.com/oa/type"
+               term="task" />
+
+<atom:category scheme="http://www.w3.org/2005/Atom/Entry-Kind"
+               term="http://schemas.google.com/g/2005#contact"
+               label="Contact" />
+
+<atom:category scheme="http://www.w3.org/2005/Atom/Entry-Kind"
+               term="http://ibm.com/oa/type#task"
+               label="Task" />
+\end{anylisting}
+
+A standard conform approach is demonstrated by Google's Data
+Protocol\footnote{\citeurl{http://code.google.com/apis/gdata/docs/2.0/elements.html}{2012-2-28}}
+and by an internal project at
+IBM\footnote{\label{snellatomcategory}\citeurl{http://www.imc.org/atom-syntax/mail-archive/msg18208.html}{2012-2-28}}. Both
+use atom categories\cite[sec. 8.3.6]{RFC5023} to mark the type of atom
+entries. James Snell proposed a standard URI to identify the semantic of
+categories\footref{snellatomcategory} but no follow up to this could be
+found. The use of categories to attach arbitrary meaning, e.g ``event type
+(product or promotion), and its status (new, updated, or cancelled)'' to feeds
+and entries is also recommended in \cite[p. 200]{Webber2010}.
+
+The CalAtom\cite{draft-yates-atompub-calatom-00.txt} proposal introduces a new
+tag ``features'' and an associated IANA registry to mark collection types and
+their features. But the examples of category usage above and the interaction
+patterns outlined in this section provide confidence that a new tag is not
+required.
+
+To make categories usable for a common Groupware API, the server needs to use a
+categorization scheme understood by the client. If different clients don't agree
+on one scheme the server could still support several.\footnote{As a last resort
+  a client could of course also fetch the feeds and identify the media types of
+  the included media entries.}
+
+An alternative Media Type to Service Documents in JSON could not be found. The
+most promising approach seems to list available collections in a
+\lstinline:application/vnd.collection+json: representation. (\autoref{sec:media-types-coll})
+
+\paragraph{personalized Service Documents} For a Groupware that manages
+confidential information it would make sense to provide personalized Service
+Documents for authenticated users that list only collections that the user is
+authorized to read.\footnote{For this use case it would be convenient, if HTTP
+  would support optional authentication, but it does not or only
+  poorly. \citeurl{http://computerstuff.jdarx.info/content/optional-http-authentication}{2012-2-28}}
+Personalized Service Documents for different users should have different URIs to
+make them cacheable and to acknowledge that each personalized Service Document
+is indeed an individual entity. This however conflicts with the previous goal of
+using one unique Service Document URI as entrance to the API. A solution would
+be to require the user to authenticate when requesting the unique entrance URI
+and to answer with a HTTP code ``307 Temporary Redirect'' to the user's
+personalized Service Document after successful
+authentication.\footnote{Alternative all Service Documents could be served under
+  the entrance URI with different HTTP Content-Location
+  headers.\cite[sec. 14.14]{RFC2616} In that case the personalized Service
+  Document must however also be available at the indicated location.}
+
+% http://www.berenddeboer.net/rest/authentication.html
+
 \subsubsection{Synchronizing Collections}
+
+An atom feed can be used to synchronize a collection of entries from server to
+client. The necessary ingredients that make this possible are the link relation
+``next''\cite{RFC5005}, the concept of a ``deleted
+entry''\cite{draft-snell-atompub-tombstones-14} and the prerequisite that the
+feed entries must ``be ordered by their "app:edited" property, with the most
+recently edited Entries coming first in the document
+order''\cite[sec. 10]{RFC5023}.
+
 \subsubsection{Modifying Resources}
 
 TODO Atompub requires the client to download the full representation before
@@ -1363,7 +1458,9 @@ the resolution path unambiguous.
 
 The right site shows dependencies of Title and Summary Facades. Different
 Factories would be provided that knows to create meaningful titles and summaries
-for Persons, Events or Todo items independent of the original Media Types. A title of a person surely includes the full name, for an event the date and event title would be combined and a todo item could include the priority in the title.
+for Persons, Events or Todo items independent of the original Media Types. A
+title of a person surely includes the full name, for an event the date and event
+title would be combined and a todo item could include the priority in the title.
 
 \begin{figure}[t]
   \centering
@@ -1430,6 +1527,7 @@ for Persons, Events or Todo items independent of the original Media Types. A tit
 % It therefor seems to be reasonable to provide one GET request method for every produced Media Type.
 % Specialized get requests may also execute faster than an approach that needs to dynamically build the processing pipeline.
 
+% JAF + REST proposed in 2007 http://www.javaworld.com/javaworld/jw-10-2007/jw-10-resteasy.html
 
 \paragraph{Related work}
 \label{sec:resourcefacadesrelated-work}
@@ -1481,6 +1579,16 @@ require extra care:
   cases may be equivalent to the Request scope, but this can't be guaranteed.
 \item Each ResourceHandler manages its own view of available Facades.
 \end{itemize}
+
+The Apache Wink Rest Framework implements a concept called
+``Assets''.\footnote{\citeurl{https://cwiki.apache.org/WINK/59-assets.html}{2012-2-28}}
+Assets are containers for the resource data injected in or returned from
+resource methods. Assets provide methods annotated with \lstinline:@Produces: or
+\lstinline:@Consumes: to handle different Media types. In contrast to Resource
+Facades, the set of supported media types of assets can only be extended by
+extending the asset classes. It is also not possible like in listing
+\ref{fig:facade-ex-dependen} to provide generic Facades for a title or a
+summary.
 
 \paragraph{Scala's type system}
 The proposed Java class diagram in this section has the disadvantage that the
@@ -1743,4 +1851,4 @@ What needs a client to know, how does it need to work?
 % ispell-dictionary: "american"
 % eval: (progn (flyspell-mode 1) (outline-minor-mode 1) (goto-address-mode 1) (hide-body))
 % End:
-%  LocalWords:  RESTful programmatically instantiation hypothetic
+%  LocalWords:  RESTful programmatically instantiation hypothetic cacheable
