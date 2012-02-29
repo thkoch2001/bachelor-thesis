@@ -505,10 +505,82 @@ efficiency.
 
 
 \subsection{User Classes and Characteristics}
+\label{sec:user-class-char}
 
-TODO: plain Web Browsers, Desktop applications (PIM Suites), JavaScript Gadgets/Widgets (see OpenSocial) probably with WebStorage\footnote{\citeurl{http://www.w3.org/TR/webstorage/}{2012-2-2}}
+Different kinds of clients should be able to use the API.
+\autoref{tab:clientsconstraints} lists clients whose constraints and
+characteristics must be respected in the design. The choice of clients and their
+characteristics is intentionally conservative to cover a wide range of real
+world use cases.
 
-Aus den verschiedenen Benutzerern leitet sich ab, dass verschiedene Medientypen unterstützt werden sollen: xCard, JSON, HTML
+\begin{table}[tbh]
+  \centering
+  \begin{tabular}[tbh]{ r || c | c | c | l }
+                      & Memory & Bandwidth & preferred format & comment \\  \hline
+  Web Browser (HTML5) &  5 MB & 56 kbit/s & JSON & workplace, internet cafe\\
+  Mobile Device       &  512 MB & 384 kbit/s & any/XML & Smart Phone, Tabled \\ 
+  Desktop application &  1 GB & 10 Mbit/s  & any/XML & PIM suite \\
+  Server application  &  4 GB & 100 Mbit/s & any/XML/HTML & intranet application \\
+  \end{tabular}
+  \caption{Constraints of different API clients}
+  \label{tab:clientsconstraints}
+\end{table}
+
+The most problematic client in the list is the web browser with only 5MB of
+storage capacity (via
+WebStorage\footnote{\citeurl{http://www.w3.org/TR/webstorage/}{2012-2-2}}) a
+potentially very bad internet connection, the inability to leave data for later
+sessions (internet cafe) and the restriction to one particular format
+(JSON). However this use case is of importance as the
+OpenSocial~(~\ref{sec:opensocial}) case shows. It is also the primary use case
+to justify an API that provides multiple Media Types since it mandates JSON
+while the canonical Media Types (xCard, xCal) support XML.
+
+\subsection{Data Characteristics}
+\label{sec:data-characteristics}
+
+Lacking sources for more accurate numbers, a couple of conservative estimates
+are made for the size and number of resources in the scope of this work. This
+guesswork is not perfect. But it provides a rationale behind later design
+decisions (\autoref{sec:interactions}) and outlines their applicability for a concrete use case.
+
+\subparagraph{Contacts}
+
+It is believed that humans have regular social contacts to around 150
+people\footnote{\citeurl{http://en.wikipedia.org/wiki/Dunbar's_number}{2012-2-29}}. So
+the number of contacts in a users address book collection should at least handle
+1500 contacts.
+
+The average textual data size associated to a contact is expected to be around
+840 bytes\footnote{estimated average bytes per common fields: id 100, name 30, 2 *
+  address 100, 2 * mail 50, instant messenger 50, 2 phone numbers 15, comments
+  30, 3 * url 100}. 100 kb are enough for an image file to identify a face.
+
+So a collection with a data size of $1500 contacts * 840 \frac{bytes}{contact}
+\approx 1MB$ should be a usable address book without profile pictures for many
+users.
+
+\subparagraph{Events}
+
+A very busy person may have 10 events per day. A two years calendar thus
+contains $2*365*10=730$ events. The core data of an event is estimated to
+comprise 356 bytes\footnote{field sizes: start 8, end 8, title 40, location 100,
+  free text 200}. So a useful calendar collection has a data size of $730 events
+* 356 \frac{bytes}{event} \approx 0.25 MB$
+
+\subparagraph{Conclusions} The size of full, useful collections of personal
+information items has the same order of magnitude then the size of a digital
+image taken with today's smart phones. With the worst case bandwidth from
+\autoref{tab:clientsconstraints} the download of a full uncompressed collection
+lasts around $\frac{2 * 1MB}{56kbit/s} \approx 5min$\footnote{The factor 2
+  accounts for field names and syntax elements. Besides other inaccuracies,
+  latency is not taken into account.}. Even with a drastic data compression of
+90\% the transfer would still last over 30 seconds. With the next better
+bandwidth of the mobile device however the transfer duration for the
+uncompressed case is already under one minute ($\approx 42 sec$).
+
+For all described clients the client's storage is large enough to contain at
+least a few collections.
 
 \subsection{Operation Environment}
 
@@ -1083,6 +1155,7 @@ Candidate areas for re-usability:
 % Im Gegensatz zu Bildern, wie in \cite{Schreier:2011:MRA:1967428.1967434} können Kontakte komplett inline sein.
 
 \subsection{Interactions}
+\label{sec:interactions}
 \subsubsection{Discovery of Collections}
 
 An ideal Rest API is accessed by one main URI and all other resources can be
@@ -1166,23 +1239,103 @@ authentication.\footnote{Alternative all Service Documents could be served under
 
 \subsubsection{Synchronizing Collections}
 
-An atom feed can be used to synchronize a collection of entries from server to
-client. The necessary ingredients that make this possible are the link relation
-``next''\cite{RFC5005}, the concept of a ``deleted
-entry''\cite{draft-snell-atompub-tombstones-14} and the prerequisite that the
-feed entries must ``be ordered by their "app:edited" property, with the most
-recently edited Entries coming first in the document
+If a Groupware client can synchronize an entire collection to its local memory,
+then there is no need for more sophisticated queries that provide only a subset
+of the collection. The client can answer all queries from its local copy of the
+collection.
+
+In \autoref{sec:data-characteristics} it has been shown that the time necessary
+to synchronize a full collection is under one minute in most cases. This should
+be acceptable for an initial synchronization that is only done once on rare
+occasions when a desktop machine or mobile device is first used. If subsequent
+synchronizations only transfer a few resources, that have changed since the last
+synchronization then such updates can be made in the order of a second.
+
+All client scenarios except of a Web Browser client that is used only once, can
+profit from the above scenario. In such a case other interaction patterns need
+to be used (\autoref{sec:spec-reports-search}).
+
+The Atom Publishing Protocol identifies collections of resources as Atom
+Feeds. Feeds can also be used to synchronize collections. The necessary
+ingredients are the link relation ``next''\cite{RFC5005}, the concept of a
+``deleted entry''\cite{draft-snell-atompub-tombstones-14} and the prerequisite
+that the feed entries must ``be ordered by their "app:edited" property, with the
+most recently edited Entries coming first in the document
 order''\cite[sec. 10]{RFC5023}.
+
+The API server design has the notion of a logical feed that can be split up in
+multiple real Atom feeds linked with the relation ``next''. Updated or new
+entries are always inserted as first element of the first feed since their
+``app:edited'' property is the most recent. Inserting a new entry at the top of
+a feed can lead to entries at the end of the feed being pushed to the subsequent
+feed. This push needs to be atomic such that a client loading subsequent feeds
+may see an entry twice, at the end of a previous feed and the top of the next
+feed, but will never miss an entry in this scenario.
+
+In the case of an initial synchronization, the client loads the initial feed and
+all subsequent feeds linked with the ``next'' relation and adds all Resources
+associated with the feeds entries to its local storage. Resources can either be
+included completely in the content tag of an entry or be linked to by the
+entry. The client memorizes the ``app:edited'' value of the first entry of the
+first feed for subsequent synchronizations.
+
+It is possible, that the collection has been modified during the
+synchronization. Therefor the client should directly conclude with an update
+synchronization. This means that the client starts again to load the first feed
+and applies all updates until it sees an entry with an ``app:edited'' value
+older then the one memorized from the last synchronization. It is possible that
+the client must follow several ``next'' links or even load all feeds in the
+extreme case.
+
+If the client followed a ``next'' link during a synchronization then it will
+make sure at the end of the synchronization that the first feed has not changed
+meanwhile most probably with a conditional GET request. After this last request
+indicates no further changes the client knows that its local collection is in
+the state of the servers location at the time of the last GET request.
+
+\subsubsection{Media entries included or linked}
+\label{sec:inline-feeds-or}
+TODO
+
+ATOM entries can either carry the full content inline in the content tag or link to the content.
+
+\begin{itemize}
+
+\item feeds could be dynamically created and inline only those entries that the client has not yet seen as indicated by the provided ETag or timestamp.
+\item Feeds with links will most probably result in many further requests by the client to get the individual entries
+\item Inline feeds may cause unnecessary work and deliver entries that the client has already seen
+\item A compromise could be to provide the first page of a paginated feed with links and all additional pages with inlined entries
+\end{itemize}
+
+A final decision about this subject should be done based on utilization and performance data of a real world installation.
+
 
 \subsubsection{Modifying Resources}
 
-TODO Atompub requires the client to download the full representation before
-editing. This however could be avoided, if the feed would contain etags,
-probably as attributes to the link tag.
+Editing, Updating and Deleting of media entries is specified in the Atom
+Publishing Protocol and is useful for this work without modifications or
+additions. Two aspects however are worth to be highlighted.
 
-Google adds an etag attribute to the entry tag in its data api.\footnote{\citeurl{http://code.google.com/apis/gdata/docs/2.0/reference.html\#ResourceVersioning}{2012-2-13}}
+As outlined in \autoref{sec:inline-feeds-or} it is possible to include full
+representations of the collection resources in the content tag of an entry. A
+client however is not allowed to use an inline resource representation as the
+base for an update.\cite[sec. 10]{RFC5023} If the client has not yet retrieved
+the resource from its own URI it thus `` SHOULD perform a GET on the URI of the
+Member Entry before editing it.''[Ibid.] This limitation is consequent since the
+Atom feed does not contain an ETag for an inlined resource. A client thus can
+not make a conditional PUT request only from the information in the
+feed.\footnote{Google adds an etag attribute to the entry tag in its data
+  api. \citeurl{http://code.google.com/apis/gdata/docs/2.0/reference.html\#ResourceVersioning}{2012-2-13}}
+
+The second aspect concerns offline editing. A client should offer the user the
+possibility to create, update and delete resources while being offline and to
+apply this modifications during the next synchronization. TODO
+
 
 \subsubsection{Special Reports, Search}
+\label{sec:spec-reports-search}
+
+
 TODO 
 full text search in contacts -> OpenSearch
 
@@ -1820,19 +1973,6 @@ application.
 
 
 \subsection{Detailed Design Considerations}
-\subsubsection{Inline feeds or feeds with links?}
-
-ATOM entries can either carry the full content inline in the content tag or link to the content.
-
-\begin{itemize}
-
-\item feeds could be dynamically created and inline only those entries that the client has not yet seen as indicated by the provided ETag or timestamp.
-\item Feeds with links will most probably result in many further requests by the client to get the individual entries
-\item Inline feeds may cause unnecessary work and deliver entries that the client has already seen
-\item A compromise could be to provide the first page of a paginated feed with links and all additional pages with inlined entries
-\end{itemize}
-
-A final decision about this subject should be done based on utilization and performance data of a real world installation.
 
 \subsection{Client Design}
 
