@@ -7,7 +7,7 @@
 <meta name="originator" content="TeX4ht (http://www.cse.ohio-state.edu/~gurari/TeX4ht/)"> 
 <!-- html,2 --> 
 <meta name="src" content="restful_groupware.tex"> 
-<meta name="date" content="2012-02-28 20:13:00"> 
+<meta name="date" content="2012-02-29 20:03:00"> 
 <link rel="stylesheet" type="text/css" href="restful_groupware.css"> 
 </head><body 
 >
@@ -82,7 +82,7 @@ href="restful_groupwareli2.html#XRFC6352">Dab11</a>, sec. 1]</span>:
 <!--l. 479--><p class="noindent" >There are some minor features of CardDAV, that are mainly inherited from WebDAV and whose
 general usefulness outside of the scope of a content management system could be argued. See
 <a 
-href="#x13-160007">subsection&#x00A0;2.7<!--tex4ht:ref: sec:algerm-class-http --></a> for a discussion of those.
+href="#x13-170008">subsection&#x00A0;2.8<!--tex4ht:ref: sec:algerm-class-http --></a> for a discussion of those.
 <a 
  id="x13-11016r2"></a>
 <span 
@@ -111,35 +111,171 @@ scalability in terms of users, network performance and efficiency.
  id="x13-11017r13"></a>
 <h4 class="subsectionHead"><span class="titlemark">2.3  </span> <a 
  id="x13-120003"></a>User Classes and Characteristics</h4>
-<!--l. 509--><p class="noindent" >TODO: plain Web Browsers, Desktop applications (PIM Suites), JavaScript Gadgets/Widgets (see OpenSocial) probably
-with WebStorage<span class="footnote-mark"><a 
+<!--l. 510--><p class="noindent" >Different kinds of clients should be able to use the API. <a 
+href="#x13-120013">Table&#x00A0;3<!--tex4ht:ref: sec:algerm-class-http --></a> lists clients whose
+constraints and characteristics must be respected in the design. The choice of clients and
+their characteristics is intentionally conservative to cover a wide range of real world use
+cases.
+    <div class="table">
+                                                                                         
+                                                                                         
+<!--l. 516--><p class="indent" >    <a 
+ id="x13-120013"></a><a 
+ id="x21-21004r1"></a><a 
+ id="x21-210001"></a><hr class="float"><div class="float" 
+>
+                                                                                         
+                                                                                         
+<div class="tabular"> <table id="TBL-4" class="tabular" 
+cellspacing="0" cellpadding="0" rules="groups" 
+><colgroup id="TBL-4-1g"><col 
+id="TBL-4-1"></colgroup><colgroup id="TBL-4-2g"><col 
+id="TBL-4-2"></colgroup><colgroup id="TBL-4-3g"><col 
+id="TBL-4-3"></colgroup><colgroup id="TBL-4-4g"><col 
+id="TBL-4-4"></colgroup><colgroup id="TBL-4-5g"><col 
+id="TBL-4-5"></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-4-1-"><td  style="white-space:nowrap; text-align:right;" id="TBL-4-1-1"  
+class="td11">                   </td><td  style="white-space:nowrap; text-align:center;" id="TBL-4-1-2"  
+class="td11">Memory</td><td  style="white-space:nowrap; text-align:center;" id="TBL-4-1-3"  
+class="td11">Bandwidth</td><td  style="white-space:nowrap; text-align:center;" id="TBL-4-1-4"  
+class="td11"> preferred format </td><td  style="white-space:nowrap; text-align:left;" id="TBL-4-1-5"  
+class="td11">comment                   </td>
+</tr><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-4-2-"><td  style="white-space:nowrap; text-align:right;" id="TBL-4-2-1"  
+class="td11">Web Browser (HTML5)</td><td  style="white-space:nowrap; text-align:center;" id="TBL-4-2-2"  
+class="td11"> 5 MB  </td><td  style="white-space:nowrap; text-align:center;" id="TBL-4-2-3"  
+class="td11"> 56 kbit/s </td><td  style="white-space:nowrap; text-align:center;" id="TBL-4-2-4"  
+class="td11">     JSON        </td><td  style="white-space:nowrap; text-align:left;" id="TBL-4-2-5"  
+class="td11">workplace, internet cafe</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-4-3-"><td  style="white-space:nowrap; text-align:right;" id="TBL-4-3-1"  
+class="td11">        Mobile Device</td><td  style="white-space:nowrap; text-align:center;" id="TBL-4-3-2"  
+class="td11">512 MB</td><td  style="white-space:nowrap; text-align:center;" id="TBL-4-3-3"  
+class="td11"> 384 kbit/s </td><td  style="white-space:nowrap; text-align:center;" id="TBL-4-3-4"  
+class="td11">   any/XML     </td><td  style="white-space:nowrap; text-align:left;" id="TBL-4-3-5"  
+class="td11">Smart Phone, Tabled   </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-4-4-"><td  style="white-space:nowrap; text-align:right;" id="TBL-4-4-1"  
+class="td11">   Desktop application</td><td  style="white-space:nowrap; text-align:center;" id="TBL-4-4-2"  
+class="td11"> 1 GB  </td><td  style="white-space:nowrap; text-align:center;" id="TBL-4-4-3"  
+class="td11"> 10 Mbit/s </td><td  style="white-space:nowrap; text-align:center;" id="TBL-4-4-4"  
+class="td11">   any/XML     </td><td  style="white-space:nowrap; text-align:left;" id="TBL-4-4-5"  
+class="td11">PIM suite                  </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-4-5-"><td  style="white-space:nowrap; text-align:right;" id="TBL-4-5-1"  
+class="td11">     Server application</td><td  style="white-space:nowrap; text-align:center;" id="TBL-4-5-2"  
+class="td11"> 4 GB  </td><td  style="white-space:nowrap; text-align:center;" id="TBL-4-5-3"  
+class="td11">100 Mbit/s</td><td  style="white-space:nowrap; text-align:center;" id="TBL-4-5-4"  
+class="td11">any/XML/HTML</td><td  style="white-space:nowrap; text-align:left;" id="TBL-4-5-5"  
+class="td11">intranet application     </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-4-6-"><td  style="white-space:nowrap; text-align:right;" id="TBL-4-6-1"  
+class="td11">                    </td></tr></table></div>
+<br /> <div class="caption" 
+><span class="id">Table&#x00A0;3: </span><span  
+class="content">Constraints of different API clients</span></div><!--tex4ht:label?: x13-120013 -->
+                                                                                         
+                                                                                         
+    </div><hr class="endfloat" />
+    </div>
+<!--l. 529--><p class="indent" >    The most problematic client in the list is the web browser with only 5MB of storage capacity (via
+WebStorage<span class="footnote-mark"><a 
 href="restful_groupware14.html#fn10x0"><sup class="textsuperscript">10</sup></a></span><a 
- id="x13-12001f10"></a> 
-<!--l. 511--><p class="indent" >    Aus den verschiedenen Benutzerern leitet sich ab, dass verschiedene Medientypen unterstützt
-werden sollen: xCard, JSON, HTML
+ id="x13-12002f10"></a> )
+a potentially very bad internet connection, the inability to leave data for later sessions (internet
+cafe) and the restriction to one particular format (JSON). However this use case is of importance
+as the OpenSocial&#x00A0;(&#x00A0;<a 
+href="restful_groupwarese1.html#x3-70003">1.2.3<!--tex4ht:ref: sec:opensocial --></a>) case shows. It is also the primary use case to justify an API that
+provides multiple Media Types since it mandates JSON while the canonical Media Types (xCard,
+xCal) support XML.
 <a 
- id="x13-12002r14"></a>
+ id="x13-12003r14"></a>
 <h4 class="subsectionHead"><span class="titlemark">2.4  </span> <a 
- id="x13-130004"></a>Operation Environment</h4>
-<!--l. 515--><p class="noindent" >The application is expected to be installed in a Java servlet container like Tomcat or Jetty and to
+ id="x13-130004"></a>Data Characteristics</h4>
+<!--l. 542--><p class="noindent" >Lacking sources for more accurate numbers, a couple of conservative estimates are made for the
+size and number of resources in the scope of this work. This guesswork is not perfect. But it
+provides a rationale behind later design decisions (<a 
+href="restful_groupwarese4.html#x41-360003">Listing&#x00A0;4.3<!--tex4ht:ref: sec:opensocial --></a>) and outlines their applicability for a
+concrete use case.
+<span 
+class="cmssbx-10x-x-120">Contacts</span>&#x00A0;   It is believed that humans have regular social contacts to around 150
+people<span class="footnote-mark"><a 
+href="restful_groupware15.html#fn11x0"><sup class="textsuperscript">11</sup></a></span><a 
+ id="x13-13001f11"></a> .
+So the number of contacts in a users address book collection should at least handle 1500
+contacts.
+    The average textual data size associated to a contact is expected to be around 840
+bytes<span class="footnote-mark"><a 
+href="restful_groupware16.html#fn12x0"><sup class="textsuperscript">12</sup></a></span><a 
+ id="x13-13002f12"></a> .
+100 kb are enough for an image file to identify a face.
+    So a collection with a data size of 1500<span 
+class="cmmi-12">contacts</span><span 
+class="cmsy-10x-x-120">* </span>840<img 
+src="restful_groupware0x.png" alt="-bytes--
+contact"  class="frac" align="middle"> <span 
+class="cmsy-10x-x-120">&#x2248; </span>1<span 
+class="cmmi-12">MB </span>should be a usable address
+book without profile pictures for many users.
+<span 
+class="cmssbx-10x-x-120">Events</span>&#x00A0;   A very busy person may have 10 events per day. A two years calendar thus
+contains 2 <span 
+class="cmsy-10x-x-120">* </span>365 <span 
+class="cmsy-10x-x-120">* </span>10 = 730 events. The core data of an event is estimated to comprise 356
+bytes<span class="footnote-mark"><a 
+href="restful_groupware17.html#fn13x0"><sup class="textsuperscript">13</sup></a></span><a 
+ id="x13-13003f13"></a> . So
+a useful calendar collection has a data size of 730<span 
+class="cmmi-12">events </span><span 
+class="cmsy-10x-x-120">* </span>356<img 
+src="restful_groupware1x.png" alt="bytes
+event"  class="frac" align="middle"> <span 
+class="cmsy-10x-x-120">&#x2248; </span>0<span 
+class="cmmi-12">.</span>25<span 
+class="cmmi-12">MB</span>
+<span 
+class="cmssbx-10x-x-120">Conclusions</span>&#x00A0;   The size of full, useful collections of personal information items has the same order
+of magnitude then the size of a digital image taken with today&#8217;s smart phones. With the worst case
+bandwidth from <a 
+href="#x13-120013">Table&#x00A0;3<!--tex4ht:ref: sec:opensocial --></a> the download of a full uncompressed collection lasts around
+<img 
+src="restful_groupware2x.png" alt="-2*1MB-
+56kbit&#x2215;s"  class="frac" align="middle"> <span 
+class="cmsy-10x-x-120">&#x2248; </span>5<span 
+class="cmmi-12">min</span><span class="footnote-mark"><a 
+href="restful_groupware18.html#fn14x0"><sup class="textsuperscript">14</sup></a></span><a 
+ id="x13-13004f14"></a> .
+Even with a drastic data compression of 90% the transfer would still last over 30 seconds. With the
+next better bandwidth of the mobile device however the transfer duration for the uncompressed
+case is already under one minute (<span 
+class="cmsy-10x-x-120">&#x2248; </span>42<span 
+class="cmmi-12">sec</span>).
+    For all described clients the client&#8217;s storage is large enough to contain at least a few
+collections.
+                                                                                         
+                                                                                         
+<a 
+ id="x13-13005r16"></a>
+<h4 class="subsectionHead"><span class="titlemark">2.5  </span> <a 
+ id="x13-140005"></a>Operation Environment</h4>
+<!--l. 587--><p class="noindent" >The application is expected to be installed in a Java servlet container like Tomcat or Jetty and to
 contact a separate storage component. The primarily targeted storage component is an IMAP
-                                                                                         
-                                                                                         
 server with a Kolab conform set of groupware folders. However the design should not restrict
 the extension to a document database like CouchDB, plain files, relational or XML
 databases.
 <a 
- id="x13-13001r15"></a>
-<h4 class="subsectionHead"><span class="titlemark">2.5  </span> <a 
- id="x13-140005"></a>Design and Implementation Constraints</h4>
-<a 
- id="x13-14001r16"></a>
+ id="x13-14001r17"></a>
 <h4 class="subsectionHead"><span class="titlemark">2.6  </span> <a 
- id="x13-150006"></a>Specific Requirements</h4>
+ id="x13-150006"></a>Design and Implementation Constraints</h4>
 <a 
- id="x13-15001r3"></a>
+ id="x13-15001r18"></a>
+<h4 class="subsectionHead"><span class="titlemark">2.7  </span> <a 
+ id="x13-160007"></a>Specific Requirements</h4>
+<a 
+ id="x13-16001r3"></a>
 <span 
-class="cmssbx-10x-x-120">2.6.0.3  Nested and mixed collections</span>&#x00A0;   The design should not unnecessarily hinder that
+class="cmssbx-10x-x-120">2.7.0.3  Nested and mixed collections</span>&#x00A0;   The design should not unnecessarily hinder that
 collections could be nested or contain different kinds of media types, e.g. calendar items and
 contacts.
     <span class="cite">[<a 
@@ -148,58 +284,58 @@ However both may make sense in certain scenarios and the protocol should not exc
 scenarios. A collection could for example represent all items related to a project, which include
 contacts, events, todos and notes.
 <a 
- id="x13-15002r17"></a>
-<h4 class="subsectionHead"><span class="titlemark">2.7  </span> <a 
- id="x13-160007"></a>Excluded requirements</h4>
+ id="x13-16002r19"></a>
+<h4 class="subsectionHead"><span class="titlemark">2.8  </span> <a 
+ id="x13-170008"></a>Excluded requirements</h4>
 <a 
- id="x13-16001r4"></a>
+ id="x13-17001r4"></a>
 <span 
-class="cmssbx-10x-x-120">2.7.0.4  Search</span>&#x00A0;   It is not required that the server implements any means to search its data. It is
+class="cmssbx-10x-x-120">2.8.0.4  Search</span>&#x00A0;   It is not required that the server implements any means to search its data. It is
 not excluded that such a facility could be added later. It is however expected that searching could
 be implemented separately. This could be done either on a synchronizing client or as a separate
 system in the same administrative domain as the server.
 <a 
- id="x13-16002r5"></a>
+ id="x13-17002r5"></a>
 <span 
-class="cmssbx-10x-x-120">2.7.0.5  Performance optimization</span>&#x00A0;   The system is meant to inherit the benefits of a restful
+class="cmssbx-10x-x-120">2.8.0.5  Performance optimization</span>&#x00A0;   The system is meant to inherit the benefits of a restful
 architecture. It should therefor be possible to attach separate caching intermediaries for read
 requests. Rather then concentrating on the performance of the implementation of read requests it
 should be taken care that the architecture supports external caching and thus avoids to serve the
 same read request multiple times.
 <a 
- id="x13-16003r6"></a>
+ id="x13-17003r6"></a>
 <span 
-class="cmssbx-10x-x-120">2.7.0.6  Access Control</span>&#x00A0;   The aspect of access control would broaden the scope of this work to
+class="cmssbx-10x-x-120">2.8.0.6  Access Control</span>&#x00A0;   The aspect of access control would broaden the scope of this work to
 wide. However it could be kept in mind, whether the proposed design could be enhanced by a
 separate access control design as proposed in <span class="cite">[<a 
 href="restful_groupwareli2.html#Xconf/rest/GrafZLW11">GZLW11</a>]</span>.
 <a 
- id="x13-16004r7"></a>
+ id="x13-17004r7"></a>
 <span 
-class="cmssbx-10x-x-120">2.7.0.7  Copying and Moving</span>&#x00A0;   WebDAV introduces the HTTP verbs to COPY and MOVE. The
+class="cmssbx-10x-x-120">2.8.0.7  Copying and Moving</span>&#x00A0;   WebDAV introduces the HTTP verbs to COPY and MOVE. The
 usefulness of such functionality must of course be compared to the complexity of the
 implementation and the drawback of incompatibility to plain HTTP.
     It is possible to enhance a restful API with copy and move functionality without extending
 HTTP. The only requirement is that additional hyperlinks can be attached to the resources of the
 API. Allamaraju <span class="cite">[<a 
 href="restful_groupwareli2.html#XAllamaraju_2010">All10</a>, Ch. 11]</span> proposes &#8220;controller resources&#8221; that act on POST requests and
+                                                                                         
+                                                                                         
 are linked from the resources they act on. Custom link relations are used to indicate the semantic
 of the controller resource.
     This work does not include initial support for copy or move.
 <a 
- id="x13-16005r8"></a>
-                                                                                         
-                                                                                         
+ id="x13-17005r8"></a>
 <span 
-class="cmssbx-10x-x-120">2.7.0.8  Versioning</span>&#x00A0;   WebDAV and therefor CalDAV and CardDAV support the versioning of
+class="cmssbx-10x-x-120">2.8.0.8  Versioning</span>&#x00A0;   WebDAV and therefor CalDAV and CardDAV support the versioning of
 resources as an extension to the HTTP protocol. Versioning is an important feature for a text
 authoring system that may have been the main target for the WebDAV protocol. It does however
 seem to be of little use for the resources considered here. The resources are mostly created in one
 session by one user and seldom modified.
 <a 
- id="x13-16006r9"></a>
+ id="x13-17006r9"></a>
 <span 
-class="cmssbx-10x-x-120">2.7.0.9  Make Collections</span>&#x00A0;   WebDAV introduces the MKCOL HTTP verb to create collections.
+class="cmssbx-10x-x-120">2.8.0.9  Make Collections</span>&#x00A0;   WebDAV introduces the MKCOL HTTP verb to create collections.
 CardDAV recommends that implementations support this to allow users to &#8220;organize their data
 better&#8221;. An alternative would be to make use of ATOM categories for grouping. Instead of creating
 a new (empty) collection the user would thus create a contact resource with a new category. An
@@ -208,30 +344,30 @@ accepts resources of this category.
     TODO: What are the proposed ways to create collections? Post a feed to the service
 document? Put a new service document? Put a feed document to the desired location?
 <a 
- id="x13-16007r10"></a>
+ id="x13-17007r10"></a>
 <span 
-class="cmssbx-10x-x-120">2.7.0.10  Locking</span>&#x00A0;   As with Versioning, this is feature of WebDAV is not considered. Instead of
+class="cmssbx-10x-x-120">2.8.0.10  Locking</span>&#x00A0;   As with Versioning, this is feature of WebDAV is not considered. Instead of
 locking a resource HTTP supports conditional updates and leaves conflict resolution to the
 client.
 <a 
- id="x13-16008r11"></a>
+ id="x13-17008r11"></a>
 <span 
-class="cmssbx-10x-x-120">2.7.0.11  Push notifications</span>&#x00A0;   This work does not include any means to actively
+class="cmssbx-10x-x-120">2.8.0.11  Push notifications</span>&#x00A0;   This work does not include any means to actively
 notify (push) a client about changes happening on the server. The client needs to
 initiate a request (pull) to the server to look for changes. However separate solutions
 exist<span class="footnote-mark"><a 
-href="restful_groupware15.html#fn11x0"><sup class="textsuperscript">11</sup></a></span><a 
- id="x13-16009f11"></a> 
+href="restful_groupware19.html#fn15x0"><sup class="textsuperscript">15</sup></a></span><a 
+ id="x13-17009f15"></a> 
 to enable a push workflow on top of a feed based application.<span class="cite">[<a 
 href="restful_groupwareli2.html#XWilde:2009:FQP:1693155.1693220">WM09</a>]</span> It
 may therefor not be seen as a disadvantage to omit push notifications as a
 requirement.<span class="footnote-mark"><a 
-href="restful_groupware16.html#fn12x0"><sup class="textsuperscript">12</sup></a></span><a 
- id="x13-16010f12"></a> 
+href="restful_groupware20.html#fn16x0"><sup class="textsuperscript">16</sup></a></span><a 
+ id="x13-17010f16"></a> 
     &#x00A0;
                                                                                          
                                                                                          
-    <!--l. 605--><div class="crosslinks"><p class="noindent">[<a 
+    <!--l. 677--><div class="crosslinks"><p class="noindent">[<a 
 href="restful_groupwarese1.html" >prev</a>] [<a 
 href="restful_groupwarese1.html#tailrestful_groupwarese1.html" >prev-tail</a>] [<a 
 href="restful_groupwarese2.html" >front</a>] [<a 
