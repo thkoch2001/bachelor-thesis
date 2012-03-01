@@ -664,6 +664,13 @@ As with Versioning, this is feature of WebDAV is not considered. Instead of
 locking a resource HTTP supports conditional updates and leaves conflict
 resolution to the client.
 
+\cite[sec. 1]{Nielsen1999} provides three questions to help deciding whether a
+protocol should support locking and which in the present case advise against
+locking: \textit{The content is mergeable} in contrast to binary data like
+images. \textit{The editing is expected to be localized to isolated points in
+  the document}, e.g. changing just one field in a content or event. And
+\textit{the content can be edited while the user is offline}.
+
 \paragraph{Push notifications}
 This work does not include any means to actively notify (push) a client about
 changes happening on the server. The client needs to initiate a request (pull)
@@ -1048,6 +1055,13 @@ A template engine that should be extended as described above should allow to
 capture and manipulate nested HTML elements and to call methods of passed in
 objects.
 
+\subsection{HTML Forms}
+\label{sec:html-forms}
+TODO
+% no support for etags?
+% no put/delete?
+% automatically build forms like eZPublish / Drupal?
+
 \subsection{Media Types for Collections}
 \label{sec:media-types-coll}
 Vergleich ATOM mit Medientyp Collection+JSON
@@ -1293,22 +1307,38 @@ meanwhile most probably with a conditional GET request. After this last request
 indicates no further changes the client knows that its local collection is in
 the state of the servers location at the time of the last GET request.
 
-\subsubsection{Media entries included or linked}
+\subsubsection{Media Entries and the content tag}
 \label{sec:inline-feeds-or}
-TODO
 
-ATOM entries can either carry the full content inline in the content tag or link to the content.
+The Atom format provides the opportunity to include a full representation of a
+resource in the content tag of an entry.\cite[sec. 4.1.3]{RFC4287} It is thus
+possible to embed complete xCard or xCal resources in the Atom feed
+and so to relieve the client from issuing many GET requests for each individual
+resource.
+
+The benefit of saved GET requests must be balanced with the possible
+disadvantage of serving the client resource representations already seen. A
+client that does regular updates may probably be interested only in the first
+one or two entries of a feed while the server might have made the effort to
+produce tens of entries.
+
+On the other hand the Atom Format mandates that an entry without embedded
+content must provide a summary element. It may not make much of a difference in
+bandwidth and processing whether a summary is produced or the full content is
+provided.
+
+Different optimization strategies are possible here, e.g.
 
 \begin{itemize}
-
-\item feeds could be dynamically created and inline only those entries that the client has not yet seen as indicated by the provided ETag or timestamp.
-\item Feeds with links will most probably result in many further requests by the client to get the individual entries
-\item Inline feeds may cause unnecessary work and deliver entries that the client has already seen
-\item A compromise could be to provide the first page of a paginated feed with links and all additional pages with inlined entries
+\item The first feed in a sequence of paged feeds could contain only very few
+  entries to optimize for regular updates and have more entries in all following
+  feeds.
+\item The server could remember the entries already consumed by an authenticated
+  client and serve only new entries in the first feed.
 \end{itemize}
 
-A final decision about this subject should be done based on utilization and performance data of a real world installation.
-
+In any case it is mandatory that a client can handle embedded content as well as
+linked content.
 
 \subsubsection{Modifying Resources}
 
@@ -1318,45 +1348,80 @@ additions. Two aspects however are worth to be highlighted.
 
 As outlined in \autoref{sec:inline-feeds-or} it is possible to include full
 representations of the collection resources in the content tag of an entry. A
-client however is not allowed to use an inline resource representation as the
+client however is not allowed to use an embedded resource representation as the
 base for an update.\cite[sec. 10]{RFC5023} If the client has not yet retrieved
 the resource from its own URI it thus `` SHOULD perform a GET on the URI of the
 Member Entry before editing it.''[Ibid.] This limitation is consequent since the
-Atom feed does not contain an ETag for an inlined resource. A client thus can
+Atom feed does not contain an ETag for an embedded resource. A client thus can
 not make a conditional PUT request only from the information in the
 feed.\footnote{Google adds an etag attribute to the entry tag in its data
   api. \citeurl{http://code.google.com/apis/gdata/docs/2.0/reference.html\#ResourceVersioning}{2012-2-13}}
 
 The second aspect concerns offline editing. A client should offer the user the
 possibility to create, update and delete resources while being offline and to
-apply this modifications during the next synchronization. TODO
+apply this modifications during the next synchronization, much like the IMAP
+protocol used by Kolab. This requirement is trivial to fulfill as long as no
+concurrent edits happen on the server site. In that case the client needs to
+perform an automated or user assisted merge of the conflicting resources. The
+client should always preserve a copy of a resource version as last seen from the
+Server to be able to perform a three-way-merge.
 
+The problem of offline edits and conflicts is thus similar to the case of a
+failed conditional PUT request due to a concurrent edit. \cite{Nielsen1999}
+describes this case and resolutions in detail.
 
-\subsubsection{Special Reports, Search}
+\subsubsection{Special Reports, Queries, Search}
 \label{sec:spec-reports-search}
 
+In few cases it may not be feasible for a client to synchronize a full
+collection, e.g. due to low bandwidth. This section explores restful ways to let
+the client request only a subset (selection) of a collection. More specifically
+the client should be informed about possible query facilities without relying on
+out-of-band information.
 
-TODO 
-full text search in contacts -> OpenSearch
+A promising approach is to use the de-facto standard
+OpenSearch\cite{Clinton}. According to its homepage it is implemented by most
+major browsers, search engines and many other sites. OpenSearch is also
+recommended for the link type ``search'' in the HTML5
+standard\cite[sec. 4.12.4.12]{Hickson2011a}. The default format of an OpenSearch
+result list is an Atom (or RSS) feed.
 
-The client can compare the update time of any entry with the update time of an entry that it may have cached to avoid unnecessary loading.
+OpenSearch defines the (not yet IANA registered) media type
+application/opensearchdescription+xml, which provides necessary information for
+a client to perform queries against a search service. Since possible search
+queries are usually unlimited it is not possible anymore to provide a set of
+static links. Instead the server provides an ``URI Template''\cite{Gregorio2012}
+that instructs the client how to perform an ``URI
+construction''\footnote{OpenSearch is the older standard and referenced as Level
+  1 URI Templates in \cite{Gregorio2012}.}.
 
-complete collections \cite{RFC5005} for months, weeks, days, time ranges
- - should not contain full representations but etags
+The basic OpenSearch standard defines a simple full text search. Thus a user
+could search contacts by name, address or any other field value. Equally events,
+todo items or notes could be searched by keywords.
 
-TODO It would be good, if OpenSearch links would already be available in the service document to avoid loading the feed.
-TODO Google://opensearch service document
+The next important use case is to show calendar events in a given interval,
+e.g. to present the events for a month, week or day. This can be achieved with
+the OpenSearch Time extension that provides the temporal start and end
+parameters.
 
-Microdata (\autoref{sec:microdata}) enhanced summaries could be used by the client to display the results list.
+Probably useful might be the OpenSocial Geo extension. It could allow to search
+contacts or events in a given geographic region. Even more search types become
+possible with the SRU extension that wraps the ``Search/Retrieval via URL''
+standard with its ``Contextual Query Language''
+(CQL)\footnote{\citeurl{http://www.loc.gov/standards/sru}{2012-3-1}}. The latter
+provides the possibility to sort result sets which might be interesting to
+present an address book sorted by names.
 
-OpenSearch already defines an extension to limit a search to a time range.\footnote{\citeurl{http://www.opensearch.org/Specifications/OpenSearch/Extensions/Time/1.0/Draft_1}{2012-2-13}}
+Search result Atom feeds can make use of annotated HTML
+(\autoref{sec:microdata}) in the summaries of entries and should not embed full
+resources in the content tag. Thus the client can still provide a structured
+view of the data, like calendar views or a tabular contacts list without the
+need to transfer full representations.
 
-\subsubsection{Structural and Behavioral Rest Model}
-
-TODO Modelierung der Anwendung mit dem Meta Model nach Schreier.
-
-Primary Resources: Contacts, Calendars, ...
-List Resources: 
+% \subsubsection{Structural and Behavioral Rest Model}
+% TODO Modelierung der Anwendung mit dem Meta Model nach Schreier.
+% Primary Resources: Contacts, Calendars, ...
+% List Resources: 
 
 \subsubsection{AtomPub for PIM data}
 
@@ -1390,7 +1455,7 @@ entry.\footnote{\citeurl{http://web.archive.org/web/20081120001246/http://www.sn
       Archiving}) feed unless you see an entry older then the newest entry from
     your last synchronization run.
   \end{quote}
-\item If the content of the entry is presented inline then the client does not
+\item If the content of the entry is embedded then the client does not
   know the etag of the resource representation? TODO
 \end{itemize}
 
@@ -1842,6 +1907,10 @@ ResponseBuilder rb = request.evaluatePreconditions(etag);
 if (rb == null)
   return doUpdate(foo);
 \end{javalisting}
+
+% TODO a resource should not be build, it the etag has not changed. How to make
+% etag checking as cheap as possible?
+
 
 \paragraph{Preparsed Request Components}
 \label{sec:prep-requ-comp}
