@@ -378,13 +378,14 @@ representations.\footnote{compare Bill de Hora, Extensions v Envelopes. 11/2009
 Consequently the newest OpenSocial specification deprecates any reference to the
 ATOM format.
 
-In Algermissen's classification (~\ref{sec:algerm-class-http}), the OpenSocial
-REST API would actually be ``HTTP-based Type I'' due to the lack of media types
-and direct hyper links between related resources. Algermissen writes that this
-level has the lowest possible initial cost of all HTTP APIs. Or in other words:
-The OpenSocial specification authors did not have to invest a lot to come up
-with this API specification but maintenance and evolution cost may be medium or
-high.
+In Jan Algermissen's ``Classification of HTTP-based
+APIs''\footnote{\citeurl{http://nordsc.com/ext/classification_of_http_based_apis.html}{2011-12-08}},
+the OpenSocial REST API would actually be ``HTTP-based Type I'' due to the lack
+of media types and direct hyper links between related resources. Algermissen
+writes that this level has the lowest possible initial cost of all HTTP APIs. Or
+in other words: The OpenSocial specification authors might not have had to
+invest a lot to come up with this API specification but maintenance and
+evolution cost may be medium or high.
 
 \subsubsection{CAP}
 
@@ -1171,6 +1172,7 @@ Candidate areas for re-usability:
 \subsection{Interactions}
 \label{sec:interactions}
 \subsubsection{Discovery of Collections}
+\label{sec:disc-coll}
 
 An ideal Rest API is accessed by one main URI and all other resources can be
 discovered by following links. A useful Media type to discover available
@@ -1215,12 +1217,6 @@ found. The use of categories to attach arbitrary meaning, e.g ``event type
 (product or promotion), and its status (new, updated, or cancelled)'' to feeds
 and entries is also recommended in \cite[p. 200]{Webber2010}.
 
-The CalAtom\cite{draft-yates-atompub-calatom-00.txt} proposal introduces a new
-tag ``features'' and an associated IANA registry to mark collection types and
-their features. But the examples of category usage above and the interaction
-patterns outlined in this section provide confidence that a new tag is not
-required.
-
 To make categories usable for a common Groupware API, the server needs to use a
 categorization scheme understood by the client. If different clients don't agree
 on one scheme the server could still support several.\footnote{As a last resort
@@ -1231,7 +1227,7 @@ An alternative Media Type to Service Documents in JSON could not be found. The
 most promising approach seems to list available collections in a
 \lstinline:application/vnd.collection+json: representation. (\autoref{sec:media-types-coll})
 
-\paragraph{personalized Service Documents} For a Groupware that manages
+\subsubsection{personalized Service Documents} For a Groupware that manages
 confidential information it would make sense to provide personalized Service
 Documents for authenticated users that list only collections that the user is
 authorized to read.\footnote{For this use case it would be convenient, if HTTP
@@ -1250,6 +1246,34 @@ authentication.\footnote{Alternative all Service Documents could be served under
   Document must however also be available at the indicated location.}
 
 % http://www.berenddeboer.net/rest/authentication.html
+
+\subsubsection{Atom Publishing Protocol}
+
+% Rob Yates \url{mailto:robert_yates@us.ibm.com}
+
+The idea to not only use Service Documents but the complete Atom Publishing
+Protocol as the foundation for a Groupware API is not novel. Rob Yates described
+this idea under the titles ``CalAtom'' and ``CardAtom'' already in
+2006\footnote{\citeurl{http://robubu.com/?cat=2}{2012-3-2}}.
+
+The CalAtom\cite{draft-yates-atompub-calatom-00.txt} proposal uses a
+``features'' tag and associated IANA registry to mark collection types and their
+features. But the examples of category usage above (\autoref{sec:disc-coll}) and
+the availability of OpenSearch for time range searches
+(\autoref{sec:spec-reports-search}) provide confidence that a new tag is not
+required. The features tag was proposed in 2007 by
+\cite{draft-snell-atompub-feature} but did not become a standard.
+
+The Atom format is also used by the Google Data Protocol to publish contacts,
+events and other data
+types\footnote{\citeurl{http://code.google.com/apis/gdata}{2012-3-2}}. Google's
+use of Atom however is a bit special. The resource data is not included in the
+content tag of an entry. Instead a new namespace is used to put the data with
+additional tags directly inside the entry
+tag\footnote{\citeurl{http://web.archive.org/web/20081120001246/http://www.snellspace.com/wp/?p=314}{2012-01-05}}.
+
+% TODO Atom entries could contain multiple link tags referring to alternative
+% representations of the resource with different (media) type attributes.
 
 \subsubsection{Synchronizing Collections}
 
@@ -1402,7 +1426,8 @@ todo items or notes could be searched by keywords.
 The next important use case is to show calendar events in a given interval,
 e.g. to present the events for a month, week or day. This can be achieved with
 the OpenSearch Time extension that provides the temporal start and end
-parameters.
+parameters. Rob Yates CalAtom\cite{draft-yates-atompub-calatom-00.txt} proposal
+included a similar time range search as the only but mandatory special report.
 
 Probably useful might be the OpenSocial Geo extension. It could allow to search
 contacts or events in a given geographic region. Even more search types become
@@ -1418,47 +1443,16 @@ resources in the content tag. Thus the client can still provide a structured
 view of the data, like calendar views or a tabular contacts list without the
 need to transfer full representations.
 
+The OpenSearch specification suggests that links to the OpenSearch Description
+Document for an Atom feed might be added inside a feed tag. There is however no
+reason not to add such a link inside the collection tag of a Service
+Document. This allows a client to directly search a collection without the need
+to get the feed first.
+
 % \subsubsection{Structural and Behavioral Rest Model}
 % TODO Modelierung der Anwendung mit dem Meta Model nach Schreier.
 % Primary Resources: Contacts, Calendars, ...
 % List Resources: 
-
-\subsubsection{AtomPub for PIM data}
-
-Rob Yates \url{mailto:robert_yates@us.ibm.com}:
-CalATOM \citeurl{http://robubu.com/?p=6}{2012-01-05} Draft:
-CardATOM \citeurl{http://robubu.com/?p=10}{2012-01-05}
-
-Rob Yates drafted a CalATOM
-specification.\cite{draft-yates-atompub-calatom-00.txt} It references another
-old draft (draft-snell-atompub-feature-12) to mark a collection as a CalATOM
-collection. This seems unnecessary since we can specify that a collection
-accepts calendar resources and thus marking a collection as a calendar.
-
-Furthermore the draft mentions a capability to query for events in a given time
-range. There is no equivalent for such a request for contacts.
-
-In rest the draft only repeats or references the atompub standard and the xcal
-format. This draft could therefor be seen as indication that the existing
-standards are almost sufficient to define GroupWare APIs.
-
-Google Data API also uses ATOM, but puts their tags directly inside the ``atom:entry'' tag 
-instead of putting all of the content in the content element of an atom
-entry.\footnote{\citeurl{http://web.archive.org/web/20081120001246/http://www.snellspace.com/wp/?p=314}{2012-01-05}}
-
-\begin{itemize}
-\item Atom entries could contain multiple link tags referring to alternative
-  representations of the resource with different (media) type attributes.
-\item The synchronization algorithm is so simple that it does not even warrant an activity diagram:
-  \begin{quote}
-    Consume all entries of a (paged\footnote{RFC 5005 - Feed Paging and
-      Archiving}) feed unless you see an entry older then the newest entry from
-    your last synchronization run.
-  \end{quote}
-\item If the content of the entry is embedded then the client does not
-  know the etag of the resource representation? TODO
-\end{itemize}
-
 
 \subsection{Components}
 
@@ -2061,3 +2055,4 @@ What needs a client to know, how does it need to work?
 % eval: (progn (flyspell-mode 1) (outline-minor-mode 1) (goto-address-mode 1) (hide-body))
 % End:
 %  LocalWords:  RESTful programmatically instantiation hypothetic cacheable
+% LocalWords:  Algermissen
