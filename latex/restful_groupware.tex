@@ -705,7 +705,7 @@ from: Rest APIs must be hypertext driven\footnote
 \subsection{Syntax vs. Semantic (Vocabulary)}
 
 The usage of standardized media types is one key difference between an API and a
-restful API. \cite[sec. 5.2.1.2]{Fielding2000} Only if the client has knowledge
+restful API\cite[sec. 5.2.1.2]{Fielding2000}. Only if the client has knowledge
 about the media type can it do something meaningful with it besides just
 receiving it. In that sense, the often used mime types application/xml or
 application/json are not really media types. They don't tell the browser or user
@@ -723,15 +723,15 @@ Compare this with a mime type like \texttt{application/atom+xml}. It specifies
 the syntax (xml) and the semantic (atom) of the data. Of course somebody once
 needed to read the atom specification and program the client with the knowledge
 of how to process this media type. The purpose of standardized media types
-however is that there is a limited number of them and that they are reused by many
-sites and clients.
+however is that their number is limited enough so that there is a fair chance
+that a client might have implemented a given media type.
 
-Large sites like Google, Facebook or Twitter can successfully attract enough
-developers to read their specifications and program clients accordingly. Usually
-one can also find client libraries that can help a lot. REST however envisions a
-decentralized web in which parties can interact without previous knowledge of
-each other. This becomes possible through the usage of well known predefined
-media types.
+Large sites like Google, Facebook or Twitter have the market power to attract
+developers to read their specifications and program clients accordingly. They
+thus don't necessary need to rely on standardized media types. REST however
+envisions a decentralized web in which parties can interact without previous
+knowledge of each other. This becomes possible through the usage of well known
+predefined media types.
 
 %  in the area of semantic
 % standardization. Questions whether and how contact information should also hold
@@ -740,7 +740,6 @@ media types.
 % are independent from a data serialization format. So is the question whether and
 % how to specify the sex or gender of a
 % person.\footnote{\citeurl{http://www.ietf.org/mail-archive/web/vcarddav/current/msg01778.html}{2011-12-20}}
-
 
 \subsection{Data Models of Media Types}
 
@@ -1905,6 +1904,8 @@ if (rb == null)
 % TODO a resource should not be build, it the etag has not changed. How to make
 % etag checking as cheap as possible?
 
+% Contactzilla.com saves portablecontacts json in MongoDB
+% https://groups.google.com/d/msg/portablecontacts/57R9gGyoqt0/-P0fF4zRjaoJ
 
 \paragraph{Preparsed Request Components}
 \label{sec:prep-requ-comp}
