@@ -12,14 +12,14 @@
 .cmtt-12{font-family: monospace;}
 .cmtt-12{font-family: monospace;}
 .cmr-10x-x-109{font-size:90%;}
-.cmr-8{font-size:66%;}
-.cmmi-8{font-size:66%;font-style: italic;}
-.cmsy-8{font-size:66%;}
-.cmbx-12{ font-weight: bold;}
 .cmtt-10{font-size:83%;font-family: monospace;}
 .cmtt-10{font-family: monospace;}
 .cmtt-10{font-family: monospace;}
 .cmti-12{ font-style: italic;}
+.cmr-8{font-size:66%;}
+.cmmi-8{font-size:66%;font-style: italic;}
+.cmsy-8{font-size:66%;}
+.cmbx-12{ font-weight: bold;}
 .small-caps{font-variant: small-caps; }
 p.noindent { text-indent: 0em }
 td p.noindent { text-indent: 0em; margin-top:0em; }
