@@ -691,6 +691,9 @@ Portable Contacts test client at plaxo \url{http://www.plaxo.com/pdata/testClien
 ** \subsection{Servers}
 \begin{description}[\breaklabel\setleftmargin{1ex}]
 
+  \item[Bedeworks]
+    Java
+
   % http://en.wikipedia.org/wiki/Cyn.in
   \item[Cyn.in]
     Python, Open Core
