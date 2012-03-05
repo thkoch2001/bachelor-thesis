@@ -1100,23 +1100,47 @@ Some problems in loss-less conversion of ATOM to json:\cite{Snell2008}
 
 % http://code.google.com/apis/youtube/2.0/developers_guide_jsonc.html
 
-\subsection{Media Type conversion}
+\subsection{Media Type conversion and non-isomorphism}
 
-Konvertieren zwischen verschiedenen Representationen die nach aussen gegeben werden vs. Konvertieren zwischen äußerer Representation und Representation für die Datenbank.
+Two media types are non isomorphic, if at least one of them can express
+information which the other could not express. For example the vcard media type
+defines many property parameters that have no equivalent in portable contacts,
+like language, altid or sort-as. So a conversion of a vcard into portable
+contacts will most likely lose this data.
 
-An welchen Punkten in der Architektur muss/kann/soll konvertiert werden?
+This data loss could first be a problem when a client receives a
+representation. However since the client negotiated the media type with the
+server it is most likely that it is satisfied with only the data representable
+in that data type.
 
-\subsection{Updates with non isomorphic Media Types}
-How to handle updates, if the mediatypes are not isomorph?
+Now if the client uses such a media type in a put request to update a resource,
+it may not be clear how to deal with the information the client could not
+express in the submitted resource. Should it be deleted or merged with the new
+representation?
 
-How does Google handle PATCH in the calendar API?
+Different strategies are possible in such scenarios and must be selected for the
+individual use case:
 
-Schnittmenge der Medientypen identifizieren
+\begin{enumerate}
+\item The server accepts updates only for one media type while serving other
+  media types in a ``read-only'' mode.
+\item The server accepts PATCH requests\cite{RFC5789} as a compromise while
+  still not accepting certain media types for updates.
+\item The implementer decides to either merge or deletes information not
+  representable in a received media type and lives with the consequences. In the
+  case of contact information this can be a valid strategy since the most
+  essential information is representable in all media types. The server
+  practically only works with data in the intersection of all supported media
+  types.
+\item Available facilities to extend media types are used to establish
+  isomorphism. Vcard for example allows the addition of arbitrary properties
+  prefixed with ``x-''.
+\item The server implements version control so that the situation can be
+  resolved manually later.
+\end{enumerate}
 
-Einen kanonischen Medientypen festlegen für Updates?
-
-Erweiterungsmöglichkeiten v. Medientypen nutzen um Isomorphie herzustellen
-
+The creation of resources can be handled more liberate then updating, since no
+state on the server exists that could be lost.
 
 \section{Design}
 
@@ -2072,4 +2096,4 @@ What needs a client to know, how does it need to work?
 % eval: (progn (flyspell-mode 1) (outline-minor-mode 1) (goto-address-mode 1) (hide-body))
 % End:
 %  LocalWords:  RESTful programmatically instantiation hypothetic cacheable
-% LocalWords:  Algermissen interoperability
+% LocalWords:  Algermissen interoperability representable isomorphism
