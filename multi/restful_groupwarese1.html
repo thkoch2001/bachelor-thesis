@@ -7,7 +7,7 @@
 <meta name="originator" content="TeX4ht (http://www.cse.ohio-state.edu/~gurari/TeX4ht/)"> 
 <!-- html,2 --> 
 <meta name="src" content="restful_groupware.tex"> 
-<meta name="date" content="2012-03-05 17:48:00"> 
+<meta name="date" content="2012-03-07 17:12:00"> 
 <link rel="stylesheet" type="text/css" href="restful_groupware.css"> 
 </head><body 
 >
@@ -28,7 +28,6 @@ href="restful_groupware4.html#fn1x0"><sup class="textsuperscript">1</sup></a></s
  id="x3-2001f1"></a> 
 or require the user to trust his personal data to the commercial interests of a multinational
 corporation.
-<!--l. 81--><p class="indent" >    TODO Überleitung
 <!--l. 83--><p class="indent" >    A section about OpenSocial (<a 
 href="#x3-70003">subsubsection&#x00A0;1.2.3</a>) provides additional motivation for
 a restful API for social data. It also uses the opportunity to provide an alternative
@@ -37,10 +36,10 @@ restful.
 <!--l. 88--><p class="indent" >    A few patterns or techniques are presented and proposed for reuse in other Rest applications to
 ease the support for multiple alternative Media types. Among these techniques are Dependency
 Injection to prepare resource method parameters (<a 
-href="restful_groupwarese4.html#x48-48010r3">Listing&#x00A0;4.4.3.3</a>), Resource Facades
+href="restful_groupwarese4.html#x44-45010r3">Listing&#x00A0;4.5.1.3</a>), Resource Facades
 (<a 
-href="restful_groupwarese4.html#x48-470002">Listing&#x00A0;4.4.2</a>), a programmable dispatcher (<a 
-href="restful_groupwarese4.html#x48-460001">Listing&#x00A0;4.4.1</a>).
+href="restful_groupwarese4.html#x44-430002">Listing&#x00A0;4.4.2</a>), a programmable dispatcher (<a 
+href="restful_groupwarese4.html#x44-420001">Listing&#x00A0;4.4.1</a>).
 <a 
  id="x3-2002r1"></a>
 <h4 class="subsectionHead"><span class="titlemark">1.1  </span> <a 
@@ -207,8 +206,8 @@ class="cmtt-12">{a}/{b}/{c}</span></span></span></div>
 This would also have made it clearer to see that the specification actually defines services instead
 of resources. One test showing the misfit is to ask how dot-segments (&#8217;.&#8217; and &#8217;..&#8217;) inside the URI
 fragment are interpreted and whether this conforms with the letter and spirit of the URI
-standard.<span class="cite">[<a 
-href="restful_groupwareli2.html#XRFC3986">BLFM05</a>, sec 3.3]</span> Another misfit can be seen in the URI fragment to retrieve one or
+standard<span class="cite">[<a 
+href="restful_groupwareli2.html#XRFC3986">BLFM05</a>, sec 3.3]</span>. Another misfit can be seen in the URI fragment to retrieve one or
 multiple albums. In this case the &#8217;c&#8217; part in the quoted definition above is actually a list of albums
 to retrieve separated by a slash.
 <!--l. 287--><p class="indent" >    Fielding&#8217;s second bullet point most likely refers to the <span 
@@ -236,8 +235,8 @@ URIs to access information or which methods to use on which URIs for different a
 means that the OpenSocial API is not simple or intuitive to use but requires a client developer to
 read a lot of specification, thus violating the simplicity property of a restful architecture. Since the
 URIs are fixed in the specification and necessarily also in clients, the modifiability property is also
-violated.<span class="cite">[<a 
-href="restful_groupwareli2.html#XFielding2000">Fie00</a>, sec 2.3]</span>
+violated<span class="cite">[<a 
+href="restful_groupwareli2.html#XFielding2000">Fie00</a>, sec 2.3]</span>.
                                                                                          
                                                                                          
 <!--l. 314--><p class="indent" >    The following tables give some examples of the specified URIs:
@@ -474,7 +473,7 @@ href="restful_groupware19.html#fn16x0"><sup class="textsuperscript">16</sup></a>
  id="x3-8002f16"></a> .
 <!--l. 421--><p class="indent" >    CalAtom and CardAtom build on top of the Atom Publishing Protocol and are therefor
 discussed in <a 
-href="restful_groupwarese4.html#x48-400003">Listing&#x00A0;4.3.3</a>.
+href="restful_groupwarese4.html#x44-360003">Listing&#x00A0;4.3.3</a>.
                                                                                          
                                                                                          
     <!--l. 424--><div class="crosslinks"><p class="noindent">[<a 

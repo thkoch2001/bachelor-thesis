@@ -7,7 +7,7 @@
 <meta name="originator" content="TeX4ht (http://www.cse.ohio-state.edu/~gurari/TeX4ht/)"> 
 <!-- html,2 --> 
 <meta name="src" content="restful_groupware.tex"> 
-<meta name="date" content="2012-03-05 17:48:00"> 
+<meta name="date" content="2012-03-07 17:12:00"> 
 <link rel="stylesheet" type="text/css" href="restful_groupware.css"> 
 </head><body 
 >
@@ -21,108 +21,109 @@ href="restful_groupware.html# " >up</a>] </p></div>
 <a 
  id="x20-9001r4"></a>
 <h4 class="subsectionHead"><span class="titlemark">2.1  </span> <a 
- id="x20-100001"></a>Scope</h4>
-<!--l. 438--><p class="noindent" >This work defines a protocol to share
+ id="x20-100001"></a>Scope and General Requirements</h4>
+<!--l. 455--><p class="noindent" >The software system designed in this work should provide a web based interface for most common
+interactions with a Groupware system like Kolab. It must obey the constraints of the REST
+architectural style<span class="cite">[<a 
+href="restful_groupwareli2.html#XFielding2000">Fie00</a>]</span>.
+<!--l. 459--><p class="indent" >    Guidelines of the design are:
+      <ul class="itemize1">
+      <li class="itemize">The system should be extensible to support different kind of personal information
+      resources like contacts, events, todo items, journal items and free-busy informations.
+      </li>
+      <li class="itemize">The CRUD operations must be supported: Create, Read, Update, Delete.
+      </li>
+      <li class="itemize">The client must be able to synchronize collections of resources for offline read access
+      and manipulation.
+      </li>
+      <li class="itemize">The design should be considerably &#8220;easier&#8221; to implement then CalDAV, CardDAV or
+      IMAP as well for the server as for the client.
+      </li>
+      <li class="itemize">The design should reuse existing standards where possible.
+      </li>
+      <li class="itemize">The design should support all client types listed in <a 
+href="#x20-130004">subsection&#x00A0;2.4</a>.
+      </li>
+      <li class="itemize">The design should support different Media Type representations of resources.</li></ul>
 <a 
  id="x20-10001r12"></a>
 <h4 class="subsectionHead"><span class="titlemark">2.2  </span> <a 
- id="x20-110002"></a>General Requirements</h4>
-      <ul class="itemize1">
-      <li class="itemize">Lesen/Schreiben  der  verwalteten  Resourcen:  Kontakte,  Kalender-Events,  Todos,
-      Journal-Einträge, Free-Busy, &#x2026;
-      </li>
-      <li class="itemize">Synchronisation von Collections für Offline-Nutzung
-      </li>
-      <li class="itemize">einfach zu implementieren (vgl. CalDAV, CardDAV, IMAP) <span 
-class="cmsy-10x-x-120">&#x2192; </span>ReST
-      </li>
-      <li class="itemize">Standardkonform <span 
-class="cmsy-10x-x-120">&#x2192; </span>xCard, xCal, ATOM
-      </li>
-      <li class="itemize">nutzbar durch JavaScript: JSON basierte Medientypen
-      </li>
-      <li class="itemize">Groupware Elemente: Kontakte, Kalender-Events, Todos, Journal-Einträge, Free-Busy</li></ul>
-<a 
- id="x20-11001r1"></a>
-<span 
-class="cmssbx-10x-x-120">2.2.0.1  Replacement for CardDAV</span>&#x00A0;   The web application should provide at least the same
-features as the CardDAV protocol. It should be demonstrated that a restful application can serve
-for the same purpose and thus that the additional complexity of WebDAV and CardDAV is not
-necessary.
-    The standard lists the supposed main features of CardDAV<span class="cite">[<a 
+ id="x20-110002"></a>Replacement for CardDAV</h4>
+<!--l. 483--><p class="noindent" >The web application should provide at least the same features as the CardDAV protocol. It should
+be demonstrated that a restful application can serve for the same purpose and thus that the
+additional complexity of WebDAV and CardDAV is not necessary.
+<!--l. 488--><p class="indent" >    The standard lists the supposed main features of CardDAV<span class="cite">[<a 
 href="restful_groupwareli2.html#XRFC6352">Dab11</a>, sec. 1]</span>:
       <ol  class="enumerate1" >
       <li 
-  class="enumerate" id="x20-11003x1">Ability to use multiple address books with hierarchical layout.
+  class="enumerate" id="x20-11002x1">Ability to use multiple address books with hierarchical layout.
       </li>
       <li 
-  class="enumerate" id="x20-11005x2">Ability  to  control  access  to  individual  address  books  and  address  entries  as  per
+  class="enumerate" id="x20-11004x2">Ability  to  control  access  to  individual  address  books  and  address  entries  as  per
       WebDAV Access Control List (ACL) [RFC3744].
       </li>
       <li 
-  class="enumerate" id="x20-11007x3">Principal collections can be used to enumerate and query other users on the system as
+  class="enumerate" id="x20-11006x3">Principal collections can be used to enumerate and query other users on the system as
       per WebDAV ACL [RFC3744].
       </li>
       <li 
-  class="enumerate" id="x20-11009x4">Server-side searching of address data, avoiding the need for clients to download an
+  class="enumerate" id="x20-11008x4">Server-side searching of address data, avoiding the need for clients to download an
       entire address book in order to do a quick address &#8217;expansion&#8217; operation.
-      </li>
-      <li 
-  class="enumerate" id="x20-11011x5">Well-defined internationalization support through WebDAV&#8217;s use of XML.
                                                                                          
                                                                                          
       </li>
       <li 
-  class="enumerate" id="x20-11013x6">Use  of  vCards  [RFC2426]  for  well-defined  address  schema  to  enhance  client
+  class="enumerate" id="x20-11010x5">Well-defined internationalization support through WebDAV&#8217;s use of XML.
+      </li>
+      <li 
+  class="enumerate" id="x20-11012x6">Use  of  vCards  [RFC2426]  for  well-defined  address  schema  to  enhance  client
       interoperability.
       </li>
       <li 
-  class="enumerate" id="x20-11015x7">Many  limited  clients  (e.g.,  mobile  devices)  contain  an  HTTP  stack  that  makes
+  class="enumerate" id="x20-11014x7">Many  limited  clients  (e.g.,  mobile  devices)  contain  an  HTTP  stack  that  makes
       implementing WebDAV much easier than other protocols.</li></ol>
-<!--l. 496--><p class="noindent" >There are some minor features of CardDAV, that are mainly inherited from WebDAV and whose
-general usefulness outside of the scope of a content management system could be argued. See
+<!--l. 506--><p class="indent" >    There are some minor features of CardDAV, that are mainly inherited from WebDAV and
+whose general usefulness outside of the scope of a content management system could be argued.
+See <a 
+href="#x20-180009">subsection&#x00A0;2.9</a> for a discussion of those.
 <a 
-href="#x20-170008">subsection&#x00A0;2.8</a> for a discussion of those.
-<a 
- id="x20-11016r2"></a>
-<span 
-class="cmssbx-10x-x-120">2.2.0.2  Restful</span>&#x00A0;   The application should obey the constraints of a rest application as specified in
-<span class="cite">[<a 
-href="restful_groupwareli2.html#XFielding2000">Fie00</a>]</span>.
-    TODO: 4 Grundconstraints von REST auflisten.
-    The above constraints are not an end in itself but lead to the following required or desirable
-properties:
+ id="x20-11015r13"></a>
+<h4 class="subsectionHead"><span class="titlemark">2.3  </span> <a 
+ id="x20-120003"></a>REST architectural style</h4>
+<!--l. 513--><p class="noindent" >The requirement to obey the constraints of REST should cause the system to have some
+characteristics that may be especially advantageous for the use case of a Groupware API. Those
+characteristics are, according to <span class="cite">[<a 
+href="restful_groupwareli2.html#XFielding2000">Fie00</a>]</span>:
       <ul class="itemize1">
-      <li class="itemize">Cacheability  (5.1.4)  can  keep  the  data  available  also  in  offline  mode,  improves
+      <li class="itemize">Cacheability (sec. 5.1.4) can keep the data available also in offline mode, improves
       performance and scalability.
       </li>
-      <li class="itemize">Simplicity helps to develop glue code to connect the application to other systems or to
-      extend it.
+      <li class="itemize">Simplicity (sec. 2.3.3) helps to integrate the Groupware with other applications, e.g.
+      publishing birthdays of employees in an intranet portal.
       </li>
-      <li class="itemize">Modifiability allows to adapt the Groupware to changes in the organization.
+      <li class="itemize">Modifiability (sec. 2.3.4) allows to adapt the Groupware to changes in the organization.
       </li>
-      <li class="itemize">Reliability should not need additional justification.
+      <li class="itemize">Reliability (sec. 2.3.7) can be of great importance, if the ability to work depends on
+      the correct working of the Groupware system.
       </li>
-      <li class="itemize">Administrative  scalability  means  that  intermediary  components  can  be  deployed
-      independent of the administrator of the main application.</li></ul>
-<!--l. 518--><p class="indent" >    Other outcomes described by Fielding that may not be of importance for the present work are:
-scalability in terms of users, network performance and efficiency.
+      <li class="itemize">Anarchic  scalability  (sec.  4.1.4.1)  allows  a  Groupware  to  function  with  other
+      components that are not under the control of the Groupware administrator.</li></ul>
 <a 
- id="x20-11017r13"></a>
-<h4 class="subsectionHead"><span class="titlemark">2.3  </span> <a 
- id="x20-120003"></a>User Classes and Characteristics</h4>
-<!--l. 527--><p class="noindent" >Different kinds of clients should be able to use the API. <a 
-href="#x20-120013">Table&#x00A0;3</a> lists clients whose
+ id="x20-12001r14"></a>
+<h4 class="subsectionHead"><span class="titlemark">2.4  </span> <a 
+ id="x20-130004"></a>User Classes and Characteristics</h4>
+<!--l. 538--><p class="noindent" >Different kinds of clients should be able to use the API. <a 
+href="#x20-130013">Table&#x00A0;3</a> lists clients whose
 constraints and characteristics must be respected in the design. The choice of clients and
 their characteristics is intentionally conservative to cover a wide range of real world use
 cases.
     <div class="table">
                                                                                          
                                                                                          
-<!--l. 533--><p class="indent" >    <a 
- id="x20-120013"></a><a 
- id="x28-21004r1"></a><a 
- id="x28-210001"></a><hr class="float"><div class="float" 
+<!--l. 544--><p class="indent" >    <a 
+ id="x20-130013"></a><a 
+ id="x29-21004r1"></a><a 
+ id="x29-210001"></a><hr class="float"><div class="float" 
 >
                                                                                          
                                                                                          
@@ -174,15 +175,15 @@ class="td11">intranet application     </td>
 class="td11">                    </td></tr></table></div>
 <br /> <div class="caption" 
 ><span class="id">Table&#x00A0;3: </span><span  
-class="content">Constraints of different API clients</span></div><!--tex4ht:label?: x20-120013 -->
+class="content">Constraints of different API clients</span></div><!--tex4ht:label?: x20-130013 -->
                                                                                          
                                                                                          
     </div><hr class="endfloat" />
     </div>
-<!--l. 546--><p class="indent" >    The most problematic client in the list is the web browser with only 5MB of storage capacity (via
+<!--l. 557--><p class="indent" >    The most problematic client in the list is the web browser with only 5MB of storage capacity (via
 WebStorage<span class="footnote-mark"><a 
 href="restful_groupware21.html#fn17x0"><sup class="textsuperscript">17</sup></a></span><a 
- id="x20-12002f17"></a> )
+ id="x20-13002f17"></a> )
 a potentially very bad internet connection, the inability to leave data for later sessions (internet
 cafe) and the restriction to one particular format (JSON). However this use case is of importance
 as the OpenSocial&#x00A0;(&#x00A0;<a 
@@ -190,25 +191,25 @@ href="restful_groupwarese1.html#x3-70003">1.2.3<!--tex4ht:ref: sec:opensocial --
 provides multiple Media Types since it mandates JSON while the canonical Media Types (xCard,
 xCal) support XML.
 <a 
- id="x20-12003r14"></a>
-<h4 class="subsectionHead"><span class="titlemark">2.4  </span> <a 
- id="x20-130004"></a>Data Characteristics</h4>
-<!--l. 559--><p class="noindent" >Lacking sources for more accurate numbers, a couple of conservative estimates are made for the
+ id="x20-13003r15"></a>
+<h4 class="subsectionHead"><span class="titlemark">2.5  </span> <a 
+ id="x20-140005"></a>Data Characteristics</h4>
+<!--l. 570--><p class="noindent" >Lacking sources for more accurate numbers, a couple of conservative estimates are made for the
 size and number of resources in the scope of this work. This guesswork is not perfect. But it
 provides a rationale behind later design decisions (<a 
-href="restful_groupwarese4.html#x48-370003">Listing&#x00A0;4.3<!--tex4ht:ref: sec:opensocial --></a>) and outlines their applicability for a
+href="restful_groupwarese4.html#x44-330003">Listing&#x00A0;4.3<!--tex4ht:ref: sec:opensocial --></a>) and outlines their applicability for a
 concrete use case.
 <span 
 class="cmssbx-10x-x-120">Contacts</span>&#x00A0;   It is believed that humans have regular social contacts to around 150
 people<span class="footnote-mark"><a 
 href="restful_groupware22.html#fn18x0"><sup class="textsuperscript">18</sup></a></span><a 
- id="x20-13001f18"></a> .
+ id="x20-14001f18"></a> .
 So the number of contacts in a users address book collection should at least handle 1500
 contacts.
     The average textual data size associated to a contact is expected to be around 840
 bytes<span class="footnote-mark"><a 
 href="restful_groupware23.html#fn19x0"><sup class="textsuperscript">19</sup></a></span><a 
- id="x20-13002f19"></a> .
+ id="x20-14002f19"></a> .
 100 kb are enough for an image file to identify a face.
     So a collection with a data size of 1500<span 
 class="cmmi-12">contacts</span><span 
@@ -225,7 +226,7 @@ class="cmsy-10x-x-120">* </span>365 <span
 class="cmsy-10x-x-120">* </span>10 = 730 events. The core data of an event is estimated to comprise 356
 bytes<span class="footnote-mark"><a 
 href="restful_groupware24.html#fn20x0"><sup class="textsuperscript">20</sup></a></span><a 
- id="x20-13003f20"></a> . So
+ id="x20-14003f20"></a> . So
 a useful calendar collection has a data size of 730<span 
 class="cmmi-12">events </span><span 
 class="cmsy-10x-x-120">* </span>356<img 
@@ -238,14 +239,14 @@ class="cmmi-12">MB</span>
 class="cmssbx-10x-x-120">Conclusions</span>&#x00A0;   The size of full, useful collections of personal information items has the same order
 of magnitude then the size of a digital image taken with today&#8217;s smart phones. With the worst case
 bandwidth from <a 
-href="#x20-120013">Table&#x00A0;3<!--tex4ht:ref: sec:opensocial --></a> the download of a full uncompressed collection lasts around
+href="#x20-130013">Table&#x00A0;3<!--tex4ht:ref: sec:opensocial --></a> the download of a full uncompressed collection lasts around
 <img 
 src="restful_groupware2x.png" alt="-2*1MB-
 56kbit&#x2215;s"  class="frac" align="middle"> <span 
 class="cmsy-10x-x-120">&#x2248; </span>5<span 
 class="cmmi-12">min</span><span class="footnote-mark"><a 
 href="restful_groupware25.html#fn21x0"><sup class="textsuperscript">21</sup></a></span><a 
- id="x20-13004f21"></a> .
+ id="x20-14004f21"></a> .
 Even with a drastic data compression of 90% the transfer would still last over 30 seconds. With the
 next better bandwidth of the mobile device however the transfer duration for the uncompressed
 case is already under one minute (<span 
@@ -256,63 +257,63 @@ collections.
                                                                                          
                                                                                          
 <a 
- id="x20-13005r16"></a>
-<h4 class="subsectionHead"><span class="titlemark">2.5  </span> <a 
- id="x20-140005"></a>Operation Environment</h4>
-<!--l. 604--><p class="noindent" >The application is expected to be installed in a Java servlet container like Tomcat or Jetty and to
+ id="x20-14005r17"></a>
+<h4 class="subsectionHead"><span class="titlemark">2.6  </span> <a 
+ id="x20-150006"></a>Operation Environment</h4>
+<!--l. 615--><p class="noindent" >The application is expected to be installed in a Java servlet container like Tomcat or Jetty and to
 contact a separate storage component. The primarily targeted storage component is an IMAP
 server with a Kolab conform set of groupware folders. However the design should not restrict
 the extension to a document database like CouchDB, plain files, relational or XML
 databases.
 <a 
- id="x20-14001r17"></a>
-<h4 class="subsectionHead"><span class="titlemark">2.6  </span> <a 
- id="x20-150006"></a>Design and Implementation Constraints</h4>
-<a 
  id="x20-15001r18"></a>
 <h4 class="subsectionHead"><span class="titlemark">2.7  </span> <a 
- id="x20-160007"></a>Specific Requirements</h4>
+ id="x20-160007"></a>Design and Implementation Constraints</h4>
 <a 
- id="x20-16001r3"></a>
+ id="x20-16001r19"></a>
+<h4 class="subsectionHead"><span class="titlemark">2.8  </span> <a 
+ id="x20-170008"></a>Specific Requirements</h4>
+<a 
+ id="x20-17001r1"></a>
 <span 
-class="cmssbx-10x-x-120">2.7.0.3  Nested and mixed collections</span>&#x00A0;   The design should not unnecessarily hinder that
+class="cmssbx-10x-x-120">2.8.0.1  Nested and mixed collections</span>&#x00A0;   The design should not unnecessarily hinder that
 collections could be nested or contain different kinds of media types, e.g. calendar items and
 contacts.
     <span class="cite">[<a 
 href="restful_groupwareli2.html#XRFC6352">Dab11</a>, sec. 5.2]</span> forbids nested and mixed collections to ease the implementation of clients.
 However both may make sense in certain scenarios and the protocol should not exclude such
 scenarios. A collection could for example represent all items related to a project, which include
-contacts, events, todos and notes.
+contacts, events, todos and journal entries.
 <a 
- id="x20-16002r19"></a>
-<h4 class="subsectionHead"><span class="titlemark">2.8  </span> <a 
- id="x20-170008"></a>Excluded requirements</h4>
+ id="x20-17002r20"></a>
+<h4 class="subsectionHead"><span class="titlemark">2.9  </span> <a 
+ id="x20-180009"></a>Excluded requirements</h4>
 <a 
- id="x20-17001r4"></a>
+ id="x20-18001r2"></a>
 <span 
-class="cmssbx-10x-x-120">2.8.0.4  Search</span>&#x00A0;   It is not required that the server implements any means to search its data. It is
+class="cmssbx-10x-x-120">2.9.0.2  Search</span>&#x00A0;   It is not required that the server implements any means to search its data. It is
 not excluded that such a facility could be added later. It is however expected that searching could
 be implemented separately. This could be done either on a synchronizing client or as a separate
 system in the same administrative domain as the server.
 <a 
- id="x20-17002r5"></a>
+ id="x20-18002r3"></a>
 <span 
-class="cmssbx-10x-x-120">2.8.0.5  Performance optimization</span>&#x00A0;   The system is meant to inherit the benefits of a restful
+class="cmssbx-10x-x-120">2.9.0.3  Performance optimization</span>&#x00A0;   The system is meant to inherit the benefits of a restful
 architecture. It should therefor be possible to attach separate caching intermediaries for read
 requests. Rather then concentrating on the performance of the implementation of read requests it
 should be taken care that the architecture supports external caching and thus avoids to serve the
 same read request multiple times.
 <a 
- id="x20-17003r6"></a>
+ id="x20-18003r4"></a>
 <span 
-class="cmssbx-10x-x-120">2.8.0.6  Access Control</span>&#x00A0;   The aspect of access control would broaden the scope of this work to
+class="cmssbx-10x-x-120">2.9.0.4  Access Control</span>&#x00A0;   The aspect of access control would broaden the scope of this work to
 wide. However it could be kept in mind, whether the proposed design could be enhanced by a
 separate access control design as proposed in <span class="cite">[<a 
 href="restful_groupwareli2.html#Xconf/rest/GrafZLW11">GZLW11</a>]</span>.
 <a 
- id="x20-17004r7"></a>
+ id="x20-18004r5"></a>
 <span 
-class="cmssbx-10x-x-120">2.8.0.7  Copying and Moving</span>&#x00A0;   WebDAV introduces the HTTP verbs to COPY and MOVE. The
+class="cmssbx-10x-x-120">2.9.0.5  Copying and Moving</span>&#x00A0;   WebDAV introduces the HTTP verbs to COPY and MOVE. The
 usefulness of such functionality must of course be compared to the complexity of the
 implementation and the drawback of incompatibility to plain HTTP.
     It is possible to enhance a restful API with copy and move functionality without extending
@@ -325,28 +326,31 @@ are linked from the resources they act on. Custom link relations are used to ind
 of the controller resource.
     This work does not include initial support for copy or move.
 <a 
- id="x20-17005r8"></a>
+ id="x20-18005r6"></a>
 <span 
-class="cmssbx-10x-x-120">2.8.0.8  Versioning</span>&#x00A0;   WebDAV and therefor CalDAV and CardDAV support the versioning of
+class="cmssbx-10x-x-120">2.9.0.6  Versioning</span>&#x00A0;   WebDAV and therefor CalDAV and CardDAV support the versioning of
 resources as an extension to the HTTP protocol. Versioning is an important feature for a text
 authoring system that may have been the main target for the WebDAV protocol. It does however
 seem to be of little use for the resources considered here. The resources are mostly created in one
 session by one user and seldom modified.
 <a 
- id="x20-17006r9"></a>
+ id="x20-18006r7"></a>
 <span 
-class="cmssbx-10x-x-120">2.8.0.9  Make Collections</span>&#x00A0;   WebDAV introduces the MKCOL HTTP verb to create collections.
+class="cmssbx-10x-x-120">2.9.0.7  Make Collections</span>&#x00A0;   WebDAV introduces the MKCOL HTTP verb to create collections.
 CardDAV recommends that implementations support this to allow users to &#8220;organize their data
 better&#8221;. An alternative would be to make use of ATOM categories for grouping. Instead of creating
 a new (empty) collection the user would thus create a contact resource with a new category. An
-ATOM service document could then link to a new (virtual) collection that only contains and
-accepts resources of this category.
-    TODO: What are the proposed ways to create collections? Post a feed to the service
-document? Put a new service document? Put a feed document to the desired location?
+ATOM service document could then link to a new (virtual, read-only) collection that only contains
+resources of this category.
+    The Atom Publishing Protocol does not define how collection resources could be created. Practitioners
+recommend a pattern wherein collections of collections exist and new collections can be created by posting
+to the former<span class="footnote-mark"><a 
+href="restful_groupware26.html#fn22x0"><sup class="textsuperscript">22</sup></a></span><a 
+ id="x20-18007f22"></a> .
 <a 
- id="x20-17007r10"></a>
+ id="x20-18008r8"></a>
 <span 
-class="cmssbx-10x-x-120">2.8.0.10  Locking</span>&#x00A0;   As with Versioning, this is feature of WebDAV is not considered. Instead of
+class="cmssbx-10x-x-120">2.9.0.8  Locking</span>&#x00A0;   As with Versioning, this is feature of WebDAV is not considered. Instead of
 locking a resource HTTP supports conditional updates and leaves conflict resolution to the
 client.
     <span class="cite">[<a 
@@ -360,24 +364,24 @@ class="cmti-12">the content can be edited while the user is</span>
 <span 
 class="cmti-12">offline</span>.
 <a 
- id="x20-17008r11"></a>
+ id="x20-18009r9"></a>
 <span 
-class="cmssbx-10x-x-120">2.8.0.11  Push notifications</span>&#x00A0;   This work does not include any means to actively
+class="cmssbx-10x-x-120">2.9.0.9  Push notifications</span>&#x00A0;   This work does not include any means to actively
 notify (push) a client about changes happening on the server. The client needs to
 initiate a request (pull) to the server to look for changes. However separate solutions
 exist<span class="footnote-mark"><a 
-href="restful_groupware26.html#fn22x0"><sup class="textsuperscript">22</sup></a></span><a 
- id="x20-17009f22"></a> 
-to enable a push workflow on top of a feed based application.<span class="cite">[<a 
-href="restful_groupwareli2.html#XWilde:2009:FQP:1693155.1693220">WM09</a>]</span> It
+href="restful_groupware27.html#fn23x0"><sup class="textsuperscript">23</sup></a></span><a 
+ id="x20-18010f23"></a> 
+to enable a push workflow on top of a feed based application<span class="cite">[<a 
+href="restful_groupwareli2.html#XWilde:2009:FQP:1693155.1693220">WM09</a>]</span>. It
 may therefor not be seen as a disadvantage to omit push notifications as a
 requirement.<span class="footnote-mark"><a 
-href="restful_groupware27.html#fn23x0"><sup class="textsuperscript">23</sup></a></span><a 
- id="x20-17010f23"></a> 
+href="restful_groupware28.html#fn24x0"><sup class="textsuperscript">24</sup></a></span><a 
+ id="x20-18011f24"></a> 
     &#x00A0;
                                                                                          
                                                                                          
-    <!--l. 701--><div class="crosslinks"><p class="noindent">[<a 
+    <!--l. 717--><div class="crosslinks"><p class="noindent">[<a 
 href="restful_groupwarese1.html" >prev</a>] [<a 
 href="restful_groupwarese1.html#tailrestful_groupwarese1.html" >prev-tail</a>] [<a 
 href="restful_groupwarese2.html" >front</a>] [<a 
