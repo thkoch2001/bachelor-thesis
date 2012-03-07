@@ -78,7 +78,7 @@ brittle and unreliable\footnote{See comments on the individual projects in
 interests of a multinational corporation.
 %\footnote{Experiences with Android and Data in the cloud \citeurl{http://keithp.com/blogs/calypso}{?}}
 
-TODO Überleitung
+% @TODO Überleitung
 
 A section about OpenSocial (\autoref{sec:opensocial}) provides additional
 motivation for a restful API for social data. It also uses the opportunity to
@@ -93,7 +93,7 @@ these techniques are Dependency Injection to prepare resource method parameters
   (\autoref{sec:dispatcher}).
 
 \subsection{Definitions}
-
+%@TODO
 Kolab is the name of a software product ... TODO
 
 A couple of related terms and concepts exist that all more or less overlap with
@@ -280,7 +280,7 @@ parameters. This would also have made it clearer to see that the specification
 actually defines services instead of resources. One test showing the misfit is
 to ask how dot-segments ('.' and '..') inside the URI fragment are interpreted
 and whether this conforms with the letter and spirit of the URI
-standard.\cite[sec 3.3]{RFC3986} Another misfit can be seen in the URI fragment
+standard\cite[sec 3.3]{RFC3986}. Another misfit can be seen in the URI fragment
 to retrieve one or multiple albums. In this case the 'c' part in the quoted
 definition above is actually a list of albums to retrieve separated by a slash.
 
@@ -308,8 +308,8 @@ which URIs for different actions. This means that the OpenSocial API is not
 simple or intuitive to use but requires a client developer to read a lot of
 specification, thus violating the simplicity property of a restful
 architecture. Since the URIs are fixed in the specification and necessarily also
-in clients, the modifiability property is also violated.\cite[sec
-2.3]{Fielding2000}
+in clients, the modifiability property is also violated\cite[sec
+2.3]{Fielding2000}.
 
 The following tables give some examples of the specified URIs:
 
@@ -425,7 +425,7 @@ therefor discussed in \autoref{sec:atom-publ-prot}.
 
 
 % SRS template from http://code.google.com/p/e-bibliophile/wiki/SRS
-\subsection{Scope}
+%\subsection{Scope}
 % This subsection should
 % a)Identify the software product(s) to be produced by name (e.g., Host DBMS, 
 % Report Generator, etc.);
@@ -435,10 +435,7 @@ therefor discussed in \autoref{sec:atom-publ-prot}.
 % d)Be consistent with similar statements in higher level specifications 
 % (e.g., the system requirements specification), if they exist.
 
-This work defines a protocol to share 
-
-
-\subsection{General Requirements}
+\subsection{Scope and General Requirements}
 % This subsection of the SRS should provide a summary of the major functions 
 % that the software will perform. For example, an SRS for an accounting program 
 % may use this part to address customer account maintenance, customer statement, 
@@ -455,20 +452,33 @@ This work defines a protocol to share
 % and their relationships. Such a diagram is not intended to show a design of 
 % a product, but simply shows the logical relationships among variables.
 
+The software system designed in this work should provide a web based interface
+for most common interactions with a Groupware system like Kolab. It must obey
+the constraints of the REST architectural style\cite{Fielding2000}.
+
+Guidelines of the design are:
+
 \begin{itemize}
-  \item Lesen/Schreiben der verwalteten Resourcen: Kontakte, Kalender-Events, Todos, Journal-Einträge, Free-Busy, \ldots
-  \item Synchronisation von Collections für Offline-Nutzung
-  \item einfach zu implementieren (vgl. CalDAV, CardDAV, IMAP) $\rightarrow$ ReST
-  \item Standardkonform $\rightarrow$ xCard, xCal, ATOM
-  \item nutzbar durch JavaScript: JSON basierte Medientypen
-  \item Groupware Elemente: Kontakte, Kalender-Events, Todos, Journal-Einträge, Free-Busy
+\item The system should be extensible to support different kind of personal
+  information resources like contacts, events, todo items, journal items and
+  free-busy informations.
+  \item The CRUD operations must be supported: Create, Read, Update, Delete.
+  \item The client must be able to synchronize collections of resources for
+    offline read access and manipulation.
+  \item The design should be considerably ``easier'' to implement then CalDAV,
+    CardDAV or IMAP as well for the server as for the client.
+  \item The design should reuse existing standards where possible.
+  \item The design should support all client types listed in
+    \autoref{sec:user-class-char}.
+  \item The design should support different Media Type representations of
+    resources.
 \end{itemize}
 
 % restful: one entry point, reuse of existing protocols and media types
 % easy to understand and implement
 % Collections z.B. für Projekte könnten alle möglichen Typen konsumieren.
 
-\paragraph{Replacement for CardDAV}
+\subsection{Replacement for CardDAV}
 
 The web application should provide at least the same features as the CardDAV
 protocol. It should be demonstrated that a restful application can serve for the
@@ -498,28 +508,29 @@ and whose general usefulness outside of the scope of a content management system
 could be argued. See \autoref{sec:excluded-requirements} for a discussion of
 those.
 
-\paragraph{Restful}
-The application should obey the constraints of a rest application as specified
-in \cite{Fielding2000}.
+\subsection{REST architectural style}
 
-TODO: 4 Grundconstraints von REST auflisten.
-
-The above constraints are not an end in itself but lead to the following
-required or desirable properties:
+The requirement to obey the constraints of REST should cause the system to have
+some characteristics that may be especially advantageous for the use case of a
+Groupware API. Those characteristics are, according to \cite{Fielding2000}:
 
 \begin{itemize}
-\item Cacheability (5.1.4) can keep the data available also in offline mode, improves performance and scalability.
-\item Simplicity helps to develop glue code to connect the application to other systems or to extend it.
-\item Modifiability allows to adapt the Groupware to changes in the organization.
-\item Reliability should not need additional justification.
-\item Administrative scalability means that intermediary components can be deployed independent of the administrator of the main application.
+\item Cacheability (sec. 5.1.4) can keep the data available also in offline
+  mode, improves performance and scalability.
+\item Simplicity (sec. 2.3.3) helps to integrate the Groupware with other
+  applications, e.g. publishing birthdays of employees in an intranet portal.
+\item Modifiability (sec. 2.3.4) allows to adapt the Groupware to changes in the
+  organization.
+\item Reliability (sec. 2.3.7) can be of great importance, if the ability to
+  work depends on the correct working of the Groupware system.
+\item Anarchic scalability (sec. 4.1.4.1) allows a Groupware to function with
+  other components that are not under the control of the Groupware
+  administrator.
 \end{itemize}
 
-Other outcomes described by Fielding that may not be of importance for the
-present work are: scalability in terms of users, network performance and
-efficiency.
-
-
+% Other outcomes described by Fielding that may not be of importance for the
+% present work are: scalability in terms of users, network performance and
+% efficiency.
 
 \subsection{User Classes and Characteristics}
 \label{sec:user-class-char}
@@ -619,7 +630,7 @@ contain different kinds of media types, e.g. calendar items and contacts.
 implementation of clients. However both may make sense in certain scenarios and
 the protocol should not exclude such scenarios. A collection could for example
 represent all items related to a project, which include contacts, events, todos
-and notes.
+and journal entries.
 
 \subsection{Excluded requirements}
 \label{sec:excluded-requirements}
@@ -670,11 +681,13 @@ that implementations support this to allow users to ``organize their data
 better''. An alternative would be to make use of ATOM categories for
 grouping. Instead of creating a new (empty) collection the user would thus
 create a contact resource with a new category. An ATOM service document could
-then link to a new (virtual) collection that only contains and accepts resources
+then link to a new (virtual, read-only) collection that only contains resources
 of this category.
 
-TODO: What are the proposed ways to create collections?
-Post a feed to the service document? Put a new service document? Put a feed document to the desired location?
+The Atom Publishing Protocol does not define how collection resources could be
+created. Practitioners recommend a pattern wherein collections of collections
+exist and new collections can be created by posting to the
+former\footnote{\citeurl{http://www.imc.org/atom-protocol/mail-archive/msg11565.html}{2012-3-7}}.
 
 \paragraph{Locking}
 As with Versioning, this is feature of WebDAV is not considered. Instead of
@@ -691,11 +704,14 @@ images. \textit{The editing is expected to be localized to isolated points in
 \paragraph{Push notifications}
 This work does not include any means to actively notify (push) a client about
 changes happening on the server. The client needs to initiate a request (pull)
-to the server to look for changes. However separate solutions exist\footnote{most
-  notable PubSubHubBub
+to the server to look for changes. However separate solutions
+exist\footnote{most notable PubSubHubBub
   \citeurl{http://code.google.com/p/pubsubhubbub/}{2012-1-5}} to enable a push
 workflow on top of a feed based
-application.\cite{Wilde:2009:FQP:1693155.1693220} It may therefor not be seen as a disadvantage to omit push notifications as a requirement.\footnote{\cite[sec. 1]{RFC6352} explicitly mentions missing ``change notifications'' as a ``key disadvantage'' of CardDAV.}
+application\cite{Wilde:2009:FQP:1693155.1693220}. It may therefor not be seen as
+a disadvantage to omit push notifications as a
+requirement.\footnote{\cite[sec. 1]{RFC6352} explicitly mentions missing
+  ``change notifications'' as a ``key disadvantage'' of CardDAV.}
 
 
 \section{Media Types}
@@ -757,24 +773,6 @@ predefined media types.
 % how to specify the sex or gender of a
 % person.\footnote{\citeurl{http://www.ietf.org/mail-archive/web/vcarddav/current/msg01778.html}{2011-12-20}}
 
-\subsection{Data Models of Media Types}
-
-TODO:
-\begin{itemize}
-\item Ein generelles Daten Modell wäre hilfreich, um alle Medien Typen darauf zu projezieren und mit einer solchen Projektion dann innerhalb der Applikation zu arbeiten (TODO Schreier: warum muss dass Datenmodell total allgemeingültig sein, reicht es nicht vielleicht auch für eine Domäne?)
-\item Ein allgemeines Datenmodell könnte auch eine Hilfe sein als Zwischenschritt für Conversions zwischen Medientypen
-\item Es gibt kein allgemeines, sinnvolles Datenmodell für alle Medientypen
-\item Trotzdem können bestimmte hilfreiche Generalisierungen vorgenommen werden
-  \begin{itemize}
-  \item Die meisten Resourcen haben bestimmte generische Metadaten die entweder im Medientyp kodiert werden können oder mit dem Medientyp zusammen persistiert werden müssen
-  \item Diese Metadaten finden sich auch in atom:entry wieder und sind: Autor, Updated, Titel, Summary, etag, id, name, links
-  \item Transitional Links vs Structural Links: \url{http://java.net/projects/jax-rs-spec/pages/Hypermedia}
-  \item Different categories of data: CSV, binary/plain text, large binary (video), tree (XML/JSON) (Referenz?)
-
-
-  \end{itemize}
-\end{itemize}
-
 \subsubsection{XML vs. JSON}
 
 % Data Meta Models http://dret.net/netdret/docs/wilde-cacm2008-document-design-matters/
@@ -806,7 +804,7 @@ that is not the case.
 
 Instead, possible mappings have to trade of the preservation of all structural
 information against the ``friendliness'' of the resulting JSON
-structure.\cite{Boyer2011} Without going into detail, a JSON structure can be
+structure\cite{Boyer2011}. Without going into detail, a JSON structure can be
 seen as friendly if it makes best use of JSON's data types, is compact and easy
 to process. \autoref{fig:waysmapxmljson} shows two different examples how to map
 data from XML to JSON with one of them using JSON number values, being more
@@ -845,22 +843,23 @@ compact and probably easier to process.
 
 Activity Streams has avoided the misalignment of an official XML format and an unofficial JSON deviate by defining an XML (ATOM) and JSON format from the beginning.\footnote{\citeurl{http://activitystrea.ms/}{2012-01-21}}
 
-\subsubsection{Hypermedia Support in JSON}
-
-TODO: discuss HAL
+%\subsubsection{Hypermedia Support in JSON}
+%@TODO: discuss HAL
 
 \subsection{vCard, iCalendar, xCard and xCal}
 
-TODO:
-\begin{itemize}
-\item Textbasierte vs. XML Formate
-\end{itemize}
+The vCard and iCalendar media types seem a bit archaic in today's terms, since
+they're not based on XML or JSON but on the older Internet Message
+Format\cite{RFC5322} (IMF) first defined in RFC822 in 1982. Version 3 of vCard
+was published in 1998\cite{RFC2425} only a few months after the W3C published
+Version 1.0 of XML\cite{Paoli:98:XR} and eight years before JSON became an
+official standard\cite{RFC4627}.
 
-Version 3 of vCard was published in 1998\cite{RFC2425} only a few months after
-the W3C published Version 1.0 of XML\cite{Paoli:98:XR} and eight years before
-JSON became an official standard.\cite{RFC4627}
-
-\subsubsection{Hypermedia Support}
+Thus vCard and iCalendar look a lot like email or HTTP headers. Fortunately, the
+xCard\cite{RFC6351} and xCal\cite{RFC6321} standards are now available as
+alternative serializations, so that XML tooling can be used. The standards aim
+for full compatibility between the XML and IMF formats so that no information is
+lost when converting in either direction.
 
 \begin{figure}[tb]
 
@@ -888,7 +887,7 @@ JSON became an official standard.\cite{RFC4627}
   \caption{Hypermedia support in xCard and xCal}
 \end{figure}
 
-The iCalendar standard defines a several properties that can link to external
+The iCalendar standard defines several properties that can link to external
 representations of the properties value by specifying an ``Alternate Text
 Representation'' parameter. These are comment, summary, description, contact,
 location, resources. The properties attendee and organizer can have a
@@ -906,18 +905,20 @@ information about the person.
 
 \subsection{Derived JSON formats for PIM data}
 
+%@todo
 TODO Übereinstimmungen und Unterschiede vCard, portable contacts: Which fields of portable contacts are derived from vCard: \url{http://wiki.portablecontacts.net/w/page/17776141/schema}
 
 Calendar Formate nur kurz
 
 \subsection{Microformats, Microdata, RDFa}
 \label{sec:microdata}
+%TODO Schreier:nach dem lesen des einführenden Abschnitts weiss der Leser nicht, was er im Rest des Abschnitts zu erwarten hat, dementsprechend ist die Motivation für die Abschnitte unklar und es fällt schwer den roten Faden zu finden
 
 HTML documents are primarily meant to be rendered by browsers and interpreted by
-humans. It is hard for a computer to interpret the meaning of text and data
+humans. It is hard for a machine to interpret the meaning of text and data
 included in an HTML document. Microformats, Microdata and RDFa define ways to
-add additional meta data to HTML that allows computers to identify structured
-data in HTML without having an impact on the rendering.\cite{Tennison2012}
+add additional meta data to HTML that allows machines to identify structured
+data in HTML without having an impact on the rendering\cite{Tennison2012}.
 
 There is not yet an established term to refer to the three different
 formats. Practitioners use ``structured data
@@ -941,7 +942,7 @@ Bing and Yahoo. Another use case is demonstrated by the Firefox plugin
 It allows to extract annotated entities from web pages. A user could thus import
 contact or event data from arbitrary web pages in his personal information
 manager with one click. Semantic annotations can also be used to make web
-content accessible to disabled people.\cite{Yesilada:2007:EDS:1279700.1279704}
+content accessible to disabled people\cite{Yesilada:2007:EDS:1279700.1279704}.
 
 In the context of this work, Semantic annotations could be used inside the
 \lstinline:summary: tag of Atom entries. A consumer of a feed of contact
@@ -949,7 +950,7 @@ elements could thus use the data extracted from the annotated summary data to
 provide a tabular overview of the entries even without fetching the associated
 media resource of the entry.
 
-TODO example
+%@TODO example
 
 A third use case is currently under development as part of the European Union
 Research Project ``Interactive Knowledge Stack'' (IKS) that builds a semantic
@@ -969,14 +970,14 @@ JSON.\footnote{\citeurl{http://json-ld.org}{2012-2-20} the iana registration of
 
 With at least three different formats, a developer needs to settle on one to
 implement.\footnote{It is possible to implement multiple formats in
-  parallel.\cite{Tennison2012}} A first consideration has to be the ability of
+  parallel\cite{Tennison2012}}. A first consideration has to be the ability of
 expected consumers to handle the format, a second consideration the available
 tooling to produce a particular format. The different Semantic annotation formats
 impose certain requirements for the used HTML dialect. Microformats can be used
 with all versions of HTML, RDFa with XHTML or HTML5 and Microdata introduces
-special attributes that work only with HTML5.\cite{Tennison2012}
+special attributes that work only with HTML5\cite{Tennison2012}.
 
-Microdata is part of HTML5 and a standard effort of the W3C.\cite{Hickson2011}
+Microdata is part of HTML5 and a standard effort of the W3C\cite{Hickson2011}.
 It is also backed up by the schema.org effort of Google and
 Microsoft.\footnote{\citeurl{http://schema.org/docs/gs.html\#microdata_why}{2012-2-17}}
 The schema.org vocabulary in turn has been mapped to the semantic world by
@@ -1058,7 +1059,7 @@ puts the value for this property inside the element.
 \end{anylisting}
 
 An implementation of this approach must take care of a few
-peculiarities.\cite{Hickson2011} Some properties don't necessarily use simple
+peculiarities\cite{Hickson2011}. Some properties don't necessarily use simple
 \lstinline:span: elements, e.g. dates can be better expressed with
 \lstinline:time: elements or URI values most likely appear in an
 \lstinline:a:,\lstinline:img:,\lstinline:link: or \lstinline:object:
@@ -1073,7 +1074,7 @@ objects.
 
 \subsection{HTML Forms}
 \label{sec:html-forms}
-TODO
+%@TODO
 % no support for etags?
 % no put/delete?
 % automatically build forms like eZPublish / Drupal?
@@ -1215,7 +1216,7 @@ Candidate areas for re-usability:
 
 An ideal Rest API is accessed by one main URI and all other resources can be
 discovered by following links. A useful Media type to discover available
-collections is the Atom Service Document.\cite[sec. 8]{RFC5023} It contains
+collections is the Atom Service Document\cite[sec. 8]{RFC5023}. It contains
 links to collections organized in workspaces and annotated with meta data.
 
 A Groupware client most likely needs to discern the available collections by the
@@ -1281,7 +1282,7 @@ and to answer with a HTTP code ``307 Temporary Redirect'' to the user's
 personalized Service Document after successful
 authentication.\footnote{Alternative all Service Documents could be served under
   the entrance URI with different HTTP Content-Location
-  headers.\cite[sec. 14.14]{RFC2616} In that case the personalized Service
+  headers\cite[sec. 14.14]{RFC2616}. In that case the personalized Service
   Document must however also be available at the indicated location.}
 
 % http://www.berenddeboer.net/rest/authentication.html
@@ -1311,7 +1312,7 @@ content tag of an entry. Instead a new namespace is used to put the data with
 additional tags directly inside the entry
 tag\footnote{\citeurl{http://web.archive.org/web/20081120001246/http://www.snellspace.com/wp/?p=314}{2012-01-05}}.
 
-% TODO Atom entries could contain multiple link tags referring to alternative
+% @TODO Atom entries could contain multiple link tags referring to alternative
 % representations of the resource with different (media) type attributes.
 
 \subsubsection{Synchronizing Collections}
@@ -1374,7 +1375,7 @@ the state of the servers location at the time of the last GET request.
 \label{sec:inline-feeds-or}
 
 The Atom format provides the opportunity to include a full representation of a
-resource in the content tag of an entry.\cite[sec. 4.1.3]{RFC4287} It is thus
+resource in the content tag of an entry\cite[sec. 4.1.3]{RFC4287}. It is thus
 possible to embed complete xCard or xCal resources in the Atom feed
 and so to relieve the client from issuing many GET requests for each individual
 resource.
@@ -1412,7 +1413,7 @@ additions. Two aspects however are worth to be highlighted.
 As outlined in \autoref{sec:inline-feeds-or} it is possible to include full
 representations of the collection resources in the content tag of an entry. A
 client however is not allowed to use an embedded resource representation as the
-base for an update.\cite[sec. 10]{RFC5023} If the client has not yet retrieved
+base for an update\cite[sec. 10]{RFC5023}. If the client has not yet retrieved
 the resource from its own URI it thus `` SHOULD perform a GET on the URI of the
 Member Entry before editing it.''[Ibid.] This limitation is consequent since the
 Atom feed does not contain an ETag for an embedded resource. A client thus can
@@ -1489,7 +1490,7 @@ Document. This allows a client to directly search a collection without the need
 to get the feed first.
 
 % \subsubsection{Structural and Behavioral Rest Model}
-% TODO Modelierung der Anwendung mit dem Meta Model nach Schreier.
+% @TODO Modelierung der Anwendung mit dem Meta Model nach Schreier.
 % Primary Resources: Contacts, Calendars, ...
 % List Resources: 
 
@@ -1560,7 +1561,7 @@ Advantages of a dynamic dispatcher configuration would be:
   composing the equivalent of a resource class at runtime.
 \end{itemize}
 
-TODO:
+%@TODO:
 
 The dispatching as defined in JAX-RS does not define any facility for a resource
 method to decline its possibility to handle a method at runtime. Such a facility
@@ -1582,7 +1583,7 @@ e.g. WADL documents and responses to HEAD and OPTION requests.
 \label{sec:resourcefacades}
 Fielding discerns between a resource and the representation of a resource in a
 certain format, ``selected dynamically based on the capabilities or desires of
-the recipient and the nature of the resource''.\cite[p. 87]{Fielding2000}
+the recipient and the nature of the resource''\cite[p. 87]{Fielding2000}.
 According to this notion, the media type used to represent a resource should not
 influence the processing logic. In an ideal case all possible media types should
 be handled by the same resource method.
@@ -1941,7 +1942,7 @@ if (rb == null)
   return doUpdate(foo);
 \end{javalisting}
 
-% TODO a resource should not be build, it the etag has not changed. How to make
+% @TODO a resource should not be build, it the etag has not changed. How to make
 % etag checking as cheap as possible?
 
 % Contactzilla.com saves portablecontacts json in MongoDB
@@ -2097,3 +2098,4 @@ What needs a client to know, how does it need to work?
 % End:
 %  LocalWords:  RESTful programmatically instantiation hypothetic cacheable
 % LocalWords:  Algermissen interoperability representable isomorphism
+% LocalWords:  Cacheability

@@ -279,6 +279,22 @@ support, first letter ``C''.
 
 ezPublish or Drupal implement the dynamic object model, see Dirk Riehle
 
+* \subsection{Data Models of Media Types}
+
+TODO:
+\begin{itemize}
+\item Ein generelles Daten Modell wäre hilfreich, um alle Medien Typen darauf zu projezieren und mit einer solchen Projektion dann innerhalb der Applikation zu arbeiten (TODO Schreier: warum muss dass Datenmodell total allgemeingültig sein, reicht es nicht vielleicht auch für eine Domäne?)
+\item Ein allgemeines Datenmodell könnte auch eine Hilfe sein als Zwischenschritt für Conversions zwischen Medientypen
+\item Es gibt kein allgemeines, sinnvolles Datenmodell für alle Medientypen
+\item Trotzdem können bestimmte hilfreiche Generalisierungen vorgenommen werden
+  \begin{itemize}
+  \item Die meisten Resourcen haben bestimmte generische Metadaten die entweder im Medientyp kodiert werden können oder mit dem Medientyp zusammen persistiert werden müssen
+  \item Diese Metadaten finden sich auch in atom:entry wieder und sind: Autor, Updated, Titel, Summary, etag, id, name, links
+  \item Transitional Links vs Structural Links: \url{http://java.net/projects/jax-rs-spec/pages/Hypermedia}
+  \item Different categories of data: CSV, binary/plain text, large binary (video), tree (XML/JSON) (Referenz?)
+  \end{itemize}
+\end{itemize}
+
 * \section{Hypermedia in RESTful applications}
 
 % Hat Kolab Hypermedia links in Kontakten, wie soll es sein mit xCard?
