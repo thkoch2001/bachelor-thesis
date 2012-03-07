@@ -916,66 +916,93 @@ Calendar Formate nur kurz
 
 HTML documents are primarily meant to be rendered by browsers and interpreted by
 humans. It is hard for a machine to interpret the meaning of text and data
-included in an HTML document. Microformats, Microdata and RDFa define ways to
+included in an HTML document. To help this, different techniques have evolved to
 add additional meta data to HTML that allows machines to identify structured
-data in HTML without having an impact on the rendering\cite{Tennison2012}.
+data in HTML without having an impact on the rendering. The most popular ones,
+Microformats, Microdata and RDFa, are presented and discussed in
+\cite{Tennison2012}.
 
 There is not yet an established term to refer to the three different
-formats. Practitioners use ``structured data
-languages''\footnote{\citeurl{http://manu.sporny.org/2011/uber-comparison-rdfa-md-uf/}{2012-2-20}},
+formats. Practitioners use ``structured data languages''\cite{Sporny2011},
 ``machine-readable data format''\cite{Hickson2011}, ``structured data
-markup''\footnote{\citeurl{http://googlewebmastercentral.blogspot.com/2011/06/introducing-schemaorg-search-engines.html}{2012-2-20}}
-or just ``structured markup''. Scientific publications seem to use the term
-``Semantic annotation''\cite{instance7} to refer to HTML with machine readable
-semantic data. This work will use the term ``Semantic annotation format'' to
-refer to Microformats, Microdata, RDFa and similar formats.
+markup''\cite{Goel2011} or just ``structured markup''. Scientific publications
+seem to use the term ``Semantic annotation''\cite{instance7} to refer to HTML
+with machine readable semantic data. This work will use the term ``Semantic
+annotation format'' to refer to Microformats, Microdata, RDFa and similar
+formats.
 
 \subsubsection{Use Cases}
 
 One major use case for semantic annotations is to help search engines to better
 index the annotated site. The Microformats project was started by a blog search
-engine
-(Technorati)\footnote{\citeurl{http://tantek.com/log/2006/05.html}{2012-2-20}}
-and the recent schema.org effort came from the three big search engines Google,
-Bing and Yahoo. Another use case is demonstrated by the Firefox plugin
+engine (Technorati)\cite{Celik2006} and the recent schema.org effort came from
+the three big search engines Google, Bing and Yahoo.\cite{Goel2011} Another use
+case is demonstrated by the Firefox plugin
 ``Operator''.\footnote{\citeurl{https://addons.mozilla.org/en-US/firefox/addon/operator/}{2012-2-20}}
 It allows to extract annotated entities from web pages. A user could thus import
 contact or event data from arbitrary web pages in his personal information
 manager with one click. Semantic annotations can also be used to make web
 content accessible to disabled people\cite{Yesilada:2007:EDS:1279700.1279704}.
 
-In the context of this work, Semantic annotations could be used inside the
-\lstinline:summary: tag of Atom entries. A consumer of a feed of contact
-elements could thus use the data extracted from the annotated summary data to
-provide a tabular overview of the entries even without fetching the associated
-media resource of the entry.
-
-%@TODO example
-
 A third use case is currently under development as part of the European Union
 Research Project ``Interactive Knowledge Stack'' (IKS) that builds a semantic
 content management stack. The sub-project ``Vienna IKS Editables''
 (VIE)\footnote{\citeurl{http://www.iks-project.eu/projects/vienna-iks-editables}{2012-2-20}}
-uses semantic annotations to make content on a web site editable. In a
-traditional content management system, content is editable via HTML forms that
-are available as separate sites in addition to the normal view.  The VIE
-Javascript library instead searches the HTML document for semantically annotated
-entities and dynamically builds editing interfaces for those. A modified entity
-can then be sent to the server via AJAX in a format called ``json-ld'' that
-serializes semantic data to
+uses semantic annotations to make content on a web site editable. It does so by
+searching the HTML document for semantically annotated entities and dynamically
+building editing interfaces for those. A modified entity can then be sent to the
+server via AJAX in a format called ``json-ld'' that serializes semantic data to
 JSON.\footnote{\citeurl{http://json-ld.org}{2012-2-20} the iana registration of
   the mime type \lstinline:application/ld+json: is currently discussed}
+For a Groupware, this editor could be used to automatically create HTML forms instead
+of creating them on the server site.
+
+\begin{anylisting}[label=fig:microdata-atom-summary,
+                   language=xml,
+                   caption={Microdata used in the summary of an ATOM entry summary (markup not escaped for clarity)}]
+<summary type="html">
+  <div itemscope itemtype="http://schema.org/Person">
+    <a itemprop="url" href="www.maxpattern.name">
+      <div itemprop="name"><strong>
+        <span itemprop="givenName">Max</span>
+        <span itemprop="familyName">Pattern</span>
+      </strong></div>
+    </a>
+    <div itemscope itemtype="http://schema.org/Organization">
+      <span itemprop="name">Andorian Mining Cooperation</span>
+    </div>
+    <div itemprop="email">some@mail.com</div>
+    <div>
+      <meta itemprop="birthDate" content="1970-01-02">
+      DOB: 01/02/1970
+    </div>
+  </div>
+</summary>  
+\end{anylisting}
+
+In the context of this work, semantic annotations could be used inside the
+\lstinline:summary: tag of Atom entries, as shown in listing
+\ref{fig:microdata-atom-summary}. A consumer of a feed of contact elements could
+thus use the data extracted from the annotated summary data to provide a tabular
+overview of the entries even without fetching the associated media resource of
+the entry, which is especially useful for search results as discussed in
+\autoref{sec:spec-reports-search}.
 
 \subsubsection{Format selection}
 
-With at least three different formats, a developer needs to settle on one to
-implement.\footnote{It is possible to implement multiple formats in
-  parallel\cite{Tennison2012}}. A first consideration has to be the ability of
-expected consumers to handle the format, a second consideration the available
-tooling to produce a particular format. The different Semantic annotation formats
-impose certain requirements for the used HTML dialect. Microformats can be used
-with all versions of HTML, RDFa with XHTML or HTML5 and Microdata introduces
-special attributes that work only with HTML5\cite{Tennison2012}.
+With at least three different semantic annotation formats, a developer needs to
+decide which to implement. It is possible to implement multiple formats in
+parallel inside the same HTML document, but this means more markup and a more
+complex publishing task\cite{Tennison2012}. This choice is not a choice of
+different Media Types, but a choice in the scope of the Media Type text/html (or
+application/xhtml+xml).
+
+A first consideration has to be the ability of expected consumers to handle the
+format, a second consideration the available tooling to produce a particular
+format. The different Semantic annotation formats impose certain requirements
+for the used HTML dialect. Microformats can be used with all versions of HTML,
+RDFa with XHTML or HTML5 and Microdata introduces special attributes that work
+only with HTML5\cite{Tennison2012}.
 
 Microdata is part of HTML5 and a standard effort of the W3C\cite{Hickson2011}.
 It is also backed up by the schema.org effort of Google and
@@ -992,85 +1019,6 @@ chair of the RDF Web Applications Working Group at the World Wide Web
 Consortium.
 
 % detailed pro cons microdata vs. RFDa http://www.jenitennison.com/blog/node/165
-
-\subsubsection{Producing Semantically annotated HTML}
-
-A recent discussion of possibilities to produce semantically annotated HTML
-pages can be found in \cite[sec. 9.1.3]{DBLP:books/daglib/0023755}. The authors ``discern
-two different ways in which the Semantic Web plays a key role in current Web
-engineering approaches: one is by the creation of Web applications starting from
-semantically described data, and the second is by the generation of semantic
-annotations from the Web engineering process.''
-
-In the case of this work only the second way is of interest, since we don't
-assume the data to be persisted in a semantic model and aim to generate semantic
-annotations. As an example for this way the book describes a method developed as
-part of a larger ``Web Semantics Design Method'' (WSDM).  This method consists
-of two mappings. The first one is the ``data source mapping (DSM), which
-describes exactly how the reference ontology maps to the actual data source.''
-The second mapping uses XPointer expressions to link HTML tags to elements of
-the reference ontology from the first mapping. Neither the book nor referenced
-papers however go in any more detail about the final step of generating the
-annotated HTML tags.
-
-One important point can be learned from the WSDM description. The production of
-semantically annotated HTML can become a lot easier if the entity is already
-available represented with the targeted vocabulary. A very naive approach to
-produce annotated HTML would be to just manually write the necessary attributes
-in the template and fill them with values from an arbitrary data object, as
-demonstrated in listing \ref{fig:naive-microdata-template}. Even with the
-conciseness of the used template language
-Jade\footnote{\citeurl{http://scalate.fusesource.org/documentation/jade-syntax.html}{2012-2-22}
-  Jade is the most concise among several supported template languages of the
-  Scalate Template Engine.}, the developer still has a lot to type.
-
-\begin{anylisting}[label=fig:naive-microdata-template,
-                   caption={Defining all Microdata attributes manually in an HTML template}]
--@ var vcard: VCard
-
-div( itemscope itemtype="http://schema.org/Person" 
-     itemid=#{vcard.getProperty("uid")} )
-  span( itemprop="name" )
-    #{vcard.getProperty("fn")}
-  span( itemprop="telephone" ) 
-    #{vcard.getProperty("tel")}
-\end{anylisting}
-
-Compared to the above listing \ref{fig:microdata-template} shows a template
-using a data structure that is aware of the used Microdata vocabulary and wraps
-an instance of a typed Microdata item with its properties. The
-\lstinline:scope: method of the Microdata interface will add the
-\lstinline:itemscope:, \lstinline:itemtype: and \lstinline:itemid: attributes to
-the nested \lstinline:div: element. The \lstinline:prop: method either augments
-a nested element as shown for the \lstinline:name: property or creates the
-correct nested element. The method adds the \lstinline:itemprop: attribute and
-puts the value for this property inside the element.
-
-\begin{anylisting}[label=fig:microdata-template,
-                   caption={Using a Microdata-aware data structure in a template}]
--@ var md: MicroData
-
-= md.scope
-  div
-    = md.prop("name")
-      span( style="color:red" )
-    = md.prop("telephone")
-    = md.prop("email")
-\end{anylisting}
-
-An implementation of this approach must take care of a few
-peculiarities\cite{Hickson2011}. Some properties don't necessarily use simple
-\lstinline:span: elements, e.g. dates can be better expressed with
-\lstinline:time: elements or URI values most likely appear in an
-\lstinline:a:,\lstinline:img:,\lstinline:link: or \lstinline:object:
-element. Property values could also be put in a \lstinline:content: attribute
-while the element's nested text content is optimized for human
-consumption. Items can be nested, e.g. an item of type PostalAddress could be
-nested inside a Person item.
-
-A template engine that should be extended as described above should allow to
-capture and manipulate nested HTML elements and to call methods of passed in
-objects.
 
 \subsection{HTML Forms}
 \label{sec:html-forms}
@@ -1588,10 +1536,31 @@ According to this notion, the media type used to represent a resource should not
 influence the processing logic. In an ideal case all possible media types should
 be handled by the same resource method.
 
+% man kann, aber man muss nicht, also warum willst du dann ein problem lösen?
+% Außerdem mag eine solche Unterscheidung vllcht manchmal aus technischen
+% Gesichtspunkten vielleicht doch Sinn machen, zB wenn ich eine Darstellung
+% einer Resource in textueller Form (zB XML) und in visueller (zB ein JPG) habe,
+% dann mag vllcht unterschiedliche Behandlung doch mal notwendig bzw sinnvoll
+% sein. Außerdem sagt Fielding in Abschnitt 5.2.1.2: "A representation can be
+% included in a message and processed by the recipient according to the control
+% data of the message and the nature of the media type". D.h. die Verarbeitung
+% kann vom Medientyp abhängig sein. Und gerade unter dem Gesichtspunkt, dass du
+% untersuchen sollst, wie man verschiedene Medientypen unterstützen kann, ist es
+% vllcht nicht gut, eine medientypabhängige Verarbeitung auszuschliessen. Wenn
+% möglich will man Codedoppelungen natürlich vermeiden, aber manchmal braucht
+% man eben unterschiedlichen Code.
+
 This ideal contrasts with JAX-RS concepts where the media type can be one
 parameter of the dispatcher logic. This section outlines a pattern tentatively
 named ``Resource Facades'' that should make it easier to handle different media
 types with the same code and thus to facilitate code reuse.
+
+% das fällt vom Himmel, es gibt kein Problem, das du bis zu dem Zeitpunkt
+% beschrieben hast und beschreibst dann ein Pattern, wo auch nicht klar ist wo
+% das her kommt. Wenn du das selber entwickeln willst, musst du erstmal das
+% Problem analyisieren und beschreiben und dann kann man ein Pattern
+% entwickeln. Vor allem gibt es für Pattern auch gewisse Richtlinien wie man
+% diese beschreibt und vielleicht wäre es hilfreich sich daran zu orientieren
 
 A resource method should contain the programming logic executed to serve a
 request of a specific type (e.g. GET, PUT) against a specific resource. The
@@ -1888,6 +1857,81 @@ This example and the mentioned work on Scala roles shows that an advanced type
 systems may be able to considerably improve the presented facades approach. A
 more detailed study however is out of the scope of this work and the author's
 comprehension of type systems.
+
+
+\subsection{Producing Semantically annotated HTML}
+
+A recent discussion of possibilities to produce semantically annotated HTML can
+be found in \cite[sec. 9.1.3]{DBLP:books/daglib/0023755}. The authors describe a
+method developed as part of a larger ``Web Semantics Design Method'' (WSDM),
+consists of two mappings. The first one is the ``data source mapping (DSM),
+which describes exactly how the reference ontology maps to the actual data
+source.''  The second mapping links HTML tags to elements of the reference
+ontology from the first mapping. Neither the book nor referenced papers however
+go in any more detail about the final step of generating the annotated HTML
+tags.
+
+One important point can be learned from the WSDM description. The production of
+semantically annotated HTML can become a lot easier if the entity is already
+available represented with the targeted vocabulary. A very naive approach to
+produce annotated HTML would be to just manually write the necessary attributes
+in the template and fill them with values from an arbitrary data object, as
+demonstrated in listing \ref{fig:naive-microdata-template}. Even with the
+conciseness of the used template language
+Jade\footnote{\citeurl{http://scalate.fusesource.org/documentation/jade-syntax.html}{2012-2-22}
+  Jade is the most concise among several supported template languages of the
+  Scalate Template Engine.}, the developer still has a lot to type.
+
+\begin{anylisting}[label=fig:naive-microdata-template,
+                   caption={Defining all Microdata attributes manually in an HTML template}]
+-@ var vcard: VCard
+
+div( itemscope itemtype="http://schema.org/Person" 
+     itemid=#{vcard.getProperty("uid")} )
+  span( itemprop="name" )
+    #{vcard.getProperty("fn")}
+  span( itemprop="telephone" ) 
+    #{vcard.getProperty("tel")}
+\end{anylisting}
+
+Compared to the above listing \ref{fig:microdata-template} shows a template
+using a data structure that is aware of the used Microdata vocabulary and wraps
+an instance of a typed Microdata item with its properties. The
+\lstinline:scope: method of the Microdata interface will add the
+\lstinline:itemscope:, \lstinline:itemtype: and \lstinline:itemid: attributes to
+the nested \lstinline:div: element. The \lstinline:prop: method either augments
+a nested element as shown for the \lstinline:name: property or creates the
+correct nested element. The method adds the \lstinline:itemprop: attribute and
+puts the value for this property inside the element.
+
+\begin{anylisting}[label=fig:microdata-template,
+                   caption={Using a Microdata-aware data structure in a template}]
+-@ var md: MicroData
+
+= md.scope
+  div
+    = md.prop("name")
+      span( style="color:red" )
+    = md.prop("telephone")
+    = md.prop("email")
+\end{anylisting}
+
+An implementation of this approach must take care of a few
+peculiarities\cite{Hickson2011}. Some properties don't necessarily use simple
+\lstinline:span: elements, e.g. dates can be better expressed with
+\lstinline:time: elements or URI values most likely appear in an
+\lstinline:a:, \lstinline:img:, \lstinline:link: or \lstinline:object:
+element. Property values could also be put in a \lstinline:content: attribute
+while the element's nested text content is optimized for human
+consumption. Items can be nested, e.g. an item of type PostalAddress could be
+nested inside a Person item.
+
+The proposed approach can be implemented on any template engine as long as it
+permits to capture and manipulate nested HTML elements and to call methods of
+passed in
+objects.\footnote{\citeurl{https://github.com/Paxa/green_monkey}{2012-3-7}
+  provides helpers to produce microdata in rails but is not as automated as the
+  design proposed here.}
 
 \subsubsection{Other components}
 
