@@ -1,4 +1,111 @@
-* \section{Persistency for Groupware Data}
+* todos 
+** TODO Sektion über collection media types, besonders collection+json
+** TODO Einleitungen und Zusammenfassungen für Sektionen und gesammt
+** TODO PortableContacts beschreiben und mit vCard vergleichen
+** TODO Implementierung und Beschreibung: vCard/PoCo/xCard/iCal mit den gleichen Mitteln in Java darstellen
+** TODO Kolab beschreiben
+** TODO Darstellung der Kolab Daten: Kolab migriert z.Z. zu xCard/xCal, daher 1:1
+* TODO Einpassung in die vorgeschlagene Struktur für Abschlußarbeiten
+
+ - http://www.fernuni-hagen.de/dvt/studium/richtlinien.shtml
+
+ - Die schriftliche Ausarbeitung enthält üblicherweise:
+
+   - Einführung, Motivation, Aufgabenstellung und Aufbau der Arbeit
+     - TODO Aufgabenstellung
+
+   - Darstellung der verwendeten Grundlagen
+     Ich verwende: 
+     - Atom Syndication
+     - Atom Publishing Protocol
+     - Atom extensions: Pagination, deleted entry
+     - HTTP etags for offline work
+     - HTTP Delta encoding with Feed: \citeurl{http://www.wyman.us/main/2004/09/using_rfc3229_w.html}{2012-1-6}, implementations: \citeurl{http://www.wyman.us/main/2004/09/implementations.html}{2011-1-6}
+     - OpenSearch: plain text, time range
+     - Microdata
+     - vCard, iCal, xCard, xCal
+     - Portable Contacts
+     - evtl. Jersey, Abdera darstellen? 
+
+     Wie detailiert sollen Dinge dargestellt werden, die in der zitierten
+     Literatur eigentlich detailiert dargestellt sind? Bis in welche Tiefe
+     verwendete Dinge darstellen? HTTP und Java müssen wohl nicht erläutert
+     werden.
+
+   - Konzept und Lösungsidee
+     - AtomPub verwenden
+     - Atom Categories als "marker" zur Typisierung von Collections
+     - OpenSearch als Ersatz für CardDav/CalDAV Reports    
+     - Verzicht auf komplizierte Reports, da in den meisten Fällen eine volle
+       Synchronisation der Collections zumutbar ist
+     - Semantische Annotationen in Atom Entry Summaries verwenden statt
+       Projektionen wie in CalDAV/CardDAV
+
+   - Erläuterung des Entwurfs oder der Implementierung
+
+   - Zusammenfassung und Ausblick auf mögliche Erweiterungen
+     - Es wird gerade überlegt, PoCo zu einem isomorphen JSON Format für vCards
+       auszubauen
+     - PUT/DELETE/PATCH und etags für HTML forms wäre wünschenswert
+     - automatisches generieren von semantischen Annotationen in HTML template
+       engines
+
+   - Anhänge (optional)
+   - Literaturverzeichnis
+   - Index (optional)
+
+Bisher habe ich vor allem eine Zusammenstellung bereits bekannter Dinge und
+Erläuterung, wie diese sinnvoll kombiniert werden können.
+
+* Check der Aufgabenstellung
+
+** welche Komponenten des Entwurfs können für die Unterstützung verschiedener Medientypen gemeinsam genutzt oder wiederverwendet werden?
+ - StorageComponent
+ - Datenstruktur für Kontakte unabhängig vom Serialisierungsformat
+ - Das ganze REST Framework, z.B. Jersey
+
+** Hypermediaunterstützung der verschiedenen Formate
+ - PoCo: values with URI strings in fields urls
+   - emails (without mailto:)
+   - ims (with the messenger protocol not specified by a scheme but in a
+     separate type field)
+   - photos
+ - somo PoCo fields have values reflecting the relationship between the
+   requesting, authenticated client and the contact represented by the PoCo
+   representation: relationships, connected
+ - vCard
+   - SOURCE of directory information contained in the content type
+   - FBURL: free-busy information
+   - CALADRURI: calendar user address [RFC5545] to which a scheduling request
+      [RFC5546] should be sent
+   - CALURI: calendar associated with the object represented by the vCard,
+     should point to iCal object. BUT: Could return Atom collection by conneg?
+   - MEMBER: vCards can represent groups, MEMBER property links to members
+   - RELATED: typed links to entities related to this vCard
+   - links for PHOTO/IMPP(instant messaging)/GEO(uri format rfc5870)/LOGO/SOUND
+   - URL: web sites related to this vCard
+ - iCal
+   - links to event participants
+ - Several extensions exists for iCal/vCard which may define additional links
+ - Atom Service Document: links to collection, category documents, OpenSearch definitions
+ - Atom feeds
+   - Pagination links
+   - links to full media entry representations
+ - HTML
+   - the semantik of links in PoCo/vCard/iCal is defined by the field (property) where they appear.
+
+** Wie viel muss ein Client vorher wissen?
+ - Standard
+   - Der Client muss die Medientypen verstehen, inkl. OpenSearch, PoCo
+   - Der Client muss die zur semantischen Annotation verwendeten Schemata kennen 
+   - Noch kein Standard, aber bald: Atom deleted entry
+   - Der Client muss alle weiteren genutzten IETF bzw. W3C standards implementieren
+ - Keine Standards
+   - Der Client muss eine link relation auf eine HTML Form zum Anlegen neuer Resourcen kennen
+   - Der Client muss die zur typisierung von Collections verwendeten Atom Categories verstehen
+
+
+* Persistency for Groupware Data
 Relational Databases vs. NoSQL databases vs. plain files
 
 Relational databases are not practical for contacts, events or todos. Common patterns in systems that use relational DBs for that purpose:
@@ -9,24 +116,11 @@ Relational databases are not practical for contacts, events or todos. Common pat
 \end{itemize}
 \section{Synchronizing a large collection}
 
-How to efficiently synchronize a large collection of contacts with the server without checking each contact for changes?
+* Synchronization
 
 Portable Contacts has a filter ``updatedSince''.
 
 How is synchronization done in CardDAV?
-
-``Feed Paging for Efficient Feed Synchronization'' thread at ATOM-Syntax \url{http://www.imc.org/atom-syntax/mail-archive/msg20060.html}
-
-HTTP Delata encoding with Feed: \citeurl{http://www.wyman.us/main/2004/09/using_rfc3229_w.html}{2012-1-6}, implementations: \citeurl{http://www.wyman.us/main/2004/09/implementations.html}{2011-1-6}
-
-``There's also an advanced technique involving etags which keeps track of when
-each etag was issued and if an old etag is sent with the request then
-everything since then is sent back in the response. Someone will chime in
-with the reference.'' Eric Scheid, \citeurl{http://www.imc.org/atom-syntax/mail-archive/msg19832.html}{2012-1-6}
-
-Microsoft specification FeedSync (formerly Simple Sharing Extension) \url{http://feedsyncsamples.codeplex.com},
- comment \url{http://notes.kateva.org/2008/01/microsoft-feedsync-what-heck-is-it-and.html}
-\url{http://web.archive.org/web/20081114142152/http://www.snellspace.com/wp/?p=818}
 
 * \section{Media Types}
 
@@ -52,20 +146,16 @@ Microsoft specification FeedSync (formerly Simple Sharing Extension) \url{http:/
 % similarities to the use of OpenSocial for intranet frontends.
 \subsection{Media Type conversion}
 
-RFC 5023  "Collections are represented as Atom Feeds"
-
 Is conneg (content negotiation) useful?
 No: Norman Walsh, 2003, it can lead to hard to debug bugs\citeurl{http://norman.walsh.name/2003/07/02/conneg}{2011-1-9},
     Joe Gregorio, 2003,I can't communicate the mime type to request to a third service if I can only give an URI\citeurl{http://bitworking.org/news/WebServicesAndContentNegotiation}{2011-1-9}
 Yes: Jerome Louvel, 2006, I could additionally provide URIs that override the accept headers with query parameters like ?format=json.\citeurl{http://blog.noelios.com/2006/11/15/reconsidering-content-negotiation/}{2011-1-9}
     
-
 \begin{quote}
   No single data representation is ideal for every client. This protocol defines representations for each resource in three widely supported formats, JSON [RFC4627], XML, and Atom [RFC4287] / AtomPub [RFC5023], using a set of generic mapping rules. The mapping rules allow a server to write to a single interface rather than implementing the protocol three times.
 \end{quote}\cite[Core API Server]{OSSpec2.0.1}
 
 % microformats to json converter \url{http://microformatique.com/optimus/}
-
 
 In 2007, a project called microjson wanted to standardize json representations of microformat data structures.\footnote{\citeurl{http://notizblog.org/2007/09/16/microjson-microformats-in-json/}{2011-12-19}} 
 
@@ -276,8 +366,6 @@ support, first letter ``C''.
   \item \texttt{CL} add semantic meaning to link elements using link relations (e.g. HTML rel attribute)
   \end{itemize}
 \end{itemize}
-
-ezPublish or Drupal implement the dynamic object model, see Dirk Riehle
 
 * \subsection{Data Models of Media Types}
 
@@ -893,13 +981,6 @@ OpenSocial Development Environment (OSDE, Eclipse Plugin)  \url{https://sites.go
 
 Oracle's (former Sun's) extension to Apache Shindig. Blog \url{http://blogs.oracle.com/socialsite}
 
-* \section{TODO}
-\begin{itemize}
-\item Does funambol.org has interesting implementations?
-\end{itemize}
-% LDAP wäre auch eine Möglichkeit für Addressdaten, aber:
-% kein Standardschema, Mozilla anders als Apple
-% manche Clients können evtl. Adressen aus LDAP lesen aber nicht schreiben.
 
 % Calendaring is not easy as can be seen by the impressive list of failed projects:
 % http://www.hula-project.org/ 
@@ -908,23 +989,3 @@ Oracle's (former Sun's) extension to Apache Shindig. Blog \url{http://blogs.orac
 
 % http://en.wikibooks.org/wiki/LaTeX/Glossary
 
-support Plain Text Format (text/plain), RFC5147 URI fragment identifier for plain text?
-
-\begin{quote}
-  Sowohl Atom als auch AtomPub definieren XML-Vokabulare, die eine Erweiterung
-  mit zwei Mechanismen unterstützen. Zum einen ist im Standard definiert, dass
-  neue Elemente in diesen Vokaularen selbst von standardkonformen Prozessoren
-  ignoeriert werden müssen. [...] Gleichzeitig ist es überall dort, wo es nicht
-  explizit verboten ist, möglich, Elemente ausanderen XML-Namespaces
-  einzubetten.
-\end{quote}\cite[p. 102]{Tilkov2011}
-
-
-Why vCard/CardDav: many clients
-
-Why OpenSocial / Portable Contacts:
-\begin{itemize}
-\item used by Google, LinkedIn,
-\item used in Enterprise applications like Attlassian tools (Jira, Confluence, ...), Nuxeo CMS, ...
-\item OpenSocial can be used to implement inhouse portals and populate it with data from the companies GroupWare
-\end{itemize}

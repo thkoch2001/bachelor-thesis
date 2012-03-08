@@ -225,8 +225,8 @@ OpenSocial\cite{OSSpec2.0.1} specifies how data of social networks can be
 accessed by clients, especially Javascript browser widgets. While the
 specification was initially designed for social networks, it has also been
 adopted to enhance wikis, issue trackers (Confluence, Jira from Atlassian),
-Groupware (Lotus from IBM), Content Management Systems
-(Alfresco). \cite{Huebner2009} discusses the benefits of OpenSocial for the
+Groupware (Lotus from IBM), Content Management Systems (Alfresco,
+Nuxeo). \cite{Huebner2009} discusses the benefits of OpenSocial for the
 interaction of university members.
 
 The specification is discussed in this section because it shows the usefulness
@@ -418,6 +418,16 @@ complexity\footnote{\citeurl{http://lists.calconnect.org/pipermail/caldeveloper-
 
 CalAtom and CardAtom build on top of the Atom Publishing Protocol and are
 therefor discussed in \autoref{sec:atom-publ-prot}.
+
+The idea of using Feeds for collection synchronization has also been adapted by
+Microsoft's
+FeedSync\footnote{\citeurl{http://feedsyncsamples.codeplex.com}{2012-3-8}}. FeedSync's
+most important contribution according to \cite{Snell2007} was the concept of a
+``tombstone'' element to indicate the deletion of entries from a collection. An
+RFC to standardize the tombstone concept\cite{draft-snell-atompub-tombstones-14}
+for Atom feeds is currently in the late stages of the IETF standardization
+process.
+% http://notes.kateva.org/2008/01/microsoft-feedsync-what-heck-is-it-and.html
 
 \section{Requirements}
 
@@ -733,7 +743,7 @@ requirement.\footnote{\cite[sec. 1]{RFC6352} explicitly mentions missing
 
 \subsection{Syntax vs. Semantic (Vocabulary)}
 
-The usage of standardized media types is one key difference between an API and a
+The use of standardized media types is one key difference between an API and a
 restful API\cite[sec. 5.2.1.2]{Fielding2000}. Only if the client has knowledge
 about the media type can it do something meaningful with it besides just
 receiving it. In that sense, the often used mime types application/xml or
@@ -1137,15 +1147,16 @@ state on the server exists that could be lost.
 
 \subsection{Reusable Patterns and Components}
 
-Reuse is of course in general a good thing. In the context of Model Driven
-Development (MDD) and code generation it is especially import to identify code
-that is general enough to be provided by a library of framework and does not
-need to be generated.
+%@TODO
 
-Minimizing the generated code also minimizes the extend of drawbacks associated
-with code generation, most importantly conflicts between updates by the code
-generator and manual modification.
+% Reuse is of course in general a good thing. In the context of Model Driven
+% Development (MDD) and code generation it is especially import to identify code
+% that is general enough to be provided by a library of framework and does not
+% need to be generated.
 
+% Minimizing the generated code also minimizes the extend of drawbacks associated
+% with code generation, most importantly conflicts between updates by the code
+% generator and manual modification.
 
 % We have a namespace at our disposal. HTTP suggests to interpret the path component of this namespace in a hierarchic way.
 % The URI must be mapped to a resource, independent of the requested media type or HTTP verb. 
@@ -1153,33 +1164,33 @@ generator and manual modification.
 
 % wilde-fqas argues that feeds (collections) provide a general enough abstraction 
 
-Concerns regarding Media Types that needs to be implemented differently for each different Media Type:
-\begin{itemize}
-\item validate the Media Type
-\item provide accessors to read, write parts of the Media Type
-\item serialize, deserialize the whole Media Type
-\item converters to other formats
-\item accessors to common interfaces (projection), e.g. common generic resource attributes or common attributes of a contact
-\end{itemize}
-% Attributes of a resource could be virtual or derived, e.g. the size of an image is derived from the binary image data.
-% Images also contain additional data that could be exposed as attributes.
+% Concerns regarding Media Types that needs to be implemented differently for each different Media Type:
+% \begin{itemize}
+% \item validate the Media Type
+% \item provide accessors to read, write parts of the Media Type
+% \item serialize, deserialize the whole Media Type
+% \item converters to other formats
+% \item accessors to common interfaces (projection), e.g. common generic resource attributes or common attributes of a contact
+% \end{itemize}
+% % Attributes of a resource could be virtual or derived, e.g. the size of an image is derived from the binary image data.
+% % Images also contain additional data that could be exposed as attributes.
 
 
-Candidate areas for re-usability:
-\begin{itemize}
-\item link building, URL parsing
-\item HTML form building, parsing
-\item generic properties of resources, id
-\item resource types
-\item question to storage: does resource still match ETag? Has changed since?
-\item all links of a resource: Link: intern/extern/undefined, href, rel, title, text, media type
-\item bool function matchesMediaType(), getMediaType() auf WrappedEntry
-\item Prüfung, ob ein Update durchgeführt werden soll, gemäß ETAG, ifnotchanged
-\item Möglichkeit, DatenKlassen mit DatenTypen zu definieren wie in eZ Publish um automatische Views und Edit Ansichten zu ermöglichen.
-\item Creation of resources: POST to collection with SLUG Header, PUT to URI, normalization of SLUG Header
-\item Pagination (building and parsing of next and previous URIs, implementation of RFC5005), querying the collections entries provider with the correct parameters (offset, limit).
-\item Storage interface with transaction support. An application may for example need to notify an indexing component after some resource has been changed. -- No transaction support: Every action that must happen in a transaction together with the resource change must be handled by the storage layer, must be aware of the storage technologie.
-\end{itemize}
+% Candidate areas for re-usability:
+% \begin{itemize}
+% \item link building, URL parsing
+% \item HTML form building, parsing
+% \item generic properties of resources, id
+% \item resource types
+% \item question to storage: does resource still match ETag? Has changed since?
+% \item all links of a resource: Link: intern/extern/undefined, href, rel, title, text, media type
+% \item bool function matchesMediaType(), getMediaType() auf WrappedEntry
+% \item Prüfung, ob ein Update durchgeführt werden soll, gemäß ETAG, ifnotchanged
+% \item Möglichkeit, DatenKlassen mit DatenTypen zu definieren wie in eZ Publish um automatische Views und Edit Ansichten zu ermöglichen.
+% \item Creation of resources: POST to collection with SLUG Header, PUT to URI, normalization of SLUG Header
+% \item Pagination (building and parsing of next and previous URIs, implementation of RFC5005), querying the collections entries provider with the correct parameters (offset, limit).
+% \item Storage interface with transaction support. An application may for example need to notify an indexing component after some resource has been changed. -- No transaction support: Every action that must happen in a transaction together with the resource change must be handled by the storage layer, must be aware of the storage technologie.
+% \end{itemize}
 
 % Im Gegensatz zu Bildern, wie in \cite{Schreier:2011:MRA:1967428.1967434} können Kontakte komplett inline sein.
 
@@ -1241,7 +1252,7 @@ An alternative Media Type to Service Documents in JSON could not be found. The
 most promising approach seems to list available collections in a
 \lstinline:application/vnd.collection+json: representation. (\autoref{sec:media-types-coll})
 
-\subsubsection{personalized Service Documents} For a Groupware that manages
+\subsubsection{Personalized Service Documents} For a Groupware that manages
 confidential information it would make sense to provide personalized Service
 Documents for authenticated users that list only collections that the user is
 authorized to read.\footnote{For this use case it would be convenient, if HTTP
@@ -1371,6 +1382,16 @@ the state of the servers location at the time of the last GET request.
   \end{tikzpicture}
   \caption{Discovery paths from the Service Document to individual Groupware Resources}
 \end{figure}
+
+\subsubsection{Efficient Synchronization with HTTP Delta encoding}
+
+%TODO
+TODO
+
+HTTP Delta encoding with Feed:
+\citeurl{http://www.wyman.us/main/2004/09/using_rfc3229_w.html}{2012-1-6},
+implementations:
+\citeurl{http://www.wyman.us/main/2004/09/implementations.html}{2011-1-6}
 
 \subsubsection{Media Entries and the content tag}
 \label{sec:inline-feeds-or}
