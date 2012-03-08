@@ -19,8 +19,8 @@
 \usepackage{setspace} % Anderthalbfacher Zeilenabstand ist Standard in den meisten Seminararbeiten. Das Paket setspace ermöglicht ein einfaches Umstellen von normalem, anderthalbfachen oder sogar doppeltem Zeilenabstand. 
 \usepackage[paper=a4paper,inner=25mm,outer=20mm,top=15mm,bottom=20mm]{geometry} %Das geometry Paket dient zur Einrichtung der Seiten. Hier werden die jeweiligen Seitenränder angegeben. Diese wWerte sollten durch die jeweiligen Vorgaben des Seminarleiters oder Instituts ersetzt werden.
 \setlength{\parindent}{1.7em} %Neue Abschnitte werden mit hängendem Einzug gesetzt, parindent definiert. um wie viel der Absat eingerückt wird. Die Einheit em ist abhängig vom verwendeten Zeichensatz und daher absoluten Werten in mm oder cm vorzuziehen. 
-\setcounter{secnumdepth}{4} %Bis zu welcher Gliederungsebene nummeriert werden soll gibt dieser Befehl vor. In Falle 3 werden \section, \subsection und \subsubsection nummereiert.
-\setcounter{tocdepth}{3} %Bis zu welcher Ebene Einträge ins Inhaltsverzeichnis aufgenommen werden. In diesem Beispiel ebenfalls bis Ebene drei (\subsubsection). Ein durch \paragraph ausgewiesener Abschnitt wird demnach nicht im Inhaltsverzeichnis auftauchen. 
+\setcounter{secnumdepth}{3} %Bis zu welcher Gliederungsebene nummeriert werden soll gibt dieser Befehl vor. In Falle 3 werden \section, \subsection und \subsubsection nummereiert.
+\setcounter{tocdepth}{2} %Bis zu welcher Ebene Einträge ins Inhaltsverzeichnis aufgenommen werden. In diesem Beispiel ebenfalls bis Ebene drei (\subsubsection). Ein durch \paragraph ausgewiesener Abschnitt wird demnach nicht im Inhaltsverzeichnis auftauchen. 
 
 \usepackage[colorlinks=false, pdfborder={0 0 0}, plainpages=false]{hyperref}
 
@@ -72,9 +72,8 @@ their users with their most basic information management needs: Make contacts,
 calendars, notices and to do items available across different devices and share
 them with family and peers.
 
-Existing solutions are either based on non-free software (Microsoft Outlook),
-brittle and unreliable\footnote{See comments on the individual projects in
-  appendix ...} or require the user to trust his personal data to the commercial
+Most existing solutions are either based on non-free software (Microsoft Outlook),
+or require the user to trust his personal data to the commercial
 interests of a multinational corporation.
 %\footnote{Experiences with Android and Data in the cloud \citeurl{http://keithp.com/blogs/calypso}{?}}
 
@@ -89,7 +88,7 @@ A few patterns or techniques are presented and proposed for reuse in other Rest
 applications to ease the support for multiple alternative Media types. Among
 these techniques are Dependency Injection to prepare resource method parameters
 (\autoref{sec:prep-requ-comp}), Resource Facades
-  (\autoref{sec:resourcefacades}), a programmable dispatcher
+  (\autoref{sec:resourcefacades}) and a programmable dispatcher
   (\autoref{sec:dispatcher}).
 
 \subsection{Definitions}
@@ -100,9 +99,9 @@ A couple of related terms and concepts exist that all more or less overlap with
 the functionality provided by Kolab: Groupware, Personal Information
 Management/Manager (PIM), Group Information Management (GIM), Computer-supported
 cooperative/collaborative work, Knowledge management, (Enterprise) Content
-Management.
-
-TODO: keinen der Terme benutzen.
+Management. For the rest of this work a Groupware is a software managing address
+books, calendars, todo items, journals and probably more data for a group of
+collaborating users.
 
 \subsection{Related work}
 \subsubsection{WebDAV, CalDAV, CardDAV}
@@ -126,9 +125,9 @@ wrote\footnote{\citeurl{http://nih.blogspot.com/2008/02/nearly-two-years-ago-i-m
 Were I to propose CalDAV today it would probably be CalAtom.
 \end{quote}
 
-The three standard WebDAV (127p), CalDAV (107p) and CardDAV (48p) add up to 282
+The three standards WebDAV (127p), CalDAV (107p) and CardDAV (48p) add up to 282
 pages of highly specific standards. This is nearly double as much text as
-necessary for the design described in this work (149 pages)\footnote{Atom (43),
+necessary for the standards this work is based on (149 pages)\footnote{Atom (43),
   AtomPub (53), Feed paging (15), OpenSearch (~28), Atom Deleted Entry (10)}. In
 contrast to WebDAV, Feeds and related technologies are also widely used so that
 a web developer might already know the latter standards.
@@ -138,26 +137,23 @@ is not restful, as explained by Roy
 Fielding:\footnote{\citeurl{http://tech.groups.yahoo.com/group/rest-discuss/message/5874}{2012-3-5}}
 
 \begin{quotation}
-PROP* methods conflict with REST because they prevent
-important resources from having URIs and effectively double the
-number of methods for no good reason. Both Henrik and I argued
-against those methods at the time. It really doesn't matter
-how uniform they are because they break other aspects of the
-overall model, leading to further complications in versioning
-(WebDAV versioning is hopelessly complicated), access control
-(WebDAV ACLs are completely wrong for HTTP), and just about every
-other extension to WebDAV that has been proposed.
+  PROP* methods conflict with REST because they prevent important resources from
+  having URIs and effectively double the number of methods for no good
+  reason. [\ldots] It really doesn't matter how uniform they are because they
+  break other aspects of the overall model, leading to further complications in
+  versioning (WebDAV versioning is hopelessly complicated), access control
+  (WebDAV ACLs are completely wrong for HTTP), and just about every other
+  extension to WebDAV that has been proposed.
 
-[\ldots]
+  [\ldots]
 
-The problem with MOVE is that it is actually an operation on two
-independent namespaces (the source collection and destination
-collection). The user must have permission to remove from the
-source collection and add to the destination collection, which
-can be a bit of a problem if they are in different authentication
-realms. COPY has a similar problem, but at least in that case
-only one namespace is modified. I don't think either of them map
-very well to HTTP.
+  The problem with MOVE is that it is actually an operation on two independent
+  namespaces (the source collection and destination collection). The user must
+  have permission to remove from the source collection and add to the
+  destination collection, which can be a bit of a problem if they are in
+  different authentication realms. COPY has a similar problem, but at least in
+  that case only one namespace is modified. I don't think either of them map
+  very well to HTTP.
 \end{quotation}
 
 % \url{http://microformats.org/discuss/mail/microformats-rest/2006-April/thread.html#217}
@@ -171,7 +167,8 @@ very well to HTTP.
 % \end{quote}
 % Tim Bray, http://www.imc.org/atom-protocol/mail-archive/msg11271.html
 
-Despite the comprehensiveness of CalDAV and CardDAV, the calconnect consortium
+Given the comprehensiveness of CalDAV and CardDAV one would expect these
+protocols to cover all common use cases. However the calconnect consortium
 additionally develops two alternative protocols, CalWS-SOAP and
 CalWS-REST\footnote{\citeurl{http://calconnect.org/CD1012_Intro_Calendaring_V1.1.shtml}{2012-3-5}}.
 
@@ -185,14 +182,15 @@ There are a few appealing advantages to this approach:
 
 \begin{itemize}
   \item The IMAP infrastructure used for mail can be reused.
-  \item Data is stored as file attachment. Thus the problematic mapping of
-  groupware data items to relational schemes can be avoided.
-  \item IMAP supports offline work and later synchronization.
+  \item Data is stored as file attachment. Thus the probably complicate mapping of
+  groupware data items to the needs of a (relational) database is avoided.
+  \item IMAP already supports offline work and later synchronization.
 \end{itemize}
 
-The simplicity of just dropping files in a store however also has drawbacks,
-e.g: there's no moderating logic on the server site that could verify the
-correctness of stored data and there are no query capabilities.
+The simplicity of just dropping files in a store used by several concurrent
+clients however also has drawbacks, e.g: there is no moderating logic on the
+server site that could verify the correctness of stored data and there are no
+query capabilities.
 
 IMAP in general also comes with its own challenges:
 
@@ -220,38 +218,38 @@ IMAP in general also comes with its own challenges:
 % \item more rants: http://blog.gaborcselle.com/2010/02/how-to-replace-imap.html
 % \item IMAP issues found by the chandler project http://chandlerproject.org/bin/view/Jungle/IntrinsicIMAPIssues
 
-\subsubsection{OpenSocial}
+\subsubsection{OpenSocial, useful but not restful}
 \label{sec:opensocial}
 
-Roy Fielding wrote a blog post about the ``SocialSite REST API'', stating that
-it isn't restful at all but clearly an RPC style
-API.\footnote{\citeurl{http://roy.gbiv.com/untangled/2008/rest-apis-must-be-hyperhtext-driven}{2011-12-06}}
-Fielding was referring to SocialSite, which is however an implementation of the
-OpenSocial specification. Dave Johnson, a contributor to SocialSite, reacted on
-this critique by opening a discussion on an OpenSocial mailing
-list:\footnote{\citeurl{http://groups.google.com/group/opensocial-and-gadgets-spec/browse_thread/thread/aff4ba7373e21284/201a413efa67c26e}{2011-12-06}}
-\begin{quote}
-  I must admit, it is not clear to me how OpenSocial REST API violates the six
-  rules that Roy stated.
-\end{quote}
-The above quote warrants a short comment. I also thought before, that REST would
-be so simple that there wouldn't be much need for further studying. Every web
-developer has some understanding of URIs, HTTP and a bit less of Hypermedia. So
-it is easy to fall into the trap that everything build on top of HTTP would be
-restful. Now however, after some more reading about REST, I can easily find
-violations of the REST constraints in the OpenSocial specification.
+OpenSocial\cite{OSSpec2.0.1} specifies how data of social networks can be
+accessed by clients, especially Javascript browser widgets. While the
+specification was initially designed for social networks, it has also been
+adopted to enhance wikis, issue trackers (Confluence, Jira from Atlassian),
+Groupware (Lotus from IBM), Content Management Systems
+(Alfresco). \cite{Huebner2009} discusses the benefits of OpenSocial for the
+interaction of university members.
+
+The specification is discussed in this section because it shows the usefulness
+of making social data available for different kind of clients but on the other
+hand is a poster child for a non-restful API on top of HTTP and thus serves as a
+standard of comparison for the API to be designed in this work.
 
 Restful APIs are modeled around resources, their representations and links
-between them. The authors of the OpenSocial API however seem to have modeled
-their API around the concept of services:\cite[Social API Server, sec 2, Services]{OSSpec2.0.1}
+between them\cite[sec. 5.1.5]{Fielding2000}\footnote{ ``REST is defined by four
+  interface constraints: identification of resources; manipulation of resources
+  through representations; self-descriptive messages; and, hypermedia as the
+  engine of application state.''}. The authors of OpenSocial however seem to
+have started already from a different concept\cite[Social API Server, sec 2,
+Services]{OSSpec2.0.1}:
 \begin{quote}
   OpenSocial defines several services for providing access to a container's data.
 \end{quote}
 
-\paragraph{Fielding's critique}
-Fielding listed some rules that a restful API must obey, but did not give
-explicit examples how OpenSocial violates this rules. The following section will
-provide such examples.
+Fielding wrote a blog post stating that OpenSocial\footnote{Fielding referred to
+  a concrete implementation, the ``SocialSite REST API''.} would not be
+restful\cite{Fielding2008}. He pointed out rules ``most often violated within
+so-called REST APIs'', but did not give explicit examples, how OpenSocial
+violates them.
 
 \begin{quote}
   A REST API should not be dependent on any single communication protocol,
@@ -479,13 +477,14 @@ Guidelines of the design are:
 % Collections z.B. für Projekte könnten alle möglichen Typen konsumieren.
 
 \subsection{Replacement for CardDAV}
+\label{sec:replacement-carddav}
 
-The web application should provide at least the same features as the CardDAV
+The web application should provide at least the main features of the CardDAV
 protocol. It should be demonstrated that a restful application can serve for the
-same purpose and thus that the additional complexity of WebDAV and CardDAV is
-not necessary.
+same purpose and thus that the additional complexity of WebDAV and CardDAV may
+not be necessary for most use cases.
 
-The standard lists the supposed main features of CardDAV\cite[sec. 1]{RFC6352}:
+The standard lists the main features of CardDAV\cite[sec. 1]{RFC6352}:
 
 \begin{enumerate}
 \item Ability to use multiple address books with hierarchical layout.
@@ -618,11 +617,11 @@ targeted storage component is an IMAP server with a Kolab conform set of
 groupware folders. However the design should not restrict the extension to a
 document database like CouchDB, plain files, relational or XML databases.
 
-\subsection{Design and Implementation Constraints}
+%\subsection{Design and Implementation Constraints}
 
-\subsection{Specific Requirements}
+%\subsection{Specific Requirements}
 
-\paragraph{Nested and mixed collections}
+\subsection{Nested and mixed collections}
 The design should not unnecessarily hinder that collections could be nested or
 contain different kinds of media types, e.g. calendar items and contacts. 
 
@@ -634,27 +633,27 @@ and journal entries.
 
 \subsection{Excluded requirements}
 \label{sec:excluded-requirements}
-\paragraph{Search}
-It is not required that the server implements any means to search its data. It
-is not excluded that such a facility could be added later. It is however
-expected that searching could be implemented separately. This could be done
-either on a synchronizing client or as a separate system in the same
-administrative domain as the server.
+\subsubsection{Reports, Filters, Projections}
 
-\paragraph{Performance optimization}
+CalDAV and CardDAV define elaborate report, filter and projection
+capabilities. This work considers reports or search only when an important use
+case is not implementable without it and existing, well known specifications can
+be reused.
+
+\subsubsection{Performance optimization}
 The system is meant to inherit the benefits of a restful architecture. It should
 therefor be possible to attach separate caching intermediaries for read
 requests. Rather then concentrating on the performance of the implementation of
 read requests it should be taken care that the architecture supports external
 caching and thus avoids to serve the same read request multiple times.
 
-\paragraph{Access Control}
+\subsubsection{Access Control}
 The aspect of access control would broaden the scope of this work to
 wide. However it could be kept in mind, whether the proposed design could be
 enhanced by a separate access control design as proposed in
 \cite{conf/rest/GrafZLW11}.
 
-\paragraph{Copying and Moving}
+\subsubsection{Copying and Moving}
 WebDAV introduces the HTTP verbs to COPY and MOVE. The usefulness of such
 functionality must of course be compared to the complexity of the implementation
 and the drawback of incompatibility to plain HTTP.
@@ -668,14 +667,15 @@ of the controller resource.
 
 This work does not include initial support for copy or move.
 
-\paragraph{Versioning}
+\subsubsection{Versioning}
 WebDAV and therefor CalDAV and CardDAV support the versioning of resources as an
 extension to the HTTP protocol. Versioning is an important feature for a text
 authoring system that may have been the main target for the WebDAV protocol.  It
-does however seem to be of little use for the resources considered here. The
-resources are mostly created in one session by one user and seldom modified.
+does however seem to be of little use for the resources considered
+here. Individual contacts or events are mostly created in one session by one
+user and not modified in several sessions like text documents.
 
-\paragraph{Make Collections}
+\subsubsection{Make Collections}
 WebDAV introduces the MKCOL HTTP verb to create collections. CardDAV recommends
 that implementations support this to allow users to ``organize their data
 better''. An alternative would be to make use of ATOM categories for
@@ -689,7 +689,7 @@ created. Practitioners recommend a pattern wherein collections of collections
 exist and new collections can be created by posting to the
 former\footnote{\citeurl{http://www.imc.org/atom-protocol/mail-archive/msg11565.html}{2012-3-7}}.
 
-\paragraph{Locking}
+\subsubsection{Locking}
 As with Versioning, this is feature of WebDAV is not considered. Instead of
 locking a resource HTTP supports conditional updates and leaves conflict
 resolution to the client.
@@ -701,7 +701,7 @@ images. \textit{The editing is expected to be localized to isolated points in
   the document}, e.g. changing just one field in a content or event. And
 \textit{the content can be edited while the user is offline}.
 
-\paragraph{Push notifications}
+\subsubsection{Push notifications}
 This work does not include any means to actively notify (push) a client about
 changes happening on the server. The client needs to initiate a request (pull)
 to the server to look for changes. However separate solutions
@@ -712,7 +712,6 @@ application\cite{Wilde:2009:FQP:1693155.1693220}. It may therefor not be seen as
 a disadvantage to omit push notifications as a
 requirement.\footnote{\cite[sec. 1]{RFC6352} explicitly mentions missing
   ``change notifications'' as a ``key disadvantage'' of CardDAV.}
-
 
 \section{Media Types}
 % http://amundsen.com/hypermedia/
@@ -725,10 +724,8 @@ requirement.\footnote{\cite[sec. 1]{RFC6352} explicitly mentions missing
 
 \begin{quote}
   To some extent, people get REST wrong because I failed to include enough
-  detail on media type design within my dissertation.~--~Roy T. Fielding
+  detail on media type design within my dissertation.~--~Roy T. Fielding, \cite{Fielding2008}
 \end{quote}
-from: Rest APIs must be hypertext driven\footnote
-  {\citeurl{http://roy.gbiv.com/untangled/2008/rest-apis-must-be-hypertext-driven}{2011-12-20}}
 
 \cite[sec. 7.2]{Pautasso:2008:RWS:1367497.1367606} identifies the support of different media types as an issue that "can complicate and hinder the interoperability" and "requires more maintenance effort".
 
@@ -861,32 +858,6 @@ alternative serializations, so that XML tooling can be used. The standards aim
 for full compatibility between the XML and IMF formats so that no information is
 lost when converting in either direction.
 
-\begin{figure}[tb]
-
-  \begin{tikzpicture}
-    [doc/.style={rectangle,draw=blue!30,fill=blue!20, node distance=6em}]
-    \node[doc] (svc) [] {ServiceDoc};
-    \node[doc] (collect) [below=of svc,text width=5em] {Contacts Collection}
-      edge [<-] node {} (svc)
-      edge [->, loop left] node {next} (collect);
-
-    \node[doc] (calcollect) [below right=of svc,text width=5em] {Calendar Collection}
-      edge [<-] node {} (svc);
-
-    \node[doc] (entry) [below=of collect] {Entry (xCard)}
-      edge [<-] node {1..n} (collect)
-      edge [->] node [text width=5em] {personal calendar} (calcollect)
-      edge [->, loop left] node {related xCards} (entry);
-
-    \node[doc] (event) [below=of calcollect] {Entry (xCal event)}
-      edge [<-] node {1..n} (calcollect)
-      edge [->] node [below right] {participants} (entry);
-
-
-  \end{tikzpicture}
-  \caption{Hypermedia support in xCard and xCal}
-\end{figure}
-
 The iCalendar standard defines several properties that can link to external
 representations of the properties value by specifying an ``Alternate Text
 Representation'' parameter. These are comment, summary, description, contact,
@@ -932,6 +903,7 @@ annotation format'' to refer to Microformats, Microdata, RDFa and similar
 formats.
 
 \subsubsection{Use Cases}
+\label{sec:semantic-anno-use-cases}
 
 One major use case for semantic annotations is to help search engines to better
 index the annotated site. The Microformats project was started by a blog search
@@ -1023,13 +995,67 @@ Consortium.
 \subsection{HTML Forms}
 \label{sec:html-forms}
 %@TODO
-% no support for etags?
-% no put/delete?
+TODO
+
+A web based user interface for a Groupware today has many means to provide data
+editing and submission facilities thanks to powerful Javascript libraries like
+the VIE Editor (\autoref{sec:semantic-anno-use-cases}). The traditional,
+standardized and most compatible way however is the use of HTML forms. These
+however lack a few features that could improve their use for restful systems.
+
+HTML has no means to send an etag when submitting a form and no support for
+other HTTP verbs then GET and POST, most importantly PUT and DELETE. A
+Discussion to include these however seems to be underway\cite{Amundsen2011}.
+
+All forms have the same media type of application/x-www-form-urlencoded,
+although they may represent totally different kind of resources. In practice
+this is often not a problem since the server knows which form to expect and
+selects its parsing routine accordingly.
+
+In cases, where different forms can be expected to be submitted to the same URI,
+e.g. to the URI of a collection, the server needs to be informed about the
+resource type, probably by a hidden form input element.
+
+The manual creation of HTML forms and associated form parsers and validators is
+involved and error prone. Therefor many approaches and implementations exist to
+automate this task. If a machine can work on an existing data model for the
+resource, then this can be used as basis for the automation.
+
+TODO: Means to automatically build forms from descriptions of the data:
+``Dynamic Object Model'' (Dirk Riehle) or ``Adaptive Object-Model'' (Yoder,
+Johnson) implemented e.g. by eZPublish, Drupal
+%@TODO
 % automatically build forms like eZPublish / Drupal?
+
+Not yet answered is the question, where or under which condition an HTML form
+should be submitted to the user. It is certainly not desirable to present HTML
+forms by default in every HTML representation of any resource that the user is
+authorized to modify. And even then, there would still not be any mean for the
+user to reach an HTML form to create a new resource.
+
+The edit case can be solved with the IANA registered ``edit'' link-relation. An
+HTML page representing an editable resource could just use a link element for
+the purpose of signaling the client the location where it can retrieve an
+editable resource:
+
+\begin{lstlisting}{language=xml}
+  <link rel="edit" href="?edit"/>
+\end{lstlisting}
+
+Making different representations of one resource available under different URIs
+is no violation of rest principles and even encouraged for similar use cases by
+\cite{Raman2006}.
+
+Unfortunately no link relation is standardized to retrieve an empty form for the
+creation of a new resource. So for the time being server and client would need
+to agree on a custom link relation for that purpose. The empty form can be
+regarded as an entity of its own, linked from the collection where newly created
+resources are expected to appear.
 
 \subsection{Media Types for Collections}
 \label{sec:media-types-coll}
-Vergleich ATOM mit Medientyp Collection+JSON
+%@TODO
+TODO: Vergleich ATOM mit Medientyp Collection+JSON
 
 JSON formats for collections:
 Collection+JSON Mime-Type (approved in July 2011) by Mike Amundsen\footnote{\citeurl{http://amundsen.com/media-types/collection/}{2012-1-7}}
@@ -1263,6 +1289,7 @@ tag\footnote{\citeurl{http://web.archive.org/web/20081120001246/http://www.snell
 % @TODO Atom entries could contain multiple link tags referring to alternative
 % representations of the resource with different (media) type attributes.
 
+
 \subsubsection{Synchronizing Collections}
 
 If a Groupware client can synchronize an entire collection to its local memory,
@@ -1318,6 +1345,32 @@ make sure at the end of the synchronization that the first feed has not changed
 meanwhile most probably with a conditional GET request. After this last request
 indicates no further changes the client knows that its local collection is in
 the state of the servers location at the time of the last GET request.
+
+\begin{figure}[tb]
+
+  \begin{tikzpicture}
+    [doc/.style={rectangle,draw=blue!30,fill=blue!20, node distance=6em}]
+    \node[doc] (svc) [] {ServiceDoc};
+    \node[doc] (collect) [below=of svc,text width=5em] {Contacts Collection}
+      edge [<-] node {} (svc)
+      edge [->, loop left] node {next} (collect);
+
+    \node[doc] (calcollect) [below right=of svc,text width=5em] {Calendar Collection}
+      edge [<-] node {} (svc);
+
+    \node[doc] (entry) [below=of collect] {Entry (xCard)}
+      edge [<-] node {1..n} (collect)
+      edge [->] node [text width=5em] {personal calendar} (calcollect)
+      edge [->, loop left] node {related xCards} (entry);
+
+    \node[doc] (event) [below=of calcollect] {Entry (xCal event)}
+      edge [<-] node {1..n} (calcollect)
+      edge [->] node [below right] {participants} (entry);
+
+
+  \end{tikzpicture}
+  \caption{Discovery paths from the Service Document to individual Groupware Resources}
+\end{figure}
 
 \subsubsection{Media Entries and the content tag}
 \label{sec:inline-feeds-or}
@@ -1992,7 +2045,7 @@ if (rb == null)
 % Contactzilla.com saves portablecontacts json in MongoDB
 % https://groups.google.com/d/msg/portablecontacts/57R9gGyoqt0/-P0fF4zRjaoJ
 
-\paragraph{Preparsed Request Components}
+\paragraph{Preparsed Request Components with Dependency Injection}
 \label{sec:prep-requ-comp}
 
 It seems like an obvious fact that could not be further deduced, that any
@@ -2058,8 +2111,6 @@ support provided by the Jersey
 framework.\footnote{\citeurl{http://codahale.com/what-makes-jersey-interesting-parameter-classes/}{2012-2-5},
   \citeurl{http://codahale.com/what-makes-jersey-interesting-injection-providers/}{2012-2-5}}
 
-\paragraph{Exkurs: Driving Dependency Injection further}
-
 \begin{figure}[tbph]
   \begin{tikzpicture}
     [doc/.style={rectangle,draw=blue!30,fill=blue!20, node distance=4.5em}]
@@ -2091,17 +2142,17 @@ framework.\footnote{\citeurl{http://codahale.com/what-makes-jersey-interesting-p
   \label{fig:dependency-injection-pipeline}
 \end{figure}
 
-Paragraph \ref{sec:prep-requ-comp} used dependency injection to cause the
-instantiation of a request scoped class that prepares information for the
-request method (``handleGet'' in the example). This idea could be extended.
+\paragraph{Driving Dependency Injection further}
 
-The information from the SearchRequest class is probably just forwarded by
-``handleGet'' to another component that executes the search on a given
-collection. Thus the request methot is ultimately interested on the search
-result set to transform it into a response. Consequently the ``handleGet''
-method could use dependency injection to request the result set and only start
-working on this. Figure \ref{fig:dependency-injection-pipeline} visualizes the
-hypothetic dependency graph of an application specific ResultSet class.
+The use of dependency injection could be extended to comprise several levels of
+dependencies and thus to build processing pipelines.  The information from the
+above SearchRequest class is probably just forwarded by ``handleGet'' to another
+component that executes the search on a given collection. Thus the request
+methot is ultimately interested on the search result set to transform it into a
+response. Consequently the ``handleGet'' method could use dependency injection
+to request the result set and only start working on this. Figure
+\ref{fig:dependency-injection-pipeline} visualizes the hypothetic dependency
+graph of an application specific ResultSet class.
 
 The figure shows how the CollectionStorage to search on is identified by the URI
 path and the search parameters by the SearchRequest class of listing
@@ -2109,25 +2160,19 @@ path and the search parameters by the SearchRequest class of listing
 a ResultSet class by executing a SearchService with the request scoped
 CollectionStorage and SearchRequest.
 
-The idea might be an alternative implementation of processing pipelines as
-proposed in \cite{Davis:2011:XTR:1967428.1967437} and worth exploring in a
-separate work. One advantage of this approach would be that the processing
-pipeline is defined and configured in the same language then the rest of the
-application.
+The idea might be an alternative implementation of processing pipelines to the
+one proposed in \cite{Davis:2011:XTR:1967428.1967437}, which uses XProc, An XML
+Pipeline Language. One advantage of the dependency injection approach would be
+that the processing pipeline can be defined and configured in the same language
+then the rest of the application.
 
-\paragraph{GenericResourceAttributes}
-\label{sec:component-genericresourceattrib}
+%\paragraph{GenericResourceAttributes}
+%\label{sec:component-genericresourceattrib}
 
+%\subsection{Detailed Design Considerations}
 
-
-
-\subsection{Detailed Design Considerations}
-
-\subsection{Client Design}
-
-What needs a client to know, how does it need to work?
-
-
+%\subsection{Client Design}
+%What needs a client to know, how does it need to work?
 
 \section{Summary and Conclusions}
 
