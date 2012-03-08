@@ -5,6 +5,25 @@
 ** TODO Implementierung und Beschreibung: vCard/PoCo/xCard/iCal mit den gleichen Mitteln in Java darstellen
 ** TODO Kolab beschreiben
 ** TODO Darstellung der Kolab Daten: Kolab migriert z.Z. zu xCard/xCal, daher 1:1
+** TODO Was hat aufgehalten?
+ Macht es Sinn in der Arbeit Punkte zu nennen, die bei dem Versuch der
+ Implementierung hinderlich waren? Zumindest solche Punkte, wo einfach noch
+ libraries für bestimmte Zwecke fehlen (erste Gruppe)?
+
+ - active PoCo library?
+ - no library to convert between vCard and PoCo
+ - keine xCard/xCal library, vCal4j-vcard supports only version 3
+ - no helper library to produce microdata
+
+ - Major updates of Jersey, Abdera shortly before release. Undesirable to start on the old versions.
+ - Kolab undergoes a migration a migration of its underlying data format from its own proprietary kolab-xml to xCal/xCard
+ - Java library to access Kolab zumindest im schlechten Zustand
+ - Not possible to use Guice injection together with Jersey
+ - Not possible to define empty paths in sub-resources
+ - Jersey does not help to build URIs to resources when the path to those URIs
+   is not defined on the Resource class, limited URI building capabilites of
+   Jersey
+
 * TODO Einpassung in die vorgeschlagene Struktur für Abschlußarbeiten
 
  - http://www.fernuni-hagen.de/dvt/studium/richtlinien.shtml
