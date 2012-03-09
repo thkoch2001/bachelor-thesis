@@ -1302,6 +1302,7 @@ tag\footnote{\citeurl{http://web.archive.org/web/20081120001246/http://www.snell
 
 
 \subsubsection{Synchronizing Collections}
+\label{sec:synchr-coll}
 
 If a Groupware client can synchronize an entire collection to its local memory,
 then there is no need for more sophisticated queries that provide only a subset
@@ -1385,13 +1386,65 @@ the state of the servers location at the time of the last GET request.
 
 \subsubsection{Efficient Synchronization with HTTP Delta encoding}
 
-%TODO
-TODO
+The synchronization method described in \autoref{sec:synchr-coll} can be
+enhanced to reduce the bandwidth usage and general resource usage of both client
+and server. The necessary extension has been described in \cite{Wyman2004} and
+is commonly referred to as RFC3229+Feed since it adds a feed specific Instance
+Method (IM) to the ``Delta encoding in HTTP''
+standard\cite{RFC3229}. Unfortunately nobody has yet invested the effort to
+drive this method through a formal standardization
+process\footnote{\citeurl{http://bob.wyman.us/main/2006/04/microsoft_to_su.html}{2012-3-9}}. It
+is however reported to be widely
+implemented\footnote{\citeurl{http://www.wyman.us/main/2004/09/implementations.html}{2012-1-6}},
+even in the popular Microsoft Internet
+Explorer\footnote{\citeurl{http://blogs.msdn.com/b/rssteam/archive/2006/04/08/571509.aspx}{2012-3-9}}
+and the author claims substantial bandwidths saving opportunities
+\footnote{\citeurl{http://wyman.us/main/2004/10/massive_bandwid.html}{2012-3-9}}.
 
-HTTP Delta encoding with Feed:
-\citeurl{http://www.wyman.us/main/2004/09/using_rfc3229_w.html}{2012-1-6},
-implementations:
-\citeurl{http://www.wyman.us/main/2004/09/implementations.html}{2011-1-6}
+The idea of delta encoding is that a server can respond to conditional GET
+requests with only a small, special patch. The client applies the patch to its
+cached representation of the requested resource which results in the new version
+of the resource. All currently IANA registered IMs are byte
+oriented\footnote{\citeurl{http://www.iana.org/assignments/inst-man-values/inst-man-values.xml}{2012-3-9}}. These
+methods however don't add substantial benefit for the case of synchronization feeds.
+
+In the case of the proposed feed IM, the client sends a conditional GET to
+request the synchronization feed but indicates in the ``A-IM'' header that it
+understands the feed IM:
+\begin{lstlisting}
+GET /api/collections/contacts HTTP/1.1
+Host: bar.example.net
+If-None-Match: "3631-@2147483647"
+A-IM: feed, gzip
+\end{lstlisting}
+The server responds with a valid feed including the normal head elements but can
+use the etag from the ``If-None-Match'' header to include only those entries in
+the response, that have changed since the time when the etag was valid. This
+implies of course, that the server is able to match the given etag to a
+corresponding list of changes\footnote{The given example already suggests that
+  the etag itself could include database ids or timestamps.}. The server
+response uses HTTP code ``226 IM Used''\cite{RFC3229} to mark the response as a
+special one that is not the regular, cachaable representation.
+
+It is advisable to also include a ``next'' link to the subsequent feed to keep
+compatibility with the synchronization process from \autoref{sec:synchr-coll}
+and prevent the client from accidentally considering the returned feed to
+contain the full collection. The ``next'' link however would probably cause the
+client to unnecessarily follow it, since it has not yet seen an entry with an
+old enough ``app:edited'' value. The server could include additional entries
+from its database to satisfy the client's terminating condition. Or the server
+could include an artificial, minimal
+deleted-entry\cite{draft-snell-atompub-tombstones-14} tag with a non-existent
+ref value and a when value just older then the etag sent by the client:
+\begin{lstlisting}
+<at:deleted-entry xmlns:at="http://purl.org/atompub/tombstones/1.0"
+   ref="tag:example.org,2005:NONEXISTENT"
+   when="2005-11-29T12:11:12Z"/>
+\end{lstlisting}
+The above precautions not to break the client's synchronization logic is
+necessary to permit the server to also respond to RFC3229+Feed requests with
+paginated feeds in cases where more entries have changed then the server is
+comfortable to include in a single response.
 
 \subsubsection{Media Entries and the content tag}
 \label{sec:inline-feeds-or}

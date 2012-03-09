@@ -68,6 +68,8 @@
      - PUT/DELETE/PATCH und etags für HTML forms wäre wünschenswert
      - automatisches generieren von semantischen Annotationen in HTML template
        engines
+     - Verbreitung und Effektivität von RFC3229+Feed untersuchen, einen Standard
+       schreiben
 
    - Anhänge (optional)
    - Literaturverzeichnis
