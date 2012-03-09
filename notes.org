@@ -39,7 +39,7 @@
      - Atom Publishing Protocol
      - Atom extensions: Pagination, deleted entry
      - HTTP etags for offline work
-     - HTTP Delta encoding with Feed: \citeurl{http://www.wyman.us/main/2004/09/using_rfc3229_w.html}{2012-1-6}, implementations: \citeurl{http://www.wyman.us/main/2004/09/implementations.html}{2011-1-6}
+     - HTTP Delta encoding with Feed
      - OpenSearch: plain text, time range
      - Microdata
      - vCard, iCal, xCard, xCal
@@ -80,12 +80,40 @@ Erläuterung, wie diese sinnvoll kombiniert werden können.
 
 * Check der Aufgabenstellung
 
+  Die drei Fragen habe ich zwischendurch immer wieder angeschnitten. Soll ich
+  sie am Ende noch mal als individuelle Unterabschnitte zusammenfassen?
+
 ** welche Komponenten des Entwurfs können für die Unterstützung verschiedener Medientypen gemeinsam genutzt oder wiederverwendet werden?
- - StorageComponent
+
+  Ich habe das Problem, dass ich bisher kaum etwas implementiert habe und daher
+  natürlich stark in der Luft hänge, was konkrete Wiederverwendung von
+  Komponenten angeht.
+
+ - StorageComponent implementations
  - Datenstruktur für Kontakte unabhängig vom Serialisierungsformat
- - Das ganze REST Framework, z.B. Jersey
+ - Das ganze REST Framework, z.B. Jersey, weitere Libraries für ATOM, vCard, PoCo?
 
 ** Hypermediaunterstützung der verschiedenen Formate
+
+ Hier müsste ich noch mehr schreiben, denke ich:
+ - Wie ist die Hypermediaunterstützung realisiert?
+
+   Ein Hypermedia Link besteht mindestens aus dem Schema, dem Linkziel, und der
+   Linksemantik. Diese ist in den Medientyp unterschiedlich realisiert.
+
+   - in PoCo sagt einfach die Spec, wenn ein Textfeld ein Link sein soll
+   - Die instant messenger links haben das Schema im "type" feld angegeben (AOL,
+     MSN, Yahoo, XMPP, ...)
+   - In HTML is auf Basis des Elements definiert, ob es einen Link
+     representiert: a, link, object, img, video. Das rel attribut beschreibt die
+     Semantik.
+   - In vCard/iCal ist die Semantik durch das Property definiert, in dem der
+     Link vorkommt: SOURCE, FBURL, PHOTO, GEO, SOUND
+   - Es gibt aber in vCard auch ein RELATED property zu weiteren vCards, dass
+     wiederum genauer semantisch bestimmt werden kann mit einer IANA Typregistry
+
+ Macht es Sinn, eine Auflistung aller Linkfelder zu machen wie hier?
+
  - PoCo: values with URI strings in fields urls
    - emails (without mailto:)
    - ims (with the messenger protocol not specified by a scheme but in a
@@ -107,6 +135,7 @@ Erläuterung, wie diese sinnvoll kombiniert werden können.
    - URL: web sites related to this vCard
  - iCal
    - links to event participants
+   - ... noch mehr TODO
  - Several extensions exists for iCal/vCard which may define additional links
  - Atom Service Document: links to collection, category documents, OpenSearch definitions
  - Atom feeds
@@ -116,6 +145,7 @@ Erläuterung, wie diese sinnvoll kombiniert werden können.
    - the semantik of links in PoCo/vCard/iCal is defined by the field (property) where they appear.
 
 ** Wie viel muss ein Client vorher wissen?
+
  - Standard
    - Der Client muss die Medientypen verstehen, inkl. OpenSearch, PoCo
    - Der Client muss die zur semantischen Annotation verwendeten Schemata kennen 
@@ -143,7 +173,7 @@ Portable Contacts has a filter ``updatedSince''.
 
 How is synchronization done in CardDAV?
 
-* \section{Media Types}
+* Media Types
 
 \begin{table}
   \begin{tabular}{l c c c c c}
@@ -356,7 +386,7 @@ jCard example from microjson.org\footnote{\citeurl{http://web.archive.org/web/20
    </vcards>
 \end{lstlisting}
 
-\subsection{HFactor}
+** HFactor
 Mike Amundsen defines a method to asses media types that he calls
 ``HFactor''.\footnote{\citeurl{http://amundsen.com/hypermedia/}{2011-12-21}} The
 HFactor distinguishes different types of support for links and indicates which
@@ -388,7 +418,7 @@ support, first letter ``C''.
   \end{itemize}
 \end{itemize}
 
-* \subsection{Data Models of Media Types}
+** Data Models of Media Types
 
 TODO:
 \begin{itemize}
@@ -404,7 +434,7 @@ TODO:
   \end{itemize}
 \end{itemize}
 
-* \section{Hypermedia in RESTful applications}
+* Hypermedia in RESTful applications
 
 % Hat Kolab Hypermedia links in Kontakten, wie soll es sein mit xCard?
 
@@ -435,13 +465,13 @@ TODO:
   The model application is therefore an engine that moves from one state to the next by examining and choosing from among the alternative state transitions in the current set of representations.
 \end{quotation}\cite[sec. 5.3, p.103]{Fielding2000}
 
-** \subsection{Hypermedia in OpenSocial}
+** Hypermedia in OpenSocial
 
 Webfinger, e.g. get a profile picture from an email address
 
 Danger: One can trigger na http request by sending an email.
 
-* \section{Selection of components}
+* Selection of components
 
 Apache Shindig for Open Social, includes client tests
 
@@ -470,7 +500,7 @@ https://launchpad.net/ubuntu/+source/dovecot-metadata-plugin/8-0ubuntu1
 % existDb has an own atompub impl http://exist-db.org/atompub.html
 
 
-** \subsection{REST framework}
+** REST framework
 Jersey recommended by \cite{Kaiser2011} above Restfulie and RESTeasy because of maturity and flexibility.
 
 % http://www.torsten-horn.de/techdocs/jee-rest.htm RESTful Web Services mit JAX-RS und Jersey
@@ -548,8 +578,8 @@ Portable Contacts test client at plaxo \url{http://www.plaxo.com/pdata/testClien
 
 \url{http://code.google.com/p/rest-assured/} \url{http://restfuse.com/}
 
-* \section{Standards}
-** \subsection{Contacts / Persons}
+* Standards
+** Contacts / Persons
 
 % http://schema.org/Person
 
@@ -598,7 +628,7 @@ Portable Contacts test client at plaxo \url{http://www.plaxo.com/pdata/testClien
 
 \end{description}
 
-** \subsection{Calendaring}
+** Calendaring
 %\subparagraph{IETF (RFC)}
 \begin{description}[\breaklabel\setleftmargin{1ex}]
 
@@ -642,7 +672,7 @@ Portable Contacts test client at plaxo \url{http://www.plaxo.com/pdata/testClien
 
 \end{description}
 
-** \subsection{Scheduling}
+** Scheduling
 
 \begin{description}[\breaklabel\setleftmargin{1ex}]
   \item[RFC 5546 iCalendar Transport-Independent Interoperability Protocol (iTIP)] 
@@ -658,7 +688,7 @@ Portable Contacts test client at plaxo \url{http://www.plaxo.com/pdata/testClien
 
 \end{description}
 
-** \subsection{Relations and Links}
+** Relations and Links
 % http://code.google.com/apis/socialgraph/
 \begin{description}[\breaklabel\setleftmargin{1ex}]
 
@@ -681,7 +711,7 @@ Portable Contacts test client at plaxo \url{http://www.plaxo.com/pdata/testClien
 
 \end{description}
 
-** \subsection{out of scope}
+** out of scope
 \begin{description}[\breaklabel\setleftmargin{1ex}]
 
   % LDIF for person info
@@ -723,7 +753,7 @@ Portable Contacts test client at plaxo \url{http://www.plaxo.com/pdata/testClien
 
 \end{description}
 
-* \section{People, Groups and Organizations}
+* People, Groups and Organizations
 % http://lists.w3.org/Archives/Public/public-device-apis/ - Contacts API
 % 
 % https://www.ietf.org/mailman/listinfo/calsify
@@ -795,7 +825,7 @@ Portable Contacts test client at plaxo \url{http://www.plaxo.com/pdata/testClien
 % http://notizblog.org/2011/11/17/the-long-term-failure-of-openweb/
 \end{description}
 
-* \section{Implementations}
+* Implementations
 
 % http://wiki.portablecontacts.net/w/page/17776143/Software%20and%20Services%20using%20Portable%20Contacts
 % http://docs.opensocial.org/display/OSD/List+of+OpenSocial+Containers
@@ -813,7 +843,7 @@ Portable Contacts test client at plaxo \url{http://www.plaxo.com/pdata/testClien
 % Open Core: http://en.wikipedia.org/wiki/Open_core
 % http://en.wikipedia.org/wiki/Groupware
 
-** \subsection{Servers}
+** Servers
 \begin{description}[\breaklabel\setleftmargin{1ex}]
 
   \item[Bedeworks]
@@ -891,7 +921,7 @@ Portable Contacts test client at plaxo \url{http://www.plaxo.com/pdata/testClien
     
 \end{description}
 
-** \subsection{Clients}
+** Clients
 
 \begin{description}[\breaklabel\setleftmargin{1ex}]
 
@@ -919,9 +949,7 @@ Portable Contacts test client at plaxo \url{http://www.plaxo.com/pdata/testClien
 \subsection{Web Services}
 % Google Calendar http://code.google.com/apis/calendar/caldav/
 
-** \subsection{Others}
-
-* \section{Links}
+* Links
 
 \begin{itemize}
 \item \url{http://thesocialweb.tv}
@@ -958,7 +986,7 @@ IANA link relations registry \url{http://www.iana.org/assignments/link-relations
  - http://dannyayers.com/2012/02/11/RDF-Hypermedia-is-Art
  - 
 
-** \subsection{ATOM}
+** ATOM
 ATOM landscape overview \url{http://dret.typepad.com/dretblog/atom-landscape.html}
 WebDAV vs. ATOM:
 \url{http://intertwingly.net/wiki/pie/WebDav}
@@ -967,7 +995,7 @@ google webdav atom
 Why didn't ATOM succeed (more)? \citeurl{http://bitworking.org/news/425/atompub-is-a-failure}{2012-01-06}
 % http://swordapp.org/
 
-** \subsection{XML and JSON}
+** XML and JSON
 
 \begin{itemize}
 \item \url{http://blog.jclark.com/}
@@ -979,7 +1007,7 @@ Why didn't ATOM succeed (more)? \citeurl{http://bitworking.org/news/425/atompub-
 \item \url{http://jsonml.org/}
 \end{itemize}
 
-** \subsection{Apache Shindig}
+** Apache Shindig
 RPC vs. REST API for Shindig/OpenSocial: \url{http://groups.google.com/group/opensocial-and-gadgets-spec/browse_thread/thread/a4ddf7cd09f90237/5cfa1658e1c1d698?lnk=gst&q=rest#5cfa1658e1c1d698}, \url{http://groups.google.com/group/opensocial-and-gadgets-spec/browse_thread/thread/d1a5627fb6e686ce/d27d47dee92a87b2} One argument was support for batching. A restful batching proposal didn't get consensus: \url{https://docs.google.com/View?docid=dc43mmng_23fdbpp7hd&pli=1}
 
 Flow of REST requests in Shindig \url{https://sites.google.com/site/opensocialarticles/Home/shindig-rest-java}
@@ -998,7 +1026,7 @@ OpenSocial Development Environment (OSDE, Eclipse Plugin)  \url{https://sites.go
 
 \url{https://cwiki.apache.org/confluence/display/SHINDIG/Providing+your+own+data+service+implementation}
 
-** \subsection{Socialsite}
+** Socialsite
 
 Oracle's (former Sun's) extension to Apache Shindig. Blog \url{http://blogs.oracle.com/socialsite}
 
