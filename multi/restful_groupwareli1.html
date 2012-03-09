@@ -7,7 +7,7 @@
 <meta name="originator" content="TeX4ht (http://www.cse.ohio-state.edu/~gurari/TeX4ht/)"> 
 <!-- html,2 --> 
 <meta name="src" content="restful_groupware.tex"> 
-<meta name="date" content="2012-03-07 17:12:00"> 
+<meta name="date" content="2012-03-09 14:14:00"> 
 <link rel="stylesheet" type="text/css" href="restful_groupware.css"> 
 </head><body 
 >
@@ -24,22 +24,12 @@ href="restful_groupwarese1.html#x3-20001">Introduction</a></span>
 href="restful_groupwarese1.html#x3-30001">Definitions</a></span>
 <br />    &#x00A0;<span class="subsectionToc" >1.2 <a 
 href="restful_groupwarese1.html#x3-40002">Related work</a></span>
-<br />    &#x00A0;&#x00A0;<span class="subsubsectionToc" >1.2.1 <a 
-href="restful_groupwarese1.html#x3-50001" id="QQ2-3-5">WebDAV, CalDAV, CardDAV</a></span>
-<br />    &#x00A0;&#x00A0;<span class="subsubsectionToc" >1.2.2 <a 
-href="restful_groupwarese1.html#x3-60002" id="QQ2-3-6">IMAP used by Kolab</a></span>
-<br />    &#x00A0;&#x00A0;<span class="subsubsectionToc" >1.2.3 <a 
-href="restful_groupwarese1.html#x3-70003" id="QQ2-3-7">OpenSocial</a></span>
-<br />    &#x00A0;&#x00A0;<span class="subsubsectionToc" >1.2.4 <a 
-href="restful_groupwarese1.html#x3-80004" id="QQ2-3-10">Others</a></span>
 <br />    <span class="sectionToc" >2 <a 
 href="restful_groupwarese2.html#x20-90002">Requirements</a></span>
 <br />    &#x00A0;<span class="subsectionToc" >2.1 <a 
 href="restful_groupwarese2.html#x20-100001">Scope and General Requirements</a></span>
 <br />    &#x00A0;<span class="subsectionToc" >2.2 <a 
 href="restful_groupwarese2.html#x20-110002">Replacement for CardDAV</a></span>
-                                                                                         
-                                                                                         
 <br />    &#x00A0;<span class="subsectionToc" >2.3 <a 
 href="restful_groupwarese2.html#x20-120003">REST architectural style</a></span>
 <br />    &#x00A0;<span class="subsectionToc" >2.4 <a 
@@ -49,73 +39,43 @@ href="restful_groupwarese2.html#x20-140005">Data Characteristics</a></span>
 <br />    &#x00A0;<span class="subsectionToc" >2.6 <a 
 href="restful_groupwarese2.html#x20-150006">Operation Environment</a></span>
 <br />    &#x00A0;<span class="subsectionToc" >2.7 <a 
-href="restful_groupwarese2.html#x20-160007">Design and Implementation Constraints</a></span>
+href="restful_groupwarese2.html#x20-160007">Nested and mixed collections</a></span>
 <br />    &#x00A0;<span class="subsectionToc" >2.8 <a 
-href="restful_groupwarese2.html#x20-170008">Specific Requirements</a></span>
-<br />    &#x00A0;<span class="subsectionToc" >2.9 <a 
-href="restful_groupwarese2.html#x20-180009">Excluded requirements</a></span>
+href="restful_groupwarese2.html#x20-170008">Excluded requirements</a></span>
 <br />    <span class="sectionToc" >3 <a 
-href="restful_groupwarese3.html#x29-190003">Media Types</a></span>
+href="restful_groupwarese3.html#x29-260003">Media Types</a></span>
+                                                                                         
+                                                                                         
 <br />    &#x00A0;<span class="subsectionToc" >3.1 <a 
-href="restful_groupwarese3.html#x29-200001">Syntax vs. Semantic (Vocabulary)</a></span>
-<br />    &#x00A0;&#x00A0;<span class="subsubsectionToc" >3.1.1 <a 
-href="restful_groupwarese3.html#x29-210001" id="QQ2-29-24">XML vs. JSON</a></span>
+href="restful_groupwarese3.html#x29-270001">Syntax vs. Semantic (Vocabulary)</a></span>
 <br />    &#x00A0;<span class="subsectionToc" >3.2 <a 
-href="restful_groupwarese3.html#x29-220002">vCard, iCalendar, xCard and xCal</a></span>
+href="restful_groupwarese3.html#x29-290002">vCard, iCalendar, xCard and xCal</a></span>
 <br />    &#x00A0;<span class="subsectionToc" >3.3 <a 
-href="restful_groupwarese3.html#x29-230003">Derived JSON formats for PIM data</a></span>
+href="restful_groupwarese3.html#x29-300003">Derived JSON formats for PIM data</a></span>
 <br />    &#x00A0;<span class="subsectionToc" >3.4 <a 
-href="restful_groupwarese3.html#x29-240004">Microformats, Microdata, RDFa</a></span>
-<br />    &#x00A0;&#x00A0;<span class="subsubsectionToc" >3.4.1 <a 
-href="restful_groupwarese3.html#x29-250001" id="QQ2-29-30">Use Cases</a></span>
-<br />    &#x00A0;&#x00A0;<span class="subsubsectionToc" >3.4.2 <a 
-href="restful_groupwarese3.html#x29-260002" id="QQ2-29-32">Format selection</a></span>
+href="restful_groupwarese3.html#x29-310004">Microformats, Microdata, RDFa</a></span>
 <br />    &#x00A0;<span class="subsectionToc" >3.5 <a 
-href="restful_groupwarese3.html#x29-270005">HTML Forms</a></span>
+href="restful_groupwarese3.html#x29-340005">HTML Forms</a></span>
 <br />    &#x00A0;<span class="subsectionToc" >3.6 <a 
-href="restful_groupwarese3.html#x29-280006">Media Types for Collections</a></span>
+href="restful_groupwarese3.html#x29-350006">Media Types for Collections</a></span>
 <br />    &#x00A0;<span class="subsectionToc" >3.7 <a 
-href="restful_groupwarese3.html#x29-290007">Media Type conversion and non-isomorphism</a></span>
+href="restful_groupwarese3.html#x29-360007">Media Type conversion and non-isomorphism</a></span>
 <br />    <span class="sectionToc" >4 <a 
-href="restful_groupwarese4.html#x44-300004">Design</a></span>
+href="restful_groupwarese4.html#x43-370004">Design</a></span>
 <br />    &#x00A0;<span class="subsectionToc" >4.1 <a 
-href="restful_groupwarese4.html#x44-310001">Overview</a></span>
+href="restful_groupwarese4.html#x43-380001">Overview</a></span>
 <br />    &#x00A0;<span class="subsectionToc" >4.2 <a 
-href="restful_groupwarese4.html#x44-320002">Reusable Patterns and Components</a></span>
+href="restful_groupwarese4.html#x43-390002">Reusable Patterns and Components</a></span>
 <br />    &#x00A0;<span class="subsectionToc" >4.3 <a 
-href="restful_groupwarese4.html#x44-330003">Interactions</a></span>
-<br />    &#x00A0;&#x00A0;<span class="subsubsectionToc" >4.3.1 <a 
-href="restful_groupwarese4.html#x44-340001" id="QQ2-44-40">Discovery of Collections</a></span>
-<br />    &#x00A0;&#x00A0;<span class="subsubsectionToc" >4.3.2 <a 
-href="restful_groupwarese4.html#x44-350002" id="QQ2-44-42">personalized Service Documents</a></span>
-<br />    &#x00A0;&#x00A0;<span class="subsubsectionToc" >4.3.3 <a 
-href="restful_groupwarese4.html#x44-360003" id="QQ2-44-43">Atom Publishing Protocol</a></span>
-<br />    &#x00A0;&#x00A0;<span class="subsubsectionToc" >4.3.4 <a 
-href="restful_groupwarese4.html#x44-370004" id="QQ2-44-44">Synchronizing Collections</a></span>
-<br />    &#x00A0;&#x00A0;<span class="subsubsectionToc" >4.3.5 <a 
-href="restful_groupwarese4.html#x44-380005" id="QQ2-44-45">Media Entries and the content tag</a></span>
-<br />    &#x00A0;&#x00A0;<span class="subsubsectionToc" >4.3.6 <a 
-href="restful_groupwarese4.html#x44-390006" id="QQ2-44-46">Modifying Resources</a></span>
-<br />    &#x00A0;&#x00A0;<span class="subsubsectionToc" >4.3.7 <a 
-href="restful_groupwarese4.html#x44-400007" id="QQ2-44-47">Special Reports, Queries, Search</a></span>
+href="restful_groupwarese4.html#x43-400003">Interactions</a></span>
 <br />    &#x00A0;<span class="subsectionToc" >4.4 <a 
-href="restful_groupwarese4.html#x44-410004">Components</a></span>
-<br />    &#x00A0;&#x00A0;<span class="subsubsectionToc" >4.4.1 <a 
-href="restful_groupwarese4.html#x44-420001" id="QQ2-44-49">Dispatcher</a></span>
-<br />    &#x00A0;&#x00A0;<span class="subsubsectionToc" >4.4.2 <a 
-href="restful_groupwarese4.html#x44-430002" id="QQ2-44-51">Resource Facades</a></span>
+href="restful_groupwarese4.html#x43-490004">Components</a></span>
 <br />    &#x00A0;<span class="subsectionToc" >4.5 <a 
-href="restful_groupwarese4.html#x44-440005">Producing Semantically annotated HTML</a></span>
-<br />    &#x00A0;&#x00A0;<span class="subsubsectionToc" >4.5.1 <a 
-href="restful_groupwarese4.html#x44-450001" id="QQ2-44-58">Other components</a></span>
-<br />    &#x00A0;<span class="subsectionToc" >4.6 <a 
-href="restful_groupwarese4.html#x44-460006">Detailed Design Considerations</a></span>
-<br />    &#x00A0;<span class="subsectionToc" >4.7 <a 
-href="restful_groupwarese4.html#x44-470007">Client Design</a></span>
+href="restful_groupwarese4.html#x43-520005">Producing Semantically annotated HTML</a></span>
 <br />    <span class="sectionToc" >5 <a 
-href="restful_groupwarese5.html#x67-480005">Summary and Conclusions</a></span>
+href="restful_groupwarese5.html#x72-540005">Summary and Conclusions</a></span>
 <br />    <span class="sectionToc" ><a 
-href="restful_groupwareli2.html#Q1-68-67">References</a></span>
+href="restful_groupwareli2.html#Q1-73-74">References</a></span>
     </div> <div 
 class="abstract" 
 >

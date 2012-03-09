@@ -7,217 +7,201 @@
 <meta name="originator" content="TeX4ht (http://www.cse.ohio-state.edu/~gurari/TeX4ht/)"> 
 <!-- html,2 --> 
 <meta name="src" content="restful_groupware.tex"> 
-<meta name="date" content="2012-03-07 17:12:00"> 
+<meta name="date" content="2012-03-09 14:14:00"> 
 <link rel="stylesheet" type="text/css" href="restful_groupware.css"> 
 </head><body 
 >
-    <!--l. 717--><div class="crosslinks"><p class="noindent">[<a 
+    <!--l. 726--><div class="crosslinks"><p class="noindent">[<a 
 href="restful_groupwarese2.html" >prev</a>] [<a 
 href="restful_groupwarese2.html#tailrestful_groupwarese2.html" >prev-tail</a>] [<a 
 href="#tailrestful_groupwarese3.html">tail</a>] [<a 
 href="restful_groupware.html# " >up</a>] </p></div>
 <h3 class="sectionHead"><span class="titlemark">3  </span> <a 
- id="x29-190003"></a>Media Types</h3>
+ id="x29-260003"></a>Media Types</h3>
       <div class="quote">
-      <!--l. 727--><p class="noindent" >To some extent, people get REST wrong because I failed to include enough detail
-      on media type design within my dissertation.&#x00A0;&#8211;&#x00A0;Roy T. Fielding</div>
-<!--l. 730--><p class="noindent" >from: Rest APIs must be hypertext driven<span class="footnote-mark"><a 
-href="restful_groupware30.html#fn25x0"><sup class="textsuperscript">25</sup></a></span><a 
- id="x29-19001f25"></a> 
-<!--l. 733--><p class="indent" >    <span class="cite">[<a 
-href="restful_groupwareli2.html#XPautasso:2008:RWS:1367497.1367606">PZL08</a>, sec. 7.2]</span> identifies the support of different media types as an issue that &#8221;can
-complicate and hinder the interoperability&#8221; and &#8221;requires more maintenance effort&#8221;.
-<!--l. 735--><p class="indent" >    <span class="cite">[<a 
+      <!--l. 736--><p class="noindent" >To some extent, people get REST wrong because I failed to include enough detail
+      on media type design within my dissertation.&#x00A0;&#8211;&#x00A0;Roy T. Fielding, <span class="cite">[<a 
+href="restful_groupwareli2.html#XFielding2008">Fie08</a>]</span></div>
+<!--l. 740--><p class="noindent" ><span class="cite">[<a 
+href="restful_groupwareli2.html#XPautasso:2008:RWS:1367497.1367606">PZL08</a>, sec. 7.2]</span> identifies the support of different media types as an issue that &#8221;can complicate
+and hinder the interoperability&#8221; and &#8221;requires more maintenance effort&#8221;.
+<!--l. 742--><p class="indent" >    <span class="cite">[<a 
 href="restful_groupwareli2.html#XDavis:2011:XTR:1967428.1967437">DM11</a>]</span> proposes a XML based REST framework that uses XForms, XQuery, XProc, XSLT
 and an XML database. It can benefit from the constraint that it only supports XML based media
 types. It is to be seen, which ideas from this work could be reused in the case of a broader variety
 of supported media types.
 <a 
- id="x29-19002r21"></a>
+ id="x29-26001r20"></a>
 <h4 class="subsectionHead"><span class="titlemark">3.1  </span> <a 
- id="x29-200001"></a>Syntax vs. Semantic (Vocabulary)</h4>
-<!--l. 739--><p class="noindent" >The usage of standardized media types is one key difference between an API and a
-restful API<span class="cite">[<a 
+ id="x29-270001"></a>Syntax vs. Semantic (Vocabulary)</h4>
+<!--l. 746--><p class="noindent" >The use of standardized media types is one key difference between an API and
+a restful API<span class="cite">[<a 
 href="restful_groupwareli2.html#XFielding2000">Fie00</a>, sec. 5.2.1.2]</span>. Only if the client has knowledge about the media
 type can it do something meaningful with it besides just receiving it. In that sense,
 the often used mime types application/xml or application/json are not really media
 types. They don&#8217;t tell the browser or user anything meaningful beside the <span 
 class="cmti-12">syntax </span>of the
 data.<span class="footnote-mark"><a 
-href="restful_groupware31.html#fn26x0"><sup class="textsuperscript">26</sup></a></span><a 
- id="x29-20001f26"></a> 
-<!--l. 749--><p class="indent" >    To do anything meaningful with plain json or xml, the client programmer must normally look
+href="restful_groupware30.html#fn25x0"><sup class="textsuperscript">25</sup></a></span><a 
+ id="x29-27001f25"></a> 
+<!--l. 756--><p class="indent" >    To do anything meaningful with plain json or xml, the client programmer must normally look
 up the meaning or <span 
 class="cmti-12">semantic </span>of the data in the API documentation. The data therefor fails the
 self-descriptive constraint of REST.
-<!--l. 754--><p class="indent" >    Compare this with a mime type like <span 
+<!--l. 761--><p class="indent" >    Compare this with a mime type like <span 
 class="cmtt-12">application/atom+xml</span>. It specifies the syntax (xml) and
 the semantic (atom) of the data. Of course somebody once needed to read the atom
 specification and program the client with the knowledge of how to process this media
 type. The purpose of standardized media types however is that their number is limited
 enough so that there is a fair chance that a client might have implemented a given media
 type.
-<!--l. 761--><p class="indent" >    Large sites like Google, Facebook or Twitter have the market power to attract developers to
+<!--l. 768--><p class="indent" >    Large sites like Google, Facebook or Twitter have the market power to attract developers to
 read their specifications and program clients accordingly. They thus don&#8217;t necessary need to rely on
 standardized media types. REST however envisions a decentralized web in which parties can
 interact without previous knowledge of each other. This becomes possible through the usage of well
 known predefined media types.
 <a 
- id="x29-20002r10"></a>
+ id="x29-27002r28"></a>
 <h5 class="subsubsectionHead"><span class="titlemark">3.1.1  </span> <a 
- id="x29-210001"></a>XML vs. JSON</h5>
-<!--l. 780--><p class="noindent" >This section investigates the two most common syntaxes used by media types and the issues that
+ id="x29-280001"></a>XML vs. JSON</h5>
+<!--l. 787--><p class="noindent" >This section investigates the two most common syntaxes used by media types and the issues that
 arise if an application needs to support both of them.
-<!--l. 783--><p class="indent" >    The application section of the IANA mime type registration has 294 entries ending in &#8220;+xml&#8221; and only 3
+<!--l. 790--><p class="indent" >    The application section of the IANA mime type registration has 294 entries ending in &#8220;+xml&#8221; and only 3
 ending in &#8220;+json&#8221;.<span class="footnote-mark"><a 
-href="restful_groupware32.html#fn27x0"><sup class="textsuperscript">27</sup></a></span><a 
- id="x29-21001f27"></a> 
-                                                                                         
-                                                                                         
+href="restful_groupware31.html#fn26x0"><sup class="textsuperscript">26</sup></a></span><a 
+ id="x29-28001f26"></a> 
 This stands in contrast to the rise of public JSON APIs and the decline of XML
+                                                                                         
+                                                                                         
 APIs.<span class="footnote-mark"><a 
-href="restful_groupware33.html#fn28x0"><sup class="textsuperscript">28</sup></a></span><a 
- id="x29-21002f28"></a> 
-<!--l. 792--><p class="indent" >    A strong argument for JSON as the preferred format for public APIs may
+href="restful_groupware32.html#fn27x0"><sup class="textsuperscript">27</sup></a></span><a 
+ id="x29-28002f27"></a> 
+<!--l. 799--><p class="indent" >    A strong argument for JSON as the preferred format for public APIs may
 be that JSON is a subset of JavaScript and thus easily consumable in a web
 browser.<span class="footnote-mark"><a 
-href="restful_groupware34.html#fn29x0"><sup class="textsuperscript">29</sup></a></span><a 
- id="x29-21003f29"></a> 
-<!--l. 798--><p class="indent" >    A drawback of this mismatch between the preference of media type designers and
+href="restful_groupware33.html#fn28x0"><sup class="textsuperscript">28</sup></a></span><a 
+ id="x29-28003f28"></a> 
+<!--l. 805--><p class="indent" >    A drawback of this mismatch between the preference of media type designers and
 API consumers is a possible duplication of work and incompatibilities across different
 APIs. An author that wants to offer a public API as JSON is likely to find only an
 existing XML media type, but no one in JSON. The situation would be eased, if a
 standard mapping from XML schemes to JSON would be possible, but that is not the
 case.
-<!--l. 805--><p class="indent" >    Instead, possible mappings have to trade of the preservation of all structural information
+<!--l. 812--><p class="indent" >    Instead, possible mappings have to trade of the preservation of all structural information
 against the &#8220;friendliness&#8221; of the resulting JSON structure<span class="cite">[<a 
 href="restful_groupwareli2.html#XBoyer2011">BGM<sup><span 
 class="cmr-8">+</span></sup>11</a>]</span>. Without going into detail, a
 JSON structure can be seen as friendly if it makes best use of JSON&#8217;s data types, is compact and
 easy to process. <a 
-href="#x29-21004r1">Listing&#x00A0;1<!--tex4ht:ref: sec:opensocial --></a> shows two different examples how to map data from XML to JSON with
+href="#x29-28004r1">Listing&#x00A0;1<!--tex4ht:ref: sec:opensocial --></a> shows two different examples how to map data from XML to JSON with
 one of them using JSON number values, being more compact and probably easier to
 process.
     <table class="multicols" id="multicols-1"><tr><td class="multicol-1">
-    <!--l. 814-->
+    <!--l. 821-->
 <a 
- id="x29-21005"></a>
+ id="x29-28005"></a>
 <br /> <div class="caption" 
 ><span class="id">Listing&#x00A0;1: </span><span  
-class="content">XML fragment</span></div><!--tex4ht:label?: x29-21004r --><div class="lstlisting" id="listing-1"><span class="label"><a 
- id="x29-21006r1"></a></span><span 
+class="content">XML fragment</span></div><!--tex4ht:label?: x29-28004r --><div class="lstlisting" id="listing-1"><span class="label"><a 
+ id="x29-28006r1"></a></span><span 
 class="cmmi-12">&#x003C;</span>lang&#x00A0;pref=&#8221;1&#8221;&#x00A0;<br /><span class="label"><a 
- id="x29-21007r2"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;id=&#8221;fr&#8221;&#x00A0;/<span 
+ id="x29-28007r2"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;id=&#8221;fr&#8221;&#x00A0;/<span 
 class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
- id="x29-21008r3"></a></span><span 
+ id="x29-28008r3"></a></span><span 
 class="cmmi-12">&#x003C;</span>lang&#x00A0;pref=&#8221;3&#8221;&#x00A0;<br /><span class="label"><a 
- id="x29-21009r4"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;id=&#8221;en&#8221;&#x00A0;/<span 
+ id="x29-28009r4"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;id=&#8221;en&#8221;&#x00A0;/<span 
 class="cmmi-12">&#x003E;</span>
     
     </div>
-    </td><td class="multicol-2"><!--l. 823-->
+    </td><td class="multicol-2"><!--l. 830-->
 <br /> <div class="caption" 
 ><span class="id">: </span><span  
-class="content">unfriendly JSON</span></div><!--tex4ht:label?: x29-21000 --><div class="lstlisting" id="listing-2"><span class="label"><a 
- id="x29-21010r1"></a></span>&#8221;languages&#8221;:&#x00A0;[&#x00A0;<br /><span class="label"><a 
- id="x29-21011r2"></a></span>&#x00A0;&#x00A0;<span 
+class="content">unfriendly JSON</span></div><!--tex4ht:label?: x29-28000 --><div class="lstlisting" id="listing-2"><span class="label"><a 
+ id="x29-28010r1"></a></span>&#8221;languages&#8221;:&#x00A0;[&#x00A0;<br /><span class="label"><a 
+ id="x29-28011r2"></a></span>&#x00A0;&#x00A0;<span 
 class="cmsy-10x-x-120">{</span>&#x00A0;&#8221;id&#8221;:&#8221;fr&#8221;,&#x00A0;<br /><span class="label"><a 
- id="x29-21012r3"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#8221;pref&#8221;:&#8221;1&#8221;&#x00A0;<span 
+ id="x29-28012r3"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#8221;pref&#8221;:&#8221;1&#8221;&#x00A0;<span 
 class="cmsy-10x-x-120">}</span>,&#x00A0;<br /><span class="label"><a 
- id="x29-21013r4"></a></span>&#x00A0;&#x00A0;<span 
+ id="x29-28013r4"></a></span>&#x00A0;&#x00A0;<span 
 class="cmsy-10x-x-120">{</span>&#x00A0;&#8221;id&#8221;:&#8221;en&#8221;,&#x00A0;<br /><span class="label"><a 
- id="x29-21014r5"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#8221;pref&#8221;:&#8221;3&#8221;&#x00A0;<span 
+ id="x29-28014r5"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#8221;pref&#8221;:&#8221;3&#8221;&#x00A0;<span 
 class="cmsy-10x-x-120">}</span>&#x00A0;<br /><span class="label"><a 
- id="x29-21015r6"></a></span>]
+ id="x29-28015r6"></a></span>]
     
     </div>
-    </td><td class="multicol-3"><!--l. 834-->
+    </td><td class="multicol-3"><!--l. 841-->
 <br /> <div class="caption" 
 ><span class="id">: </span><span  
-class="content">friendly JSON</span></div><!--tex4ht:label?: x29-21000 --><div class="lstlisting" id="listing-3"><span class="label"><a 
- id="x29-21016r1"></a></span>&#8221;languages&#8221;:&#x00A0;<span 
+class="content">friendly JSON</span></div><!--tex4ht:label?: x29-28000 --><div class="lstlisting" id="listing-3"><span class="label"><a 
+ id="x29-28016r1"></a></span>&#8221;languages&#8221;:&#x00A0;<span 
 class="cmsy-10x-x-120">{</span>&#x00A0;<br /><span class="label"><a 
- id="x29-21017r2"></a></span>&#x00A0;&#x00A0;&#8221;fr&#8221;:1,&#x00A0;<br /><span class="label"><a 
- id="x29-21018r3"></a></span>&#x00A0;&#x00A0;&#8221;en&#8221;:3&#x00A0;<br /><span class="label"><a 
- id="x29-21019r4"></a></span><span 
+ id="x29-28017r2"></a></span>&#x00A0;&#x00A0;&#8221;fr&#8221;:1,&#x00A0;<br /><span class="label"><a 
+ id="x29-28018r3"></a></span>&#x00A0;&#x00A0;&#8221;en&#8221;:3&#x00A0;<br /><span class="label"><a 
+ id="x29-28019r4"></a></span><span 
 class="cmsy-10x-x-120">}</span>
     
     </div>
     </td></tr></table>
-<!--l. 844--><p class="indent" >    Activity Streams has avoided the misalignment of an official XML format and an
+<!--l. 851--><p class="indent" >    Activity Streams has avoided the misalignment of an official XML format and an
 unofficial JSON deviate by defining an XML (ATOM) and JSON format from the
 beginning.<span class="footnote-mark"><a 
-href="restful_groupware35.html#fn30x0"><sup class="textsuperscript">30</sup></a></span><a 
- id="x29-21020f30"></a> 
+href="restful_groupware34.html#fn29x0"><sup class="textsuperscript">29</sup></a></span><a 
+ id="x29-28020f29"></a> 
 <a 
- id="x29-21021r23"></a>
+ id="x29-28021r30"></a>
 <h4 class="subsectionHead"><span class="titlemark">3.2  </span> <a 
- id="x29-220002"></a>vCard, iCalendar, xCard and xCal</h4>
-<!--l. 851--><p class="noindent" >The vCard and iCalendar media types seem a bit archaic in today&#8217;s terms, since they&#8217;re not based
+ id="x29-290002"></a>vCard, iCalendar, xCard and xCal</h4>
+<!--l. 858--><p class="noindent" >The vCard and iCalendar media types seem a bit archaic in today&#8217;s terms, since they&#8217;re not based
 on XML or JSON but on the older Internet Message Format<span class="cite">[<a 
 href="restful_groupwareli2.html#XRFC5322">Res08</a>]</span> (IMF) first defined in RFC822
 in 1982. Version 3 of vCard was published in 1998<span class="cite">[<a 
 href="restful_groupwareli2.html#XRFC2425">HSD98</a>]</span> only a few months after the W3C
 published Version 1.0 of XML<span class="cite">[<a 
 href="restful_groupwareli2.html#XPaoli:98:XR">PSMB98</a>]</span> and eight years before JSON became an official
-                                                                                         
-                                                                                         
 standard<span class="cite">[<a 
 href="restful_groupwareli2.html#XRFC4627">Cro06</a>]</span>.
-<!--l. 858--><p class="indent" >    Thus vCard and iCalendar look a lot like email or HTTP headers. Fortunately, the
+                                                                                         
+                                                                                         
+<!--l. 865--><p class="indent" >    Thus vCard and iCalendar look a lot like email or HTTP headers. Fortunately, the
 xCard<span class="cite">[<a 
 href="restful_groupwareli2.html#XRFC6351">Per11</a>]</span> and xCal<span class="cite">[<a 
 href="restful_groupwareli2.html#XRFC6321">DDL11</a>]</span> standards are now available as alternative serializations,
 so that XML tooling can be used. The standards aim for full compatibility between
 the XML and IMF formats so that no information is lost when converting in either
 direction.
-<!--l. 864--><p class="indent" >    <hr class="figure"><div class="figure" 
->
-                                                                                         
-                                                                                         
-<a 
- id="x29-220011"></a>
-                                                                                         
-                                                                                         
-<!--l. 886--><p class="noindent" ><object data="restful_groupware-1.svg" width="448.43246 " height="301.17535 " type="image/svg+xml"><p>SVG-Viewer needed.</p></object>
-<br /> <div class="caption" 
-><span class="id">Figure&#x00A0;1: </span><span  
-class="content">Hypermedia support in xCard and xCal</span></div><!--tex4ht:label?: x29-220011 -->
-                                                                                         
-                                                                                         
-<!--l. 888--><p class="indent" >    </div><hr class="endfigure">
-<!--l. 890--><p class="indent" >    The iCalendar standard defines several properties that can link to external representations of
+<!--l. 871--><p class="indent" >    The iCalendar standard defines several properties that can link to external representations of
 the properties value by specifying an &#8220;Alternate Text Representation&#8221; parameter. These are
 comment, summary, description, contact, location, resources. The properties attendee and
 organizer can have a &#8220;Directory Entry Reference&#8221; parameter that should contain an URI to a
 person resource. One property that can not be dereferenced is &#8220;Related To&#8221;: It only contains the
 globally unique identifier of another calendar component.
-<!--l. 898--><p class="indent" >    One problem that arises with the use of hyperlinks in personal information management is
+<!--l. 879--><p class="indent" >    One problem that arises with the use of hyperlinks in personal information management is
 identification across administrative boundaries. Take for example an event that gets sent from one
 organization to another and contains hyperlinks to person representations. These hyperlinks most
 likely point to an internal addressbook of the organization and may not be accessible by the
 receiver of the event information. The receiver however may have his own addressbook containing
 information about the person.
 <a 
- id="x29-22002r26"></a>
+ id="x29-29001r33"></a>
 <h4 class="subsectionHead"><span class="titlemark">3.3  </span> <a 
- id="x29-230003"></a>Derived JSON formats for PIM data</h4>
-<!--l. 909--><p class="noindent" >TODO Übereinstimmungen und Unterschiede vCard, portable contacts: Which fields of portable
+ id="x29-300003"></a>Derived JSON formats for PIM data</h4>
+<!--l. 890--><p class="noindent" >TODO Übereinstimmungen und Unterschiede vCard, portable contacts: Which fields of portable
 contacts are derived from vCard: <a 
-href="http://wiki.portablecontacts.net/w/page/17776141/schema" class="url" ><tspan font-family="cmtt" font-size="12">http://wiki.portablecontacts.net/w/page/17776141/schema</tspan></a>
-<!--l. 911--><p class="indent" >    Calendar Formate nur kurz
+href="http://wiki.portablecontacts.net/w/page/17776141/schema" class="url" ><span 
+class="cmtt-12">http://wiki.portablecontacts.net/w/page/17776141/schema</span></a>
+<!--l. 892--><p class="indent" >    Calendar Formate nur kurz
 <a 
- id="x29-23001r28"></a>
+ id="x29-30001r34"></a>
 <h4 class="subsectionHead"><span class="titlemark">3.4  </span> <a 
- id="x29-240004"></a>Microformats, Microdata, RDFa</h4>
-<!--l. 917--><p class="noindent" >HTML documents are primarily meant to be rendered by browsers and interpreted by humans. It
+ id="x29-310004"></a>Microformats, Microdata, RDFa</h4>
+<!--l. 898--><p class="noindent" >HTML documents are primarily meant to be rendered by browsers and interpreted by humans. It
 is hard for a machine to interpret the meaning of text and data included in an HTML document.
 To help this, different techniques have evolved to add additional meta data to HTML that allows
 machines to identify structured data in HTML without having an impact on the rendering. The
 most popular ones, Microformats, Microdata and RDFa, are presented and discussed in
 <span class="cite">[<a 
 href="restful_groupwareli2.html#XTennison2012">Ten12</a>]</span>.
-<!--l. 925--><p class="indent" >    There is not yet an established term to refer to the three different formats. Practitioners use
+<!--l. 906--><p class="indent" >    There is not yet an established term to refer to the three different formats. Practitioners use
 &#8220;structured data languages&#8221;<span class="cite">[<a 
 href="restful_groupwareli2.html#XSporny2011">Spo11</a>]</span>, &#8220;machine-readable data format&#8221;<span class="cite">[<a 
 href="restful_groupwareli2.html#XHickson2011">Hic11a</a>]</span>, &#8220;structured data
@@ -228,147 +212,247 @@ href="restful_groupwareli2.html#Xinstance7">RGJ05</a>]</span> to refer to HTML w
 will use the term &#8220;Semantic annotation format&#8221; to refer to Microformats, Microdata, RDFa and
 similar formats.
 <a 
- id="x29-24001r24"></a>
+ id="x29-31001r31"></a>
 <h5 class="subsubsectionHead"><span class="titlemark">3.4.1  </span> <a 
- id="x29-250001"></a>Use Cases</h5>
-<!--l. 936--><p class="noindent" >One major use case for semantic annotations is to help search engines to better index
+ id="x29-320001"></a>Use Cases</h5>
+<!--l. 918--><p class="noindent" >One major use case for semantic annotations is to help search engines to better index
 the annotated site. The Microformats project was started by a blog search engine
 (Technorati)<span class="cite">[<a 
 href="restful_groupwareli2.html#XCelik2006">Çe06</a>]</span> and the recent schema.org effort came from the three big search engines
 Google, Bing and Yahoo.<span class="cite">[<a 
 href="restful_groupwareli2.html#XGoel2011">GG11</a>]</span> Another use case is demonstrated by the Firefox plugin
 &#8220;Operator&#8221;.<span class="footnote-mark"><a 
-href="restful_groupware36.html#fn31x0"><sup class="textsuperscript">31</sup></a></span><a 
- id="x29-25001f31"></a> 
+href="restful_groupware35.html#fn30x0"><sup class="textsuperscript">30</sup></a></span><a 
+ id="x29-32001f30"></a> 
 It allows to extract annotated entities from web pages. A user could thus import contact or
 event data from arbitrary web pages in his personal information manager with one
 click. Semantic annotations can also be used to make web content accessible to disabled
 people<span class="cite">[<a 
 href="restful_groupwareli2.html#XYesilada:2007:EDS:1279700.1279704">YSHG07</a>]</span>.
-<!--l. 947--><p class="indent" >    A third use case is currently under development as part of the European
+<!--l. 929--><p class="indent" >    A third use case is currently under development as part of the European
+                                                                                         
+                                                                                         
 Union Research Project &#8220;Interactive Knowledge Stack&#8221; (IKS) that builds a
 semantic content management stack. The sub-project &#8220;Vienna IKS Editables&#8221;
-                                                                                         
-                                                                                         
 (VIE)<span class="footnote-mark"><a 
-href="restful_groupware37.html#fn32x0"><sup class="textsuperscript">32</sup></a></span><a 
- id="x29-25002f32"></a> 
+href="restful_groupware36.html#fn31x0"><sup class="textsuperscript">31</sup></a></span><a 
+ id="x29-32002f31"></a> 
 uses semantic annotations to make content on a web site editable. It does so by
 searching the HTML document for semantically annotated entities and dynamically
 building editing interfaces for those. A modified entity can then be sent to the
 server via AJAX in a format called &#8220;json-ld&#8221; that serializes semantic data to
 JSON.<span class="footnote-mark"><a 
-href="restful_groupware38.html#fn33x0"><sup class="textsuperscript">33</sup></a></span><a 
- id="x29-25003f33"></a> 
+href="restful_groupware37.html#fn32x0"><sup class="textsuperscript">32</sup></a></span><a 
+ id="x29-32003f32"></a> 
 For a Groupware, this editor could be used to automatically create HTML forms instead of
 creating them on the server site.
                                                                                          
                                                                                          
-<!--l. 962--><p class="indent" >    <a 
- id="x29-2500020"></a><hr class="float"><div class="float" 
+<!--l. 944--><p class="indent" >    <a 
+ id="x29-3200020"></a><hr class="float"><div class="float" 
 >
                                                                                          
                                                                                          
 <a 
- id="x29-25004r2"></a>
+ id="x29-32004r2"></a>
 <a 
- id="x29-25005"></a>
-<!--l. 962--><pre class="listings">&#x00A0;<br /><span class="label"><a 
- id="x29-25006r1"></a></span><!--l. 963--><span class="listings-nested"><tspan font-family="cmmi" font-size="12">&#x003C;</tspan>summary&#x00A0;type=<!--l. 963--><span class="listings-nested">&#8221;html&#8221;</span><tspan font-family="cmmi" font-size="12">&#x003E;</tspan></span>&#x00A0;<br /><span class="label"><a 
- id="x29-25007r2"></a></span><!--l. 964--><span class="listings-nested">&#x00A0;&#x00A0;<tspan font-family="cmmi" font-size="12">&#x003C;</tspan>div&#x00A0;itemscope&#x00A0;itemtype=<!--l. 964--><span class="listings-nested">&#8221;http://schema.org/Person&#8221;</span><tspan font-family="cmmi" font-size="12">&#x003E;</tspan></span>&#x00A0;<br /><span class="label"><a 
- id="x29-25008r3"></a></span><!--l. 965--><span class="listings-nested">&#x00A0;&#x00A0;&#x00A0;&#x00A0;<tspan font-family="cmmi" font-size="12">&#x003C;</tspan>a&#x00A0;itemprop=<!--l. 965--><span class="listings-nested">&#8221;url&#8221;</span>&#x00A0;href=<!--l. 965--><span class="listings-nested">&#8221;www.maxpattern.name&#8221;</span><tspan font-family="cmmi" font-size="12">&#x003E;</tspan></span>&#x00A0;<br /><span class="label"><a 
- id="x29-25009r4"></a></span><!--l. 966--><span class="listings-nested">&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<tspan font-family="cmmi" font-size="12">&#x003C;</tspan>div&#x00A0;itemprop=<!--l. 966--><span class="listings-nested">&#8221;name&#8221;</span><tspan font-family="cmmi" font-size="12">&#x003E;</tspan></span><!--l. 966--><span class="listings-nested"><tspan font-family="cmmi" font-size="12">&#x003C;</tspan>strong<tspan font-family="cmmi" font-size="12">&#x003E;</tspan></span>&#x00A0;<br /><span class="label"><a 
- id="x29-25010r5"></a></span><!--l. 967--><span class="listings-nested">&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<tspan font-family="cmmi" font-size="12">&#x003C;</tspan>span&#x00A0;itemprop=<!--l. 967--><span class="listings-nested">&#8221;givenName&#8221;</span><tspan font-family="cmmi" font-size="12">&#x003E;</tspan></span>Max<!--l. 967--><span class="listings-nested"><tspan font-family="cmmi" font-size="12">&#x003C;</tspan>/span<tspan font-family="cmmi" font-size="12">&#x003E;</tspan></span>&#x00A0;<br /><span class="label"><a 
- id="x29-25011r6"></a></span><!--l. 968--><span class="listings-nested">&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<tspan font-family="cmmi" font-size="12">&#x003C;</tspan>span&#x00A0;itemprop=<!--l. 968--><span class="listings-nested">&#8221;familyName&#8221;</span><tspan font-family="cmmi" font-size="12">&#x003E;</tspan></span>Pattern<!--l. 968--><span class="listings-nested"><tspan font-family="cmmi" font-size="12">&#x003C;</tspan>/span<tspan font-family="cmmi" font-size="12">&#x003E;</tspan></span>&#x00A0;<br /><span class="label"><a 
- id="x29-25012r7"></a></span><!--l. 969--><span class="listings-nested">&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<tspan font-family="cmmi" font-size="12">&#x003C;</tspan>/strong<tspan font-family="cmmi" font-size="12">&#x003E;</tspan></span><!--l. 969--><span class="listings-nested"><tspan font-family="cmmi" font-size="12">&#x003C;</tspan>/div<tspan font-family="cmmi" font-size="12">&#x003E;</tspan></span>&#x00A0;<br /><span class="label"><a 
- id="x29-25013r8"></a></span><!--l. 970--><span class="listings-nested">&#x00A0;&#x00A0;&#x00A0;&#x00A0;<tspan font-family="cmmi" font-size="12">&#x003C;</tspan>/a<tspan font-family="cmmi" font-size="12">&#x003E;</tspan></span>&#x00A0;<br /><span class="label"><a 
- id="x29-25014r9"></a></span><!--l. 971--><span class="listings-nested">&#x00A0;&#x00A0;&#x00A0;&#x00A0;<tspan font-family="cmmi" font-size="12">&#x003C;</tspan>div&#x00A0;itemscope&#x00A0;itemtype=<!--l. 971--><span class="listings-nested">&#8221;http://schema.org/Organization&#8221;</span><tspan font-family="cmmi" font-size="12">&#x003E;</tspan></span>&#x00A0;<br /><span class="label"><a 
- id="x29-25015r10"></a></span><!--l. 972--><span class="listings-nested">&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<tspan font-family="cmmi" font-size="12">&#x003C;</tspan>span&#x00A0;itemprop=<!--l. 972--><span class="listings-nested">&#8221;name&#8221;</span><tspan font-family="cmmi" font-size="12">&#x003E;</tspan></span>Andorian&#x00A0;Mining&#x00A0;Cooperation<!--l. 972--><span class="listings-nested"><tspan font-family="cmmi" font-size="12">&#x003C;</tspan>/span<tspan font-family="cmmi" font-size="12">&#x003E;</tspan></span>&#x00A0;<br /><span class="label"><a 
- id="x29-25016r11"></a></span><!--l. 973--><span class="listings-nested">&#x00A0;&#x00A0;&#x00A0;&#x00A0;<tspan font-family="cmmi" font-size="12">&#x003C;</tspan>/div<tspan font-family="cmmi" font-size="12">&#x003E;</tspan></span>&#x00A0;<br /><span class="label"><a 
- id="x29-25017r12"></a></span><!--l. 974--><span class="listings-nested">&#x00A0;&#x00A0;&#x00A0;&#x00A0;<tspan font-family="cmmi" font-size="12">&#x003C;</tspan>div&#x00A0;itemprop=<!--l. 974--><span class="listings-nested">&#8221;email&#8221;</span><tspan font-family="cmmi" font-size="12">&#x003E;</tspan></span>some@mail.com<!--l. 974--><span class="listings-nested"><tspan font-family="cmmi" font-size="12">&#x003C;</tspan>/div<tspan font-family="cmmi" font-size="12">&#x003E;</tspan></span>&#x00A0;<br /><span class="label"><a 
- id="x29-25018r13"></a></span><!--l. 975--><span class="listings-nested">&#x00A0;&#x00A0;&#x00A0;&#x00A0;<tspan font-family="cmmi" font-size="12">&#x003C;</tspan>div<tspan font-family="cmmi" font-size="12">&#x003E;</tspan></span>&#x00A0;<br /><span class="label"><a 
- id="x29-25019r14"></a></span><!--l. 976--><span class="listings-nested">&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<tspan font-family="cmmi" font-size="12">&#x003C;</tspan>meta&#x00A0;itemprop=<!--l. 976--><span class="listings-nested">&#8221;birthDate&#8221;</span>&#x00A0;content=<!--l. 976--><span class="listings-nested">&#8221;1970<tspan font-family="cmsy" font-size="10">-</tspan>01<tspan font-family="cmsy" font-size="10">-</tspan>02&#8221;</span><tspan font-family="cmmi" font-size="12">&#x003E;</tspan></span>&#x00A0;<br /><span class="label"><a 
- id="x29-25020r15"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;DOB:&#x00A0;01/02/1970&#x00A0;<br /><span class="label"><a 
- id="x29-25021r16"></a></span><!--l. 978--><span class="listings-nested">&#x00A0;&#x00A0;&#x00A0;&#x00A0;<tspan font-family="cmmi" font-size="12">&#x003C;</tspan>/div<tspan font-family="cmmi" font-size="12">&#x003E;</tspan></span>&#x00A0;<br /><span class="label"><a 
- id="x29-25022r17"></a></span><!--l. 979--><span class="listings-nested">&#x00A0;&#x00A0;<tspan font-family="cmmi" font-size="12">&#x003C;</tspan>/div<tspan font-family="cmmi" font-size="12">&#x003E;</tspan></span>&#x00A0;<br /><span class="label"><a 
- id="x29-25023r18"></a></span><!--l. 980--><span class="listings-nested"><tspan font-family="cmmi" font-size="12">&#x003C;</tspan>/summary<tspan font-family="cmmi" font-size="12">&#x003E;</tspan></span>
+ id="x29-32005"></a>
+<!--l. 944--><pre class="listings">&#x00A0;<br /><span class="label"><a 
+ id="x29-32006r1"></a></span><!--l. 945--><span class="listings-nested"><span 
+class="cmmi-12">&#x003C;</span>summary&#x00A0;type=<!--l. 945--><span class="listings-nested">&#8221;html&#8221;</span><span 
+class="cmmi-12">&#x003E;</span></span>&#x00A0;<br /><span class="label"><a 
+ id="x29-32007r2"></a></span><!--l. 946--><span class="listings-nested">&#x00A0;&#x00A0;<span 
+class="cmmi-12">&#x003C;</span>div&#x00A0;itemscope&#x00A0;itemtype=<!--l. 946--><span class="listings-nested">&#8221;http://schema.org/Person&#8221;</span><span 
+class="cmmi-12">&#x003E;</span></span>&#x00A0;<br /><span class="label"><a 
+ id="x29-32008r3"></a></span><!--l. 947--><span class="listings-nested">&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+class="cmmi-12">&#x003C;</span>a&#x00A0;itemprop=<!--l. 947--><span class="listings-nested">&#8221;url&#8221;</span>&#x00A0;href=<!--l. 947--><span class="listings-nested">&#8221;www.maxpattern.name&#8221;</span><span 
+class="cmmi-12">&#x003E;</span></span>&#x00A0;<br /><span class="label"><a 
+ id="x29-32009r4"></a></span><!--l. 948--><span class="listings-nested">&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+class="cmmi-12">&#x003C;</span>div&#x00A0;itemprop=<!--l. 948--><span class="listings-nested">&#8221;name&#8221;</span><span 
+class="cmmi-12">&#x003E;</span></span><!--l. 948--><span class="listings-nested"><span 
+class="cmmi-12">&#x003C;</span>strong<span 
+class="cmmi-12">&#x003E;</span></span>&#x00A0;<br /><span class="label"><a 
+ id="x29-32010r5"></a></span><!--l. 949--><span class="listings-nested">&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+class="cmmi-12">&#x003C;</span>span&#x00A0;itemprop=<!--l. 949--><span class="listings-nested">&#8221;givenName&#8221;</span><span 
+class="cmmi-12">&#x003E;</span></span>Max<!--l. 949--><span class="listings-nested"><span 
+class="cmmi-12">&#x003C;</span>/span<span 
+class="cmmi-12">&#x003E;</span></span>&#x00A0;<br /><span class="label"><a 
+ id="x29-32011r6"></a></span><!--l. 950--><span class="listings-nested">&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+class="cmmi-12">&#x003C;</span>span&#x00A0;itemprop=<!--l. 950--><span class="listings-nested">&#8221;familyName&#8221;</span><span 
+class="cmmi-12">&#x003E;</span></span>Pattern<!--l. 950--><span class="listings-nested"><span 
+class="cmmi-12">&#x003C;</span>/span<span 
+class="cmmi-12">&#x003E;</span></span>&#x00A0;<br /><span class="label"><a 
+ id="x29-32012r7"></a></span><!--l. 951--><span class="listings-nested">&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+class="cmmi-12">&#x003C;</span>/strong<span 
+class="cmmi-12">&#x003E;</span></span><!--l. 951--><span class="listings-nested"><span 
+class="cmmi-12">&#x003C;</span>/div<span 
+class="cmmi-12">&#x003E;</span></span>&#x00A0;<br /><span class="label"><a 
+ id="x29-32013r8"></a></span><!--l. 952--><span class="listings-nested">&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+class="cmmi-12">&#x003C;</span>/a<span 
+class="cmmi-12">&#x003E;</span></span>&#x00A0;<br /><span class="label"><a 
+ id="x29-32014r9"></a></span><!--l. 953--><span class="listings-nested">&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+class="cmmi-12">&#x003C;</span>div&#x00A0;itemscope&#x00A0;itemtype=<!--l. 953--><span class="listings-nested">&#8221;http://schema.org/Organization&#8221;</span><span 
+class="cmmi-12">&#x003E;</span></span>&#x00A0;<br /><span class="label"><a 
+ id="x29-32015r10"></a></span><!--l. 954--><span class="listings-nested">&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+class="cmmi-12">&#x003C;</span>span&#x00A0;itemprop=<!--l. 954--><span class="listings-nested">&#8221;name&#8221;</span><span 
+class="cmmi-12">&#x003E;</span></span>Andorian&#x00A0;Mining&#x00A0;Cooperation<!--l. 954--><span class="listings-nested"><span 
+class="cmmi-12">&#x003C;</span>/span<span 
+class="cmmi-12">&#x003E;</span></span>&#x00A0;<br /><span class="label"><a 
+ id="x29-32016r11"></a></span><!--l. 955--><span class="listings-nested">&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+class="cmmi-12">&#x003C;</span>/div<span 
+class="cmmi-12">&#x003E;</span></span>&#x00A0;<br /><span class="label"><a 
+ id="x29-32017r12"></a></span><!--l. 956--><span class="listings-nested">&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+class="cmmi-12">&#x003C;</span>div&#x00A0;itemprop=<!--l. 956--><span class="listings-nested">&#8221;email&#8221;</span><span 
+class="cmmi-12">&#x003E;</span></span>some@mail.com<!--l. 956--><span class="listings-nested"><span 
+class="cmmi-12">&#x003C;</span>/div<span 
+class="cmmi-12">&#x003E;</span></span>&#x00A0;<br /><span class="label"><a 
+ id="x29-32018r13"></a></span><!--l. 957--><span class="listings-nested">&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+class="cmmi-12">&#x003C;</span>div<span 
+class="cmmi-12">&#x003E;</span></span>&#x00A0;<br /><span class="label"><a 
+ id="x29-32019r14"></a></span><!--l. 958--><span class="listings-nested">&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+class="cmmi-12">&#x003C;</span>meta&#x00A0;itemprop=<!--l. 958--><span class="listings-nested">&#8221;birthDate&#8221;</span>&#x00A0;content=<!--l. 958--><span class="listings-nested">&#8221;1970<span 
+class="cmsy-10x-x-120">-</span>01<span 
+class="cmsy-10x-x-120">-</span>02&#8221;</span><span 
+class="cmmi-12">&#x003E;</span></span>&#x00A0;<br /><span class="label"><a 
+ id="x29-32020r15"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;DOB:&#x00A0;01/02/1970&#x00A0;<br /><span class="label"><a 
+ id="x29-32021r16"></a></span><!--l. 960--><span class="listings-nested">&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+class="cmmi-12">&#x003C;</span>/div<span 
+class="cmmi-12">&#x003E;</span></span>&#x00A0;<br /><span class="label"><a 
+ id="x29-32022r17"></a></span><!--l. 961--><span class="listings-nested">&#x00A0;&#x00A0;<span 
+class="cmmi-12">&#x003C;</span>/div<span 
+class="cmmi-12">&#x003E;</span></span>&#x00A0;<br /><span class="label"><a 
+ id="x29-32023r18"></a></span><!--l. 962--><span class="listings-nested"><span 
+class="cmmi-12">&#x003C;</span>/summary<span 
+class="cmmi-12">&#x003E;</span></span>
 &#x00A0;<br /><span class="label"><a 
- id="x29-25024r19"></a></span></pre>
+ id="x29-32024r19"></a></span></pre>
  <div class="caption" 
 ><span class="id">Listing&#x00A0;2: </span><span  
 class="content">Microdata used in the summary of an ATOM entry summary (markup not
-escaped for clarity)</span></div><!--tex4ht:label?: x29-25000 -->
+escaped for clarity)</span></div><!--tex4ht:label?: x29-32000 -->
                                                                                          
                                                                                          
     </div><hr class="endfloat" />
-<!--l. 983--><p class="indent" >    In the context of this work, semantic annotations could be used inside the <span class="lstinline">summary</span> tag of
+<!--l. 965--><p class="indent" >    In the context of this work, semantic annotations could be used inside the <span class="lstinline">summary</span> tag of
 Atom entries, as shown in listing <a 
-href="#x29-25004r2">2<!--tex4ht:ref: fig:microdata-atom-summary --></a>. A consumer of a feed of contact elements could thus use the
+href="#x29-32004r2">2<!--tex4ht:ref: fig:microdata-atom-summary --></a>. A consumer of a feed of contact elements could thus use the
 data extracted from the annotated summary data to provide a tabular overview of the entries even
 without fetching the associated media resource of the entry, which is especially useful for search
 results as discussed in <a 
-href="restful_groupwarese4.html#x44-400007">Listing&#x00A0;4.3.7<!--tex4ht:ref: fig:microdata-atom-summary --></a>.
+href="restful_groupwarese4.html#x43-480008">Listing&#x00A0;4.3.8<!--tex4ht:ref: fig:microdata-atom-summary --></a>.
 <a 
- id="x29-25025r30"></a>
+ id="x29-32025r36"></a>
 <h5 class="subsubsectionHead"><span class="titlemark">3.4.2  </span> <a 
- id="x29-260002"></a>Format selection</h5>
-<!--l. 993--><p class="noindent" >With at least three different semantic annotation formats, a developer needs to decide which to
+ id="x29-330002"></a>Format selection</h5>
+<!--l. 975--><p class="noindent" >With at least three different semantic annotation formats, a developer needs to decide which to
 implement. It is possible to implement multiple formats in parallel inside the same HTML
 document, but this means more markup and a more complex publishing task<span class="cite">[<a 
 href="restful_groupwareli2.html#XTennison2012">Ten12</a>]</span>. This choice is
 not a choice of different Media Types, but a choice in the scope of the Media Type text/html (or
 application/xhtml+xml).
-<!--l. 1000--><p class="indent" >    A first consideration has to be the ability of expected consumers to handle the format, a
+<!--l. 982--><p class="indent" >    A first consideration has to be the ability of expected consumers to handle the format, a
 second consideration the available tooling to produce a particular format. The different Semantic
 annotation formats impose certain requirements for the used HTML dialect. Microformats can be
 used with all versions of HTML, RDFa with XHTML or HTML5 and Microdata introduces special
 attributes that work only with HTML5<span class="cite">[<a 
 href="restful_groupwareli2.html#XTennison2012">Ten12</a>]</span>.
-<!--l. 1007--><p class="indent" >    Microdata is part of HTML5 and a standard effort of the
+<!--l. 989--><p class="indent" >    Microdata is part of HTML5 and a standard effort of the
 W3C<span class="cite">[<a 
 href="restful_groupwareli2.html#XHickson2011">Hic11a</a>]</span>. It is also backed up by the schema.org effort of Google and
 Microsoft.<span class="footnote-mark"><a 
-href="restful_groupware39.html#fn34x0"><sup class="textsuperscript">34</sup></a></span><a 
- id="x29-26001f34"></a> 
+href="restful_groupware38.html#fn33x0"><sup class="textsuperscript">33</sup></a></span><a 
+ id="x29-33001f33"></a> 
 The schema.org vocabulary in turn has been mapped to the semantic world by researchers working on
 linked data.<span class="footnote-mark"><a 
-href="restful_groupware40.html#fn35x0"><sup class="textsuperscript">35</sup></a></span><a 
- id="x29-26002f35"></a> 
+href="restful_groupware39.html#fn34x0"><sup class="textsuperscript">34</sup></a></span><a 
+ id="x29-33002f34"></a> 
 Thus by using Microdata with the schema.org vocabulary, the data can easily be combined
 with other semantic data. The rest of this work therefor concentrates on Microdata.
 Many good arguments to also consider RDFa can be found in the blog of Manu
 Sporny<span class="footnote-mark"><a 
-href="restful_groupware41.html#fn36x0"><sup class="textsuperscript">36</sup></a></span><a 
- id="x29-26003f36"></a> ,
+href="restful_groupware40.html#fn35x0"><sup class="textsuperscript">35</sup></a></span><a 
+ id="x29-33003f35"></a> ,
 chair of the RDF Web Applications Working Group at the World Wide Web Consortium.
 <a 
- id="x29-26004r29"></a>
+ id="x29-33004r35"></a>
 <h4 class="subsectionHead"><span class="titlemark">3.5  </span> <a 
- id="x29-270005"></a>HTML Forms</h4>
+ id="x29-340005"></a>HTML Forms</h4>
+<!--l. 1008--><p class="noindent" >TODO
+<!--l. 1010--><p class="indent" >    A web based user interface for a Groupware today has many means to provide data editing
+and submission facilities thanks to powerful Javascript libraries like the VIE Editor
+(<a 
+href="#x29-320001">subsubsection&#x00A0;3.4.1<!--tex4ht:ref: fig:microdata-atom-summary --></a>). The traditional, standardized and most compatible way however is the use
+of HTML forms. These however lack a few features that could improve their use for restful
+systems.
+<!--l. 1016--><p class="indent" >    HTML has no means to send an etag when submitting a form and no support for other HTTP
+verbs then GET and POST, most importantly PUT and DELETE. A Discussion to include these
+however seems to be underway<span class="cite">[<a 
+href="restful_groupwareli2.html#XAmundsen2011">Amu11</a>]</span>.
+<!--l. 1020--><p class="indent" >    All forms have the same media type of application/x-www-form-urlencoded, although
+they may represent totally different kind of resources. In practice this is often not a
+problem since the server knows which form to expect and selects its parsing routine
+accordingly.
+<!--l. 1025--><p class="indent" >    In cases, where different forms can be expected to be submitted to the same URI, e.g. to the
+                                                                                         
+                                                                                         
+URI of a collection, the server needs to be informed about the resource type, probably by a hidden
+form input element.
+<!--l. 1029--><p class="indent" >    The manual creation of HTML forms and associated form parsers and validators is involved
+and error prone. Therefor many approaches and implementations exist to automate this task. If a
+machine can work on an existing data model for the resource, then this can be used as basis for the
+automation.
+<!--l. 1034--><p class="indent" >    TODO: Means to automatically build forms from descriptions of the data: &#8220;Dynamic Object
+Model&#8221; (Dirk Riehle) or &#8220;Adaptive Object-Model&#8221; (Yoder, Johnson) implemented e.g. by
+eZPublish, Drupal
+<!--l. 1040--><p class="indent" >    Not yet answered is the question, where or under which condition an HTML form should be
+submitted to the user. It is certainly not desirable to present HTML forms by default in every
+HTML representation of any resource that the user is authorized to modify. And even then,
+there would still not be any mean for the user to reach an HTML form to create a new
+resource.
+<!--l. 1046--><p class="indent" >    The edit case can be solved with the IANA registered &#8220;edit&#8221; link-relation. An HTML page
+representing an editable resource could just use a link element for the purpose of signaling the
+client the location where it can retrieve an editable resource:
+    <!--l. 1051-->
 <a 
- id="x29-27001r33"></a>
+ id="x29-34001"></a>
+    <div class="lstlisting" id="listing-4"><span class="label"><a 
+ id="x29-34002r1"></a></span>&#x00A0;&#x00A0;<span 
+class="cmmi-12">&#x003C;</span>link&#x00A0;rel=&#8221;edit&#8221;&#x00A0;href=&#8221;?edit&#8221;/<span 
+class="cmmi-12">&#x003E;</span>
+    
+    </div>
+<!--l. 1055--><p class="indent" >    Making different representations of one resource available under different URIs is no violation
+of rest principles and even encouraged for similar use cases by <span class="cite">[<a 
+href="restful_groupwareli2.html#XRaman2006">Ram06</a>]</span>.
+<!--l. 1059--><p class="indent" >    Unfortunately no link relation is standardized to retrieve an empty form for the creation
+of a new resource. So for the time being server and client would need to agree on a
+custom link relation for that purpose. The empty form can be regarded as an entity
+of its own, linked from the collection where newly created resources are expected to
+appear.
+<a 
+ id="x29-34003r39"></a>
 <h4 class="subsectionHead"><span class="titlemark">3.6  </span> <a 
- id="x29-280006"></a>Media Types for Collections</h4>
-<!--l. 1032--><p class="noindent" >Vergleich ATOM mit Medientyp Collection+JSON
-<!--l. 1034--><p class="indent" >    JSON formats for collections: Collection+JSON Mime-Type (approved in July 2011) by Mike
+ id="x29-350006"></a>Media Types for Collections</h4>
+<!--l. 1068--><p class="noindent" >TODO: Vergleich ATOM mit Medientyp Collection+JSON
+<!--l. 1070--><p class="indent" >    JSON formats for collections: Collection+JSON Mime-Type (approved in July 2011) by Mike
 Amundsen<span class="footnote-mark"><a 
-href="restful_groupware42.html#fn37x0"><sup class="textsuperscript">37</sup></a></span><a 
- id="x29-28001f37"></a> 
+href="restful_groupware41.html#fn36x0"><sup class="textsuperscript">36</sup></a></span><a 
+ id="x29-35001f36"></a> 
 JSON ATOM serialization implemented by Apache
 Abdera<span class="footnote-mark"><a 
-href="restful_groupware43.html#fn38x0"><sup class="textsuperscript">38</sup></a></span><a 
- id="x29-28002f38"></a> 
-<!--l. 1039--><p class="indent" >    Some problems in loss-less conversion of ATOM to json:<span class="cite">[<a 
+href="restful_groupware42.html#fn37x0"><sup class="textsuperscript">37</sup></a></span><a 
+ id="x29-35002f37"></a> 
+<!--l. 1075--><p class="indent" >    Some problems in loss-less conversion of ATOM to json:<span class="cite">[<a 
 href="restful_groupwareli2.html#XSnell2008">Sne08</a>]</span>
       <ul class="itemize1">
-                                                                                         
-                                                                                         
       <li class="itemize">JSON has no equivalent for the xml:lang attribute.
       </li>
       <li class="itemize">Dereferencable IRIs must be transformed to URIs.
       </li>
       <li class="itemize">URIs relative to an xml:base attribute must be resolved, also inside XHTML content
       elements.
+                                                                                         
+                                                                                         
       </li>
       <li class="itemize">Repeatable elements must be converted to arrays.
       </li>
@@ -379,57 +463,55 @@ href="restful_groupwareli2.html#XSnell2008">Sne08</a>]</span>
       </li>
       <li class="itemize">ATOM supports arbitrary extensions via namespaces.</li></ul>
 <a 
- id="x29-28003r34"></a>
+ id="x29-35003r41"></a>
 <h4 class="subsectionHead"><span class="titlemark">3.7  </span> <a 
- id="x29-290007"></a>Media Type conversion and non-isomorphism</h4>
-<!--l. 1054--><p class="noindent" >Two media types are non isomorphic, if at least one of them can express information
+ id="x29-360007"></a>Media Type conversion and non-isomorphism</h4>
+<!--l. 1090--><p class="noindent" >Two media types are non isomorphic, if at least one of them can express information
 which the other could not express. For example the vcard media type defines many
 property parameters that have no equivalent in portable contacts, like language, altid
 or sort-as. So a conversion of a vcard into portable contacts will most likely lose this
 data.
-<!--l. 1060--><p class="indent" >    This data loss could first be a problem when a client receives a representation. However since
+<!--l. 1096--><p class="indent" >    This data loss could first be a problem when a client receives a representation. However since
 the client negotiated the media type with the server it is most likely that it is satisfied with only
 the data representable in that data type.
-<!--l. 1065--><p class="indent" >    Now if the client uses such a media type in a put request to update a resource, it may not be
+<!--l. 1101--><p class="indent" >    Now if the client uses such a media type in a put request to update a resource, it may not be
 clear how to deal with the information the client could not express in the submitted resource.
 Should it be deleted or merged with the new representation?
-<!--l. 1070--><p class="indent" >    Different strategies are possible in such scenarios and must be selected for the individual use
+<!--l. 1106--><p class="indent" >    Different strategies are possible in such scenarios and must be selected for the individual use
 case:
       <ol  class="enumerate1" >
       <li 
-  class="enumerate" id="x29-29002x1">The server accepts updates only for one media type while serving other media types
+  class="enumerate" id="x29-36002x1">The server accepts updates only for one media type while serving other media types
       in a &#8220;read-only&#8221; mode.
       </li>
       <li 
-  class="enumerate" id="x29-29004x2">The server accepts PATCH requests<span class="cite">[<a 
+  class="enumerate" id="x29-36004x2">The server accepts PATCH requests<span class="cite">[<a 
 href="restful_groupwareli2.html#XRFC5789">DS10</a>]</span> as a compromise while still not accepting
       certain media types for updates.
       </li>
       <li 
-  class="enumerate" id="x29-29006x3">The implementer decides to either merge or deletes information not representable in a
+  class="enumerate" id="x29-36006x3">The implementer decides to either merge or deletes information not representable in a
       received media type and lives with the consequences. In the case of contact information
       this can be a valid strategy since the most essential information is representable in
       all media types. The server practically only works with data in the intersection of all
       supported media types.
       </li>
       <li 
-  class="enumerate" id="x29-29008x4">Available facilities to extend media types are used to establish isomorphism. Vcard for
+  class="enumerate" id="x29-36008x4">Available facilities to extend media types are used to establish isomorphism. Vcard for
       example allows the addition of arbitrary properties prefixed with &#8220;x-&#8221;.
-                                                                                         
-                                                                                         
       </li>
       <li 
-  class="enumerate" id="x29-29010x5">The server implements version control so that the situation can be resolved manually
+  class="enumerate" id="x29-36010x5">The server implements version control so that the situation can be resolved manually
       later.</li></ol>
-<!--l. 1091--><p class="indent" >    The creation of resources can be handled more liberate then updating, since no state on the
+<!--l. 1127--><p class="indent" >    The creation of resources can be handled more liberate then updating, since no state on the
 server exists that could be lost.
                                                                                          
                                                                                          
-    <!--l. 1094--><div class="crosslinks"><p class="noindent">[<a 
+    <!--l. 1130--><div class="crosslinks"><p class="noindent">[<a 
 href="restful_groupwarese2.html" >prev</a>] [<a 
 href="restful_groupwarese2.html#tailrestful_groupwarese2.html" >prev-tail</a>] [<a 
 href="restful_groupwarese3.html" >front</a>] [<a 
 href="restful_groupware.html# " >up</a>] </p></div>
-<!--l. 1094--><p class="indent" >    <a 
+<!--l. 1130--><p class="indent" >    <a 
  id="tailrestful_groupwarese3.html"></a> 
 </body></html> 

@@ -7,92 +7,39 @@
 <meta name="originator" content="TeX4ht (http://www.cse.ohio-state.edu/~gurari/TeX4ht/)"> 
 <!-- html,2 --> 
 <meta name="src" content="restful_groupware.tex"> 
-<meta name="date" content="2012-03-07 17:12:00"> 
+<meta name="date" content="2012-03-09 14:14:00"> 
 <link rel="stylesheet" type="text/css" href="restful_groupware.css"> 
 </head><body 
 >
-    <!--l. 1094--><div class="crosslinks"><p class="noindent">[<a 
+    <!--l. 1130--><div class="crosslinks"><p class="noindent">[<a 
 href="restful_groupwarese3.html" >prev</a>] [<a 
 href="restful_groupwarese3.html#tailrestful_groupwarese3.html" >prev-tail</a>] [<a 
 href="#tailrestful_groupwarese4.html">tail</a>] [<a 
 href="restful_groupware.html# " >up</a>] </p></div>
 <h3 class="sectionHead"><span class="titlemark">4  </span> <a 
- id="x44-300004"></a>Design</h3>
+ id="x43-370004"></a>Design</h3>
 <a 
- id="x44-30001r35"></a>
+ id="x43-37001r42"></a>
 <h4 class="subsectionHead"><span class="titlemark">4.1  </span> <a 
- id="x44-310001"></a>Overview</h4>
+ id="x43-380001"></a>Overview</h4>
 <a 
- id="x44-31001r37"></a>
+ id="x43-38001r44"></a>
 <h4 class="subsectionHead"><span class="titlemark">4.2  </span> <a 
- id="x44-320002"></a>Reusable Patterns and Components</h4>
-<!--l. 1114--><p class="noindent" >Reuse is of course in general a good thing. In the context of Model Driven Development (MDD)
-and code generation it is especially import to identify code that is general enough to be provided
-by a library of framework and does not need to be generated.
-<!--l. 1119--><p class="indent" >    Minimizing the generated code also minimizes the extend of drawbacks associated with code
-generation, most importantly conflicts between updates by the code generator and manual
-modification.
-<!--l. 1130--><p class="indent" >    Concerns regarding Media Types that needs to be implemented differently for each different
-Media Type:
-      <ul class="itemize1">
-      <li class="itemize">validate the Media Type
-      </li>
-      <li class="itemize">provide accessors to read, write parts of the Media Type
-      </li>
-      <li class="itemize">serialize, deserialize the whole Media Type
-      </li>
-      <li class="itemize">converters to other formats
-      </li>
-      <li class="itemize">accessors to common interfaces (projection), e.g. common generic resource attributes
-      or common attributes of a contact</li></ul>
-<!--l. 1142--><p class="indent" >    Candidate areas for re-usability:
-      <ul class="itemize1">
-      <li class="itemize">link building, URL parsing
-      </li>
-      <li class="itemize">HTML form building, parsing
-      </li>
-      <li class="itemize">generic properties of resources, id
-      </li>
-      <li class="itemize">resource types
-      </li>
-      <li class="itemize">question to storage: does resource still match ETag? Has changed since?
-      </li>
-      <li class="itemize">all links of a resource: Link: intern/extern/undefined, href, rel, title, text, media type
-      </li>
-      <li class="itemize">bool function matchesMediaType(), getMediaType() auf WrappedEntry
-                                                                                         
-                                                                                         
-      </li>
-      <li class="itemize">Prüfung, ob ein Update durchgeführt werden soll, gemäß ETAG, ifnotchanged
-      </li>
-      <li class="itemize">Möglichkeit,  DatenKlassen  mit  DatenTypen  zu  definieren  wie  in  eZ  Publish  um
-      automatische Views und Edit Ansichten zu ermöglichen.
-      </li>
-      <li class="itemize">Creation  of  resources:  POST  to  collection  with  SLUG  Header,  PUT  to  URI,
-      normalization of SLUG Header
-      </li>
-      <li class="itemize">Pagination  (building  and  parsing  of  next  and  previous  URIs,  implementation  of
-      RFC5005), querying the collections entries provider with the correct parameters (offset,
-      limit).
-      </li>
-      <li class="itemize">Storage interface with transaction support. An application may for example need to
-      notify an indexing component after some resource has been changed. &#8211; No transaction
-      support: Every action that must happen in a transaction together with the resource
-      change must be handled by the storage layer, must be aware of the storage technologie.</li></ul>
+ id="x43-390002"></a>Reusable Patterns and Components</h4>
 <a 
- id="x44-32001r38"></a>
+ id="x43-39001r45"></a>
 <h4 class="subsectionHead"><span class="titlemark">4.3  </span> <a 
- id="x44-330003"></a>Interactions</h4>
+ id="x43-400003"></a>Interactions</h4>
 <a 
- id="x44-33001r32"></a>
+ id="x43-40001r38"></a>
 <h5 class="subsubsectionHead"><span class="titlemark">4.3.1  </span> <a 
- id="x44-340001"></a>Discovery of Collections</h5>
-<!--l. 1165--><p class="noindent" >An ideal Rest API is accessed by one main URI and all other resources can be discovered by
+ id="x43-410001"></a>Discovery of Collections</h5>
+<!--l. 1202--><p class="noindent" >An ideal Rest API is accessed by one main URI and all other resources can be discovered by
 following links. A useful Media type to discover available collections is the Atom Service
 Document<span class="cite">[<a 
 href="restful_groupwareli2.html#XRFC5023">Gh07</a>, sec. 8]</span>. It contains links to collections organized in workspaces and annotated
 with meta data.
-<!--l. 1170--><p class="indent" >    A Groupware client most likely needs to discern the available collections by the contained
+<!--l. 1207--><p class="indent" >    A Groupware client most likely needs to discern the available collections by the contained
 resources as to consume and present them with the appropriate user interfaces for contacts,
 calendar data, etc. A first idea could be to use the Media types declared in the &#8220;accept&#8221; tag of a
 collection to identify types of collections. However the specification explicitly states that this tag
@@ -101,72 +48,84 @@ can only be read then no accept tag should be present and thus also not availabl
 interpretation.
                                                                                          
                                                                                          
-<!--l. 1181--><p class="indent" >    <a 
- id="x44-3400015"></a><hr class="float"><div class="float" 
+<!--l. 1218--><p class="indent" >    <a 
+ id="x43-4100015"></a><hr class="float"><div class="float" 
 >
                                                                                          
                                                                                          
 <a 
- id="x44-34001r3"></a>
+ id="x43-41001r3"></a>
 <a 
- id="x44-34002"></a>
-<!--l. 1181--><pre class="listings">&#x00A0;<br /><span class="label"><a 
- id="x44-34003r1"></a></span><tspan font-family="cmmi" font-size="12">&#x003C;</tspan>atom:category&#x00A0;scheme=<!--l. 1182--><span class="listings-nested">&#8221;http://schemas.google.com/g/2005#kind&#8221;</span>&#x00A0;<br /><span class="label"><a 
- id="x44-34004r2"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;term=<!--l. 1183--><span class="listings-nested">&#8221;http://schemas.google.com/g/2005#contact&#8221;</span>&#x00A0;/<tspan font-family="cmmi" font-size="12">&#x003E;</tspan>&#x00A0;<br /><span class="label"><a 
- id="x44-34005r3"></a></span>&#x00A0;<br /><span class="label"><a 
- id="x44-34006r4"></a></span><tspan font-family="cmmi" font-size="12">&#x003C;</tspan>atom:category&#x00A0;scheme=<!--l. 1185--><span class="listings-nested">&#8221;http://ibm.com/oa/type&#8221;</span>&#x00A0;<br /><span class="label"><a 
- id="x44-34007r5"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;term=<!--l. 1186--><span class="listings-nested">&#8221;task&#8221;</span>&#x00A0;/<tspan font-family="cmmi" font-size="12">&#x003E;</tspan>&#x00A0;<br /><span class="label"><a 
- id="x44-34008r6"></a></span>&#x00A0;<br /><span class="label"><a 
- id="x44-34009r7"></a></span><tspan font-family="cmmi" font-size="12">&#x003C;</tspan>atom:category&#x00A0;scheme=<!--l. 1188--><span class="listings-nested">&#8221;http://www.w3.org/2005/Atom/Entry<tspan font-family="cmsy" font-size="10">-</tspan>Kind&#8221;</span>&#x00A0;<br /><span class="label"><a 
- id="x44-34010r8"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;term=<!--l. 1189--><span class="listings-nested">&#8221;http://schemas.google.com/g/2005#contact&#8221;</span>&#x00A0;<br /><span class="label"><a 
- id="x44-34011r9"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<tspan font-family="cmbx" font-size="12">label</tspan>=<!--l. 1190--><span class="listings-nested">&#8221;Contact&#8221;</span>&#x00A0;/<tspan font-family="cmmi" font-size="12">&#x003E;</tspan>&#x00A0;<br /><span class="label"><a 
- id="x44-34012r10"></a></span>&#x00A0;<br /><span class="label"><a 
- id="x44-34013r11"></a></span><tspan font-family="cmmi" font-size="12">&#x003C;</tspan>atom:category&#x00A0;scheme=<!--l. 1192--><span class="listings-nested">&#8221;http://www.w3.org/2005/Atom/Entry<tspan font-family="cmsy" font-size="10">-</tspan>Kind&#8221;</span>&#x00A0;<br /><span class="label"><a 
- id="x44-34014r12"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;term=<!--l. 1193--><span class="listings-nested">&#8221;http://ibm.com/oa/type#task&#8221;</span>&#x00A0;<br /><span class="label"><a 
- id="x44-34015r13"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<tspan font-family="cmbx" font-size="12">label</tspan>=<!--l. 1194--><span class="listings-nested">&#8221;Task&#8221;</span>&#x00A0;/<tspan font-family="cmmi" font-size="12">&#x003E;</tspan>
+ id="x43-41002"></a>
+<!--l. 1218--><pre class="listings">&#x00A0;<br /><span class="label"><a 
+ id="x43-41003r1"></a></span><span 
+class="cmmi-12">&#x003C;</span>atom:category&#x00A0;scheme=<!--l. 1219--><span class="listings-nested">&#8221;http://schemas.google.com/g/2005#kind&#8221;</span>&#x00A0;<br /><span class="label"><a 
+ id="x43-41004r2"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;term=<!--l. 1220--><span class="listings-nested">&#8221;http://schemas.google.com/g/2005#contact&#8221;</span>&#x00A0;/<span 
+class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
+ id="x43-41005r3"></a></span>&#x00A0;<br /><span class="label"><a 
+ id="x43-41006r4"></a></span><span 
+class="cmmi-12">&#x003C;</span>atom:category&#x00A0;scheme=<!--l. 1222--><span class="listings-nested">&#8221;http://ibm.com/oa/type&#8221;</span>&#x00A0;<br /><span class="label"><a 
+ id="x43-41007r5"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;term=<!--l. 1223--><span class="listings-nested">&#8221;task&#8221;</span>&#x00A0;/<span 
+class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
+ id="x43-41008r6"></a></span>&#x00A0;<br /><span class="label"><a 
+ id="x43-41009r7"></a></span><span 
+class="cmmi-12">&#x003C;</span>atom:category&#x00A0;scheme=<!--l. 1225--><span class="listings-nested">&#8221;http://www.w3.org/2005/Atom/Entry<span 
+class="cmsy-10x-x-120">-</span>Kind&#8221;</span>&#x00A0;<br /><span class="label"><a 
+ id="x43-41010r8"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;term=<!--l. 1226--><span class="listings-nested">&#8221;http://schemas.google.com/g/2005#contact&#8221;</span>&#x00A0;<br /><span class="label"><a 
+ id="x43-41011r9"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+class="cmbx-12">label</span>=<!--l. 1227--><span class="listings-nested">&#8221;Contact&#8221;</span>&#x00A0;/<span 
+class="cmmi-12">&#x003E;</span>&#x00A0;<br /><span class="label"><a 
+ id="x43-41012r10"></a></span>&#x00A0;<br /><span class="label"><a 
+ id="x43-41013r11"></a></span><span 
+class="cmmi-12">&#x003C;</span>atom:category&#x00A0;scheme=<!--l. 1229--><span class="listings-nested">&#8221;http://www.w3.org/2005/Atom/Entry<span 
+class="cmsy-10x-x-120">-</span>Kind&#8221;</span>&#x00A0;<br /><span class="label"><a 
+ id="x43-41014r12"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;term=<!--l. 1230--><span class="listings-nested">&#8221;http://ibm.com/oa/type#task&#8221;</span>&#x00A0;<br /><span class="label"><a 
+ id="x43-41015r13"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;<span 
+class="cmbx-12">label</span>=<!--l. 1231--><span class="listings-nested">&#8221;Task&#8221;</span>&#x00A0;/<span 
+class="cmmi-12">&#x003E;</span>
 &#x00A0;<br /><span class="label"><a 
- id="x44-34016r14"></a></span></pre>
+ id="x43-41016r14"></a></span></pre>
  <div class="caption" 
 ><span class="id">Listing&#x00A0;3: </span><span  
 class="content">ATOM categories as used by Google and IBM to mark entry types and a proposal
-to use a standard scheme URI for type terms</span></div><!--tex4ht:label?: x44-34000 -->
+to use a standard scheme URI for type terms</span></div><!--tex4ht:label?: x43-41000 -->
                                                                                          
                                                                                          
     </div><hr class="endfloat" />
-<!--l. 1197--><p class="indent" >    A standard conform approach is demonstrated by Google&#8217;s Data
+<!--l. 1234--><p class="indent" >    A standard conform approach is demonstrated by Google&#8217;s Data
 Protocol<span class="footnote-mark"><a 
-href="restful_groupware45.html#fn39x0"><sup class="textsuperscript">39</sup></a></span><a 
- id="x44-34017f39"></a>  and by an
+href="restful_groupware44.html#fn38x0"><sup class="textsuperscript">38</sup></a></span><a 
+ id="x43-41017f38"></a>  and by an
 internal project at IBM<span class="footnote-mark"><a 
-href="restful_groupware46.html#fn40x0"><sup class="textsuperscript">40</sup></a></span><a 
- id="x44-34018f40"></a> .
+href="restful_groupware45.html#fn39x0"><sup class="textsuperscript">39</sup></a></span><a 
+ id="x43-41018f39"></a> .
 Both use atom categories<span class="cite">[<a 
 href="restful_groupwareli2.html#XRFC5023">Gh07</a>, sec. 8.3.6]</span> to mark the type of atom entries. James Snell proposed
 a standard URI to identify the semantic of categories<span class="footnote-mark"><a 
-href="restful_groupware46.html#fn40x0"><sup class="textsuperscript"><a 
-href="#x44-34018f40">40<!--tex4ht:ref: snellatomcategory --></a></sup></a></span> but no follow up to this could be found.
+href="restful_groupware45.html#fn39x0"><sup class="textsuperscript"><a 
+href="#x43-41018f39">39<!--tex4ht:ref: snellatomcategory --></a></sup></a></span> but no follow up to this could be found.
 The use of categories to attach arbitrary meaning, e.g &#8220;event type (product or promotion), and its
 status (new, updated, or cancelled)&#8221; to feeds and entries is also recommended in <span class="cite">[<a 
 href="restful_groupwareli2.html#XWebber2010">Web10</a>, p.
 200]</span>.
-<!--l. 1208--><p class="indent" >    To make categories usable for a common Groupware API, the server needs to use a categorization
+<!--l. 1245--><p class="indent" >    To make categories usable for a common Groupware API, the server needs to use a categorization
 scheme understood by the client. If different clients don&#8217;t agree on one scheme the server could still support
 several.<span class="footnote-mark"><a 
-href="restful_groupware47.html#fn41x0"><sup class="textsuperscript">41</sup></a></span><a 
- id="x44-34019f41"></a> 
-<!--l. 1214--><p class="indent" >    An alternative Media Type to Service Documents in JSON could not be found. The most
+href="restful_groupware46.html#fn40x0"><sup class="textsuperscript">40</sup></a></span><a 
+ id="x43-41019f40"></a> 
+<!--l. 1251--><p class="indent" >    An alternative Media Type to Service Documents in JSON could not be found. The most
 promising approach seems to list available collections in a <span class="lstinline">application/vnd.collection+json</span>
 representation. (<a 
-href="restful_groupwarese3.html#x29-280006">Listing&#x00A0;3.6<!--tex4ht:ref: fig:microdata-atom-summary --></a>)
+href="restful_groupwarese3.html#x29-350006">Listing&#x00A0;3.6<!--tex4ht:ref: fig:microdata-atom-summary --></a>)
 <a 
- id="x44-34020r40"></a>
+ id="x43-41020r47"></a>
 <h5 class="subsubsectionHead"><span class="titlemark">4.3.2  </span> <a 
- id="x44-350002"></a>personalized Service Documents</h5>
-<!--l. 1218--><p class="noindent" >For a Groupware that manages confidential information it would make sense to provide personalized
+ id="x43-420002"></a>Personalized Service Documents</h5>
+<!--l. 1255--><p class="noindent" >For a Groupware that manages confidential information it would make sense to provide personalized
 Service Documents for authenticated users that list only collections that the user is authorized to
 read.<span class="footnote-mark"><a 
-href="restful_groupware48.html#fn42x0"><sup class="textsuperscript">42</sup></a></span><a 
- id="x44-35001f42"></a> 
+href="restful_groupware47.html#fn41x0"><sup class="textsuperscript">41</sup></a></span><a 
+ id="x43-42001f41"></a> 
 Personalized Service Documents for different users should have different URIs to make them
 cacheable and to acknowledge that each personalized Service Document is indeed an
 individual entity. This however conflicts with the previous goal of using one unique
@@ -174,56 +133,56 @@ Service Document URI as entrance to the API. A solution would be to require the 
 authenticate when requesting the unique entrance URI and to answer with a HTTP code
 &#8220;307 Temporary Redirect&#8221; to the user&#8217;s personalized Service Document after successful
 authentication.<span class="footnote-mark"><a 
-href="restful_groupware49.html#fn43x0"><sup class="textsuperscript">43</sup></a></span><a 
- id="x44-35002f43"></a> 
+href="restful_groupware48.html#fn42x0"><sup class="textsuperscript">42</sup></a></span><a 
+ id="x43-42002f42"></a> 
 <a 
- id="x44-35003r42"></a>
+ id="x43-42003r49"></a>
 <h5 class="subsubsectionHead"><span class="titlemark">4.3.3  </span> <a 
- id="x44-360003"></a>Atom Publishing Protocol</h5>
-<!--l. 1242--><p class="noindent" >The idea to not only use Service Documents but the complete Atom Publishing
+ id="x43-430003"></a>Atom Publishing Protocol</h5>
+<!--l. 1279--><p class="noindent" >The idea to not only use Service Documents but the complete Atom Publishing
 Protocol as the foundation for a Groupware API is not novel. Rob Yates
 described this idea under the titles &#8220;CalAtom&#8221; and &#8220;CardAtom&#8221; already in
 2006<span class="footnote-mark"><a 
-href="restful_groupware50.html#fn44x0"><sup class="textsuperscript">44</sup></a></span><a 
- id="x44-36001f44"></a> .
-<!--l. 1247--><p class="indent" >    The CalAtom<span class="cite">[<a 
+href="restful_groupware49.html#fn43x0"><sup class="textsuperscript">43</sup></a></span><a 
+ id="x43-43001f43"></a> .
+<!--l. 1284--><p class="indent" >    The CalAtom<span class="cite">[<a 
 href="restful_groupwareli2.html#Xdraft-yates-atompub-calatom-00.txt">Yat07</a>]</span> proposal uses a &#8220;features&#8221; tag and associated IANA registry to mark
                                                                                          
                                                                                          
 collection types and their features. But the examples of category usage above (<a 
-href="#x44-340001">Listing&#x00A0;4.3.1<!--tex4ht:ref: fig:microdata-atom-summary --></a>) and
+href="#x43-410001">Listing&#x00A0;4.3.1<!--tex4ht:ref: fig:microdata-atom-summary --></a>) and
 the availability of OpenSearch for time range searches (<a 
-href="#x44-400007">Listing&#x00A0;4.3.7<!--tex4ht:ref: fig:microdata-atom-summary --></a>) provide confidence that a
+href="#x43-480008">Listing&#x00A0;4.3.8<!--tex4ht:ref: fig:microdata-atom-summary --></a>) provide confidence that a
 new tag is not required. The features tag was proposed in 2007 by <span class="cite">[<a 
-href="restful_groupwareli2.html#Xdraft-snell-atompub-feature">Sne07</a>]</span> but did not become a
+href="restful_groupwareli2.html#Xdraft-snell-atompub-feature">Sne07a</a>]</span> but did not become a
 standard.
-<!--l. 1255--><p class="indent" >    The Atom format is also used by the Google Data Protocol to publish contacts, events and other
+<!--l. 1292--><p class="indent" >    The Atom format is also used by the Google Data Protocol to publish contacts, events and other
 data types<span class="footnote-mark"><a 
-href="restful_groupware51.html#fn45x0"><sup class="textsuperscript">45</sup></a></span><a 
- id="x44-36002f45"></a> .
+href="restful_groupware50.html#fn44x0"><sup class="textsuperscript">44</sup></a></span><a 
+ id="x43-43002f44"></a> .
 Google&#8217;s use of Atom however is a bit special. The resource data is not included in the content tag of an
 entry. Instead a new namespace is used to put the data with additional tags directly inside the entry
 tag<span class="footnote-mark"><a 
-href="restful_groupware52.html#fn46x0"><sup class="textsuperscript">46</sup></a></span><a 
- id="x44-36003f46"></a> .
+href="restful_groupware51.html#fn45x0"><sup class="textsuperscript">45</sup></a></span><a 
+ id="x43-43003f45"></a> .
 <a 
- id="x44-36004r43"></a>
+ id="x43-43004r50"></a>
 <h5 class="subsubsectionHead"><span class="titlemark">4.3.4  </span> <a 
- id="x44-370004"></a>Synchronizing Collections</h5>
-<!--l. 1268--><p class="noindent" >If a Groupware client can synchronize an entire collection to its local memory, then there is no
+ id="x43-440004"></a>Synchronizing Collections</h5>
+<!--l. 1307--><p class="noindent" >If a Groupware client can synchronize an entire collection to its local memory, then there is no
 need for more sophisticated queries that provide only a subset of the collection. The client can
 answer all queries from its local copy of the collection.
-<!--l. 1273--><p class="indent" >    In <a 
+<!--l. 1312--><p class="indent" >    In <a 
 href="restful_groupwarese2.html#x20-140005">subsection&#x00A0;2.5<!--tex4ht:ref: fig:microdata-atom-summary --></a> it has been shown that the time necessary to synchronize a full
 collection is under one minute in most cases. This should be acceptable for an initial
 synchronization that is only done once on rare occasions when a desktop machine or mobile device
 is first used. If subsequent synchronizations only transfer a few resources, that have
 changed since the last synchronization then such updates can be made in the order of a
 second.
-<!--l. 1280--><p class="indent" >    All client scenarios except of a Web Browser client that is used only once, can profit from the
+<!--l. 1319--><p class="indent" >    All client scenarios except of a Web Browser client that is used only once, can profit from the
 above scenario. In such a case other interaction patterns need to be used (<a 
-href="#x44-400007">Listing&#x00A0;4.3.7<!--tex4ht:ref: fig:microdata-atom-summary --></a>).
-<!--l. 1284--><p class="indent" >    The Atom Publishing Protocol identifies collections of resources as Atom Feeds. Feeds can also
+href="#x43-480008">Listing&#x00A0;4.3.8<!--tex4ht:ref: fig:microdata-atom-summary --></a>).
+<!--l. 1323--><p class="indent" >    The Atom Publishing Protocol identifies collections of resources as Atom Feeds. Feeds can also
 be used to synchronize collections. The necessary ingredients are the link relation &#8220;next&#8221;<span class="cite">[<a 
 href="restful_groupwareli2.html#XRFC5005">Not07</a>]</span>,
 the concept of a &#8220;deleted entry&#8221;<span class="cite">[<a 
@@ -231,65 +190,155 @@ href="restful_groupwareli2.html#Xdraft-snell-atompub-tombstones-14">Sne12</a>]</
 by their &#8221;app:edited&#8221; property, with the most recently edited Entries coming first in the document
 order&#8221;<span class="cite">[<a 
 href="restful_groupwareli2.html#XRFC5023">Gh07</a>, sec. 10]</span>.
-<!--l. 1292--><p class="indent" >    The API server design has the notion of a logical feed that can be split up in multiple real
+<!--l. 1331--><p class="indent" >    The API server design has the notion of a logical feed that can be split up in multiple real
 Atom feeds linked with the relation &#8220;next&#8221;. Updated or new entries are always inserted as first
 element of the first feed since their &#8220;app:edited&#8221; property is the most recent. Inserting a new entry
 at the top of a feed can lead to entries at the end of the feed being pushed to the subsequent feed.
 This push needs to be atomic such that a client loading subsequent feeds may see an entry twice,
 at the end of a previous feed and the top of the next feed, but will never miss an entry in this
 scenario.
-<!--l. 1301--><p class="indent" >    In the case of an initial synchronization, the client loads the initial feed and all subsequent
+<!--l. 1340--><p class="indent" >    In the case of an initial synchronization, the client loads the initial feed and all subsequent
 feeds linked with the &#8220;next&#8221; relation and adds all Resources associated with the feeds entries to its
 local storage. Resources can either be included completely in the content tag of an entry or be
 linked to by the entry. The client memorizes the &#8220;app:edited&#8221; value of the first entry of the first
 feed for subsequent synchronizations.
-<!--l. 1308--><p class="indent" >    It is possible, that the collection has been modified during the synchronization. Therefor the
+<!--l. 1347--><p class="indent" >    It is possible, that the collection has been modified during the synchronization. Therefor the
 client should directly conclude with an update synchronization. This means that the client
 starts again to load the first feed and applies all updates until it sees an entry with an
 &#8220;app:edited&#8221; value older then the one memorized from the last synchronization. It is possible
 that the client must follow several &#8220;next&#8221; links or even load all feeds in the extreme
 case.
-<!--l. 1316--><p class="indent" >    If the client followed a &#8220;next&#8221; link during a synchronization then it will make sure at the end
+<!--l. 1355--><p class="indent" >    If the client followed a &#8220;next&#8221; link during a synchronization then it will make sure at the end
                                                                                          
                                                                                          
 of the synchronization that the first feed has not changed meanwhile most probably with a
 conditional GET request. After this last request indicates no further changes the client knows that
 its local collection is in the state of the servers location at the time of the last GET
 request.
+<!--l. 1361--><p class="indent" >    <hr class="figure"><div class="figure" 
+>
+                                                                                         
+                                                                                         
 <a 
- id="x44-37001r44"></a>
+ id="x43-440011"></a>
+                                                                                         
+                                                                                         
+<!--l. 1383--><p class="noindent" ><object data="restful_groupware-1.svg" width="448.43246 " height="301.17535 " type="image/svg+xml"><p>SVG-Viewer needed.</p></object>
+<br /> <div class="caption" 
+><span class="id">Figure&#x00A0;1: </span><span  
+class="content">Discovery paths from the Service Document to individual Groupware Resources</span></div><!--tex4ht:label?: x43-440011 -->
+                                                                                         
+                                                                                         
+<!--l. 1385--><p class="indent" >    </div><hr class="endfigure">
+<a 
+ id="x43-44002r51"></a>
 <h5 class="subsubsectionHead"><span class="titlemark">4.3.5  </span> <a 
- id="x44-380005"></a>Media Entries and the content tag</h5>
-<!--l. 1325--><p class="noindent" >The Atom format provides the opportunity to include a full representation of a resource in the
+ id="x43-450005"></a>Efficient Synchronization with HTTP Delta encoding</h5>
+<!--l. 1389--><p class="noindent" >The synchronization method described in <a 
+href="#x43-440004">Listing&#x00A0;4.3.4<!--tex4ht:ref: fig:microdata-atom-summary --></a> can be enhanced to reduce the bandwidth
+usage and general resource usage of both client and server. The necessary extension has been
+described in <span class="cite">[<a 
+href="restful_groupwareli2.html#XWyman2004">Wym04</a>]</span> and is commonly referred to as RFC3229+Feed since it adds a feed specific
+Instance Method (IM) to the &#8220;Delta encoding in HTTP&#8221; standard<span class="cite">[<a 
+href="restful_groupwareli2.html#XRFC3229">MKD<sup><tspan font-family="cmr" font-size="8">+</tspan></sup>02</a>]</span>. Unfortunately
+nobody has yet invested the effort to drive this method through a formal standardization
+process<span class="footnote-mark"><a 
+href="restful_groupware52.html#fn46x0"><sup class="textsuperscript">46</sup></a></span><a 
+ id="x43-45001f46"></a> . It is however reported to
+be widely implemented<span class="footnote-mark"><a 
+href="restful_groupware53.html#fn47x0"><sup class="textsuperscript">47</sup></a></span><a 
+ id="x43-45002f47"></a> , even in the
+popular Microsoft Internet Explorer<span class="footnote-mark"><a 
+href="restful_groupware54.html#fn48x0"><sup class="textsuperscript">48</sup></a></span><a 
+ id="x43-45003f48"></a> 
+and the author claims substantial bandwidths saving opportunities
+<span class="footnote-mark"><a 
+href="restful_groupware55.html#fn49x0"><sup class="textsuperscript">49</sup></a></span><a 
+ id="x43-45004f49"></a>.
+<!--l. 1404--><p class="indent" >    The idea of delta encoding is that a server can respond to conditional GET requests with only
+a small, special patch. The client applies the patch to its cached representation of the requested
+resource which results in the new version of the resource. All currently IANA registered IMs are byte
+oriented<span class="footnote-mark"><a 
+href="restful_groupware56.html#fn50x0"><sup class="textsuperscript">50</sup></a></span><a 
+ id="x43-45005f50"></a> .
+These methods however don&#8217;t add substantial benefit for the case of synchronization
+feeds.
+<!--l. 1411--><p class="indent" >    In the case of the proposed feed IM, the client sends a conditional GET to request the
+synchronization feed but indicates in the &#8220;A-IM&#8221; header that it understands the feed IM:
+<!--l. 1414-->
+    <div class="lstlisting" id="listing-5"><span class="label"><a 
+ id="x43-45006r1"></a></span>GET&#x00A0;/api/collections/contacts&#x00A0;HTTP/1.1&#x00A0;<br /><span class="label"><a 
+ id="x43-45007r2"></a></span>Host:&#x00A0;bar.example.net&#x00A0;<br /><span class="label"><a 
+ id="x43-45008r3"></a></span>If<tspan font-family="cmsy" font-size="10">-</tspan>None<tspan font-family="cmsy" font-size="10">-</tspan>Match:&#x00A0;&#8221;3631<tspan font-family="cmsy" font-size="10">-</tspan>@2147483647&#8221;&#x00A0;<br /><span class="label"><a 
+ id="x43-45009r4"></a></span>A<tspan font-family="cmsy" font-size="10">-</tspan>IM:&#x00A0;feed,&#x00A0;gzip
+    
+    </div>
+<!--l. 1420--><p class="indent" >    The server responds with a valid feed including the normal head elements but can
+use the etag from the &#8220;If-None-Match&#8221; header to include only those entries in the
+response, that have changed since the time when the etag was valid. This implies of
+course, that the server is able to match the given etag to a corresponding list of
+changes<span class="footnote-mark"><a 
+href="restful_groupware57.html#fn51x0"><sup class="textsuperscript">51</sup></a></span><a 
+ id="x43-45010f51"></a> .
+The server response uses HTTP code &#8220;226 IM Used&#8221;<span class="cite">[<a 
+href="restful_groupwareli2.html#XRFC3229">MKD<sup><tspan font-family="cmr" font-size="8">+</tspan></sup>02</a>]</span> to mark the response as a special
+one that is not the regular, cachaable representation.
+<!--l. 1429--><p class="indent" >    It is advisable to also include a &#8220;next&#8221; link to the subsequent feed to keep compatibility with
+the synchronization process from <a 
+href="#x43-440004">Listing&#x00A0;4.3.4<!--tex4ht:ref: fig:microdata-atom-summary --></a> and prevent the client from accidentally considering
+the returned feed to contain the full collection. The &#8220;next&#8221; link however would probably cause the
+client to unnecessarily follow it, since it has not yet seen an entry with an old enough &#8220;app:edited&#8221;
+value. The server could include additional entries from its database to satisfy the client&#8217;s
+terminating condition. Or the server could include an artificial, minimal deleted-entry<span class="cite">[<a 
+href="restful_groupwareli2.html#Xdraft-snell-atompub-tombstones-14">Sne12</a>]</span> tag
+                                                                                         
+                                                                                         
+with a non-existent ref value and a when value just older then the etag sent by the client:
+<!--l. 1439-->
+    <div class="lstlisting" id="listing-6"><span class="label"><a 
+ id="x43-45011r1"></a></span><tspan font-family="cmmi" font-size="12">&#x003C;</tspan>at:deleted<tspan font-family="cmsy" font-size="10">-</tspan>entry&#x00A0;xmlns:at=&#8221;http://purl.org/atompub/tombstones/1.0&#8221;&#x00A0;<br /><span class="label"><a 
+ id="x43-45012r2"></a></span>&#x00A0;&#x00A0;&#x00A0;ref=&#8221;tag:example.org,2005:NONEXISTENT&#8221;&#x00A0;<br /><span class="label"><a 
+ id="x43-45013r3"></a></span>&#x00A0;&#x00A0;&#x00A0;when=&#8221;2005<tspan font-family="cmsy" font-size="10">-</tspan>11<tspan font-family="cmsy" font-size="10">-</tspan>29T12:11:12Z&#8221;/<tspan font-family="cmmi" font-size="12">&#x003E;</tspan>
+    
+    </div>
+<!--l. 1444--><p class="indent" >    The above precautions not to break the client&#8217;s synchronization logic is necessary to permit
+the server to also respond to RFC3229+Feed requests with paginated feeds in cases
+where more entries have changed then the server is comfortable to include in a single
+response.
+<a 
+ id="x43-45014r53"></a>
+<h5 class="subsubsectionHead"><span class="titlemark">4.3.6  </span> <a 
+ id="x43-460006"></a>Media Entries and the content tag</h5>
+<!--l. 1452--><p class="noindent" >The Atom format provides the opportunity to include a full representation of a resource in the
 content tag of an entry<span class="cite">[<a 
 href="restful_groupwareli2.html#XRFC4287">NS05</a>, sec. 4.1.3]</span>. It is thus possible to embed complete xCard or xCal
 resources in the Atom feed and so to relieve the client from issuing many GET requests for each
 individual resource.
-<!--l. 1331--><p class="indent" >    The benefit of saved GET requests must be balanced with the possible disadvantage of serving
+<!--l. 1458--><p class="indent" >    The benefit of saved GET requests must be balanced with the possible disadvantage of serving
 the client resource representations already seen. A client that does regular updates may probably
 be interested only in the first one or two entries of a feed while the server might have made the
 effort to produce tens of entries.
-<!--l. 1337--><p class="indent" >    On the other hand the Atom Format mandates that an entry without embedded content must
+<!--l. 1464--><p class="indent" >    On the other hand the Atom Format mandates that an entry without embedded content must
 provide a summary element. It may not make much of a difference in bandwidth and processing
 whether a summary is produced or the full content is provided.
-<!--l. 1342--><p class="indent" >    Different optimization strategies are possible here, e.g.
+<!--l. 1469--><p class="indent" >    Different optimization strategies are possible here, e.g.
       <ul class="itemize1">
       <li class="itemize">The first feed in a sequence of paged feeds could contain only very few entries to
       optimize for regular updates and have more entries in all following feeds.
       </li>
       <li class="itemize">The server could remember the entries already consumed by an authenticated client
       and serve only new entries in the first feed.</li></ul>
-<!--l. 1352--><p class="indent" >    In any case it is mandatory that a client can handle embedded content as well as linked
+<!--l. 1479--><p class="indent" >    In any case it is mandatory that a client can handle embedded content as well as linked
 content.
 <a 
- id="x44-38001r45"></a>
-<h5 class="subsubsectionHead"><span class="titlemark">4.3.6  </span> <a 
- id="x44-390006"></a>Modifying Resources</h5>
-<!--l. 1357--><p class="noindent" >Editing, Updating and Deleting of media entries is specified in the Atom Publishing Protocol and
+ id="x43-46001r54"></a>
+<h5 class="subsubsectionHead"><span class="titlemark">4.3.7  </span> <a 
+ id="x43-470007"></a>Modifying Resources</h5>
+<!--l. 1484--><p class="noindent" >Editing, Updating and Deleting of media entries is specified in the Atom Publishing Protocol and
 is useful for this work without modifications or additions. Two aspects however are worth to be
 highlighted.
-<!--l. 1361--><p class="indent" >    As outlined in <a 
-href="#x44-380005">Listing&#x00A0;4.3.5<!--tex4ht:ref: fig:microdata-atom-summary --></a> it is possible to include full representations of the collection
+<!--l. 1488--><p class="indent" >    As outlined in <a 
+href="#x43-460006">Listing&#x00A0;4.3.6<!--tex4ht:ref: fig:microdata-atom-summary --></a> it is possible to include full representations of the collection
 resources in the content tag of an entry. A client however is not allowed to use
 an embedded resource representation as the base for an update<span class="cite">[<a 
 href="restful_groupwareli2.html#XRFC5023">Gh07</a>, sec. 10]</span>. If the
@@ -298,136 +347,136 @@ a GET on the URI of the Member Entry before editing it.&#8221;[Ibid.] This limit
 consequent since the Atom feed does not contain an ETag for an embedded resource. A
 client thus can not make a conditional PUT request only from the information in the
 feed.<span class="footnote-mark"><a 
-href="restful_groupware53.html#fn47x0"><sup class="textsuperscript">47</sup></a></span><a 
- id="x44-39001f47"></a> 
-<!--l. 1372--><p class="indent" >    The second aspect concerns offline editing. A client should offer the user the possibility to
+href="restful_groupware58.html#fn52x0"><sup class="textsuperscript">52</sup></a></span><a 
+ id="x43-47001f52"></a> 
+                                                                                         
+                                                                                         
+<!--l. 1499--><p class="indent" >    The second aspect concerns offline editing. A client should offer the user the possibility to
 create, update and delete resources while being offline and to apply this modifications during the
 next synchronization, much like the IMAP protocol used by Kolab. This requirement is trivial to
 fulfill as long as no concurrent edits happen on the server site. In that case the client needs to
 perform an automated or user assisted merge of the conflicting resources. The client should always
 preserve a copy of a resource version as last seen from the Server to be able to perform a
 three-way-merge.
-                                                                                         
-                                                                                         
-<!--l. 1381--><p class="indent" >    The problem of offline edits and conflicts is thus similar to the case of a failed conditional
+<!--l. 1508--><p class="indent" >    The problem of offline edits and conflicts is thus similar to the case of a failed conditional
 PUT request due to a concurrent edit. <span class="cite">[<a 
 href="restful_groupwareli2.html#XNielsen1999">NL99</a>]</span> describes this case and resolutions in
 detail.
 <a 
- id="x44-39002r46"></a>
-<h5 class="subsubsectionHead"><span class="titlemark">4.3.7  </span> <a 
- id="x44-400007"></a>Special Reports, Queries, Search</h5>
-<!--l. 1388--><p class="noindent" >In few cases it may not be feasible for a client to synchronize a full collection, e.g. due to low
+ id="x43-47002r55"></a>
+<h5 class="subsubsectionHead"><span class="titlemark">4.3.8  </span> <a 
+ id="x43-480008"></a>Special Reports, Queries, Search</h5>
+<!--l. 1515--><p class="noindent" >In few cases it may not be feasible for a client to synchronize a full collection, e.g. due to low
 bandwidth. This section explores restful ways to let the client request only a subset (selection) of a
 collection. More specifically the client should be informed about possible query facilities without
 relying on out-of-band information.
-<!--l. 1394--><p class="indent" >    A promising approach is to use the de-facto standard OpenSearch<span class="cite">[<a 
+<!--l. 1521--><p class="indent" >    A promising approach is to use the de-facto standard OpenSearch<span class="cite">[<a 
 href="restful_groupwareli2.html#XClinton">Cli</a>]</span>. According to its
 homepage it is implemented by most major browsers, search engines and many other sites.
 OpenSearch is also recommended for the link type &#8220;search&#8221; in the HTML5 standard<span class="cite">[<a 
 href="restful_groupwareli2.html#XHickson2011a">Hic11b</a>,
 sec. 4.12.4.12]</span>. The default format of an OpenSearch result list is an Atom (or RSS)
 feed.
-<!--l. 1401--><p class="indent" >    OpenSearch defines the (not yet IANA registered) media type application/opensearchdescription+xml,
+<!--l. 1528--><p class="indent" >    OpenSearch defines the (not yet IANA registered) media type application/opensearchdescription+xml,
 which provides necessary information for a client to perform queries against a search service. Since possible
 search queries are usually unlimited it is not possible anymore to provide a set of static links. Instead
 the server provides an &#8220;URI Template&#8221;<span class="cite">[<a 
 href="restful_groupwareli2.html#XGregorio2012">GFH<sup><tspan font-family="cmr" font-size="8">+</tspan></sup>12</a>]</span> that instructs the client how to perform an &#8220;URI
 construction&#8221;<span class="footnote-mark"><a 
-href="restful_groupware54.html#fn48x0"><sup class="textsuperscript">48</sup></a></span><a 
- id="x44-40001f48"></a> .
-<!--l. 1410--><p class="indent" >    The basic OpenSearch standard defines a simple full text search. Thus a user could search
+href="restful_groupware59.html#fn53x0"><sup class="textsuperscript">53</sup></a></span><a 
+ id="x43-48001f53"></a> .
+<!--l. 1537--><p class="indent" >    The basic OpenSearch standard defines a simple full text search. Thus a user could search
 contacts by name, address or any other field value. Equally events, todo items or notes could be
 searched by keywords.
-<!--l. 1414--><p class="indent" >    The next important use case is to show calendar events in a given interval, e.g. to present the
+<!--l. 1541--><p class="indent" >    The next important use case is to show calendar events in a given interval, e.g. to present the
 events for a month, week or day. This can be achieved with the OpenSearch Time extension that
 provides the temporal start and end parameters. Rob Yates CalAtom<span class="cite">[<a 
 href="restful_groupwareli2.html#Xdraft-yates-atompub-calatom-00.txt">Yat07</a>]</span> proposal included a
 similar time range search as the only but mandatory special report.
-<!--l. 1420--><p class="indent" >    Probably useful might be the OpenSocial Geo extension. It could allow to search contacts or events
+<!--l. 1547--><p class="indent" >    Probably useful might be the OpenSocial Geo extension. It could allow to search contacts or events
 in a given geographic region. Even more search types become possible with the SRU extension that
 wraps the &#8220;Search/Retrieval via URL&#8221; standard with its &#8220;Contextual Query Language&#8221;
 (CQL)<span class="footnote-mark"><a 
-href="restful_groupware55.html#fn49x0"><sup class="textsuperscript">49</sup></a></span><a 
- id="x44-40002f49"></a> .
+href="restful_groupware60.html#fn54x0"><sup class="textsuperscript">54</sup></a></span><a 
+ id="x43-48002f54"></a> .
 The latter provides the possibility to sort result sets which might be interesting to present an
 address book sorted by names.
-<!--l. 1428--><p class="indent" >    Search result Atom feeds can make use of annotated HTML (<a 
-href="restful_groupwarese3.html#x29-240004">subsection&#x00A0;3.4<!--tex4ht:ref: fig:microdata-atom-summary --></a>) in the summaries
+<!--l. 1555--><p class="indent" >    Search result Atom feeds can make use of annotated HTML (<a 
+href="restful_groupwarese3.html#x29-310004">subsection&#x00A0;3.4<!--tex4ht:ref: fig:microdata-atom-summary --></a>) in the summaries
 of entries and should not embed full resources in the content tag. Thus the client can still provide a
 structured view of the data, like calendar views or a tabular contacts list without the need to
 transfer full representations.
-<!--l. 1434--><p class="indent" >    The OpenSearch specification suggests that links to the OpenSearch Description Document for
+<!--l. 1561--><p class="indent" >    The OpenSearch specification suggests that links to the OpenSearch Description Document for
 an Atom feed might be added inside a feed tag. There is however no reason not to add such a link
 inside the collection tag of a Service Document. This allows a client to directly search a collection
 without the need to get the feed first.
+                                                                                         
+                                                                                         
 <a 
- id="x44-40003r39"></a>
+ id="x43-48003r46"></a>
 <h4 class="subsectionHead"><span class="titlemark">4.4  </span> <a 
- id="x44-410004"></a>Components</h4>
+ id="x43-490004"></a>Components</h4>
 <a 
- id="x44-41001r47"></a>
+ id="x43-49001r56"></a>
 <h5 class="subsubsectionHead"><span class="titlemark">4.4.1  </span> <a 
- id="x44-420001"></a>Dispatcher</h5>
-<!--l. 1449--><p class="noindent" >The dispatcher selects the Java method (see <a 
-href="#x44-45001r1">4.5.1.1<!--tex4ht:ref: sec:components-actions --></a>) that should handle the request. The selection
+ id="x43-500001"></a>Dispatcher</h5>
+<!--l. 1576--><p class="noindent" >The dispatcher selects the Java method (see <a 
+href="#x43-530001">4.5.1<!--tex4ht:ref: sec:components-actions --></a>) that should handle the request. The selection
 can depend at least on the path component of the requested URI, the media types
-                                                                                         
-                                                                                         
 accepted by the client as indicated in the request&#8217;s ACCEPT header and the HTTP
 verb.
-<!--l. 1454--><p class="indent" >    Every project implementing JAX-RS<span class="cite">[<a 
+<!--l. 1581--><p class="indent" >    Every project implementing JAX-RS<span class="cite">[<a 
 href="restful_groupwareli2.html#XJAX-RS1.1">HS09</a>]</span> needs to have some kind of dispatcher component.
 The specification itself does not identify this component. It does however specify the algorithm a
 dispatcher needs to follow and a set of Java annotations which must be used to configure the
 dispatch. These annotations (PATH, GET for the HTTP verb and Produces) are demonstrated in
 listing <a 
-href="#x44-42001r4">4<!--tex4ht:ref: fig:jaxrs-annotated-resource-example --></a>.
+href="#x43-50001r4">4<!--tex4ht:ref: fig:jaxrs-annotated-resource-example --></a>.
                                                                                          
                                                                                          
-<!--l. 1462--><p class="indent" >    <a 
- id="x44-4200012"></a><hr class="float"><div class="float" 
+<!--l. 1589--><p class="indent" >    <a 
+ id="x43-5000012"></a><hr class="float"><div class="float" 
 >
                                                                                          
                                                                                          
 <a 
- id="x44-42001r4"></a>
+ id="x43-50001r4"></a>
 <a 
- id="x44-42002"></a>
-<!--l. 1462--><pre class="listings">&#x00A0;<br /><span class="label"><a 
- id="x44-42003r1"></a></span>@Path(<!--l. 1463--><span class="listings-nested">&#8221;atm/<tspan font-family="cmsy" font-size="10">{</tspan>cardId<tspan font-family="cmsy" font-size="10">}</tspan>&#8221;</span>)&#x00A0;<br /><span class="label"><a 
- id="x44-42004r2"></a></span><tspan font-family="cmbx" font-size="12">public</tspan>&#x00A0;<tspan font-family="cmbx" font-size="12">class</tspan>&#x00A0;AtmResource&#x00A0;<tspan font-family="cmsy" font-size="10">{</tspan>&#x00A0;<br /><span class="label"><a 
- id="x44-42005r3"></a></span>&#8216;&#x00A0;<br /><span class="label"><a 
- id="x44-42006r4"></a></span>&#x00A0;&#x00A0;@GET&#x00A0;<br /><span class="label"><a 
- id="x44-42007r5"></a></span>&#x00A0;&#x00A0;@Path(<!--l. 1467--><span class="listings-nested">&#8221;balance&#8221;</span>)&#x00A0;<br /><span class="label"><a 
- id="x44-42008r6"></a></span>&#x00A0;&#x00A0;@Produces(<!--l. 1468--><span class="listings-nested">&#8221;text/plain&#8221;</span>)&#x00A0;<br /><span class="label"><a 
- id="x44-42009r7"></a></span>&#x00A0;&#x00A0;<tspan font-family="cmbx" font-size="12">public</tspan>&#x00A0;String&#x00A0;balance(@PathParam(<!--l. 1469--><span class="listings-nested">&#8221;cardId&#8221;</span>)&#x00A0;String&#x00A0;card,&#x00A0;<br /><span class="label"><a 
- id="x44-42010r8"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;@QueryParam(<!--l. 1470--><span class="listings-nested">&#8221;pin&#8221;</span>)&#x00A0;String&#x00A0;pin)&#x00A0;<tspan font-family="cmsy" font-size="10">{</tspan>&#x00A0;<br /><span class="label"><a 
- id="x44-42011r9"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;<tspan font-family="cmbx" font-size="12">return</tspan>&#x00A0;Double.toString(getBalance(card,&#x00A0;pin));&#x00A0;<br /><span class="label"><a 
- id="x44-42012r10"></a></span>&#x00A0;&#x00A0;<tspan font-family="cmsy" font-size="10">}</tspan>
+ id="x43-50002"></a>
+<!--l. 1589--><pre class="listings">&#x00A0;<br /><span class="label"><a 
+ id="x43-50003r1"></a></span>@Path(<!--l. 1590--><span class="listings-nested">&#8221;atm/<tspan font-family="cmsy" font-size="10">{</tspan>cardId<tspan font-family="cmsy" font-size="10">}</tspan>&#8221;</span>)&#x00A0;<br /><span class="label"><a 
+ id="x43-50004r2"></a></span><tspan font-family="cmbx" font-size="12">public</tspan>&#x00A0;<tspan font-family="cmbx" font-size="12">class</tspan>&#x00A0;AtmResource&#x00A0;<tspan font-family="cmsy" font-size="10">{</tspan>&#x00A0;<br /><span class="label"><a 
+ id="x43-50005r3"></a></span>&#8216;&#x00A0;<br /><span class="label"><a 
+ id="x43-50006r4"></a></span>&#x00A0;&#x00A0;@GET&#x00A0;<br /><span class="label"><a 
+ id="x43-50007r5"></a></span>&#x00A0;&#x00A0;@Path(<!--l. 1594--><span class="listings-nested">&#8221;balance&#8221;</span>)&#x00A0;<br /><span class="label"><a 
+ id="x43-50008r6"></a></span>&#x00A0;&#x00A0;@Produces(<!--l. 1595--><span class="listings-nested">&#8221;text/plain&#8221;</span>)&#x00A0;<br /><span class="label"><a 
+ id="x43-50009r7"></a></span>&#x00A0;&#x00A0;<tspan font-family="cmbx" font-size="12">public</tspan>&#x00A0;String&#x00A0;balance(@PathParam(<!--l. 1596--><span class="listings-nested">&#8221;cardId&#8221;</span>)&#x00A0;String&#x00A0;card,&#x00A0;<br /><span class="label"><a 
+ id="x43-50010r8"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;@QueryParam(<!--l. 1597--><span class="listings-nested">&#8221;pin&#8221;</span>)&#x00A0;String&#x00A0;pin)&#x00A0;<tspan font-family="cmsy" font-size="10">{</tspan>&#x00A0;<br /><span class="label"><a 
+ id="x43-50011r9"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;<tspan font-family="cmbx" font-size="12">return</tspan>&#x00A0;Double.toString(getBalance(card,&#x00A0;pin));&#x00A0;<br /><span class="label"><a 
+ id="x43-50012r10"></a></span>&#x00A0;&#x00A0;<tspan font-family="cmsy" font-size="10">}</tspan>
 &#x00A0;<br /><span class="label"><a 
- id="x44-42013r11"></a></span></pre>
+ id="x43-50013r11"></a></span></pre>
  <div class="caption" 
 ><span class="id">Listing&#x00A0;4: </span><span  
-class="content">Example of a JAX-RS annotated Resource class (by Marek Potociar)</span></div><!--tex4ht:label?: x44-42000 -->
+class="content">Example of a JAX-RS annotated Resource class (by Marek Potociar)</span></div><!--tex4ht:label?: x43-50000 -->
                                                                                          
                                                                                          
     </div><hr class="endfloat" />
-<!--l. 1475--><p class="indent" >    Alternative approaches to configure the dispatcher are not designated by JAX-RS. One
+<!--l. 1602--><p class="indent" >    Alternative approaches to configure the dispatcher are not designated by JAX-RS. One
 possible alternative would be to expose an API to manually add dispatch routes at runtime and
 remove the corresponding annotations from the source code.
-<!--l. 1480--><p class="indent" >    This approach is indeed implemented e.g. by
+<!--l. 1607--><p class="indent" >    This approach is indeed implemented e.g. by
 Restlet<span class="footnote-mark"><a 
-href="restful_groupware56.html#fn50x0"><sup class="textsuperscript">50</sup></a></span><a 
- id="x44-42014f50"></a> ,
+href="restful_groupware61.html#fn55x0"><sup class="textsuperscript">55</sup></a></span><a 
+ id="x43-50014f55"></a> ,
 Apache Wink<span class="footnote-mark"><a 
-href="restful_groupware57.html#fn51x0"><sup class="textsuperscript">51</sup></a></span><a 
- id="x44-42015f51"></a> 
+href="restful_groupware62.html#fn56x0"><sup class="textsuperscript">56</sup></a></span><a 
+ id="x43-50015f56"></a> 
 and probably others. Jersey 2.0 is also expected to provide an API for the
 dispatcher.<span class="footnote-mark"><a 
-href="restful_groupware58.html#fn52x0"><sup class="textsuperscript">52</sup></a></span><a 
- id="x44-42016f52"></a> :
-<!--l. 1488--><p class="indent" >    Advantages of a dynamic dispatcher configuration would be:
+href="restful_groupware63.html#fn57x0"><sup class="textsuperscript">57</sup></a></span><a 
+ id="x43-50016f57"></a> :
+<!--l. 1615--><p class="indent" >    Advantages of a dynamic dispatcher configuration would be:
       <ul class="itemize1">
       <li class="itemize">The path under which a resource type is served is decoupled from the code defining the
       behavior of the resource. This could enable the reuse of resource classes or methods in
@@ -449,36 +498,36 @@ href="restful_groupware58.html#fn52x0"><sup class="textsuperscript">52</sup></a>
       method is called. Resource methods therefor by default don&#8217;t share state through
       resource class attributes. It would therefor be possible to bind individual functors to
       dispatcher routes and thus composing the equivalent of a resource class at runtime.</li></ul>
-<!--l. 1514--><p class="indent" >    The dispatching as defined in JAX-RS does not define any facility for a resource method to
+<!--l. 1641--><p class="indent" >    The dispatching as defined in JAX-RS does not define any facility for a resource method to
 decline its possibility to handle a method at runtime. Such a facility could either be
 implemented by a boolean precondition method associated with the resource method or by a
 special Exception type that would restart the request dispatch but this time ignoring the
 method that threw the exception. If no alternative request method could be found, the
 Exception would be propagated and subsequently transformed into an appropriate error
 response.
-<!--l. 1522--><p class="indent" >    Thus it would be possible to define generic and special purpose request methods
+<!--l. 1649--><p class="indent" >    Thus it would be possible to define generic and special purpose request methods
 even for cases where the static JAX-RS dispatch algorithm does not provide sufficient
 granularity.
                                                                                          
                                                                                          
-<!--l. 1526--><p class="indent" >    While all this flexibility can provide many advantages it has to be kept in mind how the
+<!--l. 1653--><p class="indent" >    While all this flexibility can provide many advantages it has to be kept in mind how the
 framework can gather enough knowledge to still help by autogenerating e.g. WADL documents and
 responses to HEAD and OPTION requests.
 <a 
- id="x44-42017r49"></a>
+ id="x43-50017r58"></a>
 <h5 class="subsubsectionHead"><span class="titlemark">4.4.2  </span> <a 
- id="x44-430002"></a>Resource Facades</h5>
-<!--l. 1532--><p class="noindent" >Fielding discerns between a resource and the representation of a resource in a certain format,
+ id="x43-510002"></a>Resource Facades</h5>
+<!--l. 1659--><p class="noindent" >Fielding discerns between a resource and the representation of a resource in a certain format,
 &#8220;selected dynamically based on the capabilities or desires of the recipient and the nature of the
 resource&#8221;<span class="cite">[<a 
 href="restful_groupwareli2.html#XFielding2000">Fie00</a>, p. 87]</span>. According to this notion, the media type used to represent a resource
 should not influence the processing logic. In an ideal case all possible media types should be
 handled by the same resource method.
-<!--l. 1553--><p class="indent" >    This ideal contrasts with JAX-RS concepts where the media type can be one parameter of the
+<!--l. 1680--><p class="indent" >    This ideal contrasts with JAX-RS concepts where the media type can be one parameter of the
 dispatcher logic. This section outlines a pattern tentatively named &#8220;Resource Facades&#8221; that should
 make it easier to handle different media types with the same code and thus to facilitate code
 reuse.
-<!--l. 1565--><p class="indent" >    A resource method should contain the programming logic executed to serve a request of a
+<!--l. 1692--><p class="indent" >    A resource method should contain the programming logic executed to serve a request of a
 specific type (e.g. GET, PUT) against a specific resource. The programming logic could execute
 common tasks like the following:
       <ul class="itemize1">
@@ -494,143 +543,141 @@ common tasks like the following:
       </li>
       <li class="itemize">check the submitted resource to be of a certain accepted domain type, like contact,
       event, todo item or any set of such types</li></ul>
-<!--l. 1579--><p class="indent" >    All the above processing tasks should in theory be independent of the media type of a resource
+<!--l. 1706--><p class="indent" >    All the above processing tasks should in theory be independent of the media type of a resource
 and only be programmed once to work on any resource format. This could be made possible by
 applying the concept of roles to resources. Roles have been described already 15 years ago by
 <span class="cite">[<a 
 href="restful_groupwareli2.html#XFowler1997">Fow97</a>]</span> or a bit later by <span class="cite">[<a 
 href="restful_groupwareli2.html#XBaeumer2000">BRSW00</a>]</span>. However no evidence could be found whether roles have been
 used to implement restful systems.
-<!--l. 1586--><p class="indent" >    According to <span class="cite">[<a 
+<!--l. 1713--><p class="indent" >    According to <span class="cite">[<a 
 href="restful_groupwareli2.html#XSteimann2008">Ste08</a>]</span>, there exists several definitions for roles which mostly share a few core
 properties:
       <div class="quote">
-      <!--l. 1590--><p class="noindent" >This includes the property that a single object can play several roles of different
+      <!--l. 1717--><p class="noindent" >This includes the property that a single object can play several roles of different
       or the same kind both simultaneously and sequentially, and that the same role
       can be played by different objects of the same and different kinds. Raised to the
       type level, this means that the relationship between role types and class types
       (as sources of role players) is generally m:n.</div>
                                                                                          
                                                                                          
-<!--l. 1597--><p class="indent" >    A popular example for roles is a person, that can have the different roles over their lifetime
+<!--l. 1724--><p class="indent" >    A popular example for roles is a person, that can have the different roles over their lifetime
 (student, professor, single, husband, widower) or in different contexts (teacher, father, husband,
 customer, politician).
-<!--l. 1604--><p class="indent" >    Exemplified with the above tasks, a resource can have the role of being validated,
+<!--l. 1731--><p class="indent" >    Exemplified with the above tasks, a resource can have the role of being validated,
 persisted, summarized or checked for being of a certain type. So like in the above quote a
 facility is needed that can provide m different roles of resources that come in n different
 shapes.
-<!--l. 1609--><p class="indent" >    It can be noted, that unlike in the previous example with roles of a person, this resource roles
+<!--l. 1736--><p class="indent" >    It can be noted, that unlike in the previous example with roles of a person, this resource roles
 examples do not extend the original resource with new attributes. A person surely gets additional
 attributes as a father (references to children) or professor (member of faculty). Thus the term
 &#8220;facade&#8221; in favor of role should indicate that only different views of the same data are
 provided.
-<!--l. 1615--><p class="indent" >    Listing <a 
-href="#x44-43001r5">5<!--tex4ht:ref: fig:datafacades-api --></a> shows interfaces of a minimal framework to provide Facades for Resources. The idea
+<!--l. 1742--><p class="indent" >    Listing <a 
+href="#x43-51001r5">5<!--tex4ht:ref: fig:datafacades-api --></a> shows interfaces of a minimal framework to provide Facades for Resources. The idea
 is, that any code that needs information from a Resource requests the appropriate Facade from the
 ResourceHandler. The ResourceHandler was instantiated with a FacadeRegistry from which it can
 request Factories for requested Facades. A ResourceHandler must have been instantiated with at
 least one initial input Facade, e.g. an InputStream.
                                                                                          
                                                                                          
-<!--l. 1624--><p class="indent" >    <a 
- id="x44-4300048"></a><hr class="float"><div class="float" 
+<!--l. 1751--><p class="indent" >    <a 
+ id="x43-5100048"></a><hr class="float"><div class="float" 
 >
                                                                                          
                                                                                          
 <a 
- id="x44-43001r5"></a>
+ id="x43-51001r5"></a>
 <a 
- id="x44-43002"></a>
-<!--l. 1624--><pre class="listings">&#x00A0;<br /><span class="label"><a 
- id="x44-43003r1"></a></span><tspan font-family="cmbx" font-size="12">interface</tspan>&#x00A0;FacadeFactory<tspan font-family="cmmi" font-size="12">&#x003C;</tspan>T<tspan font-family="cmmi" font-size="12">&#x003E;</tspan>&#x00A0;<tspan font-family="cmsy" font-size="10">{</tspan>&#x00A0;<br /><span class="label"><a 
- id="x44-43004r2"></a></span>&#x00A0;T&#x00A0;build(ResourceHandler&#x00A0;resourceHandler);&#x00A0;<br /><span class="label"><a 
- id="x44-43005r3"></a></span>&#x00A0;<br /><span class="label"><a 
- id="x44-43006r4"></a></span><!--l. 1628--><span class="listings-nested"><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">/</tspan><tspan font-family="cmsy" font-size="10">*</tspan><tspan font-family="cmsy" font-size="10">*</tspan>&#x00A0;<br /><span class="label"><a 
- id="x44-43007r5"></a></span><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmsy" font-size="10">*</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">Dependency</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">Facades</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">needed</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">by</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">this</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">factory</tspan><tspan font-family="cmti" font-size="12">.</tspan>&#x00A0;<br /><span class="label"><a 
- id="x44-43008r6"></a></span><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmsy" font-size="10">*</tspan><tspan font-family="cmti" font-size="12">/</tspan></span>&#x00A0;<br /><span class="label"><a 
- id="x44-43009r7"></a></span>&#x00A0;Iterable<tspan font-family="cmmi" font-size="12">&#x003C;</tspan>?&#x00A0;<tspan font-family="cmbx" font-size="12">extends</tspan>&#x00A0;Class<tspan font-family="cmmi" font-size="12">&#x003C;</tspan>?<tspan font-family="cmmi" font-size="12">&#x003E;&#x003E;</tspan>&#x00A0;getDependencies();&#x00A0;<br /><span class="label"><a 
- id="x44-43010r8"></a></span><tspan font-family="cmsy" font-size="10">}</tspan>&#x00A0;<br /><span class="label"><a 
- id="x44-43011r9"></a></span>&#x00A0;<br /><span class="label"><a 
- id="x44-43012r10"></a></span><tspan font-family="cmbx" font-size="12">interface</tspan>&#x00A0;FacadeRegistry&#x00A0;<tspan font-family="cmsy" font-size="10">{</tspan>&#x00A0;<br /><span class="label"><a 
- id="x44-43013r11"></a></span><!--l. 1635--><span class="listings-nested"><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">/</tspan><tspan font-family="cmsy" font-size="10">*</tspan><tspan font-family="cmsy" font-size="10">*</tspan>&#x00A0;<br /><span class="label"><a 
- id="x44-43014r12"></a></span><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmsy" font-size="10">*</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">Returns</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">Facade</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">factories</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">that</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">could</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">probably</tspan>&#x00A0;<br /><span class="label"><a 
- id="x44-43015r13"></a></span><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmsy" font-size="10">*</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">build</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">the</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">requested</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">Facade</tspan><tspan font-family="cmti" font-size="12">.</tspan>&#x00A0;<br /><span class="label"><a 
- id="x44-43016r14"></a></span><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmsy" font-size="10">*</tspan>&#x00A0;<br /><span class="label"><a 
- id="x44-43017r15"></a></span><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmsy" font-size="10">*</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">@param</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">mediaType</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">MediaType</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">of</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">the</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">original</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">Resource</tspan>&#x00A0;<br /><span class="label"><a 
- id="x44-43018r16"></a></span><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmsy" font-size="10">*</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">@param</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">clazz</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">requested</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">Facade</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">interface</tspan>&#x00A0;<br /><span class="label"><a 
- id="x44-43019r17"></a></span><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmsy" font-size="10">*</tspan><tspan font-family="cmti" font-size="12">/</tspan></span>&#x00A0;<br /><span class="label"><a 
- id="x44-43020r18"></a></span>&#x00A0;Iterable<tspan font-family="cmmi" font-size="12">&#x003C;</tspan>FacadeFactory<tspan font-family="cmmi" font-size="12">&#x003C;</tspan>?<tspan font-family="cmmi" font-size="12">&#x003E;&#x003E;</tspan>&#x00A0;getFacadeFactories(MediaType&#x00A0;mediaType,&#x00A0;<br /><span class="label"><a 
- id="x44-43021r19"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;Class<tspan font-family="cmmi" font-size="12">&#x003C;</tspan>?<tspan font-family="cmmi" font-size="12">&#x003E;</tspan>&#x00A0;clazz);&#x00A0;<br /><span class="label"><a 
- id="x44-43022r20"></a></span><tspan font-family="cmsy" font-size="10">}</tspan>&#x00A0;<br /><span class="label"><a 
- id="x44-43023r21"></a></span>&#x00A0;<br /><span class="label"><a 
- id="x44-43024r22"></a></span><tspan font-family="cmbx" font-size="12">interface</tspan>&#x00A0;ResourceHandler&#x00A0;<tspan font-family="cmsy" font-size="10">{</tspan>&#x00A0;<br /><span class="label"><a 
- id="x44-43025r23"></a></span><!--l. 1647--><span class="listings-nested"><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">/</tspan><tspan font-family="cmsy" font-size="10">*</tspan><tspan font-family="cmsy" font-size="10">*</tspan>&#x00A0;<br /><span class="label"><a 
- id="x44-43026r24"></a></span><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmsy" font-size="10">*</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">Returns</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">the</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">unique</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">instance</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">of</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">a</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">Facade</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">for</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">this</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">Resource</tspan>&#x00A0;<br /><span class="label"><a 
- id="x44-43027r25"></a></span><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmsy" font-size="10">*</tspan>&#x00A0;<br /><span class="label"><a 
- id="x44-43028r26"></a></span><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmsy" font-size="10">*</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">Subsequent</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">calls</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">with</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">the</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">same</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">parameter</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">receive</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">the</tspan>&#x00A0;<br /><span class="label"><a 
- id="x44-43029r27"></a></span><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmsy" font-size="10">*</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">_same</tspan><tspan font-family="cmti" font-size="12">_</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">unique</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">Facade</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">instance</tspan><tspan font-family="cmti" font-size="12">!</tspan>&#x00A0;<br /><span class="label"><a 
- id="x44-43030r28"></a></span><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmsy" font-size="10">*</tspan>&#x00A0;<br /><span class="label"><a 
- id="x44-43031r29"></a></span><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmsy" font-size="10">*</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">@param</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">clazz</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">requested</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">Facade</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">interface</tspan>&#x00A0;<br /><span class="label"><a 
- id="x44-43032r30"></a></span><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmsy" font-size="10">*</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">@return</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">Facade</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">implementation</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">instance</tspan>&#x00A0;<br /><span class="label"><a 
- id="x44-43033r31"></a></span><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmsy" font-size="10">*</tspan><tspan font-family="cmti" font-size="12">/</tspan></span>&#x00A0;<br /><span class="label"><a 
- id="x44-43034r32"></a></span>&#x00A0;<tspan font-family="cmmi" font-size="12">&#x003C;</tspan>T<tspan font-family="cmmi" font-size="12">&#x003E;</tspan>&#x00A0;T&#x00A0;getFacade(Class<tspan font-family="cmmi" font-size="12">&#x003C;</tspan>T<tspan font-family="cmmi" font-size="12">&#x003E;</tspan>&#x00A0;clazz);&#x00A0;<br /><span class="label"><a 
- id="x44-43035r33"></a></span>&#x00A0;<br /><span class="label"><a 
- id="x44-43036r34"></a></span><!--l. 1658--><span class="listings-nested"><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">/</tspan><tspan font-family="cmsy" font-size="10">*</tspan><tspan font-family="cmsy" font-size="10">*</tspan>&#x00A0;<br /><span class="label"><a 
- id="x44-43037r35"></a></span><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmsy" font-size="10">*</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">Is</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">the</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">requested</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">Facade</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">interface</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">available</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">for</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">this</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">Resource</tspan><tspan font-family="cmti" font-size="12">?</tspan>&#x00A0;<br /><span class="label"><a 
- id="x44-43038r36"></a></span><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmsy" font-size="10">*</tspan>&#x00A0;<br /><span class="label"><a 
- id="x44-43039r37"></a></span><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmsy" font-size="10">*</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">@param</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">clazz</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">Facade</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">interface</tspan>&#x00A0;<br /><span class="label"><a 
- id="x44-43040r38"></a></span><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmsy" font-size="10">*</tspan><tspan font-family="cmti" font-size="12">/</tspan></span>&#x00A0;<br /><span class="label"><a 
- id="x44-43041r39"></a></span>&#x00A0;<tspan font-family="cmbx" font-size="12">boolean</tspan>&#x00A0;hasFacade(Class<tspan font-family="cmmi" font-size="12">&#x003C;</tspan>?<tspan font-family="cmmi" font-size="12">&#x003E;</tspan>&#x00A0;clazz);&#x00A0;<br /><span class="label"><a 
- id="x44-43042r40"></a></span>&#x00A0;<br /><span class="label"><a 
- id="x44-43043r41"></a></span><!--l. 1665--><span class="listings-nested"><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">/</tspan><tspan font-family="cmsy" font-size="10">*</tspan><tspan font-family="cmsy" font-size="10">*</tspan>&#x00A0;<br /><span class="label"><a 
- id="x44-43044r42"></a></span><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmsy" font-size="10">*</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">The</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">MediaType</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">of</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">the</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">original</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">Resource</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">from</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">which</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">this</tspan>&#x00A0;<br /><span class="label"><a 
- id="x44-43045r43"></a></span><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmsy" font-size="10">*</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">ResourceHandler</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">was</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">instantiated</tspan><tspan font-family="cmti" font-size="12">.</tspan>&#x00A0;<br /><span class="label"><a 
- id="x44-43046r44"></a></span><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmsy" font-size="10">*</tspan><tspan font-family="cmti" font-size="12">/</tspan></span>&#x00A0;<br /><span class="label"><a 
- id="x44-43047r45"></a></span>&#x00A0;MediaType&#x00A0;getMediaType();&#x00A0;<br /><span class="label"><a 
- id="x44-43048r46"></a></span><tspan font-family="cmsy" font-size="10">}</tspan>
+ id="x43-51002"></a>
+<!--l. 1751--><pre class="listings">&#x00A0;<br /><span class="label"><a 
+ id="x43-51003r1"></a></span><tspan font-family="cmbx" font-size="12">interface</tspan>&#x00A0;FacadeFactory<tspan font-family="cmmi" font-size="12">&#x003C;</tspan>T<tspan font-family="cmmi" font-size="12">&#x003E;</tspan>&#x00A0;<tspan font-family="cmsy" font-size="10">{</tspan>&#x00A0;<br /><span class="label"><a 
+ id="x43-51004r2"></a></span>&#x00A0;T&#x00A0;build(ResourceHandler&#x00A0;resourceHandler);&#x00A0;<br /><span class="label"><a 
+ id="x43-51005r3"></a></span>&#x00A0;<br /><span class="label"><a 
+ id="x43-51006r4"></a></span><!--l. 1755--><span class="listings-nested"><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">/</tspan><tspan font-family="cmsy" font-size="10">*</tspan><tspan font-family="cmsy" font-size="10">*</tspan>&#x00A0;<br /><span class="label"><a 
+ id="x43-51007r5"></a></span><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmsy" font-size="10">*</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">Dependency</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">Facades</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">needed</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">by</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">this</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">factory</tspan><tspan font-family="cmti" font-size="12">.</tspan>&#x00A0;<br /><span class="label"><a 
+ id="x43-51008r6"></a></span><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmsy" font-size="10">*</tspan><tspan font-family="cmti" font-size="12">/</tspan></span>&#x00A0;<br /><span class="label"><a 
+ id="x43-51009r7"></a></span>&#x00A0;Iterable<tspan font-family="cmmi" font-size="12">&#x003C;</tspan>?&#x00A0;<tspan font-family="cmbx" font-size="12">extends</tspan>&#x00A0;Class<tspan font-family="cmmi" font-size="12">&#x003C;</tspan>?<tspan font-family="cmmi" font-size="12">&#x003E;&#x003E;</tspan>&#x00A0;getDependencies();&#x00A0;<br /><span class="label"><a 
+ id="x43-51010r8"></a></span><tspan font-family="cmsy" font-size="10">}</tspan>&#x00A0;<br /><span class="label"><a 
+ id="x43-51011r9"></a></span>&#x00A0;<br /><span class="label"><a 
+ id="x43-51012r10"></a></span><tspan font-family="cmbx" font-size="12">interface</tspan>&#x00A0;FacadeRegistry&#x00A0;<tspan font-family="cmsy" font-size="10">{</tspan>&#x00A0;<br /><span class="label"><a 
+ id="x43-51013r11"></a></span><!--l. 1762--><span class="listings-nested"><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">/</tspan><tspan font-family="cmsy" font-size="10">*</tspan><tspan font-family="cmsy" font-size="10">*</tspan>&#x00A0;<br /><span class="label"><a 
+ id="x43-51014r12"></a></span><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmsy" font-size="10">*</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">Returns</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">Facade</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">factories</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">that</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">could</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">probably</tspan>&#x00A0;<br /><span class="label"><a 
+ id="x43-51015r13"></a></span><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmsy" font-size="10">*</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">build</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">the</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">requested</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">Facade</tspan><tspan font-family="cmti" font-size="12">.</tspan>&#x00A0;<br /><span class="label"><a 
+ id="x43-51016r14"></a></span><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmsy" font-size="10">*</tspan>&#x00A0;<br /><span class="label"><a 
+ id="x43-51017r15"></a></span><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmsy" font-size="10">*</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">@param</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">mediaType</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">MediaType</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">of</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">the</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">original</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">Resource</tspan>&#x00A0;<br /><span class="label"><a 
+ id="x43-51018r16"></a></span><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmsy" font-size="10">*</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">@param</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">clazz</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">requested</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">Facade</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">interface</tspan>&#x00A0;<br /><span class="label"><a 
+ id="x43-51019r17"></a></span><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmsy" font-size="10">*</tspan><tspan font-family="cmti" font-size="12">/</tspan></span>&#x00A0;<br /><span class="label"><a 
+ id="x43-51020r18"></a></span>&#x00A0;Iterable<tspan font-family="cmmi" font-size="12">&#x003C;</tspan>FacadeFactory<tspan font-family="cmmi" font-size="12">&#x003C;</tspan>?<tspan font-family="cmmi" font-size="12">&#x003E;&#x003E;</tspan>&#x00A0;getFacadeFactories(MediaType&#x00A0;mediaType,&#x00A0;<br /><span class="label"><a 
+ id="x43-51021r19"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;Class<tspan font-family="cmmi" font-size="12">&#x003C;</tspan>?<tspan font-family="cmmi" font-size="12">&#x003E;</tspan>&#x00A0;clazz);&#x00A0;<br /><span class="label"><a 
+ id="x43-51022r20"></a></span><tspan font-family="cmsy" font-size="10">}</tspan>&#x00A0;<br /><span class="label"><a 
+ id="x43-51023r21"></a></span>&#x00A0;<br /><span class="label"><a 
+ id="x43-51024r22"></a></span><tspan font-family="cmbx" font-size="12">interface</tspan>&#x00A0;ResourceHandler&#x00A0;<tspan font-family="cmsy" font-size="10">{</tspan>&#x00A0;<br /><span class="label"><a 
+ id="x43-51025r23"></a></span><!--l. 1774--><span class="listings-nested"><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">/</tspan><tspan font-family="cmsy" font-size="10">*</tspan><tspan font-family="cmsy" font-size="10">*</tspan>&#x00A0;<br /><span class="label"><a 
+ id="x43-51026r24"></a></span><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmsy" font-size="10">*</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">Returns</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">the</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">unique</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">instance</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">of</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">a</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">Facade</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">for</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">this</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">Resource</tspan>&#x00A0;<br /><span class="label"><a 
+ id="x43-51027r25"></a></span><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmsy" font-size="10">*</tspan>&#x00A0;<br /><span class="label"><a 
+ id="x43-51028r26"></a></span><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmsy" font-size="10">*</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">Subsequent</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">calls</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">with</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">the</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">same</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">parameter</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">receive</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">the</tspan>&#x00A0;<br /><span class="label"><a 
+ id="x43-51029r27"></a></span><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmsy" font-size="10">*</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">_same</tspan><tspan font-family="cmti" font-size="12">_</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">unique</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">Facade</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">instance</tspan><tspan font-family="cmti" font-size="12">!</tspan>&#x00A0;<br /><span class="label"><a 
+ id="x43-51030r28"></a></span><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmsy" font-size="10">*</tspan>&#x00A0;<br /><span class="label"><a 
+ id="x43-51031r29"></a></span><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmsy" font-size="10">*</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">@param</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">clazz</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">requested</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">Facade</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">interface</tspan>&#x00A0;<br /><span class="label"><a 
+ id="x43-51032r30"></a></span><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmsy" font-size="10">*</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">@return</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">Facade</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">implementation</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">instance</tspan>&#x00A0;<br /><span class="label"><a 
+ id="x43-51033r31"></a></span><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmsy" font-size="10">*</tspan><tspan font-family="cmti" font-size="12">/</tspan></span>&#x00A0;<br /><span class="label"><a 
+ id="x43-51034r32"></a></span>&#x00A0;<tspan font-family="cmmi" font-size="12">&#x003C;</tspan>T<tspan font-family="cmmi" font-size="12">&#x003E;</tspan>&#x00A0;T&#x00A0;getFacade(Class<tspan font-family="cmmi" font-size="12">&#x003C;</tspan>T<tspan font-family="cmmi" font-size="12">&#x003E;</tspan>&#x00A0;clazz);&#x00A0;<br /><span class="label"><a 
+ id="x43-51035r33"></a></span>&#x00A0;<br /><span class="label"><a 
+ id="x43-51036r34"></a></span><!--l. 1785--><span class="listings-nested"><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">/</tspan><tspan font-family="cmsy" font-size="10">*</tspan><tspan font-family="cmsy" font-size="10">*</tspan>&#x00A0;<br /><span class="label"><a 
+ id="x43-51037r35"></a></span><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmsy" font-size="10">*</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">Is</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">the</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">requested</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">Facade</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">interface</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">available</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">for</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">this</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">Resource</tspan><tspan font-family="cmti" font-size="12">?</tspan>&#x00A0;<br /><span class="label"><a 
+ id="x43-51038r36"></a></span><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmsy" font-size="10">*</tspan>&#x00A0;<br /><span class="label"><a 
+ id="x43-51039r37"></a></span><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmsy" font-size="10">*</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">@param</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">clazz</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">Facade</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">interface</tspan>&#x00A0;<br /><span class="label"><a 
+ id="x43-51040r38"></a></span><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmsy" font-size="10">*</tspan><tspan font-family="cmti" font-size="12">/</tspan></span>&#x00A0;<br /><span class="label"><a 
+ id="x43-51041r39"></a></span>&#x00A0;<tspan font-family="cmbx" font-size="12">boolean</tspan>&#x00A0;hasFacade(Class<tspan font-family="cmmi" font-size="12">&#x003C;</tspan>?<tspan font-family="cmmi" font-size="12">&#x003E;</tspan>&#x00A0;clazz);&#x00A0;<br /><span class="label"><a 
+ id="x43-51042r40"></a></span>&#x00A0;<br /><span class="label"><a 
+ id="x43-51043r41"></a></span><!--l. 1792--><span class="listings-nested"><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">/</tspan><tspan font-family="cmsy" font-size="10">*</tspan><tspan font-family="cmsy" font-size="10">*</tspan>&#x00A0;<br /><span class="label"><a 
+ id="x43-51044r42"></a></span><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmsy" font-size="10">*</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">The</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">MediaType</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">of</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">the</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">original</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">Resource</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">from</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">which</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">this</tspan>&#x00A0;<br /><span class="label"><a 
+ id="x43-51045r43"></a></span><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmsy" font-size="10">*</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">ResourceHandler</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">was</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">instantiated</tspan><tspan font-family="cmti" font-size="12">.</tspan>&#x00A0;<br /><span class="label"><a 
+ id="x43-51046r44"></a></span><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmti" font-size="12">&#x00A0;</tspan><tspan font-family="cmsy" font-size="10">*</tspan><tspan font-family="cmti" font-size="12">/</tspan></span>&#x00A0;<br /><span class="label"><a 
+ id="x43-51047r45"></a></span>&#x00A0;MediaType&#x00A0;getMediaType();&#x00A0;<br /><span class="label"><a 
+ id="x43-51048r46"></a></span><tspan font-family="cmsy" font-size="10">}</tspan>
 &#x00A0;<br /><span class="label"><a 
- id="x44-43049r47"></a></span></pre>
+ id="x43-51049r47"></a></span></pre>
  <div class="caption" 
 ><span class="id">Listing&#x00A0;5: </span><span  
-class="content">API of the ResourceFacades component</span></div><!--tex4ht:label?: x44-43000 -->
+class="content">API of the ResourceFacades component</span></div><!--tex4ht:label?: x43-51000 -->
                                                                                          
                                                                                          
     </div><hr class="endfloat" />
-<!--l. 1673--><p class="indent" >    <a 
-href="#x44-430522">Figure&#x00A0;2<!--tex4ht:ref: fig:datafacades-api --></a> presents two example use cases for Facades. On the left site the request method
+<!--l. 1800--><p class="indent" >    <a 
+href="#x43-510522">Figure&#x00A0;2<!--tex4ht:ref: fig:datafacades-api --></a> presents two example use cases for Facades. On the left site the request method
 might want to know the full name of a submitted contact resource. It therefor requests a Person
 facade. Different Person Facade factories are registered. The different factories in turn have each a
 dependency on an InputStream parameterized with a Media Type. The provided Media Type
 makes the resolution path unambiguous.
-<!--l. 1680--><p class="indent" >    The right site shows dependencies of Title and Summary Facades. Different Factories would be
+<!--l. 1807--><p class="indent" >    The right site shows dependencies of Title and Summary Facades. Different Factories would be
 provided that knows to create meaningful titles and summaries for Persons, Events or Todo items
 independent of the original Media Types. A title of a person surely includes the full name, for an
 event the date and event title would be combined and a todo item could include the priority in the
 title.
-<!--l. 1686--><p class="indent" >    <hr class="figure"><div class="figure" 
+<!--l. 1813--><p class="indent" >    <hr class="figure"><div class="figure" 
 >
                                                                                          
                                                                                          
 <a 
- id="x44-430522"></a>
+ id="x43-510522"></a>
                                                                                          
                                                                                          
 <a 
- id="x44-43050r1"></a>
-<!--l. 1707--><p class="noindent" > <object data="restful_groupware-2.svg" width="272.75473 " height="132.68385 " type="image/svg+xml"><p>SVG-Viewer needed.</p></object> <a 
- id="x44-43051r2"></a> <object data="restful_groupware-3.svg" width="254.2059 " height="70.17517 " type="image/svg+xml"><p>SVG-Viewer needed.</p></object>
+ id="x43-51050r1"></a>
+<!--l. 1834--><p class="noindent" > <object data="restful_groupware-2.svg" width="272.75473 " height="132.68385 " type="image/svg+xml"><p>SVG-Viewer needed.</p></object> <a 
+ id="x43-51051r2"></a> <object data="restful_groupware-3.svg" width="254.2059 " height="70.17517 " type="image/svg+xml"><p>SVG-Viewer needed.</p></object>
 <br /> <div class="caption" 
 ><span class="id">Figure&#x00A0;2: </span><span  
-class="content">Facade examples with dependencies</span></div><!--tex4ht:label?: x44-430522 -->
+class="content">Facade examples with dependencies</span></div><!--tex4ht:label?: x43-510522 -->
                                                                                          
                                                                                          
-<!--l. 1729--><p class="indent" >    </div><hr class="endfigure">
-<a 
- id="x44-43053r1"></a>
-<tspan font-family="cmssbx" font-size="10">4.4.2.1  Related work</tspan>&#x00A0;   The idea for the Resource Facades concept was triggered by the use of the JavaBeans
-Activation Framework<span class="footnote-mark"><a 
-href="restful_groupware59.html#fn53x0"><sup class="textsuperscript">53</sup></a></span><a 
- id="x44-43054f53"></a> 
+<!--l. 1856--><p class="indent" >    </div><hr class="endfigure">
+<tspan font-family="cmssbx" font-size="10">Related work</tspan>&#x00A0;   The idea for the Resource Facades concept was triggered by the use of the JavaBeans Activation
+Framework<span class="footnote-mark"><a 
+href="restful_groupware64.html#fn58x0"><sup class="textsuperscript">58</sup></a></span><a 
+ id="x43-51053f58"></a> 
 (JAF) in the JAX-RS specification. In this framework the DataHandler interface provides access to
 available commands for a specific MediaType via the getCommand method. The framework
 however was designed with the needs of a Desktop clipboard in mind. Since JAF has been released
@@ -658,8 +705,8 @@ InputStream has already been consumed.
 facade are also provided by an external component. It may be possible that the
 concept could even be implemented on top of an existing Dependency Injection
 framework.<span class="footnote-mark"><a 
-href="restful_groupware60.html#fn54x0"><sup class="textsuperscript">54</sup></a></span><a 
- id="x44-43055f54"></a> 
+href="restful_groupware65.html#fn59x0"><sup class="textsuperscript">59</sup></a></span><a 
+ id="x43-51054f59"></a> 
 Some aspects however may require extra care:
       <ul class="itemize1">
       <li class="itemize">Resolving the dependencies of Facade factories must consider the Media Type of the
@@ -669,70 +716,68 @@ Some aspects however may require extra care:
       be equivalent to the Request scope, but this can&#8217;t be guaranteed.
       </li>
       <li class="itemize">Each ResourceHandler manages its own view of available Facades.</li></ul>
-<!--l. 1804--><p class="indent" >    The Apache Wink Rest Framework implements a concept called
+<!--l. 1931--><p class="indent" >    The Apache Wink Rest Framework implements a concept called
 &#8220;Assets&#8221;.<span class="footnote-mark"><a 
-href="restful_groupware61.html#fn55x0"><sup class="textsuperscript">55</sup></a></span><a 
- id="x44-43056f55"></a> 
+href="restful_groupware66.html#fn60x0"><sup class="textsuperscript">60</sup></a></span><a 
+ id="x43-51055f60"></a> 
                                                                                          
                                                                                          
 Assets are containers for the resource data injected in or returned from resource methods. Assets
 provide methods annotated with <span class="lstinline">@Produces</span> or <span class="lstinline">@Consumes</span> to handle different Media types. In
 contrast to Resource Facades, the set of supported media types of assets can only be extended by
 extending the asset classes. It is also not possible like in listing <a 
-href="#x44-430522">2<!--tex4ht:ref: fig:facade-ex-dependen --></a> to provide generic Facades for a
+href="#x43-510522">2<!--tex4ht:ref: fig:facade-ex-dependen --></a> to provide generic Facades for a
 title or a summary.
-<a 
- id="x44-43057r2"></a>
-<tspan font-family="cmssbx" font-size="10">4.4.2.2  Scala&#8217;s type system</tspan>&#x00A0;   The proposed Java class diagram in this section has the
-disadvantage that the availability of a facade can not be checked at compile time. It seems
-however, that a more advanced type system could help in this regard.
+<tspan font-family="cmssbx" font-size="10">Scala&#8217;s type system</tspan>&#x00A0;   The proposed Java class diagram in this section has the disadvantage that
+the availability of a facade can not be checked at compile time. It seems however, that a more
+advanced type system could help in this regard.
     Listing <a 
-href="#x44-43058r6">6<!--tex4ht:ref: fig:facades-with-scala-types --></a> demonstrates features of the Scala type system<span class="cite">[<a 
+href="#x43-51056r6">6<!--tex4ht:ref: fig:facades-with-scala-types --></a> demonstrates features of the Scala type system<span class="cite">[<a 
 href="restful_groupwareli2.html#XOdersky2011">Ode11</a>]</span> that could be of interest
 here. In the example a post method handler has the requirement to access the posted
 data through the facades <span class="lstinline">VCard</span> and <span class="lstinline">TextSummary</span>. Additionally the data should be
 forwarded to an implementation of the trait Storage which has its own requirement for a
 facade.
     Scala&#8217;s &#8220;compound types&#8221; feature is used in line <a 
-href="#x44-43057r8">8<!--tex4ht:ref: line-scala-compound --></a> to combine these requirements into an
+href="#x43-510008">8<!--tex4ht:ref: line-scala-compound --></a> to combine these requirements into an
 anonymous type. The &#8220;type alias&#8221; feature allows it to assign the identifier <span class="lstinline">MessageBody</span> to
 this anonymous type and thus to keep the declaration of the <span class="lstinline">post</span> method short and
 readable.
                                                                                          
                                                                                          
     <a 
- id="x44-43057r20"></a><hr class="float"><div class="float" 
+ id="x43-5100020"></a><hr class="float"><div class="float" 
 >
                                                                                          
                                                                                          
 <a 
- id="x44-43058r6"></a>
+ id="x43-51056r6"></a>
 <a 
- id="x44-43059"></a>
-<!--l. 1835--><pre class="listings">&#x00A0;<br /><span class="label"><a 
- id="x44-43060r1"></a>1</span>trait&#x00A0;Storage[ReqFacade]&#x00A0;<tspan font-family="cmsy" font-size="10">{</tspan>&#x00A0;<br /><span class="label"><a 
- id="x44-43061r2"></a>2</span>&#x00A0;def&#x00A0;create(id:&#x00A0;String,&#x00A0;<br /><span class="label"><a 
- id="x44-43062r3"></a>3</span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;body:&#x00A0;ResourceHandler&#x00A0;with&#x00A0;FacadeFactory[ReqFacade])&#x00A0;<br /><span class="label"><a 
- id="x44-43063r4"></a>4</span><tspan font-family="cmsy" font-size="10">}</tspan>&#x00A0;<br /><span class="label"><a 
- id="x44-43064r5"></a>5</span>&#x00A0;<br /><span class="label"><a 
- id="x44-43065r6"></a>6</span><tspan font-family="cmbx" font-size="12">class</tspan>&#x00A0;PostToCollection[StorageReqFacade]&#x00A0;<br /><span class="label"><a 
- id="x44-43066r7"></a>7</span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;(storage:&#x00A0;Storage[StorageReqFacade])&#x00A0;<tspan font-family="cmsy" font-size="10">{</tspan>&#x00A0;<br /><span class="label"><a 
- id="x44-43067r8"></a>8</span>&#x00A0;type&#x00A0;MessageBody&#x00A0;=&#x00A0;ResourceHandler&#x00A0;</pre><!--l. 1843--><pre class="listings"></pre><!--l. 1843--><pre class="listings">&#x00A0;<br /><span class="label"><a 
- id="x44-43068r9"></a>9</span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;with&#x00A0;FacadeFactory[VCard]&#x00A0;<br /><span class="label"><a 
- id="x44-43069r10"></a>10</span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;with&#x00A0;FacadeFactory[TextSummary]&#x00A0;<br /><span class="label"><a 
- id="x44-43070r11"></a>11</span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;with&#x00A0;FacadeFactory[StorageReqFacade]&#x00A0;<br /><span class="label"><a 
- id="x44-43071r12"></a>12</span>&#x00A0;<br /><span class="label"><a 
- id="x44-43072r13"></a>13</span>&#x00A0;def&#x00A0;post(body:MessageBody)&#x00A0;:&#x00A0;Response&#x00A0;=&#x00A0;<tspan font-family="cmsy" font-size="10">{</tspan>&#x00A0;<br /><span class="label"><a 
- id="x44-43073r14"></a>14</span>&#x00A0;&#x00A0;...&#x00A0;<br /><span class="label"><a 
- id="x44-43074r15"></a>15</span>&#x00A0;&#x00A0;storage.create(<!--l. 1850--><span class="listings-nested">&#8221;id&#8221;</span>,&#x00A0;body)&#x00A0;<br /><span class="label"><a 
- id="x44-43075r16"></a>16</span>&#x00A0;&#x00A0;...&#x00A0;<br /><span class="label"><a 
- id="x44-43076r17"></a>17</span>&#x00A0;<tspan font-family="cmsy" font-size="10">}</tspan>&#x00A0;<br /><span class="label"><a 
- id="x44-43077r18"></a>18</span><tspan font-family="cmsy" font-size="10">}</tspan>
+ id="x43-51057"></a>
+<!--l. 1962--><pre class="listings">&#x00A0;<br /><span class="label"><a 
+ id="x43-51058r1"></a>1</span>trait&#x00A0;Storage[ReqFacade]&#x00A0;<tspan font-family="cmsy" font-size="10">{</tspan>&#x00A0;<br /><span class="label"><a 
+ id="x43-51059r2"></a>2</span>&#x00A0;def&#x00A0;create(id:&#x00A0;String,&#x00A0;<br /><span class="label"><a 
+ id="x43-51060r3"></a>3</span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;body:&#x00A0;ResourceHandler&#x00A0;with&#x00A0;FacadeFactory[ReqFacade])&#x00A0;<br /><span class="label"><a 
+ id="x43-51061r4"></a>4</span><tspan font-family="cmsy" font-size="10">}</tspan>&#x00A0;<br /><span class="label"><a 
+ id="x43-51062r5"></a>5</span>&#x00A0;<br /><span class="label"><a 
+ id="x43-51063r6"></a>6</span><tspan font-family="cmbx" font-size="12">class</tspan>&#x00A0;PostToCollection[StorageReqFacade]&#x00A0;<br /><span class="label"><a 
+ id="x43-51064r7"></a>7</span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;(storage:&#x00A0;Storage[StorageReqFacade])&#x00A0;<tspan font-family="cmsy" font-size="10">{</tspan>&#x00A0;<br /><span class="label"><a 
+ id="x43-51065r8"></a>8</span>&#x00A0;type&#x00A0;MessageBody&#x00A0;=&#x00A0;ResourceHandler&#x00A0;</pre><!--l. 1970--><pre class="listings"></pre><!--l. 1970--><pre class="listings">&#x00A0;<br /><span class="label"><a 
+ id="x43-51066r9"></a>9</span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;with&#x00A0;FacadeFactory[VCard]&#x00A0;<br /><span class="label"><a 
+ id="x43-51067r10"></a>10</span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;with&#x00A0;FacadeFactory[TextSummary]&#x00A0;<br /><span class="label"><a 
+ id="x43-51068r11"></a>11</span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;with&#x00A0;FacadeFactory[StorageReqFacade]&#x00A0;<br /><span class="label"><a 
+ id="x43-51069r12"></a>12</span>&#x00A0;<br /><span class="label"><a 
+ id="x43-51070r13"></a>13</span>&#x00A0;def&#x00A0;post(body:MessageBody)&#x00A0;:&#x00A0;Response&#x00A0;=&#x00A0;<tspan font-family="cmsy" font-size="10">{</tspan>&#x00A0;<br /><span class="label"><a 
+ id="x43-51071r14"></a>14</span>&#x00A0;&#x00A0;...&#x00A0;<br /><span class="label"><a 
+ id="x43-51072r15"></a>15</span>&#x00A0;&#x00A0;storage.create(<!--l. 1977--><span class="listings-nested">&#8221;id&#8221;</span>,&#x00A0;body)&#x00A0;<br /><span class="label"><a 
+ id="x43-51073r16"></a>16</span>&#x00A0;&#x00A0;...&#x00A0;<br /><span class="label"><a 
+ id="x43-51074r17"></a>17</span>&#x00A0;<tspan font-family="cmsy" font-size="10">}</tspan>&#x00A0;<br /><span class="label"><a 
+ id="x43-51075r18"></a>18</span><tspan font-family="cmsy" font-size="10">}</tspan>
 &#x00A0;<br /><span class="label"><a 
- id="x44-43078r19"></a>19</span></pre>
+ id="x43-51076r19"></a>19</span></pre>
  <div class="caption" 
 ><span class="id">Listing&#x00A0;6: </span><span  
-class="content">Implementing the facades approach with Scala&#8217;s type system</span></div><!--tex4ht:label?: x44-43057r -->
+class="content">Implementing the facades approach with Scala&#8217;s type system</span></div><!--tex4ht:label?: x43-51000 -->
                                                                                          
                                                                                          
     </div><hr class="endfloat" />
@@ -741,10 +786,10 @@ may be able to considerably improve the presented facades approach. A more detai
 study however is out of the scope of this work and the author&#8217;s comprehension of type
 systems.
 <a 
- id="x44-43079r48"></a>
+ id="x43-51077r57"></a>
 <h4 class="subsectionHead"><span class="titlemark">4.5  </span> <a 
- id="x44-440005"></a>Producing Semantically annotated HTML</h4>
-<!--l. 1864--><p class="noindent" >A recent discussion of possibilities to produce semantically annotated HTML can be found in
+ id="x43-520005"></a>Producing Semantically annotated HTML</h4>
+<!--l. 1991--><p class="noindent" >A recent discussion of possibilities to produce semantically annotated HTML can be found in
 <span class="cite">[<a 
 href="restful_groupwareli2.html#XDBLP:books/daglib/0023755">CDDM09</a>, sec. 9.1.3]</span>. The authors describe a method developed as part of a larger
 &#8220;Web Semantics Design Method&#8221; (WSDM), consists of two mappings. The first one is
@@ -753,46 +798,46 @@ maps to the actual data source.&#8221; The second mapping links HTML tags to ele
 the reference ontology from the first mapping. Neither the book nor referenced papers
 however go in any more detail about the final step of generating the annotated HTML
 tags.
-<!--l. 1874--><p class="indent" >    One important point can be learned from the WSDM description. The production of semantically
+<!--l. 2001--><p class="indent" >    One important point can be learned from the WSDM description. The production of semantically
 annotated HTML can become a lot easier if the entity is already available represented with the
 targeted vocabulary. A very naive approach to produce annotated HTML would be to just
 manually write the necessary attributes in the template and fill them with values from an arbitrary
 data object, as demonstrated in listing <a 
-href="#x44-44002r7">7<!--tex4ht:ref: fig:naive-microdata-template --></a>. Even with the conciseness of the used template language
+href="#x43-52002r7">7<!--tex4ht:ref: fig:naive-microdata-template --></a>. Even with the conciseness of the used template language
 Jade<span class="footnote-mark"><a 
-href="restful_groupware62.html#fn56x0"><sup class="textsuperscript">56</sup></a></span><a 
- id="x44-44001f56"></a> ,
+href="restful_groupware67.html#fn61x0"><sup class="textsuperscript">61</sup></a></span><a 
+ id="x43-52001f61"></a> ,
 the developer still has a lot to type.
                                                                                          
                                                                                          
-<!--l. 1886--><p class="indent" >    <a 
- id="x44-4400010"></a><hr class="float"><div class="float" 
+<!--l. 2013--><p class="indent" >    <a 
+ id="x43-5200010"></a><hr class="float"><div class="float" 
 >
                                                                                          
                                                                                          
 <a 
- id="x44-44002r7"></a>
+ id="x43-52002r7"></a>
 <a 
- id="x44-44003"></a>
-<!--l. 1886--><pre class="listings">&#x00A0;<br /><span class="label"><a 
- id="x44-44004r1"></a></span><tspan font-family="cmsy" font-size="10">-</tspan>@&#x00A0;var&#x00A0;vcard:&#x00A0;VCard&#x00A0;<br /><span class="label"><a 
- id="x44-44005r2"></a></span>&#x00A0;<br /><span class="label"><a 
- id="x44-44006r3"></a></span>div(&#x00A0;itemscope&#x00A0;itemtype=<!--l. 1889--><span class="listings-nested">&#8221;http://schema.org/Person&#8221;</span>&#x00A0;<br /><span class="label"><a 
- id="x44-44007r4"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;itemid=#<tspan font-family="cmsy" font-size="10">{</tspan>vcard.getProperty(<!--l. 1890--><span class="listings-nested">&#8221;uid&#8221;</span>)<tspan font-family="cmsy" font-size="10">}</tspan>&#x00A0;)&#x00A0;<br /><span class="label"><a 
- id="x44-44008r5"></a></span>&#x00A0;&#x00A0;span(&#x00A0;itemprop=<!--l. 1891--><span class="listings-nested">&#8221;name&#8221;</span>&#x00A0;)&#x00A0;<br /><span class="label"><a 
- id="x44-44009r6"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;#<tspan font-family="cmsy" font-size="10">{</tspan>vcard.getProperty(<!--l. 1892--><span class="listings-nested">&#8221;fn&#8221;</span>)<tspan font-family="cmsy" font-size="10">}</tspan>&#x00A0;<br /><span class="label"><a 
- id="x44-44010r7"></a></span>&#x00A0;&#x00A0;span(&#x00A0;itemprop=<!--l. 1893--><span class="listings-nested">&#8221;telephone&#8221;</span>&#x00A0;)&#x00A0;<br /><span class="label"><a 
- id="x44-44011r8"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;#<tspan font-family="cmsy" font-size="10">{</tspan>vcard.getProperty(<!--l. 1894--><span class="listings-nested">&#8221;tel&#8221;</span>)<tspan font-family="cmsy" font-size="10">}</tspan>
+ id="x43-52003"></a>
+<!--l. 2013--><pre class="listings">&#x00A0;<br /><span class="label"><a 
+ id="x43-52004r1"></a></span><tspan font-family="cmsy" font-size="10">-</tspan>@&#x00A0;var&#x00A0;vcard:&#x00A0;VCard&#x00A0;<br /><span class="label"><a 
+ id="x43-52005r2"></a></span>&#x00A0;<br /><span class="label"><a 
+ id="x43-52006r3"></a></span>div(&#x00A0;itemscope&#x00A0;itemtype=<!--l. 2016--><span class="listings-nested">&#8221;http://schema.org/Person&#8221;</span>&#x00A0;<br /><span class="label"><a 
+ id="x43-52007r4"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;itemid=#<tspan font-family="cmsy" font-size="10">{</tspan>vcard.getProperty(<!--l. 2017--><span class="listings-nested">&#8221;uid&#8221;</span>)<tspan font-family="cmsy" font-size="10">}</tspan>&#x00A0;)&#x00A0;<br /><span class="label"><a 
+ id="x43-52008r5"></a></span>&#x00A0;&#x00A0;span(&#x00A0;itemprop=<!--l. 2018--><span class="listings-nested">&#8221;name&#8221;</span>&#x00A0;)&#x00A0;<br /><span class="label"><a 
+ id="x43-52009r6"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;#<tspan font-family="cmsy" font-size="10">{</tspan>vcard.getProperty(<!--l. 2019--><span class="listings-nested">&#8221;fn&#8221;</span>)<tspan font-family="cmsy" font-size="10">}</tspan>&#x00A0;<br /><span class="label"><a 
+ id="x43-52010r7"></a></span>&#x00A0;&#x00A0;span(&#x00A0;itemprop=<!--l. 2020--><span class="listings-nested">&#8221;telephone&#8221;</span>&#x00A0;)&#x00A0;<br /><span class="label"><a 
+ id="x43-52011r8"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;#<tspan font-family="cmsy" font-size="10">{</tspan>vcard.getProperty(<!--l. 2021--><span class="listings-nested">&#8221;tel&#8221;</span>)<tspan font-family="cmsy" font-size="10">}</tspan>
 &#x00A0;<br /><span class="label"><a 
- id="x44-44012r9"></a></span></pre>
+ id="x43-52012r9"></a></span></pre>
  <div class="caption" 
 ><span class="id">Listing&#x00A0;7: </span><span  
-class="content">Defining all Microdata attributes manually in an HTML template</span></div><!--tex4ht:label?: x44-44000 -->
+class="content">Defining all Microdata attributes manually in an HTML template</span></div><!--tex4ht:label?: x43-52000 -->
                                                                                          
                                                                                          
     </div><hr class="endfloat" />
-<!--l. 1897--><p class="indent" >    Compared to the above listing <a 
-href="#x44-44013r8">8<!--tex4ht:ref: fig:microdata-template --></a> shows a template using a data structure that is aware of the
+<!--l. 2024--><p class="indent" >    Compared to the above listing <a 
+href="#x43-52013r8">8<!--tex4ht:ref: fig:microdata-template --></a> shows a template using a data structure that is aware of the
 used Microdata vocabulary and wraps an instance of a typed Microdata item with its properties.
 The <span class="lstinline">scope</span> method of the Microdata interface will add the <span class="lstinline">itemscope</span>, <span class="lstinline">itemtype</span> and
 <span class="lstinline">itemid</span> attributes to the nested <span class="lstinline">div</span> element. The <span class="lstinline">prop</span> method either augments a nested
@@ -801,50 +846,48 @@ method adds the <span class="lstinline">itemprop</span> attribute and puts the v
 element.
                                                                                          
                                                                                          
-<!--l. 1908--><p class="indent" >    <hr class="float"><div class="float" 
+<!--l. 2035--><p class="indent" >    <hr class="float"><div class="float" 
 >
                                                                                          
                                                                                          
 <a 
- id="x44-44013r8"></a>
+ id="x43-52013r8"></a>
 <a 
- id="x44-44014"></a>
-<!--l. 1908--><pre class="listings">&#x00A0;<br /><span class="label"><a 
- id="x44-44015r1"></a></span><tspan font-family="cmsy" font-size="10">-</tspan>@&#x00A0;var&#x00A0;md:&#x00A0;MicroData&#x00A0;<br /><span class="label"><a 
- id="x44-44016r2"></a></span>&#x00A0;<br /><span class="label"><a 
- id="x44-44017r3"></a></span>=&#x00A0;md.scope&#x00A0;<br /><span class="label"><a 
- id="x44-44018r4"></a></span>&#x00A0;&#x00A0;div&#x00A0;<br /><span class="label"><a 
- id="x44-44019r5"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;=&#x00A0;md.prop(<!--l. 1913--><span class="listings-nested">&#8221;name&#8221;</span>)&#x00A0;<br /><span class="label"><a 
- id="x44-44020r6"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;span(&#x00A0;style=<!--l. 1914--><span class="listings-nested">&#8221;color:red&#8221;</span>&#x00A0;)&#x00A0;<br /><span class="label"><a 
- id="x44-44021r7"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;=&#x00A0;md.prop(<!--l. 1915--><span class="listings-nested">&#8221;telephone&#8221;</span>)&#x00A0;<br /><span class="label"><a 
- id="x44-44022r8"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;=&#x00A0;md.prop(<!--l. 1916--><span class="listings-nested">&#8221;email&#8221;</span>)
+ id="x43-52014"></a>
+<!--l. 2035--><pre class="listings">&#x00A0;<br /><span class="label"><a 
+ id="x43-52015r1"></a></span><tspan font-family="cmsy" font-size="10">-</tspan>@&#x00A0;var&#x00A0;md:&#x00A0;MicroData&#x00A0;<br /><span class="label"><a 
+ id="x43-52016r2"></a></span>&#x00A0;<br /><span class="label"><a 
+ id="x43-52017r3"></a></span>=&#x00A0;md.scope&#x00A0;<br /><span class="label"><a 
+ id="x43-52018r4"></a></span>&#x00A0;&#x00A0;div&#x00A0;<br /><span class="label"><a 
+ id="x43-52019r5"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;=&#x00A0;md.prop(<!--l. 2040--><span class="listings-nested">&#8221;name&#8221;</span>)&#x00A0;<br /><span class="label"><a 
+ id="x43-52020r6"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;span(&#x00A0;style=<!--l. 2041--><span class="listings-nested">&#8221;color:red&#8221;</span>&#x00A0;)&#x00A0;<br /><span class="label"><a 
+ id="x43-52021r7"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;=&#x00A0;md.prop(<!--l. 2042--><span class="listings-nested">&#8221;telephone&#8221;</span>)&#x00A0;<br /><span class="label"><a 
+ id="x43-52022r8"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;=&#x00A0;md.prop(<!--l. 2043--><span class="listings-nested">&#8221;email&#8221;</span>)
 &#x00A0;<br /><span class="label"><a 
- id="x44-44023r9"></a></span></pre>
+ id="x43-52023r9"></a></span></pre>
  <div class="caption" 
 ><span class="id">Listing&#x00A0;8: </span><span  
-class="content">Using a Microdata-aware data structure in a template</span></div><!--tex4ht:label?: x44-44000 -->
+class="content">Using a Microdata-aware data structure in a template</span></div><!--tex4ht:label?: x43-52000 -->
                                                                                          
                                                                                          
     </div><hr class="endfloat" />
-<!--l. 1919--><p class="indent" >    An implementation of this approach must take care of a few peculiarities<span class="cite">[<a 
+<!--l. 2046--><p class="indent" >    An implementation of this approach must take care of a few peculiarities<span class="cite">[<a 
 href="restful_groupwareli2.html#XHickson2011">Hic11a</a>]</span>. Some
 properties don&#8217;t necessarily use simple <span class="lstinline">span</span> elements, e.g. dates can be better expressed with <span class="lstinline">time</span>
 elements or URI values most likely appear in an <span class="lstinline">a</span>, <span class="lstinline">img</span>, <span class="lstinline">link</span> or <span class="lstinline">object</span> element. Property values
 could also be put in a <span class="lstinline">content</span> attribute while the element&#8217;s nested text content is optimized for
 human consumption. Items can be nested, e.g. an item of type PostalAddress could be nested
 inside a Person item.
-<!--l. 1929--><p class="indent" >    The proposed approach can be implemented on any template engine as long as it permits
+<!--l. 2056--><p class="indent" >    The proposed approach can be implemented on any template engine as long as it permits
 to capture and manipulate nested HTML elements and to call methods of passed in
 objects.<span class="footnote-mark"><a 
-href="restful_groupware63.html#fn57x0"><sup class="textsuperscript">57</sup></a></span><a 
- id="x44-44024f57"></a> 
+href="restful_groupware68.html#fn62x0"><sup class="textsuperscript">62</sup></a></span><a 
+ id="x43-52024f62"></a> 
 <a 
- id="x44-44025r51"></a>
+ id="x43-52025r60"></a>
 <h5 class="subsubsectionHead"><span class="titlemark">4.5.1  </span> <a 
- id="x44-450001"></a>Other components</h5>
-<a 
- id="x44-45001r1"></a>
-<tspan font-family="cmssbx" font-size="10">4.5.1.1  Actions</tspan>&#x00A0;   An action is basically the code that should be executed to respond to a client
+ id="x43-530001"></a>Other components</h5>
+<tspan font-family="cmssbx" font-size="10">Actions</tspan>&#x00A0;   An action is basically the code that should be executed to respond to a client
 request. An action receives all information about a request and is connected to the
 application. It can use and manipulate the application state and produces a data structure
 representing the response. It can be compared to the &#8220;Request method&#8221; defined in
@@ -858,11 +901,9 @@ in a POST or PUT resource method are:
       </li>
       <li class="itemize">Extract information to be sent to another component, e.g. to notify users about changes
       or to index the new data for search.</li></ul>
-<a 
- id="x44-45002r2"></a>
-<tspan font-family="cmssbx" font-size="10">4.5.1.2  CollectionStorage</tspan>&#x00A0;   The collection storage interface offers the necessary means to store
-and retrieve resources. For clarity this interface is not further broken down into a read-only part
-and a full read-write interface.
+<tspan font-family="cmssbx" font-size="10">CollectionStorage</tspan>&#x00A0;   The collection storage interface offers the necessary means to store and
+retrieve resources. For clarity this interface is not further broken down into a read-only part and a
+full read-write interface.
     A collection storage is instantiated with the knowledge of the collection it is responsible
 for. It therefor typically only returns resources that were previously stored through it
 although it may share its underlying persistency provider with other collection storage
@@ -873,119 +914,115 @@ attach memory based caching to this component.
 method call represents one atomic action independent from other actions.
 Conditional request execution is therefor in the responsibility of the storage. Listing
 <a 
-href="#x44-45004r9">9<!--tex4ht:ref: fig:evaluatepreconditions-concurrency --></a><span class="footnote-mark"><a 
-href="restful_groupware64.html#fn58x0"><sup class="textsuperscript">58</sup></a></span><a 
- id="x44-45003f58"></a> 
+href="#x43-53002r9">9<!--tex4ht:ref: fig:evaluatepreconditions-concurrency --></a><span class="footnote-mark"><a 
+href="restful_groupware69.html#fn63x0"><sup class="textsuperscript">63</sup></a></span><a 
+ id="x43-53001f63"></a> 
 shows a possibility for a lost update. Another request could have updated the resource between the
-                                                                                         
-                                                                                         
 etag check and the <span class="lstinline">doUpdate</span> call.
                                                                                          
                                                                                          
     <a 
- id="x44-45002r5"></a><hr class="float"><div class="float" 
+ id="x43-530005"></a><hr class="float"><div class="float" 
 >
                                                                                          
                                                                                          
 <a 
- id="x44-45004r9"></a>
+ id="x43-53002r9"></a>
 <a 
- id="x44-45005"></a>
-<!--l. 1983--><pre class="listings">&#x00A0;<br /><span class="label"><a 
- id="x44-45006r1"></a></span>ResponseBuilder&#x00A0;rb&#x00A0;=&#x00A0;request.evaluatePreconditions(etag);&#x00A0;<br /><span class="label"><a 
- id="x44-45007r2"></a></span><tspan font-family="cmbx" font-size="12">if</tspan>&#x00A0;(rb&#x00A0;==&#x00A0;<tspan font-family="cmbx" font-size="12">null</tspan>)&#x00A0;<br /><span class="label"><a 
- id="x44-45008r3"></a></span>&#x00A0;&#x00A0;<tspan font-family="cmbx" font-size="12">return</tspan>&#x00A0;doUpdate(foo);
+ id="x43-53003"></a>
+<!--l. 2110--><pre class="listings">&#x00A0;<br /><span class="label"><a 
+ id="x43-53004r1"></a></span>ResponseBuilder&#x00A0;rb&#x00A0;=&#x00A0;request.evaluatePreconditions(etag);&#x00A0;<br /><span class="label"><a 
+ id="x43-53005r2"></a></span><tspan font-family="cmbx" font-size="12">if</tspan>&#x00A0;(rb&#x00A0;==&#x00A0;<tspan font-family="cmbx" font-size="12">null</tspan>)&#x00A0;<br /><span class="label"><a 
+ id="x43-53006r3"></a></span>&#x00A0;&#x00A0;<tspan font-family="cmbx" font-size="12">return</tspan>&#x00A0;doUpdate(foo);
 &#x00A0;<br /><span class="label"><a 
- id="x44-45009r4"></a></span></pre>
+ id="x43-53007r4"></a></span></pre>
  <div class="caption" 
 ><span class="id">Listing&#x00A0;9: </span><span  
-class="content">Potential lost-update problem with JAX-RS</span></div><!--tex4ht:label?: x44-45002r -->
+class="content">Potential lost-update problem with JAX-RS</span></div><!--tex4ht:label?: x43-53000 -->
                                                                                          
                                                                                          
     </div><hr class="endfloat" />
-<a 
- id="x44-45010r3"></a>
-<tspan font-family="cmssbx" font-size="10">4.5.1.3  Preparsed Request Components</tspan>&#x00A0;   It seems like an obvious fact that could not be
-further deduced, that any response action to a request must be preluded by a parsing of the
-request. In the case of a REST application this parsing could be further divided in two
-steps:
+<tspan font-family="cmssbx" font-size="10">Preparsed Request Components with Dependency Injection</tspan>&#x00A0;   It seems like an obvious fact
+that could not be further deduced, that any response action to a request must be preluded by a
+parsing of the request. In the case of a REST application this parsing could be further divided in
+two steps:
       <ol  class="enumerate1" >
       <li 
-  class="enumerate" id="x44-45012x1">Parse URI, Accept Header and HTTP verb to select the Resource method
+  class="enumerate" id="x43-53009x1">Parse URI, Accept Header and HTTP verb to select the Resource method
       </li>
       <li 
-  class="enumerate" id="x44-45014x2">Resource method specific parsing as defined by annotations or done in the Resource
+  class="enumerate" id="x43-53011x2">Resource method specific parsing as defined by annotations or done in the Resource
       method</li></ol>
-<!--l. 2008--><p class="noindent" >JAX-RS defines only rudimentary support for the second step by means of inflexible annotations.
+<!--l. 2135--><p class="noindent" >JAX-RS defines only rudimentary support for the second step by means of inflexible annotations.
 Listing <a 
-href="#x44-45016r10">10<!--tex4ht:ref: fig:jaxrs-annotated-queryparams --></a> shows the verbosity of parsing a set of standard query parameters for a search interface.
+href="#x43-53013r10">10<!--tex4ht:ref: fig:jaxrs-annotated-queryparams --></a> shows the verbosity of parsing a set of standard query parameters for a search interface.
 An alternative is shown in listing <a 
-href="#x44-45023r11">11<!--tex4ht:ref: fig:request-components --></a>. The parsing of query parameters is delegated to the class
+href="#x43-53020r11">11<!--tex4ht:ref: fig:request-components --></a>. The parsing of query parameters is delegated to the class
 SearchRequest.<span class="footnote-mark"><a 
-href="restful_groupware65.html#fn59x0"><sup class="textsuperscript">59</sup></a></span><a 
- id="x44-45015f59"></a> 
+href="restful_groupware70.html#fn64x0"><sup class="textsuperscript">64</sup></a></span><a 
+ id="x43-53012f64"></a> 
 The request method &#8220;handleGet&#8221; can access the parameters easily through the injected
 SearchRequest instance.
                                                                                          
                                                                                          
-<!--l. 2019--><p class="indent" >    <a 
- id="x44-45010r6"></a><hr class="float"><div class="float" 
+<!--l. 2146--><p class="indent" >    <a 
+ id="x43-530006"></a><hr class="float"><div class="float" 
 >
                                                                                          
                                                                                          
 <a 
- id="x44-45016r10"></a>
+ id="x43-53013r10"></a>
 <a 
- id="x44-45017"></a>
-<!--l. 2019--><pre class="listings">&#x00A0;<br /><span class="label"><a 
- id="x44-45018r1"></a></span>@Get&#x00A0;<tspan font-family="cmbx" font-size="12">public</tspan>&#x00A0;Response&#x00A0;get(@QueryParam(<!--l. 2020--><span class="listings-nested">&#8221;query&#8221;</span>)&#x00A0;String&#x00A0;query,&#x00A0;<br /><span class="label"><a 
- id="x44-45019r2"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;@QueryParam(<!--l. 2021--><span class="listings-nested">&#8221;sort<tspan font-family="cmsy" font-size="10">-</tspan>by&#8221;</span>)&#x00A0;String&#x00A0;sortBy,&#x00A0;<br /><span class="label"><a 
- id="x44-45020r3"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;@QueryParam(<!--l. 2022--><span class="listings-nested">&#8221;offset&#8221;</span>)&#x00A0;<tspan font-family="cmbx" font-size="12">int</tspan>&#x00A0;offset,&#x00A0;<br /><span class="label"><a 
- id="x44-45021r4"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;@QueryParam(<!--l. 2023--><span class="listings-nested">&#8221;limit&#8221;</span>)&#x00A0;<tspan font-family="cmbx" font-size="12">int</tspan>&#x00A0;limit&#x00A0;)&#x00A0;<tspan font-family="cmsy" font-size="10">{</tspan>
+ id="x43-53014"></a>
+<!--l. 2146--><pre class="listings">&#x00A0;<br /><span class="label"><a 
+ id="x43-53015r1"></a></span>@Get&#x00A0;<tspan font-family="cmbx" font-size="12">public</tspan>&#x00A0;Response&#x00A0;get(@QueryParam(<!--l. 2147--><span class="listings-nested">&#8221;query&#8221;</span>)&#x00A0;String&#x00A0;query,&#x00A0;<br /><span class="label"><a 
+ id="x43-53016r2"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;@QueryParam(<!--l. 2148--><span class="listings-nested">&#8221;sort<tspan font-family="cmsy" font-size="10">-</tspan>by&#8221;</span>)&#x00A0;String&#x00A0;sortBy,&#x00A0;<br /><span class="label"><a 
+ id="x43-53017r3"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;@QueryParam(<!--l. 2149--><span class="listings-nested">&#8221;offset&#8221;</span>)&#x00A0;<tspan font-family="cmbx" font-size="12">int</tspan>&#x00A0;offset,&#x00A0;<br /><span class="label"><a 
+ id="x43-53018r4"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;@QueryParam(<!--l. 2150--><span class="listings-nested">&#8221;limit&#8221;</span>)&#x00A0;<tspan font-family="cmbx" font-size="12">int</tspan>&#x00A0;limit&#x00A0;)&#x00A0;<tspan font-family="cmsy" font-size="10">{</tspan>
 &#x00A0;<br /><span class="label"><a 
- id="x44-45022r5"></a></span></pre>
+ id="x43-53019r5"></a></span></pre>
  <div class="caption" 
 ><span class="id">Listing&#x00A0;10: </span><span  
-class="content">Verbosity of parsing Requests with JAX-RS</span></div><!--tex4ht:label?: x44-45010r -->
+class="content">Verbosity of parsing Requests with JAX-RS</span></div><!--tex4ht:label?: x43-53000 -->
                                                                                          
                                                                                          
     </div><hr class="endfloat" />
                                                                                          
                                                                                          
-<!--l. 2027--><p class="indent" >    <a 
- id="x44-45010r17"></a><hr class="float"><div class="float" 
+<!--l. 2154--><p class="indent" >    <a 
+ id="x43-5300017"></a><hr class="float"><div class="float" 
 >
                                                                                          
                                                                                          
 <a 
- id="x44-45023r11"></a>
+ id="x43-53020r11"></a>
 <a 
- id="x44-45024"></a>
-<!--l. 2027--><pre class="listings">&#x00A0;<br /><span class="label"><a 
- id="x44-45025r1"></a></span>@GET&#x00A0;@Inject&#x00A0;<br /><span class="label"><a 
- id="x44-45026r2"></a></span><tspan font-family="cmbx" font-size="12">public</tspan>&#x00A0;Response&#x00A0;handleGet(SearchRequest&#x00A0;sr)&#x00A0;<tspan font-family="cmsy" font-size="10">{</tspan>&#x00A0;...&#x00A0;<tspan font-family="cmsy" font-size="10">}</tspan>&#x00A0;<br /><span class="label"><a 
- id="x44-45027r3"></a></span>&#x00A0;<br /><span class="label"><a 
- id="x44-45028r4"></a></span>@RequestScoped&#x00A0;<br /><span class="label"><a 
- id="x44-45029r5"></a></span><tspan font-family="cmbx" font-size="12">public</tspan>&#x00A0;<tspan font-family="cmbx" font-size="12">class</tspan>&#x00A0;SearchRequest&#x00A0;<tspan font-family="cmsy" font-size="10">{</tspan>&#x00A0;<br /><span class="label"><a 
- id="x44-45030r6"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;<tspan font-family="cmbx" font-size="12">public</tspan>&#x00A0;<tspan font-family="cmbx" font-size="12">final</tspan>&#x00A0;String&#x00A0;query,&#x00A0;sortBy;&#x00A0;<br /><span class="label"><a 
- id="x44-45031r7"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;<tspan font-family="cmbx" font-size="12">public</tspan>&#x00A0;<tspan font-family="cmbx" font-size="12">final</tspan>&#x00A0;<tspan font-family="cmbx" font-size="12">int</tspan>&#x00A0;offset,&#x00A0;limit;&#x00A0;<br /><span class="label"><a 
- id="x44-45032r8"></a></span>&#x00A0;<br /><span class="label"><a 
- id="x44-45033r9"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;@Inject&#x00A0;<tspan font-family="cmbx" font-size="12">public</tspan>&#x00A0;SearchRequest(QueryParams&#x00A0;qp)&#x00A0;<tspan font-family="cmsy" font-size="10">{</tspan>&#x00A0;<br /><span class="label"><a 
- id="x44-45034r10"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;query&#x00A0;=&#x00A0;qp.getNotEmpty(<!--l. 2037--><span class="listings-nested">&#8221;query&#8221;</span>);&#x00A0;<br /><span class="label"><a 
- id="x44-45035r11"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;sortBy&#x00A0;=&#x00A0;qp.getOrElse(<!--l. 2038--><span class="listings-nested">&#8221;sort<tspan font-family="cmsy" font-size="10">-</tspan>by&#8221;</span>,&#x00A0;<!--l. 2038--><span class="listings-nested">&#8221;score&#8221;</span>);&#x00A0;<br /><span class="label"><a 
- id="x44-45036r12"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;offset&#x00A0;=&#x00A0;qp.getPositiveIntOrElse(<!--l. 2039--><span class="listings-nested">&#8221;offset&#8221;</span>,&#x00A0;0);&#x00A0;<br /><span class="label"><a 
- id="x44-45037r13"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;limit&#x00A0;=&#x00A0;qp.getPositiveIntOrElse(<!--l. 2040--><span class="listings-nested">&#8221;limit&#8221;</span>,&#x00A0;<tspan font-family="cmsy" font-size="10">-</tspan>1);&#x00A0;<br /><span class="label"><a 
- id="x44-45038r14"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;<tspan font-family="cmsy" font-size="10">}</tspan>&#x00A0;<br /><span class="label"><a 
- id="x44-45039r15"></a></span><tspan font-family="cmsy" font-size="10">}</tspan>
+ id="x43-53021"></a>
+<!--l. 2154--><pre class="listings">&#x00A0;<br /><span class="label"><a 
+ id="x43-53022r1"></a></span>@GET&#x00A0;@Inject&#x00A0;<br /><span class="label"><a 
+ id="x43-53023r2"></a></span><tspan font-family="cmbx" font-size="12">public</tspan>&#x00A0;Response&#x00A0;handleGet(SearchRequest&#x00A0;sr)&#x00A0;<tspan font-family="cmsy" font-size="10">{</tspan>&#x00A0;...&#x00A0;<tspan font-family="cmsy" font-size="10">}</tspan>&#x00A0;<br /><span class="label"><a 
+ id="x43-53024r3"></a></span>&#x00A0;<br /><span class="label"><a 
+ id="x43-53025r4"></a></span>@RequestScoped&#x00A0;<br /><span class="label"><a 
+ id="x43-53026r5"></a></span><tspan font-family="cmbx" font-size="12">public</tspan>&#x00A0;<tspan font-family="cmbx" font-size="12">class</tspan>&#x00A0;SearchRequest&#x00A0;<tspan font-family="cmsy" font-size="10">{</tspan>&#x00A0;<br /><span class="label"><a 
+ id="x43-53027r6"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;<tspan font-family="cmbx" font-size="12">public</tspan>&#x00A0;<tspan font-family="cmbx" font-size="12">final</tspan>&#x00A0;String&#x00A0;query,&#x00A0;sortBy;&#x00A0;<br /><span class="label"><a 
+ id="x43-53028r7"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;<tspan font-family="cmbx" font-size="12">public</tspan>&#x00A0;<tspan font-family="cmbx" font-size="12">final</tspan>&#x00A0;<tspan font-family="cmbx" font-size="12">int</tspan>&#x00A0;offset,&#x00A0;limit;&#x00A0;<br /><span class="label"><a 
+ id="x43-53029r8"></a></span>&#x00A0;<br /><span class="label"><a 
+ id="x43-53030r9"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;@Inject&#x00A0;<tspan font-family="cmbx" font-size="12">public</tspan>&#x00A0;SearchRequest(QueryParams&#x00A0;qp)&#x00A0;<tspan font-family="cmsy" font-size="10">{</tspan>&#x00A0;<br /><span class="label"><a 
+ id="x43-53031r10"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;query&#x00A0;=&#x00A0;qp.getNotEmpty(<!--l. 2164--><span class="listings-nested">&#8221;query&#8221;</span>);&#x00A0;<br /><span class="label"><a 
+ id="x43-53032r11"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;sortBy&#x00A0;=&#x00A0;qp.getOrElse(<!--l. 2165--><span class="listings-nested">&#8221;sort<tspan font-family="cmsy" font-size="10">-</tspan>by&#8221;</span>,&#x00A0;<!--l. 2165--><span class="listings-nested">&#8221;score&#8221;</span>);&#x00A0;<br /><span class="label"><a 
+ id="x43-53033r12"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;offset&#x00A0;=&#x00A0;qp.getPositiveIntOrElse(<!--l. 2166--><span class="listings-nested">&#8221;offset&#8221;</span>,&#x00A0;0);&#x00A0;<br /><span class="label"><a 
+ id="x43-53034r13"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;limit&#x00A0;=&#x00A0;qp.getPositiveIntOrElse(<!--l. 2167--><span class="listings-nested">&#8221;limit&#8221;</span>,&#x00A0;<tspan font-family="cmsy" font-size="10">-</tspan>1);&#x00A0;<br /><span class="label"><a 
+ id="x43-53035r14"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;<tspan font-family="cmsy" font-size="10">}</tspan>&#x00A0;<br /><span class="label"><a 
+ id="x43-53036r15"></a></span><tspan font-family="cmsy" font-size="10">}</tspan>
 &#x00A0;<br /><span class="label"><a 
- id="x44-45040r16"></a></span></pre>
+ id="x43-53037r16"></a></span></pre>
  <div class="caption" 
 ><span class="id">Listing&#x00A0;11: </span><span  
-class="content">Separating Request parsing from the Resource method</span></div><!--tex4ht:label?: x44-45010r -->
+class="content">Separating Request parsing from the Resource method</span></div><!--tex4ht:label?: x43-53000 -->
                                                                                          
                                                                                          
     </div><hr class="endfloat" />
-<!--l. 2045--><p class="indent" >    The main advantages of this approach would be:
+<!--l. 2172--><p class="indent" >    The main advantages of this approach would be:
       <ul class="itemize1">
       <li class="itemize">Classes parsing commonly used query parameters can be reused.
       </li>
@@ -995,69 +1032,51 @@ class="content">Separating Request parsing from the Resource method</span></div>
       </li>
       <li class="itemize">Default values for unspecified input could depend on information only available at
       runtime instead of being provided as static value to the applications source code.</li></ul>
-<!--l. 2056--><p class="indent" >    This approach is possible to implement for example with the dependency injection support provided by the
+<!--l. 2183--><p class="indent" >    This approach is possible to implement for example with the dependency injection support provided by the
 Jersey framework.<span class="footnote-mark"><a 
-href="restful_groupware66.html#fn60x0"><sup class="textsuperscript">60</sup></a></span><a 
- id="x44-45041f60"></a> 
-<a 
- id="x44-45042r4"></a>
-<tspan font-family="cmssbx" font-size="10">4.5.1.4  Exkurs: Driving Dependency Injection further</tspan>&#x00A0;   <hr class="figure"><div class="figure" 
+href="restful_groupware71.html#fn65x0"><sup class="textsuperscript">65</sup></a></span><a 
+ id="x43-53038f65"></a> 
+<!--l. 2188--><p class="indent" >    <hr class="figure"><div class="figure" 
 >
                                                                                          
                                                                                          
 <a 
- id="x44-450433"></a>
-    &#x00A0;
+ id="x43-530393"></a>
                                                                                          
                                                                                          
-<object data="restful_groupware-4.svg" width="429.31863 " height="317.84631 " type="image/svg+xml"><p>SVG-Viewer needed.</p></object>
- <div class="caption" 
+<!--l. 2214--><p class="noindent" ><object data="restful_groupware-4.svg" width="429.31863 " height="317.84631 " type="image/svg+xml"><p>SVG-Viewer needed.</p></object>
+<br /> <div class="caption" 
 ><span class="id">Figure&#x00A0;3: </span><span  
-class="content">Building a processing pipeline with Dependency Injection</span></div><!--tex4ht:label?: x44-450433 -->
-    &#x00A0;
+class="content">Building a processing pipeline with Dependency Injection</span></div><!--tex4ht:label?: x43-530393 -->
                                                                                          
                                                                                          
-    </div><hr class="endfigure">
-    Paragraph <a 
-href="#x44-45010r3">4.5.1.3<!--tex4ht:ref: sec:prep-requ-comp --></a> used dependency injection to cause the instantiation of a request scoped
-class that prepares information for the request method (&#8220;handleGet&#8221; in the example). This idea
-could be extended.
-    The information from the SearchRequest class is probably just forwarded by &#8220;handleGet&#8221; to
-another component that executes the search on a given collection. Thus the request methot is
-ultimately interested on the search result set to transform it into a response. Consequently the
-&#8220;handleGet&#8221; method could use dependency injection to request the result set and only start
-working on this. Figure <a 
-href="#x44-450433">3<!--tex4ht:ref: fig:dependency-injection-pipeline --></a> visualizes the hypothetic dependency graph of an application specific
-ResultSet class.
+<!--l. 2217--><p class="indent" >    </div><hr class="endfigure">
+<tspan font-family="cmssbx" font-size="10">Driving Dependency Injection further</tspan>&#x00A0;   The use of dependency injection could be extended to
+comprise several levels of dependencies and thus to build processing pipelines. The information
+from the above SearchRequest class is probably just forwarded by &#8220;handleGet&#8221; to another
+component that executes the search on a given collection. Thus the request methot is ultimately
+interested on the search result set to transform it into a response. Consequently the &#8220;handleGet&#8221;
+method could use dependency injection to request the result set and only start working on this.
+Figure <a 
+href="#x43-530393">3<!--tex4ht:ref: fig:dependency-injection-pipeline --></a> visualizes the hypothetic dependency graph of an application specific ResultSet
+class.
     The figure shows how the CollectionStorage to search on is identified by the URI path and the
 search parameters by the SearchRequest class of listing <a 
-href="#x44-45023r11">11<!--tex4ht:ref: fig:request-components --></a>. The dependency injection is
+href="#x43-53020r11">11<!--tex4ht:ref: fig:request-components --></a>. The dependency injection is
 configured to produce a ResultSet class by executing a SearchService with the request scoped
 CollectionStorage and SearchRequest.
-    The idea might be an alternative implementation of processing pipelines as proposed in <span class="cite">[<a 
-href="restful_groupwareli2.html#XDavis:2011:XTR:1967428.1967437">DM11</a>]</span>
-and worth exploring in a separate work. One advantage of this approach would be that the
-processing pipeline is defined and configured in the same language then the rest of the
-application.
-<a 
- id="x44-45044r5"></a>
-<tspan font-family="cmssbx" font-size="10">4.5.1.5  GenericResourceAttributes</tspan>&#x00A0;
-<a 
- id="x44-45045r55"></a>
-<h4 class="subsectionHead"><span class="titlemark">4.6  </span> <a 
- id="x44-460006"></a>Detailed Design Considerations</h4>
-<a 
- id="x44-46001r63"></a>
-<h4 class="subsectionHead"><span class="titlemark">4.7  </span> <a 
- id="x44-470007"></a>Client Design</h4>
-<!--l. 2128--><p class="noindent" >What needs a client to know, how does it need to work?
+    The idea might be an alternative implementation of processing pipelines to the one proposed in
+<span class="cite">[<a 
+href="restful_groupwareli2.html#XDavis:2011:XTR:1967428.1967437">DM11</a>]</span>, which uses XProc, An XML Pipeline Language. One advantage of the dependency
+injection approach would be that the processing pipeline can be defined and configured in the same
+language then the rest of the application.
                                                                                          
                                                                                          
-    <!--l. 2132--><div class="crosslinks"><p class="noindent">[<a 
+    <!--l. 2251--><div class="crosslinks"><p class="noindent">[<a 
 href="restful_groupwarese3.html" >prev</a>] [<a 
 href="restful_groupwarese3.html#tailrestful_groupwarese3.html" >prev-tail</a>] [<a 
 href="restful_groupwarese4.html" >front</a>] [<a 
 href="restful_groupware.html# " >up</a>] </p></div>
-<!--l. 2132--><p class="indent" >    <a 
+    <a 
  id="tailrestful_groupwarese4.html"></a> 
 </body></html> 

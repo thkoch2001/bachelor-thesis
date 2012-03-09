@@ -7,7 +7,7 @@
 <meta name="originator" content="TeX4ht (http://www.cse.ohio-state.edu/~gurari/TeX4ht/)"> 
 <!-- html,2 --> 
 <meta name="src" content="restful_groupware.tex"> 
-<meta name="date" content="2012-03-07 17:12:00"> 
+<meta name="date" content="2012-03-09 14:14:00"> 
 <link rel="stylesheet" type="text/css" href="restful_groupware.css"> 
 </head><body 
 >
@@ -22,34 +22,32 @@ href="restful_groupware.html#restful_groupwarese1.html" >up</a>] </p></div>
 users with their most basic information management needs: Make contacts, calendars,
 notices and to do items available across different devices and share them with family and
 peers.
-<!--l. 75--><p class="indent" >    Existing solutions are either based on non-free software (Microsoft Outlook), brittle and
-unreliable<span class="footnote-mark"><a 
-href="restful_groupware4.html#fn1x0"><sup class="textsuperscript">1</sup></a></span><a 
- id="x3-2001f1"></a> 
-or require the user to trust his personal data to the commercial interests of a multinational
+<!--l. 75--><p class="indent" >    Most existing solutions are either based on non-free software (Microsoft Outlook), or
+require the user to trust his personal data to the commercial interests of a multinational
 corporation.
-<!--l. 83--><p class="indent" >    A section about OpenSocial (<a 
+<!--l. 82--><p class="indent" >    A section about OpenSocial (<a 
 href="#x3-70003">subsubsection&#x00A0;1.2.3</a>) provides additional motivation for
 a restful API for social data. It also uses the opportunity to provide an alternative
 approach to explain the rest architecture by going into detail why OpenSocial is not
 restful.
-<!--l. 88--><p class="indent" >    A few patterns or techniques are presented and proposed for reuse in other Rest applications to
+<!--l. 87--><p class="indent" >    A few patterns or techniques are presented and proposed for reuse in other Rest applications to
 ease the support for multiple alternative Media types. Among these techniques are Dependency
 Injection to prepare resource method parameters (<a 
-href="restful_groupwarese4.html#x44-45010r3">Listing&#x00A0;4.5.1.3</a>), Resource Facades
-(<a 
-href="restful_groupwarese4.html#x44-430002">Listing&#x00A0;4.4.2</a>), a programmable dispatcher (<a 
-href="restful_groupwarese4.html#x44-420001">Listing&#x00A0;4.4.1</a>).
+href="restful_groupwarese4.html#x43-530001">Listing&#x00A0;4.5.1</a>), Resource Facades (<a 
+href="restful_groupwarese4.html#x43-510002">Listing&#x00A0;4.4.2</a>)
+and a programmable dispatcher (<a 
+href="restful_groupwarese4.html#x43-500001">Listing&#x00A0;4.4.1</a>).
 <a 
- id="x3-2002r1"></a>
+ id="x3-2001r1"></a>
 <h4 class="subsectionHead"><span class="titlemark">1.1  </span> <a 
  id="x3-30001"></a>Definitions</h4>
-<!--l. 97--><p class="noindent" >Kolab is the name of a software product ... TODO
-<!--l. 99--><p class="indent" >    A couple of related terms and concepts exist that all more or less overlap with the functionality
+<!--l. 96--><p class="noindent" >Kolab is the name of a software product ... TODO
+<!--l. 98--><p class="indent" >    A couple of related terms and concepts exist that all more or less overlap with the functionality
 provided by Kolab: Groupware, Personal Information Management/Manager (PIM), Group
 Information Management (GIM), Computer-supported cooperative/collaborative work, Knowledge
-management, (Enterprise) Content Management.
-<!--l. 105--><p class="indent" >    TODO: keinen der Terme benutzen.
+management, (Enterprise) Content Management. For the rest of this work a Groupware is a
+software managing address books, calendars, todo items, journals and probably more data for a
+group of collaborating users.
 <a 
  id="x3-3001r3"></a>
 <h4 class="subsectionHead"><span class="titlemark">1.2  </span> <a 
@@ -58,87 +56,87 @@ management, (Enterprise) Content Management.
  id="x3-4001r1"></a>
 <h5 class="subsubsectionHead"><span class="titlemark">1.2.1  </span> <a 
  id="x3-50001"></a>WebDAV, CalDAV, CardDAV</h5>
-<!--l. 110--><p class="noindent" >The most widely implemented Groupware protocols (in free software) today
+<!--l. 109--><p class="noindent" >The most widely implemented Groupware protocols (in free software) today
 seem to be CalDAV<span class="cite">[<a 
 href="restful_groupwareli2.html#XRFC4791">DDD07</a>]</span> for calendaring and CardDAV<span class="cite">[<a 
 href="restful_groupwareli2.html#XRFC6352">Dab11</a>]</span> for
 contacts<span class="footnote-mark"><a 
-href="restful_groupware5.html#fn2x0"><sup class="textsuperscript">2</sup></a></span><a 
- id="x3-5001f2"></a> .
+href="restful_groupware4.html#fn1x0"><sup class="textsuperscript">1</sup></a></span><a 
+ id="x3-5001f1"></a> .
 Both protocols extend WebDAV<span class="cite">[<a 
 href="restful_groupwareli2.html#XRFC4918">Dus07</a>]</span> and thus inherit its characteristics.
-<!--l. 116--><p class="indent" >    Two characteristics of WebDAV motivate an investigation of alternative approaches. The first
+<!--l. 115--><p class="indent" >    Two characteristics of WebDAV motivate an investigation of alternative approaches. The first
 is the protocol&#8217;s complexity that complicates correct implementation. Unfortunately complexity is
 hard to assess. Therefor only some indications are provided at this point.
-<!--l. 121--><p class="indent" >    Lisa Dusseault, author of a WebDAV book<span class="cite">[<a 
+<!--l. 120--><p class="indent" >    Lisa Dusseault, author of a WebDAV book<span class="cite">[<a 
 href="restful_groupwareli2.html#XDusseault2004">Dus04</a>]</span> and the standard itself
 wrote<span class="footnote-mark"><a 
-href="restful_groupware6.html#fn3x0"><sup class="textsuperscript">3</sup></a></span><a 
- id="x3-5002f3"></a> :
+href="restful_groupware5.html#fn2x0"><sup class="textsuperscript">2</sup></a></span><a 
+ id="x3-5002f2"></a> :
       <div class="quote">
+      <!--l. 125--><p class="noindent" >Were I to propose CalDAV today it would probably be CalAtom.</div>
+<!--l. 128--><p class="indent" >    The three standards WebDAV (127p), CalDAV (107p) and CardDAV (48p) add up to 282 pages of highly
                                                                                          
                                                                                          
-      <!--l. 126--><p class="noindent" >Were I to propose CalDAV today it would probably be CalAtom.</div>
-<!--l. 129--><p class="indent" >    The three standard WebDAV (127p), CalDAV (107p) and CardDAV (48p) add up to 282 pages of highly
-specific standards. This is nearly double as much text as necessary for the design described in this work
+specific standards. This is nearly double as much text as necessary for the standards this work is based on
 (149 pages)<span class="footnote-mark"><a 
-href="restful_groupware7.html#fn4x0"><sup class="textsuperscript">4</sup></a></span><a 
- id="x3-5003f4"></a> .
+href="restful_groupware6.html#fn3x0"><sup class="textsuperscript">3</sup></a></span><a 
+ id="x3-5003f3"></a> .
 In contrast to WebDAV, Feeds and related technologies are also widely used so that a web
 developer might already know the latter standards.
-<!--l. 136--><p class="indent" >    The second and for this work more important characteristic of WebDAV is, that it is not restful, as explained
+<!--l. 135--><p class="indent" >    The second and for this work more important characteristic of WebDAV is, that it is not restful, as explained
 by Roy Fielding:<span class="footnote-mark"><a 
-href="restful_groupware8.html#fn5x0"><sup class="textsuperscript">5</sup></a></span><a 
- id="x3-5004f5"></a> 
-<!--l. 140--><p class="indent" >    <center class="quotation"><table class="quotation" 
+href="restful_groupware7.html#fn4x0"><sup class="textsuperscript">4</sup></a></span><a 
+ id="x3-5004f4"></a> 
+<!--l. 139--><p class="indent" >    <center class="quotation"><table class="quotation" 
 border="0" cellpadding="0" cellspacing="15"><tr><td>
         <div class="quotation">
-      <!--l. 141--><p class="indent" >    PROP* methods conflict with REST because they prevent important resources
+      <!--l. 140--><p class="indent" >    PROP* methods conflict with REST because they prevent important resources
       from having URIs and effectively double the number of methods for no good
-      reason. Both Henrik and I argued against those methods at the time. It really
-      doesn&#8217;t matter how uniform they are because they break other aspects of the
-      overall model, leading to further complications in versioning (WebDAV versioning
-      is hopelessly complicated), access control (WebDAV ACLs are completely wrong
-      for HTTP), and just about every other extension to WebDAV that has been
-      proposed.
-      <!--l. 151--><p class="indent" >   [&#x2026;]
-      <!--l. 153--><p class="indent" >   The problem with MOVE is that it is actually an operation on two independent
+      reason. [&#x2026;] It really doesn&#8217;t matter how uniform they are because they break
+      other aspects of the overall model, leading to further complications in versioning
+      (WebDAV versioning is hopelessly complicated), access control (WebDAV ACLs
+      are  completely  wrong  for  HTTP),  and  just  about  every  other  extension  to
+      WebDAV that has been proposed.
+      <!--l. 148--><p class="indent" >   [&#x2026;]
+      <!--l. 150--><p class="indent" >   The problem with MOVE is that it is actually an operation on two independent
       namespaces (the source collection and destination collection). The user must
       have permission to remove from the source collection and add to the destination
       collection, which can be a bit of a problem if they are in different authentication
       realms. COPY has a similar problem, but at least in that case only one namespace
       is modified. I don&#8217;t think either of them map very well to HTTP.</div>
-<!--l. 161--><p class="noindent" ></td></tr></table></center>
-    Despite the comprehensiveness of CalDAV and CardDAV, the calconnect
+<!--l. 157--><p class="noindent" ></td></tr></table></center>
+    Given the comprehensiveness of CalDAV and CardDAV one would expect
+these protocols to cover all common use cases. However the calconnect
 consortium additionally develops two alternative protocols, CalWS-SOAP and
 CalWS-REST<span class="footnote-mark"><a 
-href="restful_groupware9.html#fn6x0"><sup class="textsuperscript">6</sup></a></span><a 
- id="x3-5005f6"></a> .
+href="restful_groupware8.html#fn5x0"><sup class="textsuperscript">5</sup></a></span><a 
+ id="x3-5005f5"></a> .
 <a 
  id="x3-5006r5"></a>
 <h5 class="subsubsectionHead"><span class="titlemark">1.2.2  </span> <a 
  id="x3-60002"></a>IMAP used by Kolab</h5>
-<!--l. 180--><p class="noindent" >The Kolab Groupware Server is special in that it uses the Internet Message Access Protocol
+<!--l. 177--><p class="noindent" >The Kolab Groupware Server is special in that it uses the Internet Message Access Protocol
 (IMAP) as a synchronization protocol for all its data and thus the IMAP server as a
 database.
-<!--l. 184--><p class="indent" >    There are a few appealing advantages to this approach:
+<!--l. 181--><p class="indent" >    There are a few appealing advantages to this approach:
       <ul class="itemize1">
       <li class="itemize">The IMAP infrastructure used for mail can be reused.
       </li>
-      <li class="itemize">Data is stored as file attachment. Thus the problematic mapping of groupware data
-      items to relational schemes can be avoided.
+      <li class="itemize">Data is stored as file attachment. Thus the probably complicate mapping of groupware
+      data items to the needs of a (relational) database is avoided.
       </li>
-      <li class="itemize">IMAP supports offline work and later synchronization.</li></ul>
+      <li class="itemize">IMAP already supports offline work and later synchronization.</li></ul>
+<!--l. 190--><p class="indent" >    The simplicity of just dropping files in a store used by several concurrent clients however also
+has drawbacks, e.g: there is no moderating logic on the server site that could verify the correctness
                                                                                          
                                                                                          
-<!--l. 193--><p class="indent" >    The simplicity of just dropping files in a store however also has drawbacks, e.g: there&#8217;s no
-moderating logic on the server site that could verify the correctness of stored data and there are no
-query capabilities.
-<!--l. 197--><p class="indent" >    IMAP in general also comes with its own challenges:
+of stored data and there are no query capabilities.
+<!--l. 195--><p class="indent" >    IMAP in general also comes with its own challenges:
       <ul class="itemize1">
       <li class="itemize">The standard documents describing and extending IMAP are many<span class="footnote-mark"><a 
-href="restful_groupware10.html#fn7x0"><sup class="textsuperscript">7</sup></a></span><a 
- id="x3-6001f7"></a> .
+href="restful_groupware9.html#fn6x0"><sup class="textsuperscript">6</sup></a></span><a 
+ id="x3-6001f6"></a> .
       </li>
       <li class="itemize">IMAP imposes a folder structure and does not permit alternative structures like tags
       as used by Google&#8217;s gmail.
@@ -146,63 +144,62 @@ href="restful_groupware10.html#fn7x0"><sup class="textsuperscript">7</sup></a></
       <li class="itemize">Sam  Varshavchik,  author  of  the  Courier  Mail  Transfer  Agent,  argues  that  IMAP
       standard documents are &#8220;contradictory&#8221; and that implementations define their own
       understanding of what IMAP is<span class="footnote-mark"><a 
-href="restful_groupware11.html#fn8x0"><sup class="textsuperscript">8</sup></a></span><a 
- id="x3-6002f8"></a> .</li></ul>
+href="restful_groupware10.html#fn7x0"><sup class="textsuperscript">7</sup></a></span><a 
+ id="x3-6002f7"></a> .</li></ul>
 <a 
  id="x3-6003r6"></a>
 <h5 class="subsubsectionHead"><span class="titlemark">1.2.3  </span> <a 
- id="x3-70003"></a>OpenSocial</h5>
-<!--l. 226--><p class="noindent" >Roy Fielding wrote a blog post about the &#8220;SocialSite REST API&#8221;, stating that it isn&#8217;t restful at all but clearly
-an RPC style API.<span class="footnote-mark"><a 
+ id="x3-70003"></a>OpenSocial, useful but not restful</h5>
+<!--l. 224--><p class="noindent" >OpenSocial<span class="cite">[<a 
+href="restful_groupwareli2.html#XOSSpec2.0.1">Ope11</a>]</span> specifies how data of social networks can be accessed by clients, especially
+Javascript browser widgets. While the specification was initially designed for social
+networks, it has also been adopted to enhance wikis, issue trackers (Confluence, Jira from
+Atlassian), Groupware (Lotus from IBM), Content Management Systems (Alfresco,
+Nuxeo). <span class="cite">[<a 
+href="restful_groupwareli2.html#XHuebner2009">Hü09</a>]</span> discusses the benefits of OpenSocial for the interaction of university
+members.
+<!--l. 232--><p class="indent" >    The specification is discussed in this section because it shows the usefulness of making social
+data available for different kind of clients but on the other hand is a poster child for a non-restful
+API on top of HTTP and thus serves as a standard of comparison for the API to be designed in
+this work.
+<!--l. 237--><p class="indent" >    Restful APIs are modeled around resources, their representations and links between them<span class="cite">[<a 
+href="restful_groupwareli2.html#XFielding2000">Fie00</a>,
+sec. 5.1.5]</span><span class="footnote-mark"><a 
+href="restful_groupware11.html#fn8x0"><sup class="textsuperscript">8</sup></a></span><a 
+ id="x3-7001f8"></a> .
+The authors of OpenSocial however seem to have started already from a different concept<span class="cite">[<a 
+href="restful_groupwareli2.html#XOSSpec2.0.1">Ope11</a>,
+Social API Server, sec 2, Services]</span>:
+      <div class="quote">
+      <!--l. 245--><p class="noindent" >OpenSocial defines several services for providing access to a container&#8217;s data.</div>
+<!--l. 248--><p class="indent" >    Fielding  wrote  a  blog  post  stating  that
+OpenSocial<span class="footnote-mark"><a 
 href="restful_groupware12.html#fn9x0"><sup class="textsuperscript">9</sup></a></span><a 
- id="x3-7001f9"></a> 
-Fielding was referring to SocialSite, which is however an implementation of the OpenSocial specification.
-Dave Johnson, a contributor to SocialSite, reacted on this critique by opening a discussion on an OpenSocial
-mailing list:<span class="footnote-mark"><a 
-href="restful_groupware13.html#fn10x0"><sup class="textsuperscript">10</sup></a></span><a 
- id="x3-7002f10"></a> 
+ id="x3-7002f9"></a> 
+would not be restful<span class="cite">[<a 
+href="restful_groupwareli2.html#XFielding2008">Fie08</a>]</span>. He pointed out rules &#8220;most often violated within so-called REST
+APIs&#8221;, but did not give explicit examples, how OpenSocial violates them.
       <div class="quote">
-      <!--l. 234--><p class="noindent" >I must admit, it is not clear to me how OpenSocial REST API violates the six
-      rules that Roy stated.</div>
-<!--l. 237--><p class="noindent" >The above quote warrants a short comment. I also thought before, that REST would be so simple that
-there wouldn&#8217;t be much need for further studying. Every web developer has some understanding
-of URIs, HTTP and a bit less of Hypermedia. So it is easy to fall into the trap that
-everything build on top of HTTP would be restful. Now however, after some more reading
-about REST, I can easily find violations of the REST constraints in the OpenSocial
-specification.
-<!--l. 244--><p class="indent" >    Restful APIs are modeled around resources, their representations and links between them. The
-authors of the OpenSocial API however seem to have modeled their API around the concept of
-services:<span class="cite">[<a 
-href="restful_groupwareli2.html#XOSSpec2.0.1">Ope11</a>, Social API Server, sec 2, Services]</span>
-      <div class="quote">
-      <!--l. 248--><p class="noindent" >OpenSocial defines several services for providing access to a container&#8217;s data.</div>
-<a 
- id="x3-7003r1"></a>
                                                                                          
                                                                                          
-<span 
-class="cmssbx-10x-x-120">1.2.3.1  Fielding&#8217;s critique</span>&#x00A0;   Fielding listed some rules that a restful API must obey, but did not
-give explicit examples how OpenSocial violates this rules. The following section will provide such
-examples.
-      <div class="quote">
-      <!--l. 257--><p class="noindent" >A REST API should not be dependent on any single communication protocol,
+      <!--l. 255--><p class="noindent" >A REST API should not be dependent on any single communication protocol,
       [&#x2026;] any protocol element that uses a URI for identification must allow any URI
       scheme to be used for the sake of that identification. <span 
 class="cmti-12">[Failure here implies that</span>
       <span 
 class="cmti-12">identification is not separated from interaction.]</span></div>
-    OpenSocial defines a construct called &#8220;REST-URI-Fragment&#8221; which is a clear violation of the
+<!--l. 262--><p class="indent" >    OpenSocial defines a construct called &#8220;REST-URI-Fragment&#8221; which is a clear violation of the
 above rule. This URI fragment is simply an encoding of procedural parameters as elements of an
 HTTP URI:<span class="cite">[<a 
 href="restful_groupwareli2.html#XOSSpec2.0.1">Ope11</a>, Core API Server, sec 2.1.1.2.2, REST-URI-Fragment]</span>
       <div class="quote">
-      <!--l. 270--><p class="noindent" >Each service type defines an associated partial URI format. The base URI for each
+      <!--l. 268--><p class="noindent" >Each service type defines an associated partial URI format. The base URI for each
       service is found in the URI element associated with the service in the discovery
       document. Each service type accepts parameters via the URL path. Definitions
       are of the form:
-      <!--l. 275--><p class="noindent" ><span class="obeylines-h"><span class="verb"><span 
+      <!--l. 273--><p class="noindent" ><span class="obeylines-h"><span class="verb"><span 
 class="cmtt-12">{a}/{b}/{c}</span></span></span></div>
-<!--l. 278--><p class="indent" >    URIs can contain a query component that would be more appropriate to contain parameters.
+<!--l. 276--><p class="indent" >    URIs can contain a query component that would be more appropriate to contain parameters.
 This would also have made it clearer to see that the specification actually defines services instead
 of resources. One test showing the misfit is to ask how dot-segments (&#8217;.&#8217; and &#8217;..&#8217;) inside the URI
 fragment are interpreted and whether this conforms with the letter and spirit of the URI
@@ -210,16 +207,16 @@ standard<span class="cite">[<a
 href="restful_groupwareli2.html#XRFC3986">BLFM05</a>, sec 3.3]</span>. Another misfit can be seen in the URI fragment to retrieve one or
 multiple albums. In this case the &#8217;c&#8217; part in the quoted definition above is actually a list of albums
 to retrieve separated by a slash.
-<!--l. 287--><p class="indent" >    Fielding&#8217;s second bullet point most likely refers to the <span 
+<!--l. 285--><p class="indent" >    Fielding&#8217;s second bullet point most likely refers to the <span 
 class="cmtt-12">X-HTTP-Method-Override </span>header. This header is
 a widely used<span class="footnote-mark"><a 
-href="restful_groupware14.html#fn11x0"><sup class="textsuperscript">11</sup></a></span><a 
- id="x3-7004f11"></a> 
+href="restful_groupware13.html#fn10x0"><sup class="textsuperscript">10</sup></a></span><a 
+ id="x3-7003f10"></a> 
 workaround to allow the use of other HTTP methods than GET and POST from HTML forms or
 through firewalls.
-<!--l. 293--><p class="indent" >    The next two points again refer to a more serious issue:
+<!--l. 291--><p class="indent" >    The next two points again refer to a more serious issue:
       <div class="quote">
-      <!--l. 296--><p class="noindent" >A REST API should spend almost all of its descriptive effort in defining the
+      <!--l. 294--><p class="noindent" >A REST API should spend almost all of its descriptive effort in defining the
       media type(s) used for representing resources and driving application state[&#x2026;].
       <span 
 class="cmti-12">[Failure here implies that out-of-band information is driving interaction instead</span>
@@ -230,21 +227,19 @@ class="cmti-12">[Failure here implies that clients are assuming a resource struc
       <span 
 class="cmti-12">band information[</span><span 
 class="cmti-12">&#x2026;]].</span></div>
-<!--l. 305--><p class="indent" >    The OpenSocial specification contains a lot of out-of-band information describing how to form
+<!--l. 303--><p class="indent" >    The OpenSocial specification contains a lot of out-of-band information describing how to form
 URIs to access information or which methods to use on which URIs for different actions. This
 means that the OpenSocial API is not simple or intuitive to use but requires a client developer to
 read a lot of specification, thus violating the simplicity property of a restful architecture. Since the
 URIs are fixed in the specification and necessarily also in clients, the modifiability property is also
 violated<span class="cite">[<a 
 href="restful_groupwareli2.html#XFielding2000">Fie00</a>, sec 2.3]</span>.
-                                                                                         
-                                                                                         
-<!--l. 314--><p class="indent" >    The following tables give some examples of the specified URIs:
+<!--l. 312--><p class="indent" >    The following tables give some examples of the specified URIs:
     <div class="table">
                                                                                          
                                                                                          
-<!--l. 316--><p class="indent" >    <a 
- id="x3-70051"></a><hr class="float"><div class="float" 
+<!--l. 314--><p class="indent" >    <a 
+ id="x3-70041"></a><hr class="float"><div class="float" 
 >
                                                                                          
                                                                                          
@@ -255,81 +250,81 @@ id="TBL-2-1"><col
 id="TBL-2-2"><col 
 id="TBL-2-3"></colgroup><tr  
  style="vertical-align:baseline;" id="TBL-2-1-"><td  style="white-space:wrap; text-align:left;" id="TBL-2-1-1"  
-class="td11"><!--l. 318--><p class="noindent" >URI fragment                             </td><td  style="white-space:nowrap; text-align:left;" id="TBL-2-1-2"  
+class="td11"><!--l. 316--><p class="noindent" >URI fragment                             </td><td  style="white-space:nowrap; text-align:left;" id="TBL-2-1-2"  
 class="td11">Method  </td><td  style="white-space:wrap; text-align:left;" id="TBL-2-1-3"  
-class="td11"><!--l. 318--><p class="noindent" >Description                                                          </td>
+class="td11"><!--l. 316--><p class="noindent" >Description                                                          </td>
 </tr><tr  
  style="vertical-align:baseline;" id="TBL-2-2-"><td  style="white-space:wrap; text-align:left;" id="TBL-2-2-1"  
-class="td11"><!--l. 320--><p class="noindent" ><span class="obeylines-h"><span class="verb"><span 
+class="td11"><!--l. 318--><p class="noindent" ><span class="obeylines-h"><span class="verb"><span 
 class="cmtt-12">/people/{User-Id}/@self</span></span></span>        </td><td  style="white-space:nowrap; text-align:left;" id="TBL-2-2-2"  
 class="td11">GET      </td><td  style="white-space:wrap; text-align:left;" id="TBL-2-2-3"  
-class="td11"><!--l. 320--><p class="noindent" >profile for User-Id                                                 </td>
+class="td11"><!--l. 318--><p class="noindent" >profile for User-Id                                                 </td>
 </tr><tr  
  style="vertical-align:baseline;" id="TBL-2-3-"><td  style="white-space:wrap; text-align:left;" id="TBL-2-3-1"  
-class="td11"><!--l. 321--><p class="noindent" ><span class="obeylines-h"><span class="verb"><span 
+class="td11"><!--l. 319--><p class="noindent" ><span class="obeylines-h"><span class="verb"><span 
 class="cmtt-12">/people/{User-Id}/@self</span></span></span>        </td><td  style="white-space:nowrap; text-align:left;" id="TBL-2-3-2"  
 class="td11">DELETE</td><td  style="white-space:wrap; text-align:left;" id="TBL-2-3-3"  
-class="td11"><!--l. 321--><p class="noindent" >remove User                                                        </td>
+class="td11"><!--l. 319--><p class="noindent" >remove User                                                        </td>
 </tr><tr  
  style="vertical-align:baseline;" id="TBL-2-4-"><td  style="white-space:wrap; text-align:left;" id="TBL-2-4-1"  
-class="td11"><!--l. 322--><p class="noindent" ><span class="obeylines-h"><span class="verb"><span 
+class="td11"><!--l. 320--><p class="noindent" ><span class="obeylines-h"><span class="verb"><span 
 class="cmtt-12">/people/{User-Id}/{Group-Id}</span></span></span>   </td><td  style="white-space:nowrap; text-align:left;" id="TBL-2-4-2"  
 class="td11">GET      </td><td  style="white-space:wrap; text-align:left;" id="TBL-2-4-3"  
-class="td11"><!--l. 322--><p class="noindent" >full profiles of group members                                 </td>
+class="td11"><!--l. 320--><p class="noindent" >full profiles of group members                                 </td>
 </tr><tr  
  style="vertical-align:baseline;" id="TBL-2-5-"><td  style="white-space:wrap; text-align:left;" id="TBL-2-5-1"  
-class="td11"><!--l. 323--><p class="noindent" ><span class="obeylines-h"><span class="verb"></span></span>                               </td><td  style="white-space:nowrap; text-align:left;" id="TBL-2-5-2"  
+class="td11"><!--l. 321--><p class="noindent" ><span class="obeylines-h"><span class="verb"></span></span>                               </td><td  style="white-space:nowrap; text-align:left;" id="TBL-2-5-2"  
 class="td11">POST    </td><td  style="white-space:wrap; text-align:left;" id="TBL-2-5-3"  
-class="td11"><!--l. 323--><p class="noindent" >Create relationship, target specified <br 
+class="td11"><!--l. 321--><p class="noindent" >Create relationship, target specified <br 
 class="newline" />by <span class="obeylines-h"><span class="verb"><span 
 class="cmtt-12">&#x003C;entry&#x003E;&#x003C;id&#x003E;</span></span></span> in body                                        </td>
 </tr><tr  
  style="vertical-align:baseline;" id="TBL-2-6-"><td  style="white-space:wrap; text-align:left;" id="TBL-2-6-1"  
-class="td11"><!--l. 324--><p class="noindent" >                               </td><td  style="white-space:nowrap; text-align:left;" id="TBL-2-6-2"  
+class="td11"><!--l. 322--><p class="noindent" >                               </td><td  style="white-space:nowrap; text-align:left;" id="TBL-2-6-2"  
 class="td11">POST    </td><td  style="white-space:wrap; text-align:left;" id="TBL-2-6-3"  
-class="td11"><!--l. 324--><p class="noindent" >Update Person                                                     </td>
+class="td11"><!--l. 322--><p class="noindent" >Update Person                                                     </td>
 </tr><tr  
  style="vertical-align:baseline;" id="TBL-2-7-"><td  style="white-space:wrap; text-align:left;" id="TBL-2-7-1"  
-class="td11"><!--l. 325--><p class="noindent" ><span class="obeylines-h"><span class="verb"><span 
+class="td11"><!--l. 323--><p class="noindent" ><span class="obeylines-h"><span class="verb"><span 
 class="cmtt-12">/people/{Initial-User-Id}/</span></span></span> <br 
 class="newline" /><span class="obeylines-h"><span class="verb"><span 
 class="cmtt-12">{Group-Id}/{Related-User-Id}</span></span></span>   </td><td  style="white-space:nowrap; text-align:left;" id="TBL-2-7-2"  
 class="td11">GET      </td><td  style="white-space:wrap; text-align:left;" id="TBL-2-7-3"  
-class="td11"><!--l. 325--><p class="noindent" >???                                                                    </td>
+class="td11"><!--l. 323--><p class="noindent" >???                                                                    </td>
 </tr><tr  
  style="vertical-align:baseline;" id="TBL-2-8-"><td  style="white-space:wrap; text-align:left;" id="TBL-2-8-1"  
-class="td11"><!--l. 326--><p class="noindent" ><span class="obeylines-h"><span class="verb"><span 
+class="td11"><!--l. 324--><p class="noindent" ><span class="obeylines-h"><span class="verb"><span 
 class="cmtt-12">/people/@supportedFields</span></span></span>       </td><td  style="white-space:nowrap; text-align:left;" id="TBL-2-8-2"  
 class="td11">GET      </td><td  style="white-space:wrap; text-align:left;" id="TBL-2-8-3"  
-class="td11"><!--l. 326--><p class="noindent" >list of supported person profile fields                         </td>
+class="td11"><!--l. 324--><p class="noindent" >list of supported person profile fields                         </td>
 </tr><tr  
  style="vertical-align:baseline;" id="TBL-2-9-"><td  style="white-space:wrap; text-align:left;" id="TBL-2-9-1"  
-class="td11"><!--l. 327--><p class="noindent" ><span class="obeylines-h"><span class="verb"><span 
+class="td11"><!--l. 325--><p class="noindent" ><span class="obeylines-h"><span class="verb"><span 
 class="cmtt-12">/groups/{User-Id}[/{Group-Id}]</span></span></span> </td><td  style="white-space:nowrap; text-align:left;" id="TBL-2-9-2"  
 class="td11">GET      </td><td  style="white-space:wrap; text-align:left;" id="TBL-2-9-3"  
-class="td11"><!--l. 327--><p class="noindent" >one or all groups of a user                                      </td>
+class="td11"><!--l. 325--><p class="noindent" >one or all groups of a user                                      </td>
 </tr><tr  
  style="vertical-align:baseline;" id="TBL-2-10-"><td  style="white-space:wrap; text-align:left;" id="TBL-2-10-1"  
-class="td11"><!--l. 328--><p class="noindent" >                               </td><td  style="white-space:nowrap; text-align:left;" id="TBL-2-10-2"  
+class="td11"><!--l. 326--><p class="noindent" >                               </td><td  style="white-space:nowrap; text-align:left;" id="TBL-2-10-2"  
 class="td11">PUT      </td><td  style="white-space:wrap; text-align:left;" id="TBL-2-10-3"  
-class="td11"><!--l. 328--><p class="noindent" >update group                                                       </td>
+class="td11"><!--l. 326--><p class="noindent" >update group                                                       </td>
 </tr><tr  
  style="vertical-align:baseline;" id="TBL-2-11-"><td  style="white-space:wrap; text-align:left;" id="TBL-2-11-1"  
-class="td11"><!--l. 329--><p class="noindent" >                               </td><td  style="white-space:nowrap; text-align:left;" id="TBL-2-11-2"  
+class="td11"><!--l. 327--><p class="noindent" >                               </td><td  style="white-space:nowrap; text-align:left;" id="TBL-2-11-2"  
 class="td11">DELETE</td><td  style="white-space:wrap; text-align:left;" id="TBL-2-11-3"  
-class="td11"><!--l. 329--><p class="noindent" >delete group                                                        </td>
+class="td11"><!--l. 327--><p class="noindent" >delete group                                                        </td>
 </tr><tr  
  style="vertical-align:baseline;" id="TBL-2-12-"><td  style="white-space:wrap; text-align:left;" id="TBL-2-12-1"  
-class="td11"><!--l. 330--><p class="noindent" ><span class="obeylines-h"><span class="verb"><span 
+class="td11"><!--l. 328--><p class="noindent" ><span class="obeylines-h"><span class="verb"><span 
 class="cmtt-12">/groups/{User-Id}</span></span></span>              </td><td  style="white-space:nowrap; text-align:left;" id="TBL-2-12-2"  
 class="td11">POST    </td><td  style="white-space:wrap; text-align:left;" id="TBL-2-12-3"  
-class="td11"><!--l. 330--><p class="noindent" >create group                                                        </td>
+class="td11"><!--l. 328--><p class="noindent" >create group                                                        </td>
 </tr><tr  
  style="vertical-align:baseline;" id="TBL-2-13-"><td  style="white-space:wrap; text-align:left;" id="TBL-2-13-1"  
 class="td11">                               </td></tr></table></div>
 <br /> <div class="caption" 
 ><span class="id">Table&#x00A0;1: </span><span  
-class="content">URI fragments for peoples and groups in the OpenSocial REST API</span></div><!--tex4ht:label?: x3-70051 -->
+class="content">URI fragments for peoples and groups in the OpenSocial REST API</span></div><!--tex4ht:label?: x3-70041 -->
                                                                                          
                                                                                          
     </div><hr class="endfloat" />
@@ -337,8 +332,8 @@ class="content">URI fragments for peoples and groups in the OpenSocial REST API<
     <div class="table">
                                                                                          
                                                                                          
-<!--l. 335--><p class="indent" >    <a 
- id="x3-70062"></a><hr class="float"><div class="float" 
+<!--l. 333--><p class="indent" >    <a 
+ id="x3-70052"></a><hr class="float"><div class="float" 
 >
                                                                                          
                                                                                          
@@ -349,57 +344,57 @@ id="TBL-3-1"><col
 id="TBL-3-2"><col 
 id="TBL-3-3"></colgroup><tr  
  style="vertical-align:baseline;" id="TBL-3-1-"><td  style="white-space:wrap; text-align:left;" id="TBL-3-1-1"  
-class="td11"><!--l. 337--><p class="noindent" >URI fragment                                                   </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-1-2"  
+class="td11"><!--l. 335--><p class="noindent" >URI fragment                                                   </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-1-2"  
 class="td11">Method</td><td  style="white-space:wrap; text-align:left;" id="TBL-3-1-3"  
-class="td11"><!--l. 337--><p class="noindent" >Description                                           </td>
+class="td11"><!--l. 335--><p class="noindent" >Description                                           </td>
 </tr><tr  
  style="vertical-align:baseline;" id="TBL-3-2-"><td  style="white-space:wrap; text-align:left;" id="TBL-3-2-1"  
-class="td11"><!--l. 339--><p class="noindent" ><span class="obeylines-h"><span class="verb"><span 
+class="td11"><!--l. 337--><p class="noindent" ><span class="obeylines-h"><span class="verb"><span 
 class="cmtt-12">/albums/{User-Id}/@self</span></span></span>                     </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-2-2"  
 class="td11">POST  </td><td  style="white-space:wrap; text-align:left;" id="TBL-3-2-3"  
-class="td11"><!--l. 339--><p class="noindent" >create album                                         </td>
+class="td11"><!--l. 337--><p class="noindent" >create album                                         </td>
 </tr><tr  
  style="vertical-align:baseline;" id="TBL-3-3-"><td  style="white-space:wrap; text-align:left;" id="TBL-3-3-1"  
-class="td11"><!--l. 340--><p class="noindent" ><span class="obeylines-h"><span class="verb"><span 
+class="td11"><!--l. 338--><p class="noindent" ><span class="obeylines-h"><span class="verb"><span 
 class="cmtt-12">/albums/{User-Id}/{Group-Id}[/Album-Id]*</span></span></span>    </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-3-2"  
 class="td11">GET    </td><td  style="white-space:wrap; text-align:left;" id="TBL-3-3-3"  
-class="td11"><!--l. 340--><p class="noindent" >one or multiple albums                            </td>
+class="td11"><!--l. 338--><p class="noindent" >one or multiple albums                            </td>
 </tr><tr  
  style="vertical-align:baseline;" id="TBL-3-4-"><td  style="white-space:wrap; text-align:left;" id="TBL-3-4-1"  
-class="td11"><!--l. 341--><p class="noindent" ><span class="obeylines-h"><span class="verb"><span 
+class="td11"><!--l. 339--><p class="noindent" ><span class="obeylines-h"><span class="verb"><span 
 class="cmtt-12">/mediaItems/{User-Id}/{Group-Id}/{Album-Id}/</span></span></span>
 <br 
 class="newline" /><span class="obeylines-h"><span class="verb"><span 
 class="cmtt-12">{MediaItem-Id}</span></span></span>                              </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-4-2"  
 class="td11">GET    </td><td  style="white-space:wrap; text-align:left;" id="TBL-3-4-3"  
-class="td11"><!--l. 341--><p class="noindent" >one mediaitem                                       </td>
+class="td11"><!--l. 339--><p class="noindent" >one mediaitem                                       </td>
 </tr><tr  
  style="vertical-align:baseline;" id="TBL-3-5-"><td  style="white-space:wrap; text-align:left;" id="TBL-3-5-1"  
-class="td11"><!--l. 342--><p class="noindent" ><span class="obeylines-h"><span class="verb"><span 
+class="td11"><!--l. 340--><p class="noindent" ><span class="obeylines-h"><span class="verb"><span 
 class="cmtt-12">/mediaItem/{User-Id}/@self/{Album-Id}</span></span></span> (sic!)    </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-5-2"  
 class="td11">POST  </td><td  style="white-space:wrap; text-align:left;" id="TBL-3-5-3"  
-class="td11"><!--l. 342--><p class="noindent" >create mediaitem                                    </td>
+class="td11"><!--l. 340--><p class="noindent" >create mediaitem                                    </td>
 </tr><tr  
  style="vertical-align:baseline;" id="TBL-3-6-"><td  style="white-space:wrap; text-align:left;" id="TBL-3-6-1"  
 class="td11">                                            </td></tr></table></div>
 <br /> <div class="caption" 
 ><span class="id">Table&#x00A0;2: </span><span  
-class="content">URI fragments for albums and mediaitems in the OpenSocial REST API</span></div><!--tex4ht:label?: x3-70062 -->
+class="content">URI fragments for albums and mediaitems in the OpenSocial REST API</span></div><!--tex4ht:label?: x3-70052 -->
                                                                                          
                                                                                          
     </div><hr class="endfloat" />
     </div>
-<!--l. 348--><p class="indent" >    The last URI in <a 
-href="#x3-70062">Table&#x00A0;2</a> is obviously missing an &#8220;s&#8221; behind <span 
+<!--l. 346--><p class="indent" >    The last URI in <a 
+href="#x3-70052">Table&#x00A0;2</a> is obviously missing an &#8220;s&#8221; behind <span 
 class="cmtt-12">mediaItem</span>. This typo is
 present and unfixed in the OpenSocial spec since Version 1.0, released in march 2010.
 This is of course not a big issue in itself, but rather a sign that the specification is too
 verbose and does over-specify things that should rather be auto-discovered through
 hyperlinks.
-<!--l. 354--><p class="indent" >    Fielding mentions in a comment to the same blog post that the OpenSocial API &#8220;could be
+<!--l. 352--><p class="indent" >    Fielding mentions in a comment to the same blog post that the OpenSocial API &#8220;could be
 made so [restful] with some relatively small changes&#8221; but does not specify these changes. However
 some issues can easily be identified.
-<!--l. 358--><p class="indent" >    First the data structures defined in OpenSocial do not use URIs to refer to other
+<!--l. 356--><p class="indent" >    First the data structures defined in OpenSocial do not use URIs to refer to other
 resources. Instead they use Object-Ids that must then be inserted in the appropriate
 URI templates. Examples are the <span 
 class="cmtt-12">recipients</span>, <span 
@@ -414,26 +409,26 @@ filling in the <span
 class="cmtt-12">userId </span>in one of the specified URI templates. If Users would just contain
 references to other resources related to a user, the specification could already be shortened a
 lot.
-<!--l. 370--><p class="indent" >    Another missed opportunity for a much more intuitive API is the relation of media items and
+<!--l. 368--><p class="indent" >    Another missed opportunity for a much more intuitive API is the relation of media items and
 albums. This seems to be poster child example for a collection (album) to collection-element
 (media item) relation which could have made use of the hierarchical character of URI paths.
 OpenSocial however requires the client developer to use two different URI templates.
 (<a 
-href="#x3-70062">Table&#x00A0;2</a>)
-<!--l. 376--><p class="indent" >    A not so small change to OpenSocial would be to either use already standardized and
+href="#x3-70052">Table&#x00A0;2</a>)
+<!--l. 374--><p class="indent" >    A not so small change to OpenSocial would be to either use already standardized and
 registered media types where possible or to register new types where necessary. It seems that there
 are some already existing media types that could be a good fit for OpenSocial but only miss a
 canonical json representation for easy consumption by javascript applications. These are vCard for
 persons,<span class="footnote-mark"><a 
-href="restful_groupware15.html#fn12x0"><sup class="textsuperscript">12</sup></a></span><a 
- id="x3-7007f12"></a> 
+href="restful_groupware14.html#fn11x0"><sup class="textsuperscript">11</sup></a></span><a 
+ id="x3-7006f11"></a> 
 ATOM entries<span class="cite">[<a 
 href="restful_groupwareli2.html#XRFC4287">NS05</a>]</span> for messages, activities and media items and ATOM categories, collections or
 workspaces<span class="cite">[<a 
 href="restful_groupwareli2.html#XRFC5023">Gh07</a>]</span> for albums and groups. It would probably be necessary to add extensions to the
 mentioned media types but vCard and ATOM both already anticipated this need and provided
 mechanisms to do so.
-<!--l. 388--><p class="indent" >    The use of the ATOM format could promote the adoption of OpenSocial because developers
+<!--l. 386--><p class="indent" >    The use of the ATOM format could promote the adoption of OpenSocial because developers
 could either reuse existing knowledge about ATOM or would be more motivated to learn about
 a system that is based on an already widespread format. In fact OpenSocial already
 mentions ATOM as a way to wrap OpenSocial data. However this wrapping does not build
@@ -441,16 +436,16 @@ extend and reuse ATOM semantics as proposed above but just puts the OpenSocial d
 structures inside the entry/content element of ATOM. This kind of misuse of ATOM
 does of course not deliver any advantage on top of the existing plain JSON or XML
 representations.<span class="footnote-mark"><a 
-href="restful_groupware16.html#fn13x0"><sup class="textsuperscript">13</sup></a></span><a 
- id="x3-7008f13"></a> 
+href="restful_groupware15.html#fn12x0"><sup class="textsuperscript">12</sup></a></span><a 
+ id="x3-7007f12"></a> 
 Consequently the newest OpenSocial specification deprecates any reference to the ATOM
 format.
-<!--l. 402--><p class="indent" >    In Jan Algermissen&#8217;s &#8220;Classification of HTTP-based
+<!--l. 400--><p class="indent" >    In Jan Algermissen&#8217;s &#8220;Classification of HTTP-based
                                                                                          
                                                                                          
 APIs&#8221;<span class="footnote-mark"><a 
-href="restful_groupware17.html#fn14x0"><sup class="textsuperscript">14</sup></a></span><a 
- id="x3-7009f14"></a> ,
+href="restful_groupware16.html#fn13x0"><sup class="textsuperscript">13</sup></a></span><a 
+ id="x3-7008f13"></a> ,
 the OpenSocial REST API would actually be &#8220;HTTP-based Type I&#8221; due to the lack
 of media types and direct hyper links between related resources. Algermissen writes
 that this level has the lowest possible initial cost of all HTTP APIs. Or in other words:
@@ -458,29 +453,39 @@ The OpenSocial specification authors might not have had to invest a lot to come 
 with this API specification but maintenance and evolution cost may be medium or
 high.
 <a 
- id="x3-7010r7"></a>
+ id="x3-7009r7"></a>
 <h5 class="subsubsectionHead"><span class="titlemark">1.2.4  </span> <a 
  id="x3-80004"></a>Others</h5>
-<!--l. 413--><p class="noindent" >The Calendar Access Protocol (CAP)<span class="cite">[<a 
+<!--l. 411--><p class="noindent" >The Calendar Access Protocol (CAP)<span class="cite">[<a 
 href="restful_groupwareli2.html#XRFC4324">RBM05</a>]</span> was published in December 2005 about one year before
 CalDAV and CalAtom. The standard comprises 131 pages. No evidence of any successful implementation
 could be found<span class="footnote-mark"><a 
-href="restful_groupware18.html#fn15x0"><sup class="textsuperscript">15</sup></a></span><a 
- id="x3-8001f15"></a> .
+href="restful_groupware17.html#fn14x0"><sup class="textsuperscript">14</sup></a></span><a 
+ id="x3-8001f14"></a> .
 Cyrus Daboo, author of some calendaring standards, attributes the failure of CAP to its
 complexity<span class="footnote-mark"><a 
-href="restful_groupware19.html#fn16x0"><sup class="textsuperscript">16</sup></a></span><a 
- id="x3-8002f16"></a> .
-<!--l. 421--><p class="indent" >    CalAtom and CardAtom build on top of the Atom Publishing Protocol and are therefor
+href="restful_groupware18.html#fn15x0"><sup class="textsuperscript">15</sup></a></span><a 
+ id="x3-8002f15"></a> .
+<!--l. 419--><p class="indent" >    CalAtom and CardAtom build on top of the Atom Publishing Protocol and are therefor
 discussed in <a 
-href="restful_groupwarese4.html#x44-360003">Listing&#x00A0;4.3.3</a>.
+href="restful_groupwarese4.html#x43-430003">Listing&#x00A0;4.3.3</a>.
+<!--l. 422--><p class="indent" >    The idea of using Feeds for collection synchronization has also been adapted by Microsoft&#8217;s
+FeedSync<span class="footnote-mark"><a 
+href="restful_groupware19.html#fn16x0"><sup class="textsuperscript">16</sup></a></span><a 
+ id="x3-8003f16"></a> .
+FeedSync&#8217;s most important contribution according to <span class="cite">[<a 
+href="restful_groupwareli2.html#XSnell2007">Sne07b</a>]</span> was the concept of a &#8220;tombstone&#8221;
+element to indicate the deletion of entries from a collection. An RFC to standardize the tombstone
+concept<span class="cite">[<a 
+href="restful_groupwareli2.html#Xdraft-snell-atompub-tombstones-14">Sne12</a>]</span> for Atom feeds is currently in the late stages of the IETF standardization
+process.
                                                                                          
                                                                                          
-    <!--l. 424--><div class="crosslinks"><p class="noindent">[<a 
+    <!--l. 432--><div class="crosslinks"><p class="noindent">[<a 
 href="restful_groupwareli1.html" >prev</a>] [<a 
 href="restful_groupwareli1.html#tailrestful_groupwareli1.html" >prev-tail</a>] [<a 
 href="restful_groupwarese1.html" >front</a>] [<a 
 href="restful_groupware.html#restful_groupwarese1.html" >up</a>] </p></div>
-<!--l. 424--><p class="indent" >    <a 
+<!--l. 432--><p class="indent" >    <a 
  id="tailrestful_groupwarese1.html"></a> 
 </body></html> 

@@ -7,11 +7,11 @@
 <meta name="originator" content="TeX4ht (http://www.cse.ohio-state.edu/~gurari/TeX4ht/)"> 
 <!-- html,2 --> 
 <meta name="src" content="restful_groupware.tex"> 
-<meta name="date" content="2012-03-07 17:12:00"> 
+<meta name="date" content="2012-03-09 14:14:00"> 
 <link rel="stylesheet" type="text/css" href="restful_groupware.css"> 
 </head><body 
 >
-    <!--l. 424--><div class="crosslinks"><p class="noindent">[<a 
+    <!--l. 432--><div class="crosslinks"><p class="noindent">[<a 
 href="restful_groupwarese1.html" >prev</a>] [<a 
 href="restful_groupwarese1.html#tailrestful_groupwarese1.html" >prev-tail</a>] [<a 
 href="#tailrestful_groupwarese2.html">tail</a>] [<a 
@@ -22,11 +22,11 @@ href="restful_groupware.html# " >up</a>] </p></div>
  id="x20-9001r4"></a>
 <h4 class="subsectionHead"><span class="titlemark">2.1  </span> <a 
  id="x20-100001"></a>Scope and General Requirements</h4>
-<!--l. 455--><p class="noindent" >The software system designed in this work should provide a web based interface for most common
+<!--l. 463--><p class="noindent" >The software system designed in this work should provide a web based interface for most common
 interactions with a Groupware system like Kolab. It must obey the constraints of the REST
 architectural style<span class="cite">[<a 
 href="restful_groupwareli2.html#XFielding2000">Fie00</a>]</span>.
-<!--l. 459--><p class="indent" >    Guidelines of the design are:
+<!--l. 467--><p class="indent" >    Guidelines of the design are:
       <ul class="itemize1">
       <li class="itemize">The system should be extensible to support different kind of personal information
       resources like contacts, events, todo items, journal items and free-busy informations.
@@ -49,10 +49,11 @@ href="#x20-130004">subsection&#x00A0;2.4</a>.
  id="x20-10001r12"></a>
 <h4 class="subsectionHead"><span class="titlemark">2.2  </span> <a 
  id="x20-110002"></a>Replacement for CardDAV</h4>
-<!--l. 483--><p class="noindent" >The web application should provide at least the same features as the CardDAV protocol. It should
+<!--l. 492--><p class="noindent" >The web application should provide at least the main features of the CardDAV protocol. It should
 be demonstrated that a restful application can serve for the same purpose and thus that the
-additional complexity of WebDAV and CardDAV is not necessary.
-<!--l. 488--><p class="indent" >    The standard lists the supposed main features of CardDAV<span class="cite">[<a 
+additional complexity of WebDAV and CardDAV may not be necessary for most use
+cases.
+<!--l. 497--><p class="indent" >    The standard lists the main features of CardDAV<span class="cite">[<a 
 href="restful_groupwareli2.html#XRFC6352">Dab11</a>, sec. 1]</span>:
       <ol  class="enumerate1" >
       <li 
@@ -65,12 +66,12 @@ href="restful_groupwareli2.html#XRFC6352">Dab11</a>, sec. 1]</span>:
       <li 
   class="enumerate" id="x20-11006x3">Principal collections can be used to enumerate and query other users on the system as
       per WebDAV ACL [RFC3744].
+                                                                                         
+                                                                                         
       </li>
       <li 
   class="enumerate" id="x20-11008x4">Server-side searching of address data, avoiding the need for clients to download an
       entire address book in order to do a quick address &#8217;expansion&#8217; operation.
-                                                                                         
-                                                                                         
       </li>
       <li 
   class="enumerate" id="x20-11010x5">Well-defined internationalization support through WebDAV&#8217;s use of XML.
@@ -82,15 +83,15 @@ href="restful_groupwareli2.html#XRFC6352">Dab11</a>, sec. 1]</span>:
       <li 
   class="enumerate" id="x20-11014x7">Many  limited  clients  (e.g.,  mobile  devices)  contain  an  HTTP  stack  that  makes
       implementing WebDAV much easier than other protocols.</li></ol>
-<!--l. 506--><p class="indent" >    There are some minor features of CardDAV, that are mainly inherited from WebDAV and
+<!--l. 515--><p class="indent" >    There are some minor features of CardDAV, that are mainly inherited from WebDAV and
 whose general usefulness outside of the scope of a content management system could be argued.
 See <a 
-href="#x20-180009">subsection&#x00A0;2.9</a> for a discussion of those.
+href="#x20-170008">subsection&#x00A0;2.8</a> for a discussion of those.
 <a 
  id="x20-11015r13"></a>
 <h4 class="subsectionHead"><span class="titlemark">2.3  </span> <a 
  id="x20-120003"></a>REST architectural style</h4>
-<!--l. 513--><p class="noindent" >The requirement to obey the constraints of REST should cause the system to have some
+<!--l. 522--><p class="noindent" >The requirement to obey the constraints of REST should cause the system to have some
 characteristics that may be especially advantageous for the use case of a Groupware API. Those
 characteristics are, according to <span class="cite">[<a 
 href="restful_groupwareli2.html#XFielding2000">Fie00</a>]</span>:
@@ -112,7 +113,7 @@ href="restful_groupwareli2.html#XFielding2000">Fie00</a>]</span>:
  id="x20-12001r14"></a>
 <h4 class="subsectionHead"><span class="titlemark">2.4  </span> <a 
  id="x20-130004"></a>User Classes and Characteristics</h4>
-<!--l. 538--><p class="noindent" >Different kinds of clients should be able to use the API. <a 
+<!--l. 547--><p class="noindent" >Different kinds of clients should be able to use the API. <a 
 href="#x20-130013">Table&#x00A0;3</a> lists clients whose
 constraints and characteristics must be respected in the design. The choice of clients and
 their characteristics is intentionally conservative to cover a wide range of real world use
@@ -120,10 +121,10 @@ cases.
     <div class="table">
                                                                                          
                                                                                          
-<!--l. 544--><p class="indent" >    <a 
+<!--l. 553--><p class="indent" >    <a 
  id="x20-130013"></a><a 
- id="x29-21004r1"></a><a 
- id="x29-210001"></a><hr class="float"><div class="float" 
+ id="x29-28004r1"></a><a 
+ id="x29-280001"></a><hr class="float"><div class="float" 
 >
                                                                                          
                                                                                          
@@ -180,7 +181,7 @@ class="content">Constraints of different API clients</span></div><!--tex4ht:labe
                                                                                          
     </div><hr class="endfloat" />
     </div>
-<!--l. 557--><p class="indent" >    The most problematic client in the list is the web browser with only 5MB of storage capacity (via
+<!--l. 566--><p class="indent" >    The most problematic client in the list is the web browser with only 5MB of storage capacity (via
 WebStorage<span class="footnote-mark"><a 
 href="restful_groupware21.html#fn17x0"><sup class="textsuperscript">17</sup></a></span><a 
  id="x20-13002f17"></a> )
@@ -194,10 +195,10 @@ xCal) support XML.
  id="x20-13003r15"></a>
 <h4 class="subsectionHead"><span class="titlemark">2.5  </span> <a 
  id="x20-140005"></a>Data Characteristics</h4>
-<!--l. 570--><p class="noindent" >Lacking sources for more accurate numbers, a couple of conservative estimates are made for the
+<!--l. 579--><p class="noindent" >Lacking sources for more accurate numbers, a couple of conservative estimates are made for the
 size and number of resources in the scope of this work. This guesswork is not perfect. But it
 provides a rationale behind later design decisions (<a 
-href="restful_groupwarese4.html#x44-330003">Listing&#x00A0;4.3<!--tex4ht:ref: sec:opensocial --></a>) and outlines their applicability for a
+href="restful_groupwarese4.html#x43-400003">Listing&#x00A0;4.3<!--tex4ht:ref: sec:opensocial --></a>) and outlines their applicability for a
 concrete use case.
 <span 
 class="cmssbx-10x-x-120">Contacts</span>&#x00A0;   It is believed that humans have regular social contacts to around 150
@@ -260,7 +261,7 @@ collections.
  id="x20-14005r17"></a>
 <h4 class="subsectionHead"><span class="titlemark">2.6  </span> <a 
  id="x20-150006"></a>Operation Environment</h4>
-<!--l. 615--><p class="noindent" >The application is expected to be installed in a Java servlet container like Tomcat or Jetty and to
+<!--l. 624--><p class="noindent" >The application is expected to be installed in a Java servlet container like Tomcat or Jetty and to
 contact a separate storage component. The primarily targeted storage component is an IMAP
 server with a Kolab conform set of groupware folders. However the design should not restrict
 the extension to a document database like CouchDB, plain files, relational or XML
@@ -268,92 +269,91 @@ databases.
 <a 
  id="x20-15001r18"></a>
 <h4 class="subsectionHead"><span class="titlemark">2.7  </span> <a 
- id="x20-160007"></a>Design and Implementation Constraints</h4>
-<a 
- id="x20-16001r19"></a>
-<h4 class="subsectionHead"><span class="titlemark">2.8  </span> <a 
- id="x20-170008"></a>Specific Requirements</h4>
-<a 
- id="x20-17001r1"></a>
-<span 
-class="cmssbx-10x-x-120">2.8.0.1  Nested and mixed collections</span>&#x00A0;   The design should not unnecessarily hinder that
-collections could be nested or contain different kinds of media types, e.g. calendar items and
-contacts.
-    <span class="cite">[<a 
+ id="x20-160007"></a>Nested and mixed collections</h4>
+<!--l. 635--><p class="noindent" >The design should not unnecessarily hinder that collections could be nested or contain different
+kinds of media types, e.g. calendar items and contacts.
+<!--l. 638--><p class="indent" >    <span class="cite">[<a 
 href="restful_groupwareli2.html#XRFC6352">Dab11</a>, sec. 5.2]</span> forbids nested and mixed collections to ease the implementation of clients.
 However both may make sense in certain scenarios and the protocol should not exclude such
 scenarios. A collection could for example represent all items related to a project, which include
 contacts, events, todos and journal entries.
 <a 
- id="x20-17002r20"></a>
-<h4 class="subsectionHead"><span class="titlemark">2.9  </span> <a 
- id="x20-180009"></a>Excluded requirements</h4>
+ id="x20-16001r19"></a>
+<h4 class="subsectionHead"><span class="titlemark">2.8  </span> <a 
+ id="x20-170008"></a>Excluded requirements</h4>
 <a 
- id="x20-18001r2"></a>
-<span 
-class="cmssbx-10x-x-120">2.9.0.2  Search</span>&#x00A0;   It is not required that the server implements any means to search its data. It is
-not excluded that such a facility could be added later. It is however expected that searching could
-be implemented separately. This could be done either on a synchronizing client or as a separate
-system in the same administrative domain as the server.
+ id="x20-17001r10"></a>
+<h5 class="subsubsectionHead"><span class="titlemark">2.8.1  </span> <a 
+ id="x20-180001"></a>Reports, Filters, Projections</h5>
+<!--l. 648--><p class="noindent" >CalDAV and CardDAV define elaborate report, filter and projection capabilities. This work
+considers reports or search only when an important use case is not implementable without it and
+existing, well known specifications can be reused.
 <a 
- id="x20-18002r3"></a>
-<span 
-class="cmssbx-10x-x-120">2.9.0.3  Performance optimization</span>&#x00A0;   The system is meant to inherit the benefits of a restful
-architecture. It should therefor be possible to attach separate caching intermediaries for read
-requests. Rather then concentrating on the performance of the implementation of read requests it
-should be taken care that the architecture supports external caching and thus avoids to serve the
-same read request multiple times.
+ id="x20-18001r21"></a>
+<h5 class="subsubsectionHead"><span class="titlemark">2.8.2  </span> <a 
+ id="x20-190002"></a>Performance optimization</h5>
+<!--l. 654--><p class="noindent" >The system is meant to inherit the benefits of a restful architecture. It should therefor be possible
+to attach separate caching intermediaries for read requests. Rather then concentrating on the
+performance of the implementation of read requests it should be taken care that the
+architecture supports external caching and thus avoids to serve the same read request multiple
+times.
 <a 
- id="x20-18003r4"></a>
-<span 
-class="cmssbx-10x-x-120">2.9.0.4  Access Control</span>&#x00A0;   The aspect of access control would broaden the scope of this work to
-wide. However it could be kept in mind, whether the proposed design could be enhanced by a
-separate access control design as proposed in <span class="cite">[<a 
+ id="x20-19001r22"></a>
+<h5 class="subsubsectionHead"><span class="titlemark">2.8.3  </span> <a 
+ id="x20-200003"></a>Access Control</h5>
+<!--l. 661--><p class="noindent" >The aspect of access control would broaden the scope of this work to wide. However it could be
+kept in mind, whether the proposed design could be enhanced by a separate access control design
+as proposed in <span class="cite">[<a 
 href="restful_groupwareli2.html#Xconf/rest/GrafZLW11">GZLW11</a>]</span>.
 <a 
- id="x20-18004r5"></a>
-<span 
-class="cmssbx-10x-x-120">2.9.0.5  Copying and Moving</span>&#x00A0;   WebDAV introduces the HTTP verbs to COPY and MOVE. The
-usefulness of such functionality must of course be compared to the complexity of the
-implementation and the drawback of incompatibility to plain HTTP.
-    It is possible to enhance a restful API with copy and move functionality without extending
+ id="x20-20001r23"></a>
+<h5 class="subsubsectionHead"><span class="titlemark">2.8.4  </span> <a 
+ id="x20-210004"></a>Copying and Moving</h5>
+<!--l. 667--><p class="noindent" >WebDAV introduces the HTTP verbs to COPY and MOVE. The usefulness of such functionality
+must of course be compared to the complexity of the implementation and the drawback of
+incompatibility to plain HTTP.
+<!--l. 671--><p class="indent" >    It is possible to enhance a restful API with copy and move functionality without extending
 HTTP. The only requirement is that additional hyperlinks can be attached to the resources of the
 API. Allamaraju <span class="cite">[<a 
 href="restful_groupwareli2.html#XAllamaraju_2010">All10</a>, Ch. 11]</span> proposes &#8220;controller resources&#8221; that act on POST requests and
-                                                                                         
-                                                                                         
 are linked from the resources they act on. Custom link relations are used to indicate the semantic
 of the controller resource.
-    This work does not include initial support for copy or move.
+<!--l. 678--><p class="indent" >    This work does not include initial support for copy or move.
 <a 
- id="x20-18005r6"></a>
-<span 
-class="cmssbx-10x-x-120">2.9.0.6  Versioning</span>&#x00A0;   WebDAV and therefor CalDAV and CardDAV support the versioning of
-resources as an extension to the HTTP protocol. Versioning is an important feature for a text
-authoring system that may have been the main target for the WebDAV protocol. It does however
-seem to be of little use for the resources considered here. The resources are mostly created in one
-session by one user and seldom modified.
+ id="x20-21001r24"></a>
+                                                                                         
+                                                                                         
+<h5 class="subsubsectionHead"><span class="titlemark">2.8.5  </span> <a 
+ id="x20-220005"></a>Versioning</h5>
+<!--l. 681--><p class="noindent" >WebDAV and therefor CalDAV and CardDAV support the versioning of resources as an extension
+to the HTTP protocol. Versioning is an important feature for a text authoring system
+that may have been the main target for the WebDAV protocol. It does however seem
+to be of little use for the resources considered here. Individual contacts or events are
+mostly created in one session by one user and not modified in several sessions like text
+documents.
 <a 
- id="x20-18006r7"></a>
-<span 
-class="cmssbx-10x-x-120">2.9.0.7  Make Collections</span>&#x00A0;   WebDAV introduces the MKCOL HTTP verb to create collections.
-CardDAV recommends that implementations support this to allow users to &#8220;organize their data
-better&#8221;. An alternative would be to make use of ATOM categories for grouping. Instead of creating
-a new (empty) collection the user would thus create a contact resource with a new category. An
-ATOM service document could then link to a new (virtual, read-only) collection that only contains
-resources of this category.
-    The Atom Publishing Protocol does not define how collection resources could be created. Practitioners
+ id="x20-22001r25"></a>
+<h5 class="subsubsectionHead"><span class="titlemark">2.8.6  </span> <a 
+ id="x20-230006"></a>Make Collections</h5>
+<!--l. 689--><p class="noindent" >WebDAV introduces the MKCOL HTTP verb to create collections. CardDAV recommends that
+implementations support this to allow users to &#8220;organize their data better&#8221;. An alternative would
+be to make use of ATOM categories for grouping. Instead of creating a new (empty) collection the
+user would thus create a contact resource with a new category. An ATOM service document could
+then link to a new (virtual, read-only) collection that only contains resources of this
+category.
+<!--l. 697--><p class="indent" >    The Atom Publishing Protocol does not define how collection resources could be created. Practitioners
 recommend a pattern wherein collections of collections exist and new collections can be created by posting
 to the former<span class="footnote-mark"><a 
 href="restful_groupware26.html#fn22x0"><sup class="textsuperscript">22</sup></a></span><a 
- id="x20-18007f22"></a> .
+ id="x20-23001f22"></a> .
 <a 
- id="x20-18008r8"></a>
-<span 
-class="cmssbx-10x-x-120">2.9.0.8  Locking</span>&#x00A0;   As with Versioning, this is feature of WebDAV is not considered. Instead of
-locking a resource HTTP supports conditional updates and leaves conflict resolution to the
+ id="x20-23002r26"></a>
+<h5 class="subsubsectionHead"><span class="titlemark">2.8.7  </span> <a 
+ id="x20-240007"></a>Locking</h5>
+<!--l. 703--><p class="noindent" >As with Versioning, this is feature of WebDAV is not considered. Instead of locking
+a resource HTTP supports conditional updates and leaves conflict resolution to the
 client.
-    <span class="cite">[<a 
+<!--l. 707--><p class="indent" >    <span class="cite">[<a 
 href="restful_groupwareli2.html#XNielsen1999">NL99</a>, sec. 1]</span> provides three questions to help deciding whether a protocol should support
 locking and which in the present case advise against locking: <span 
 class="cmti-12">The content is mergeable </span>in contrast
@@ -364,28 +364,27 @@ class="cmti-12">the content can be edited while the user is</span>
 <span 
 class="cmti-12">offline</span>.
 <a 
- id="x20-18009r9"></a>
-<span 
-class="cmssbx-10x-x-120">2.9.0.9  Push notifications</span>&#x00A0;   This work does not include any means to actively
-notify (push) a client about changes happening on the server. The client needs to
-initiate a request (pull) to the server to look for changes. However separate solutions
-exist<span class="footnote-mark"><a 
+ id="x20-24001r27"></a>
+<h5 class="subsubsectionHead"><span class="titlemark">2.8.8  </span> <a 
+ id="x20-250008"></a>Push notifications</h5>
+<!--l. 715--><p class="noindent" >This work does not include any means to actively notify (push) a client about changes happening on the
+server. The client needs to initiate a request (pull) to the server to look for changes. However separate
+solutions exist<span class="footnote-mark"><a 
 href="restful_groupware27.html#fn23x0"><sup class="textsuperscript">23</sup></a></span><a 
- id="x20-18010f23"></a> 
+ id="x20-25001f23"></a> 
 to enable a push workflow on top of a feed based application<span class="cite">[<a 
 href="restful_groupwareli2.html#XWilde:2009:FQP:1693155.1693220">WM09</a>]</span>. It
 may therefor not be seen as a disadvantage to omit push notifications as a
 requirement.<span class="footnote-mark"><a 
 href="restful_groupware28.html#fn24x0"><sup class="textsuperscript">24</sup></a></span><a 
- id="x20-18011f24"></a> 
-    &#x00A0;
+ id="x20-25002f24"></a> 
                                                                                          
                                                                                          
-    <!--l. 717--><div class="crosslinks"><p class="noindent">[<a 
+    <!--l. 726--><div class="crosslinks"><p class="noindent">[<a 
 href="restful_groupwarese1.html" >prev</a>] [<a 
 href="restful_groupwarese1.html#tailrestful_groupwarese1.html" >prev-tail</a>] [<a 
 href="restful_groupwarese2.html" >front</a>] [<a 
 href="restful_groupware.html# " >up</a>] </p></div>
-    <a 
+<!--l. 726--><p class="indent" >    <a 
  id="tailrestful_groupwarese2.html"></a> 
 </body></html> 
