@@ -155,7 +155,6 @@ Erläuterung, wie diese sinnvoll kombiniert werden können.
    - Der Client muss eine link relation auf eine HTML Form zum Anlegen neuer Resourcen kennen
    - Der Client muss die zur typisierung von Collections verwendeten Atom Categories verstehen
 
-
 * Persistency for Groupware Data
 Relational Databases vs. NoSQL databases vs. plain files
 
@@ -1037,4 +1036,122 @@ Oracle's (former Sun's) extension to Apache Shindig. Blog \url{http://blogs.orac
 % http://xmpp.org/extensions/xep-0054.html
 
 % http://en.wikibooks.org/wiki/LaTeX/Glossary
+
+* Stuff
+scala rest frameworks
+
+unfiltered
+spray
+play!
+scalatra, http://bowlerframework.org/
+Lift
+http://www.decodified.com/spray/2011/03/31/introducing-the-spray-framework
+
+http://code.google.com/p/implementing-rest/wiki/Crochet
+
+rest allgemein
+http://code.google.com/p/implementing-rest
+
+Alternative zu AtomPub? http://en.wikipedia.org/wiki/Content_Management_Interoperability_Services
+http://davmail.sourceforge.net - Gateway Standards to Exchange
+
+http://code.google.com/p/caldav4j/
+
+vCard
+=====
+
+http://microformats.org/wiki/vCard4
+
+
+Restful versioning
+http://www.mnot.net/blog/2011/10/25/web_api_versioning_smackdown
+http://www.pacificspirit.com/blog/2004/06/14/protocol_extensibility_and_versioning
+
+* Twitter Diskussion on WebDAV
+@dret Erik Wilde 
+@mamund Mike Amundsen 
+@jreschke Julian Reschke 
+
+http://twitter.com/#!/dret/status/109293361860575232
+big day for vCard: new RFCs for #vCard (6350, rfc-editor.org/rfc/rfc6350.txt), #xCard (6351, rfc-editor.org/rfc/rfc6351.txt), #CardDAV (6352, rfc-editor.org/rfc/rfc6352.txt)
+
+http://twitter.com/#!/dret/status/109326257736531969
+there's #HTTP, there's #WebDAV on top, and now there's #CalDAV and #CardDAV. do we really need a specific protocol for each application?
+
+http://twitter.com/#!/mamund/status/109327254835838977
+RT @dret: "there's #HTTP, #WebDAV on top, now #CalDAV & #CardDAV. do we need specific protocol for each app.?" should be hypermedia types.
+
+http://twitter.com/#!/dret/status/109335619385303040
+@mamund wrt #WebDAV and #CalDAV: they invent new methods, which are not really something you can easily do by just adding new types. #REST
+
+http://twitter.com/#!/mamund/status/109359241986449408
+RT @dret: @mamund #CalDAV: invent[s] new methods..." CALDAV & CARDDAV == GET for props; better solution here: http://j.mp/ohwXzo #REST
+http://amundsen.com/examples/fielding-props/
+
+http://twitter.com/#!/mamund/status/109360022559002625
+RT @dret: @mamund MKCALENDAR? meh! it's a PUT! now REPORT is a diff story but i still suspect a hypermedia definition could handle it. #REST
+
+http://twitter.com/#!/dret/status/109410268060196864
+@mamund @algermissen just to clarify: i don't think application-specific protocols such as #CardDAV and #CalDAV are a good way to go. #REST
+
+http://twitter.com/#!/mamund/status/109418119101030400
+RT @dret: @algermissen "i don't think app-specific protocols are good way to go." options: 1)protocol, 2)media-type, 3)URI. i pick 2) #REST
+
+http://twitter.com/#!/dret/status/109451106236628992
+@mamund i prefer to think of it as design patterns of solving common problems with (maybe new) media types and existing methods. #REST
+
+http://twitter.com/#!/jreschke/status/109524446720688128
+@mamund @dret MKCALENDAR actually is a app-specific MKCOL, not POST.
+
+http://twitter.com/#!/jreschke/status/109523908260134912
+@algermissen @dret @mamund @fielding It's cute but it fails to address the #1 reason why WebDAV did it differently....
+
+http://twitter.com/#!/jreschke/status/109524053416615936
+@algermissen @dret @mamund @fielding ...which is getting all props, getting a list of props, setting a list of props, etc.
+
+
+
+
+* ResourceFacades
+
+Requirements:
+
+application/x-www-form-urlencoded actually doesn't specify a media type
+
+application/calendar+xml; component="VEVENT"
+application/calendar+xml; component="VTODO"
+
+The media type alone is not sufficient to select an appropriate parser.
+
+z.B. Kalender: getStartDate()
+
+Optimierung:
+@ResourceInterfaces(Class,Class,Class)
+
+Resource.
+
+
+Use cases:
+
+- A Project items collection handler needs to check, whether a posted resource
+  is a project resource, e.g. a Contact, Event, Todo item or Journal entry.
+
+- An Adressbook collection handler needs to check whether a posted resource
+  represents a contact.
+
+- A Calendar collection wants to access the start and end date of a posted
+  event.
+
+- A textual representation should be extracted from a resource if possible to be
+  submitted to an indexing service.
+
+- It needs to be checked, whether the posted Resource can be transformed in a
+  representation acceptable by the persistency component.
+
+- Resources needs to be transformed either to a XML, JSON or relational
+  representation for different persistency components.
+
+Outlook:
+
+A resource method could define all interfaces it needs by an annotation and the framework 
 
