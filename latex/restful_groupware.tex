@@ -33,6 +33,7 @@
 \newcommand{\citeurl}[2]{\url{#1} (#2)}
 
 \begin{document}
+\pagenumbering{Roman}
 \lstnewenvironment{javalisting}[1][]
   {\lstset{language=Java,float=tb,#1}}% \begin{javalisting}[...]
   {} % \end{javalisting}
@@ -64,7 +65,7 @@
 
 \end{abstract}
 \newpage{}
-
+\pagenumbering{arabic}
 \section{Introduction}
 
 Although computers became ubiquitous for some time now, they still don't help
@@ -109,8 +110,8 @@ collaborating users.
 The most widely implemented Groupware protocols (in free software) today seem to
 be CalDAV\cite{RFC4791} for calendaring and CardDAV\cite{RFC6352} for
 contacts\footnote{only full free server implementations: Apple Calendar Server,
-  Bedeworks, DAViCal, eGroupWare, Owncloud, SOGo}. Both protocols extend
-WebDAV\cite{RFC4918} and thus inherit its characteristics.
+  Bedeworks, DAViCal, eGroupWare, Owncloud, SOGo, Tine2.0}. Both protocols
+extend WebDAV\cite{RFC4918} and thus inherit its characteristics.
 
 Two characteristics of WebDAV motivate an investigation of alternative
 approaches. The first is the protocol's complexity that complicates correct
@@ -1406,7 +1407,9 @@ requests with only a small, special patch. The client applies the patch to its
 cached representation of the requested resource which results in the new version
 of the resource. All currently IANA registered IMs are byte
 oriented\footnote{\citeurl{http://www.iana.org/assignments/inst-man-values/inst-man-values.xml}{2012-3-9}}. These
-methods however don't add substantial benefit for the case of synchronization feeds.
+methods however don't add substantial benefit for the case of synchronization
+feeds.\footnote{Byte oriented IMs might however be very beneficial to serve
+  updates of xCard/xCal resources if only one or a few fields changed.}
 
 In the case of the proposed feed IM, the client sends a conditional GET to
 request the synchronization feed but indicates in the ``A-IM'' header that it
@@ -1569,6 +1572,11 @@ to get the feed first.
 % Primary Resources: Contacts, Calendars, ...
 % List Resources: 
 
+
+% http://lists.calconnect.org/pipermail/caldeveloper-l/2012-March/000177.html
+% "The only queries I have seen clients doing are time-range ones."
+% Cyrus Daboo
+
 \subsection{Components}
 
 \subsubsection{Dispatcher}
@@ -1613,6 +1621,9 @@ expected to provide an API for the
 dispatcher.\footnote{\citeurl{http://java.net/jira/browse/JERSEY-842}{2012-2-6}}:
 
 Advantages of a dynamic dispatcher configuration would be:
+
+% JAX-RS Path annotations can not take any non constant input, that's not known at compile time.
+% Would be fine to use e.g. an enum of all known URI templates.
 
 \begin{itemize}
 \item The path under which a resource type is served is decoupled from the code

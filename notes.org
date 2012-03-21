@@ -1,9 +1,22 @@
+* Implementation Todos
+** TODO SLUG Header
+** TODO Wohin redirect nach delete/put?
+** TODO Alle Tombstones am Ende der updates Liste löschen
+** DONE Tombstones für gelöschte Entries
+** DONE EntityTags berücksichtigen
+** TODO Categories für service document und feeds
+** DONE pagination query params
+** TODO Implement Vary header http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.44
+** DONE next link für feeds
+
 * todos 
 ** TODO Sektion über collection media types, besonders collection+json
 ** TODO Einleitungen und Zusammenfassungen für Sektionen und gesammt
 ** TODO PortableContacts beschreiben und mit vCard vergleichen
 ** TODO Implementierung und Beschreibung: vCard/PoCo/xCard/iCal mit den gleichen Mitteln in Java darstellen
 ** TODO Kolab beschreiben
+** TODO Grundlagen beschreiben
+  http://theamiableapi.com/2012/03/04/rest-and-the-art-of-protocol-design/
 ** TODO Darstellung der Kolab Daten: Kolab migriert z.Z. zu xCard/xCal, daher 1:1
 ** TODO Was hat aufgehalten?
  Macht es Sinn in der Arbeit Punkte zu nennen, die bei dem Versuch der
@@ -14,6 +27,7 @@
  - no library to convert between vCard and PoCo
  - keine xCard/xCal library, vCal4j-vcard supports only version 3
  - no helper library to produce microdata
+ - Abdera: keine Dokumentation, komplizierte Vererbungsbäume
 
  - Major updates of Jersey, Abdera shortly before release. Undesirable to start on the old versions.
  - Kolab undergoes a migration a migration of its underlying data format from its own proprietary kolab-xml to xCal/xCard
@@ -500,6 +514,10 @@ https://launchpad.net/ubuntu/+source/dovecot-metadata-plugin/8-0ubuntu1
 
 
 ** REST framework
+
+https://github.com/spray/spray/wiki REST Framework Scala, Akka
+https://github.com/teamon/play-navigator better router for play framework
+
 Jersey recommended by \cite{Kaiser2011} above Restfulie and RESTeasy because of maturity and flexibility.
 
 % http://www.torsten-horn.de/techdocs/jee-rest.htm RESTful Web Services mit JAX-RS und Jersey
@@ -950,6 +968,28 @@ Portable Contacts test client at plaxo \url{http://www.plaxo.com/pdata/testClien
 
 * Links
 
+PortableContacts PoCo
+http://wiki.portablecontacts.net/w/page/17776141/schema
+http://portablecontacts.net/draft-schema.html
+http://portablecontacts.net/draft-spec.html
+
+PoCo typisch implementiert mit einer Klasse pro Attribut:
+http://code.google.com/p/asmx-poco/source/browse/trunk/core/src/main/java/com/asemantics/poco/Entry.java
+
+
+Java Halbuilder
+https://github.com/talios/halbuilder
+
+
+Scala XML nodes manipulation
+http://stackoverflow.com/questions/4666717/scala-modify-a-nodeseq
+http://stackoverflow.com/questions/970675/scala-modifying-nested-elements-in-xml
+
+
+aloha vie vcard
+https://getsatisfaction.com/aloha_editor/topics/use_aloha_vie_to_edit_contacts_vcard?utm_content=topic_link&utm_medium=email&utm_source=reply_notification
+
+
 \begin{itemize}
 \item \url{http://thesocialweb.tv}
 \item \url{http://www.vogella.de/articles/REST/article.html} REST with Java (JAX-RS) using Jersey - Tutorial
@@ -976,6 +1016,8 @@ Portable Contacts test client at plaxo \url{http://www.plaxo.com/pdata/testClien
 % Blog on calendar interop http://calendarswamp.blogspot.com
 
 \end{itemize}
+
+http://amundsen.com/media-types/phactor/format/
 
 IANA link relations registry \url{http://www.iana.org/assignments/link-relations/link-relations.xml}
 
