@@ -1,3 +1,98 @@
+* Gliederung
+
+Herleitung der REST API
+
+- Die Anforderungen an eine Groupware API werden anhand zweier existierender und
+  weitverbreiteter APIs begründet: Card/CalDAV, OpenSocial.
+
+- Allerdings sind diese APIs entweder komplexer als notwendig (C.*DAV) oder
+  nicht restful (C.*DAV, OpenSocial). Außerdem wäre es natürlich schön, eine
+  Schnittstelle zu haben, die beide Anwendungsfälle bedienen kann.
+
+- Die Anforderung von Kolab selbst ist minimal: Synchronisation von Collections,
+  denn mehr macht die jetzige IMAP API auch nicht.
+
+- Es wird gezeigt, dass AtomPub mit ein paar, meist bereits standardisierten
+  Ergänzungen eine sinnvolle, resourcenorientierte Alternative zu C.*DAV,
+  OpenSocial ist.
+
+Vorstellung der Medientypen inkl. Hypermediaunterstützung
+
+- Die ATOM Medientypen und Hypermediaunterstützung wurden bereits bei der API
+  beschrieben.
+
+- Darstellung vCard, xCard, PoCo. HyperMedia ist hier nicht mehr ganz so
+  wichtig, weil diese Medientypen meist den Endpunkten der "discouvery route"
+  bilden. Allerdings gibt es von diesen Medientypen Verweise auf in Beziehung
+  stehende (related) Resourcen. Diese Verweise sind komplette URIs mit
+  standartisierter Semantik, also REST konform.
+
+- Diskussion der Problematik, dass viele Medientypen in XML definiert sind, aber
+  viele Webentwickler JSON bevorzugen. Eine automatisierte Übersetzung von XML
+  Schemas in JSON Schemas ist nicht möglich, also muss für alle XML Medientypen
+  eine JSON Äquivalent manuel definiert werden.
+
+- Darstellung semantically annotated HTML mit drei verschiedenen Formaten,
+  Begründung der Formatauswahl. Vorschlag zur Implementierung mit einer
+  Templateengine und automatisierten Erstellung der Microdata Strukturelemente
+
+  Warum überhaupt annotated (X)HTML? Suchmaschinen, Semantischer Editor,
+  Interpretierung durch Browser Extensions (Import in Adressbuch, Kalender),
+  Serendipitous Reuse
+
+- HTML Forms und ihre Einbettung in eine Hypermedia API:
+  - Kein PUT/DELETE
+  - universeller, nichtssagender Medientyp application/x-www-form-urlencoded
+  - keine link-relation, um auf die Form zur Erstellung einer neuen Resource zu
+    verweisen.
+
+- Problematik des Updates mit nicht isomorphen Medientypen, Möglichkeiten, damit
+  umzugehen
+
+Implementierung und wiederverwendung von Komponenten
+
+- Auf Basis von Jersey, weil empfohlen von Schneider2010 (Vergleich und
+  Beurteilung von Java Frameworks für Web Services mit REST)
+
+- Komplexität der Behandlung verschiedener Medientypen versteckt hinter
+  "Resource" Klasse mit Hilfe von ResourceFacades
+
+- Die Mächtigkeit der Resourceklasse ermöglicht dass der restliche Code,
+  z.B. CollectionStorage sehr einfach gehalten werden kann.
+
+- Das CollectionStorage Interface kann für verschiedene Storagetypen
+  implementiert werden und ist auf das Konzept eines Updatefeeds spezialiesiert.
+
+- Wiederverwendbare Komponenten:
+  - ResourceFacades Framework inkl. Medientypspezifische Klassen zur Extraktion,
+    Transformation v. Daten
+  - ATOM Framework (z.B. Abdera)
+  - Extrem hilfreich: Dependency Injection
+  - JAX-RS überraschenderweise wenig hilfreich
+  - Einige kleine Helferklassen, die Funktionalität von JAX-RS ersetzen oder
+    besser zugreifbar machen
+
+- Größtes Problem: Fehlende oder unzureichende Libraries zum Parsen, Bauen,
+  Konvertieren der Medientypen. Erstellung und Pflege solcher Libraries ist eine
+  langwierige Fleißarbeit.
+
+  Gedanken zu Libraries für Medientypen: (macht das Sinn?)
+
+  - Die Libraries müssen unbekannte Felder beibehalten um Vendorspezifische
+    Erweiterungen nicht zu beschädigen und um Aufwärtskompatibel zu sein.
+
+  - Das Schema des Datentyps sollte nicht durch Klassen oder Objectfelder
+    bereits zur Compilezeit statisch festgelegt sein (hartcodiert) sondern erst
+    dynamisch zur Laufzeit gebaut werden. Das reduziert den
+    Implementierungsaufwand der Library und ermöglicht die Erweiterung des
+    Schemas zur Laufzeit.
+  
+    Beispiele: 
+    - ICal4J hat eine Java Klasse pro bekannter Property
+    - Apache Shindig hat eine Objekteigenschaft pro bekanntem PoCo Feld
+
+
+
 * Implementation Todos
 ** TODO SLUG Header
 ** TODO Wohin redirect nach delete/put?

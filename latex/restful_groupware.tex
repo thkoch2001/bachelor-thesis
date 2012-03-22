@@ -33,7 +33,7 @@
 \newcommand{\citeurl}[2]{\url{#1} (#2)}
 
 \begin{document}
-\pagenumbering{Roman}
+
 \lstnewenvironment{javalisting}[1][]
   {\lstset{language=Java,float=tb,#1}}% \begin{javalisting}[...]
   {} % \end{javalisting}
@@ -51,16 +51,78 @@
 
 %\titlehead{}
 %\subject{subject}
-\title{}
-\subtitle{}
-\author{Thomas Koch\\\url{thomas@koch.ro}\\matriculation number 7250371}
+
+% Entwicklung einer REST-konformen Schnittstelle für die Opensource-Groupware
+% Kolab mit Unterstützung verschiedener Medientypen
+
+\title{Development of a REST API for the free software Groupware Kolab with support for different Media Types}
+
+\subtitle{bachelor thesis}
+
+\author{Thomas Koch}
 \publishers{Fernuniversität Hagen\\Faculty of mathematics and computer science}
 \date{\today}
-%\thanks{}
-\maketitle{}
 
-%\newpage{}
+\maketitle{}
+\thispagestyle{empty}
+\pagenumbering{Roman}
+\vspace{3cm}
+\begin{center}
+  matriculation number 7250371
+\end{center}
+\vspace{3cm}
+\begin{center}
+Professor Dr.-Ing. Bernd J. Krämer\\
+Dipl.-Inf. Silvia Schreier
+\end{center}
+
+\section*{Aufgabenstellung}
+
+\textit{Entwicklung einer REST-konformen Schnittstelle für die 
+Opensource-Groupware Kolab mit Unterstützung verschiedener Medientypen}
+
+Für die Opensource-Groupware Kolab\footnote{\url{http://kolab.org}} gibt es
+bisher ein PHP-basiertes Web-Frontend. Als Alternative dazu soll eine
+REST-konforme
+Schnittstelle\footnote{\url{http://www.ics.uci.edu/~fielding/pubs/dissertation/top.htm}}
+für die Kontaktfunktionalität entwickelt werden. Um die Anbindung an
+verschiedene Clienten zu unterstützen sollen die folgenden Medientypen
+unterstützt werden:
+
+\begin{itemize}
+\item
+  vCard\footnote{\url{http://datatracker.ietf.org/doc/draft-ietf-vcarddav-vcardrev/?include_text=1}}:
+  Für die Darstellung von Kontaktdaten eignet sich vCard, auch hier muss
+  untersucht werden inwiefern die Daten aus Kolab abgebildet werden können.
+\item Contact Schema von
+  portablecontacts.net\footnote{\url{http://portablecontacts.net/draft-spec.html}}:
+  Dieses JSON-Format, das auf vCard basiert, findet inzwischen auch in Open
+  Social\footnote{\url{http://docs.opensocial.org/display/OS/Home}} Verwendung.
+% Link für XHTML?
+\item XHTML: XHTML eignet sich primär für menschliche Clients und kann beliebige
+  Daten enthalten. Hierbei soll auch untersucht werden, inwiefern die Daten mit
+  Hilfe von Microdata angereichert werden können, so dass dieses Format auch für
+  maschinelle Clienten nutzbar wird.
+\end{itemize}
+
+Bei der Implementierung soll untersucht werden, welche Komponenten des Entwurfs
+für die Unterstützung verschiedener Medientypen gemeinsam genutzt
+bzw. wiederverwendet werden können. Außerdem soll die Hypermediaunterstützung
+der verschiedenen Formate untersucht werden: Wie viel muss ein Client vorher
+wissen und wie viel kann er durch Hyperlinks entdecken?
+
+optionale Ergänzungen:
+
+\begin{itemize}
+\item CardDAV als alternatives Protokoll mit Untersuchung der
+  Wiederverwendbarkeit der Komponenten
+\item Mitbetrachtung der Kalenderfunktionalität bei der Hypermediaunterstützung
+\item zumindest lesender Zugriff auf die Kalenderfunktionalität über die
+  REST-Schnittstelle
+\end{itemize}
+
 \tableofcontents{}
+
 \begin{abstract}
 
 \end{abstract}
@@ -1050,28 +1112,100 @@ the purpose of signaling the client the location where it can retrieve an
 editable resource:
 
 \begin{lstlisting}{language=xml}
-  <link rel="edit" href="?edit"/>
+  <link rel="edit" href="?edit=true"/>
 \end{lstlisting}
 
-Making different representations of one resource available under different URIs
-is no violation of rest principles and even encouraged for similar use cases by
-\cite{Raman2006}.
+The above link is a relative Link that just appends a query part to the URI of
+the current page (assuming that the page URI does not already contain a query
+part).
+
+It may be noted here, that making different representations of one resource
+available under different URIs is no violation of rest principles and even
+encouraged for similar use cases by \cite{Raman2006}.
 
 Unfortunately no link relation is standardized to retrieve an empty form for the
-creation of a new resource. So for the time being server and client would need
+creation of a new resource.\footnote{The \lstinline:Collection+JSON: Mediatype solves this issue by providing templates for new items inside the collection representation (\autoref{sec:collection+json}).}
+ So for the time being server and client would need
 to agree on a custom link relation for that purpose. The empty form can be
 regarded as an entity of its own, linked from the collection where newly created
 resources are expected to appear.
 
-\subsection{Media Types for Collections}
+\subsection{JSON based Media Types for Collections}
 \label{sec:media-types-coll}
 %@TODO
-TODO: Vergleich ATOM mit Medientyp Collection+JSON
 
-JSON formats for collections:
-Collection+JSON Mime-Type (approved in July 2011) by Mike Amundsen\footnote{\citeurl{http://amundsen.com/media-types/collection/}{2012-1-7}}
-JSON ATOM serialization implemented by Apache Abdera\footnote{\citeurl{http://www.ibm.com/developerworks/library/x-atom2json/index.html}{2012-1-7} \citeurl{https://cwiki.apache.org/ABDERA/json-serialization.html}{2012-1-7}}
 
+\subsubsection{Collection+JSON}
+\label{sec:collection+json}
+
+
+Collection+JSON Mime-Type (approved in July 2011) by Mike Amundsen\cite{Amundsen2011a}\cite[ch. 3]{amundsen2011building}.
+
+The author states that is has been explicitly designed after the model of Atom Publishing
+Protocol\footnote{\citeurl{http://amundsen.com/media-types/collection}{2012-03-22}}
+
+The Mediatype consists of
+
+\begin{itemize}
+\item Query Templates
+\item items array
+\item Write Template - to create or edit items
+\item Meta data about the collection
+
+\end{itemize}
+
+
+
+Collection+JSON does not enforce an order of the elements in a collection. The
+proposed synchronization interaction however is based on the assumption that the
+collection feed is ordered by the time of the last modification. Consequently,
+there is also no equivalent to an ATOM
+``deleted-entry''\cite{draft-snell-atompub-tombstones-14}, which enables the use
+of an updates feed for synchronization.
+
+The facility to include full item representations directly in the collection
+(the ``data'' property) is restricted to simple key/value pairs. This excludes
+more complex data structures, like PortableContacts. It would still be possible
+to omit the optional data property and only fill the href property with a link
+to the full representation.
+
+An AtomPub collection declares its accepted media types and assumes that the
+client knows to produce those. The Collection+JSON Mediatype instead provides a
+write template which the client must fill in order to create new items. The
+write template only supports basic key value pairs in accordance to the data
+property. More complex schemes can not be expressed\footnote{It would make sense
+  to rely on JSON schemas to define valid item structures:
+  \citeurl{http://json-schema.org}{2012-03-22}}.
+
+A Collection+JSON document is furthermore restricted to contain only one write
+template. This excludes mixed collections of different types.
+
+Collection+JSON provides query templates but those come without a defined
+semantic. A mapping from OpenSearch to JSON would be helpful to reuse the
+semantic definitions. Also the URI template part should be updated to reuse the
+specification of the upcoming URI templates standard\cite{Gregorio2012}.
+
+Pagination link relations for feeds\cite{RFC5005} could be reused to express
+paginated JSON collections as encouraged by the format
+documentation\cite[sec. 5.5]{Amundsen2011a}.
+
+In summary, for Collection+JSON to become usable as a JSON variant of the
+proposed synchronization model, it would need the following simple enhancements:
+
+\begin{itemize}
+\item an indication, that a collection is ordered by modification time
+\item means to indicate deletion of items
+\item means to indicate accepted Media types as an alternative to the write
+  template
+\end{itemize}
+
+% 3.4. links "The links array is an OPTIONAL child property of the items array." and the collection!
+
+\subsubsection{Direct Mapping of ATOM XML}
+
+JSON ATOM serialization implemented by Apache
+Abdera\footnote{\cite{Snell2008}
+  \citeurl{https://cwiki.apache.org/ABDERA/json-serialization.html}{2012-1-7}}
 
 Some problems in loss-less conversion of ATOM to json:\cite{Snell2008}
 \begin{itemize}
@@ -2264,6 +2398,26 @@ then the rest of the application.
 \newpage
 \bibliography{references}{}
 \bibliographystyle{alphadin}
+
+\section*{Selbstständigkeitserklärung}
+% Keine Kopf- und Fußzeilen ausgeben
+\thispagestyle{empty}
+% Aber trotzdem ins Inhaltsverzeichnis aufnehmen
+% \addcontentsline{toc}{chapter}{Selbstständigkeitserklärung}
+% Hier der offizielle Text der eidesstattlichen Erklärung
+Ich erkläre hiermit, dass ich die vorliegende Arbeit selbstständig und ohne
+Benutzung anderer als der angegebenen Hilfsmittel angefertigt habe; die aus
+fremden Quellen direkt oder indirekt übernommenen Gedanken sind als solche
+kenntlich gemacht.  Die Arbeit wurde bisher in gleicher oder ähnlicher Form
+keiner anderen Prüfungskommission vorgelegt.
+% Etwas Abstand für die Unterschrift
+\vspace{3cm}
+% Hier kommt die Unterschrift drüber
+\begin{tabbing}
+\hspace{6cm}  \= \kill
+\textit{Kreuzlingen, 4. April 2012} \> \textit{Thomas Koch}
+\end{tabbing}
+
 \end{document}
 
 % Local Variables:
