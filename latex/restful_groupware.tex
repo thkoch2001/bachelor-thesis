@@ -137,180 +137,6 @@ optionale Ergänzungen:
 \section{Introduction}
 \label{sec:introduction}
 
-\section{Background and Related Work}
-\label{sec:backgr-relat-work}
-
-\subsection{vCard, xCard, iCal, xCal}
-\label{sec:vcard-xcard-ical}
-
-\subsection{PortableContacts}
-\label{sec:portablecontacts}
-
-\subsection{CardDAV, CalDAV}
-\label{sec:carddav-caldav}
-
-\subsection{OpenSocial}
-\label{sec:opensocial-background}
-
-% > - Allerdings sind diese APIs entweder komplexer als notwendig (C.*DAV) oder
-% >   nicht restful (C.*DAV, OpenSocial). Außerdem wäre es natürlich schön, eine
-% >   Schnittstelle zu haben, die beide Anwendungsfälle bedienen kann.
-
-\section{Requirements and Analysis}
-\label{sec:requ-analys}
-
-%  - Herleitung aus C.*DAV, OpenSocial
-%  - Anforderungen, die sich aus Kolab ergeben
-% > - Die Anforderung von Kolab selbst ist minimal: Synchronisation von 
-% > Collections,
-% >   denn mehr macht die jetzige IMAP API auch nicht.
-
-% - HTML + annotation als Anforderung begründen
-
-% >   Warum überhaupt annotated (X)HTML? Suchmaschinen, Semantischer Editor,
-% >   Interpretierung durch Browser Extensions (Import in Adressbuch, Kalender),
-% >   Serendipitous Reuse
-% sehr kurz fassen und aufpassen nicht zu sehr auszuholen
-
-% Synchronisation als Hauptinteraktion, 2 Searchtypen
-
-\section{Design}
-\label{sec:design}
-
-% > - Es wird gezeigt, dass AtomPub mit ein paar, meist bereits standardisierten
-% >   Ergänzungen eine sinnvolle, resourcenorientierte Alternative zu C.*DAV,
-% >   OpenSocial ist.
-
-% > - Diskussion der Problematik, dass viele Medientypen in XML definiert sind, 
-% > aber
-% >   viele Webentwickler JSON bevorzugen. Eine automatisierte Übersetzung von XML
-% >   Schemas in JSON Schemas ist nicht möglich, also muss für alle XML 
-% > Medientypen
-% >   eine JSON Äquivalent manuel definiert werden.
-
-% > - Darstellung semantically annotated HTML mit drei verschiedenen Formaten,
-% >   Begründung der Formatauswahl. Vorschlag zur Implementierung mit einer
-% >   Templateengine und automatisierten Erstellung der Microdata Strukturelemente
-
-% > - HTML Forms und ihre Einbettung in eine Hypermedia API:
-% >   - Kein PUT/DELETE
-% >   - universeller, nichtssagender Medientyp application/x-www-form-urlencoded
-% >   - keine link-relation, um auf die Form zur Erstellung einer neuen Resource 
-% > zu
-% >     verweisen.
-
-% > - Problematik des Updates mit nicht isomorphen Medientypen, Möglichkeiten, 
-% > damit umzugehen
-
-\section{Implementation}
-\label{sec:implementation}
-
-\subsection{Used Frameworks and Libraries}
-\label{sec:used-fram-libr}
-
-%> - Auf Basis von Jersey, weil empfohlen von Schneider2010 (Vergleich und
-%>   Beurteilung von Java Frameworks für Web Services mit REST)
-
-\subsection{Overview}
-\label{sec:overview}
-
-\subsection{Resource handling}
-\label{sec:resource-handling}
-% Resource Klasse
-
-% Komplexität der Behandlung verschiedener Medientypen versteckt hinter
-% "Resource" Klasse mit Hilfe von ResourceFacades
-
-% Die Mächtigkeit der Resourceklasse ermöglicht dass der restliche Code,
-% z.B. CollectionStorage sehr einfach gehalten werden kann.
-
-\subsection{CollectionStorage}
-\label{sec:collectionstorage}
-
-% Das CollectionStorage Interface kann für verschiedene Storagetypen
-% implementiert werden und ist auf das Konzept eines Updatefeeds spezialiesiert.
-
-\subsection{Reusability of Components}
-\label{sec:reus-comp}
-
-% > - Wiederverwendbare Komponenten:
-% >   - ResourceFacades Framework inkl. Medientypspezifische Klassen zur 
-% > Extraktion,
-% >     Transformation v. Daten
-% >   - ATOM Framework (z.B. Abdera)
-% >   - Extrem hilfreich: Dependency Injection
-% >   - JAX-RS überraschenderweise wenig hilfreich
-% >   - Einige kleine Helferklassen, die Funktionalität von JAX-RS ersetzen oder
-% >     besser zugreifbar machen
-
-% **** Zusammenfassung, Fazit
-
-% > - Größtes Problem: Fehlende oder unzureichende Libraries zum Parsen, Bauen,
-% >   Konvertieren der Medientypen. Erstellung und Pflege solcher Libraries ist 
-% > eine
-% >   langwierige Fleißarbeit.
-
-\section{Results and Discussion}
-\label{sec:results-discussion}
-
-% The main results of your work should be presented, together with critical
-% discussion. The chapter should cover three things (although these would not be
-% used as section headings):
-
-% Findings. Present all the results (products, experimental findings, theories,
-% etc.) generated during the project. This may also include some off-topic
-% findings that were not expected, or which were side-effects of other
-% explorations.
-
-% Goals achieved. Describe the degree to which the findings support the original
-% objectives laid out for the project. The goals may be partially or fully
-% achieved, or exceeded. An experimental project may prove, or disprove the
-% original thesis. A theoretical project may cover some or all of the example
-% cases. Note that reporting of failures to achieve goals is important since a
-% fundamental feature of the assessment procedures is that the processes (how you
-% went about your project) are often as important as the products of the project.
-
-% Further work. This should address two things: firstly, new areas of
-% investigation prompted by developments in this project, and secondly parts of
-% the current work which were not completed due to time constraints and/or
-% problems encountered.
-
-
-% Gedanken zu Libraries für Medientypen: (macht das Sinn?)
-
-% >   - Die Libraries müssen unbekannte Felder beibehalten um Vendorspezifische
-% >     Erweiterungen nicht zu beschädigen und um Aufwärtskompatibel zu sein.
-% > 
-% >   - Das Schema des Datentyps sollte nicht durch Klassen oder Objectfelder
-% >     bereits zur Compilezeit statisch festgelegt sein (hartcodiert) sondern 
-% > erst
-% >     dynamisch zur Laufzeit gebaut werden. Das reduziert den
-% >     Implementierungsaufwand der Library und ermöglicht die Erweiterung des
-% >     Schemas zur Laufzeit.
-% >   
-% >     Beispiele: 
-% >     - ICal4J hat eine Java Klasse pro bekannter Property
-% >     - Apache Shindig hat eine Objekteigenschaft pro bekanntem PoCo Feld
-
-% **** Hypermediabetrachtung in einen ganz eigenen Abschnitt eher gegen Ende der
-% Arbeit, da könnte man zB super über (stark/schwach) zusammenhängende Graphen
-% von Ressourcen/Medientypen reden
-
-\section{Conclusions}
-\label{sec:conclusions}
-
-% The conclusions can be summarised in a fairly short chapter (2 or 3 pages). This
-% chapter brings together many of the points that you will have made in other
-% chapters, especially in the previous results and discussion chapter. Do not be
-% afraid of repeating some of your earlier statements here, albeit using different
-% wording.
-
-
-\section{alles alt hier unten}
-
-
-\section{Introduction}
-
 Although computers became ubiquitous for some time now, they still don't help
 their users with their most basic information management needs: Make contacts,
 calendars, notices and to do items available across different devices and share
@@ -321,23 +147,49 @@ or require the user to trust his personal data to the commercial
 interests of a multinational corporation.
 %\footnote{Experiences with Android and Data in the cloud \citeurl{http://keithp.com/blogs/calypso}{?}}
 
-% @TODO Überleitung
 
-A section about OpenSocial (\autoref{sec:opensocial}) provides additional
-motivation for a restful API for social data. It also uses the opportunity to
-provide an alternative approach to explain the rest architecture by going into
-detail why OpenSocial is not restful.
+\section{Background and Related Work}
+\label{sec:backgr-relat-work}
 
-A few patterns or techniques are presented and proposed for reuse in other Rest
-applications to ease the support for multiple alternative Media types. Among
-these techniques are Dependency Injection to prepare resource method parameters
-(\autoref{sec:prep-requ-comp}), Resource Facades
-  (\autoref{sec:resourcefacades}) and a programmable dispatcher
-  (\autoref{sec:dispatcher}).
+\subsection{REST architectural style}
 
-\subsection{Definitions}
-%@TODO
-Kolab is the name of a software product ... TODO
+% @TODO
+
+\cite[sec. 5.1.5]{Fielding2000}
+
+ ``REST is defined by four
+  interface constraints: identification of resources; manipulation of resources
+  through representations; self-descriptive messages; and, hypermedia as the
+  engine of application state.''
+
+% more on rest in the opensocial chapter
+
+The requirement to obey the constraints of REST should cause the system to have
+some characteristics that may be especially advantageous for the use case of a
+Groupware API. Those characteristics are, according to \cite{Fielding2000}:
+
+\begin{itemize}
+\item Cacheability (sec. 5.1.4) can keep the data available also in offline
+  mode, improves performance and scalability.
+\item Simplicity (sec. 2.3.3) helps to integrate the Groupware with other
+  applications, e.g. publishing birthdays of employees in an intranet portal.
+\item Modifiability (sec. 2.3.4) allows to adapt the Groupware to changes in the
+  organization.
+\item Reliability (sec. 2.3.7) can be of great importance, if the ability to
+  work depends on the correct working of the Groupware system.
+\item Anarchic scalability (sec. 4.1.4.1) allows a Groupware to function with
+  other components that are not under the control of the Groupware
+  administrator.
+\end{itemize}
+
+% Other outcomes described by Fielding that may not be of importance for the
+% present work are: scalability in terms of users, network performance and
+% efficiency.
+
+\subsection{Kolab}
+\label{sec:kolab}
+
+% @TODO
 
 A couple of related terms and concepts exist that all more or less overlap with
 the functionality provided by Kolab: Groupware, Personal Information
@@ -347,76 +199,8 @@ Management. For the rest of this work a Groupware is a software managing address
 books, calendars, todo items, journals and probably more data for a group of
 collaborating users.
 
-\subsection{Related work}
-\subsubsection{WebDAV, CalDAV, CardDAV}
 
-The most widely implemented Groupware protocols (in free software) today seem to
-be CalDAV\cite{RFC4791} for calendaring and CardDAV\cite{RFC6352} for
-contacts\footnote{only full free server implementations: Apple Calendar Server,
-  Bedeworks, DAViCal, eGroupWare, Owncloud, SOGo, Tine2.0}. Both protocols
-extend WebDAV\cite{RFC4918} and thus inherit its characteristics.
-
-Two characteristics of WebDAV motivate an investigation of alternative
-approaches. The first is the protocol's complexity that complicates correct
-implementation. Unfortunately complexity is hard to assess. Therefor only some
-indications are provided at this point.
-
-Lisa Dusseault, author of a WebDAV book\cite{Dusseault2004} and the standard
-itself
-wrote\footnote{\citeurl{http://nih.blogspot.com/2008/02/nearly-two-years-ago-i-made-prediction.html}{2012-1-6}}:
-
-\begin{quote}
-Were I to propose CalDAV today it would probably be CalAtom.
-\end{quote}
-
-The three standards WebDAV (127p), CalDAV (107p) and CardDAV (48p) add up to 282
-pages of highly specific standards. This is nearly double as much text as
-necessary for the standards this work is based on (149 pages)\footnote{Atom (43),
-  AtomPub (53), Feed paging (15), OpenSearch (~28), Atom Deleted Entry (10)}. In
-contrast to WebDAV, Feeds and related technologies are also widely used so that
-a web developer might already know the latter standards.
-
-The second and for this work more important characteristic of WebDAV is, that it
-is not restful, as explained by Roy
-Fielding:\footnote{\citeurl{http://tech.groups.yahoo.com/group/rest-discuss/message/5874}{2012-3-5}}
-
-\begin{quotation}
-  PROP* methods conflict with REST because they prevent important resources from
-  having URIs and effectively double the number of methods for no good
-  reason. [\ldots] It really doesn't matter how uniform they are because they
-  break other aspects of the overall model, leading to further complications in
-  versioning (WebDAV versioning is hopelessly complicated), access control
-  (WebDAV ACLs are completely wrong for HTTP), and just about every other
-  extension to WebDAV that has been proposed.
-
-  [\ldots]
-
-  The problem with MOVE is that it is actually an operation on two independent
-  namespaces (the source collection and destination collection). The user must
-  have permission to remove from the source collection and add to the
-  destination collection, which can be a bit of a problem if they are in
-  different authentication realms. COPY has a similar problem, but at least in
-  that case only one namespace is modified. I don't think either of them map
-  very well to HTTP.
-\end{quotation}
-
-% \url{http://microformats.org/discuss/mail/microformats-rest/2006-April/thread.html#217}
-% see \cite{Amundsen2010} for a restful approach to properties.
-% \begin{quote}
-%   AtomPub is different from DAV in two key respects:
-%   \begin{itemize}
-%   \item The client doesn't control where things go, the server does
-%   \item It is allowed and expected that an AtomPub server will look at the incoming information and change it (generate ID, timestamps, sanitize HTML, etc)
-%   \end{itemize}
-% \end{quote}
-% Tim Bray, http://www.imc.org/atom-protocol/mail-archive/msg11271.html
-
-Given the comprehensiveness of CalDAV and CardDAV one would expect these
-protocols to cover all common use cases. However the calconnect consortium
-additionally develops two alternative protocols, CalWS-SOAP and
-CalWS-REST\footnote{\citeurl{http://calconnect.org/CD1012_Intro_Calendaring_V1.1.shtml}{2012-3-5}}.
-
-\subsubsection{IMAP used by Kolab}
+\subsection{IMAP as a collection synchronization protocol}
 
 The Kolab Groupware Server is special in that it uses the Internet Message
 Access Protocol (IMAP) as a synchronization protocol for all its data and thus
@@ -462,38 +246,170 @@ IMAP in general also comes with its own challenges:
 % \item more rants: http://blog.gaborcselle.com/2010/02/how-to-replace-imap.html
 % \item IMAP issues found by the chandler project http://chandlerproject.org/bin/view/Jungle/IntrinsicIMAPIssues
 
-\subsubsection{OpenSocial, useful but not restful}
-\label{sec:opensocial}
 
-OpenSocial\cite{OSSpec2.0.1} specifies how data of social networks can be
-accessed by clients, especially Javascript browser widgets. While the
-specification was initially designed for social networks, it has also been
-adopted to enhance wikis, issue trackers (Confluence, Jira from Atlassian),
-Groupware (Lotus from IBM), Content Management Systems (Alfresco,
-Nuxeo). \cite{Huebner2009} discusses the benefits of OpenSocial for the
-interaction of university members.
+\subsection{vCard, xCard, iCal, xCal}
+\label{sec:vcard-xcard-ical}
 
-The specification is discussed in this section because it shows the usefulness
-of making social data available for different kind of clients but on the other
-hand is a poster child for a non-restful API on top of HTTP and thus serves as a
-standard of comparison for the API to be designed in this work.
+vCard is an IETF standardized Mediatype to ``capture and exchange [\ldots]
+information normally stored within an address book or directory
+application''\cite{RFC6350} e.g. about individuals, groups, organizations or
+locations (see the vCard \lstinline:kind: property). Closely connected by
+format, standards body and usage is iCalendar, for ``representing and exchanging
+calendaring and scheduling information such as events, to-dos, journal entries,
+and free/busy information''\cite{RFC5545}. Both formats together cover most
+information usually managed by a Groupware system are the base of Kolab's
+internal storage, the underlying format of CardDav and CalDAV and thus of most
+free Groupware systems (\autoref{sec:carddav-caldav}).
 
-Restful APIs are modeled around resources, their representations and links
-between them\cite[sec. 5.1.5]{Fielding2000}\footnote{ ``REST is defined by four
-  interface constraints: identification of resources; manipulation of resources
-  through representations; self-descriptive messages; and, hypermedia as the
-  engine of application state.''}. The authors of OpenSocial however seem to
-have started already from a different concept\cite[Social API Server, sec 2,
-Services]{OSSpec2.0.1}:
+The vCard and iCalendar media types seem a bit archaic, since they're not based
+on XML or JSON but on the older Internet Message Format\cite{RFC5322} (IMF)
+first defined in RFC822 in 1982. Version 3 of vCard was published in
+1998\cite{RFC2425} only a few months after the W3C published Version 1.0 of
+XML\cite{Paoli:98:XR} and eight years before JSON became an official
+standard\cite{RFC4627}.
+
+Thus vCard and iCalendar look a lot like email or HTTP headers. Fortunately, the
+xCard\cite{RFC6351} and xCal\cite{RFC6321} standards are now available as
+alternative serializations, so that XML tooling can be used. The standards aim
+for full compatibility between the XML and IMF formats so that no information is
+lost when converting in either direction.
+
+The iCalendar standard defines several properties that can link to external
+representations of the properties value by specifying an ``Alternate Text
+Representation'' parameter. These are comment, summary, description, contact,
+location, resources. The properties attendee and organizer can have a
+``Directory Entry Reference'' parameter that should contain an URI to a person
+resource. One property that can not be dereferenced is ``Related To'': It only
+contains the globally unique identifier of another calendar component.
+
+One problem that arises with the use of hyperlinks in personal information
+management is identification across administrative boundaries. Take for example
+an event that gets sent from one organization to another and contains hyperlinks
+to person representations. These hyperlinks most likely point to an internal
+addressbook of the organization and may not be accessible by the receiver of the
+event information. The receiver however may have his own addressbook containing
+information about the person.
+
+\subsection{PortableContacts}
+\label{sec:portablecontacts}
+
+Portable Contacts\footnote{\citeurl{http://portablecontacts.net}{2012-03-23}} is
+a specification initiated in 2008 by Joseph Smarr while working at the Address
+Book internet service
+Plaxo.com\footnote{\citeurl{http://josephsmarr.com/2008/12/31/portable-contacts-the-half-year-in-review}{2012-03-23}}. It
+comprises of a JSON schema for contacts information derived from
+vCard\footnote{\citeurl{http://wiki.portablecontacts.net/w/page/17776141/schema}{2012-03-23}}
+and a protocol for authorized retrieval of contacts. The schema omits many
+properties of the current vCard standard\cite{RFC6350} and introduces properties
+inspired by social networks, e.g. describing social behavior or preferences.
+
+The schema and protocol has been adopted by OpenSocial
+(\autoref{sec:opensocial-background}) which is now its main user. The schema
+part of PoCo is thus the most appropriate format currently available to
+represent contacts information in JSON and make it thus easily consumable by
+JavaScript browser applications.
+
+\subsection{WebDAV, CardDAV, CalDAV}
+\label{sec:carddav-caldav}
+
+The most widely implemented Groupware protocols (in free software) today seem to
+be CalDAV\cite{RFC4791} for calendaring and CardDAV\cite{RFC6352} for
+contacts\footnote{only full free server implementations: Apple Calendar Server,
+  Bedeworks, DAViCal, eGroupWare, Owncloud, SOGo, Tine2.0}. Both protocols
+extend WebDAV\cite{RFC4918} and thus inherit its characteristics.
+
+Two characteristics of WebDAV motivate an investigation of alternative
+approaches. The first is the protocol's complexity that complicates correct
+implementation. Unfortunately complexity is hard to assess. Therefor only some
+indications are provided at this point.
+
+Lisa Dusseault, author of a WebDAV book\cite{Dusseault2004} and the standard
+itself
+wrote\footnote{\citeurl{http://nih.blogspot.com/2008/02/nearly-two-years-ago-i-made-prediction.html}{2012-1-6}}:
+
+\begin{quote}
+Were I to propose CalDAV today it would probably be CalAtom.
+\end{quote}
+
+The three standards WebDAV (127p), CalDAV (107p) and CardDAV (48p) add up to 282
+pages of highly specific standards. This is nearly double as much text as
+necessary for the standards this work is based on (149 pages)\footnote{Atom (43),
+  AtomPub (53), Feed paging (15), OpenSearch (~28), Atom Deleted Entry (10)}. In
+contrast to WebDAV, Feeds and related technologies are also widely used so that
+a web developer might already know the latter standards.
+
+% @TODO reference to excluded requirements to show how complicate 
+
+The second and for this work more important characteristic of WebDAV is, that it
+is not restful, as explained by Roy
+Fielding\footnote{\citeurl{http://tech.groups.yahoo.com/group/rest-discuss/message/5874}{2012-3-5}}:
+
+\begin{quotation}
+  PROP* methods conflict with REST because they prevent important resources from
+  having URIs and effectively double the number of methods for no good
+  reason. [\ldots] It really doesn't matter how uniform they are because they
+  break other aspects of the overall model, leading to further complications in
+  versioning (WebDAV versioning is hopelessly complicated), access control
+  (WebDAV ACLs are completely wrong for HTTP), and just about every other
+  extension to WebDAV that has been proposed.
+
+  [\ldots]
+
+  The problem with MOVE is that it is actually an operation on two independent
+  namespaces (the source collection and destination collection). The user must
+  have permission to remove from the source collection and add to the
+  destination collection, which can be a bit of a problem if they are in
+  different authentication realms. COPY has a similar problem, but at least in
+  that case only one namespace is modified. I don't think either of them map
+  very well to HTTP.
+\end{quotation}
+
+% \url{http://microformats.org/discuss/mail/microformats-rest/2006-April/thread.html#217}
+% see \cite{Amundsen2010} for a restful approach to properties.
+% \begin{quote}
+%   AtomPub is different from DAV in two key respects:
+%   \begin{itemize}
+%   \item The client doesn't control where things go, the server does
+%   \item It is allowed and expected that an AtomPub server will look at the incoming information and change it (generate ID, timestamps, sanitize HTML, etc)
+%   \end{itemize}
+% \end{quote}
+% Tim Bray, http://www.imc.org/atom-protocol/mail-archive/msg11271.html
+
+Given the comprehensiveness of CalDAV and CardDAV one would expect these
+protocols to cover all common use cases. However the calconnect consortium
+additionally develops two alternative protocols, CalWS-SOAP and
+CalWS-REST\footnote{\citeurl{http://calconnect.org/CD1012_Intro_Calendaring_V1.1.shtml}{2012-3-5}}.
+
+\subsection{OpenSocial}
+\label{sec:opensocial-background}
+
+% > - Allerdings sind diese APIs entweder komplexer als notwendig (C.*DAV) oder
+% >   nicht restful (C.*DAV, OpenSocial). Außerdem wäre es natürlich schön, eine
+% >   Schnittstelle zu haben, die beide Anwendungsfälle bedienen kann.
+
+OpenSocial\cite{OSSpec2.0.1} specifies a how data of social networks can be
+accessed by clients, especially Javascript browser widgets. The broad adoption
+not only by social networks but also for collaboration software\footnote{wiki,
+  issue tracker (Confluence, Jira both Atlassian), Groupware (Lotus from IBM),
+  Content Management System (Alfresco, Nuxeo)} demonstrates a variety of use
+cases for Browser accessible Groupware data. It has also been proposed to
+implement an OpenSocial system for the Fernuniversität Hagen\cite{Huebner2009}.
+
+Unfortunately the so called OpenSocial REST API is a poster child for a non
+restful API that does not warrant its name. It is rather service oriented, as
+the specification truthfully points out\cite[Social API Server, sec
+2,Services]{OSSpec2.0.1}:
 \begin{quote}
   OpenSocial defines several services for providing access to a container's data.
 \end{quote}
 
-Fielding wrote a blog post stating that OpenSocial\footnote{Fielding referred to
-  a concrete implementation, the ``SocialSite REST API''.} would not be
-restful\cite{Fielding2008}. He pointed out rules ``most often violated within
-so-called REST APIs'', but did not give explicit examples, how OpenSocial
-violates them.
+This section examines a critique of Fielding of the
+API\cite{Fielding2008}\footnote{Fielding referred to a concrete implementation,
+  the ``SocialSite REST API''.} which helps to further clarify the
+characteristics of a restful API that must be obeyed in this work and to justify
+the proposal of a competing API to an already widely adopted one. The following
+paragraphs quote rules from Fieldings critique and explain how they are violated
+by OpenSocial.
 
 \begin{quote}
   A REST API should not be dependent on any single communication protocol,
@@ -673,6 +589,166 @@ for Atom feeds is currently in the late stages of the IETF standardization
 process.
 % http://notes.kateva.org/2008/01/microsoft-feedsync-what-heck-is-it-and.html
 
+\section{Requirements and Analysis}
+\label{sec:requ-analys}
+
+%  - Herleitung aus C.*DAV, OpenSocial
+%  - Anforderungen, die sich aus Kolab ergeben
+% > - Die Anforderung von Kolab selbst ist minimal: Synchronisation von 
+% > Collections,
+% >   denn mehr macht die jetzige IMAP API auch nicht.
+
+% - HTML + annotation als Anforderung begründen
+
+% >   Warum überhaupt annotated (X)HTML? Suchmaschinen, Semantischer Editor,
+% >   Interpretierung durch Browser Extensions (Import in Adressbuch, Kalender),
+% >   Serendipitous Reuse
+% sehr kurz fassen und aufpassen nicht zu sehr auszuholen
+
+% Synchronisation als Hauptinteraktion, 2 Searchtypen
+
+
+
+\section{Design}
+\label{sec:design}
+
+% > - Es wird gezeigt, dass AtomPub mit ein paar, meist bereits standardisierten
+% >   Ergänzungen eine sinnvolle, resourcenorientierte Alternative zu C.*DAV,
+% >   OpenSocial ist.
+
+% > - Diskussion der Problematik, dass viele Medientypen in XML definiert sind, 
+% > aber
+% >   viele Webentwickler JSON bevorzugen. Eine automatisierte Übersetzung von XML
+% >   Schemas in JSON Schemas ist nicht möglich, also muss für alle XML 
+% > Medientypen
+% >   eine JSON Äquivalent manuel definiert werden.
+
+% > - Darstellung semantically annotated HTML mit drei verschiedenen Formaten,
+% >   Begründung der Formatauswahl. Vorschlag zur Implementierung mit einer
+% >   Templateengine und automatisierten Erstellung der Microdata Strukturelemente
+
+% > - HTML Forms und ihre Einbettung in eine Hypermedia API:
+% >   - Kein PUT/DELETE
+% >   - universeller, nichtssagender Medientyp application/x-www-form-urlencoded
+% >   - keine link-relation, um auf die Form zur Erstellung einer neuen Resource 
+% > zu
+% >     verweisen.
+
+% > - Problematik des Updates mit nicht isomorphen Medientypen, Möglichkeiten, 
+% > damit umzugehen
+
+\section{Implementation}
+\label{sec:implementation}
+
+\subsection{Used Frameworks and Libraries}
+\label{sec:used-fram-libr}
+
+%> - Auf Basis von Jersey, weil empfohlen von Schneider2010 (Vergleich und
+%>   Beurteilung von Java Frameworks für Web Services mit REST)
+
+\subsection{Overview}
+\label{sec:overview}
+
+\subsection{Resource handling}
+\label{sec:resource-handling}
+% Resource Klasse
+
+% Komplexität der Behandlung verschiedener Medientypen versteckt hinter
+% "Resource" Klasse mit Hilfe von ResourceFacades
+
+% Die Mächtigkeit der Resourceklasse ermöglicht dass der restliche Code,
+% z.B. CollectionStorage sehr einfach gehalten werden kann.
+
+\subsection{CollectionStorage}
+\label{sec:collectionstorage}
+
+% Das CollectionStorage Interface kann für verschiedene Storagetypen
+% implementiert werden und ist auf das Konzept eines Updatefeeds spezialiesiert.
+
+\subsection{Reusability of Components}
+\label{sec:reus-comp}
+
+% > - Wiederverwendbare Komponenten:
+% >   - ResourceFacades Framework inkl. Medientypspezifische Klassen zur 
+% > Extraktion,
+% >     Transformation v. Daten
+% >   - ATOM Framework (z.B. Abdera)
+% >   - Extrem hilfreich: Dependency Injection
+% >   - JAX-RS überraschenderweise wenig hilfreich
+% >   - Einige kleine Helferklassen, die Funktionalität von JAX-RS ersetzen oder
+% >     besser zugreifbar machen
+
+% **** Zusammenfassung, Fazit
+
+% > - Größtes Problem: Fehlende oder unzureichende Libraries zum Parsen, Bauen,
+% >   Konvertieren der Medientypen. Erstellung und Pflege solcher Libraries ist 
+% > eine
+% >   langwierige Fleißarbeit.
+
+\section{Results and Discussion}
+\label{sec:results-discussion}
+
+% The main results of your work should be presented, together with critical
+% discussion. The chapter should cover three things (although these would not be
+% used as section headings):
+
+% Findings. Present all the results (products, experimental findings, theories,
+% etc.) generated during the project. This may also include some off-topic
+% findings that were not expected, or which were side-effects of other
+% explorations.
+
+% Goals achieved. Describe the degree to which the findings support the original
+% objectives laid out for the project. The goals may be partially or fully
+% achieved, or exceeded. An experimental project may prove, or disprove the
+% original thesis. A theoretical project may cover some or all of the example
+% cases. Note that reporting of failures to achieve goals is important since a
+% fundamental feature of the assessment procedures is that the processes (how you
+% went about your project) are often as important as the products of the project.
+
+% Further work. This should address two things: firstly, new areas of
+% investigation prompted by developments in this project, and secondly parts of
+% the current work which were not completed due to time constraints and/or
+% problems encountered.
+
+% further work
+% establish full compatibility between PoCo and vCard/xCard and make it an IETF standard
+% standardize feed diff http
+
+% Gedanken zu Libraries für Medientypen: (macht das Sinn?)
+
+% >   - Die Libraries müssen unbekannte Felder beibehalten um Vendorspezifische
+% >     Erweiterungen nicht zu beschädigen und um Aufwärtskompatibel zu sein.
+% > 
+% >   - Das Schema des Datentyps sollte nicht durch Klassen oder Objectfelder
+% >     bereits zur Compilezeit statisch festgelegt sein (hartcodiert) sondern 
+% > erst
+% >     dynamisch zur Laufzeit gebaut werden. Das reduziert den
+% >     Implementierungsaufwand der Library und ermöglicht die Erweiterung des
+% >     Schemas zur Laufzeit.
+% >   
+% >     Beispiele: 
+% >     - ICal4J hat eine Java Klasse pro bekannter Property
+% >     - Apache Shindig hat eine Objekteigenschaft pro bekanntem PoCo Feld
+
+% **** Hypermediabetrachtung in einen ganz eigenen Abschnitt eher gegen Ende der
+% Arbeit, da könnte man zB super über (stark/schwach) zusammenhängende Graphen
+% von Ressourcen/Medientypen reden
+
+\section{Conclusions}
+\label{sec:conclusions}
+
+% The conclusions can be summarised in a fairly short chapter (2 or 3 pages). This
+% chapter brings together many of the points that you will have made in other
+% chapters, especially in the previous results and discussion chapter. Do not be
+% afraid of repeating some of your earlier statements here, albeit using different
+% wording.
+
+
+\section{alles alt hier unten}
+
+
+
+
 \section{Requirements}
 
 
@@ -761,29 +837,6 @@ and whose general usefulness outside of the scope of a content management system
 could be argued. See \autoref{sec:excluded-requirements} for a discussion of
 those.
 
-\subsection{REST architectural style}
-
-The requirement to obey the constraints of REST should cause the system to have
-some characteristics that may be especially advantageous for the use case of a
-Groupware API. Those characteristics are, according to \cite{Fielding2000}:
-
-\begin{itemize}
-\item Cacheability (sec. 5.1.4) can keep the data available also in offline
-  mode, improves performance and scalability.
-\item Simplicity (sec. 2.3.3) helps to integrate the Groupware with other
-  applications, e.g. publishing birthdays of employees in an intranet portal.
-\item Modifiability (sec. 2.3.4) allows to adapt the Groupware to changes in the
-  organization.
-\item Reliability (sec. 2.3.7) can be of great importance, if the ability to
-  work depends on the correct working of the Groupware system.
-\item Anarchic scalability (sec. 4.1.4.1) allows a Groupware to function with
-  other components that are not under the control of the Groupware
-  administrator.
-\end{itemize}
-
-% Other outcomes described by Fielding that may not be of importance for the
-% present work are: scalability in terms of users, network performance and
-% efficiency.
 
 \subsection{User Classes and Characteristics}
 \label{sec:user-class-char}
@@ -796,12 +849,12 @@ world use cases.
 
 \begin{table}[tbh]
   \centering
-  \begin{tabular}[tbh]{ r || c | c | c | l }
-                      & Memory & Bandwidth & preferred format & comment \\  \hline
-  Web Browser (HTML5) &  5 MB & 56 kbit/s & JSON & workplace, internet cafe\\
-  Mobile Device       &  512 MB & 384 kbit/s & any/XML & Smart Phone, Tabled \\ 
-  Desktop application &  1 GB & 10 Mbit/s  & any/XML & PIM suite \\
-  Server application  &  4 GB & 100 Mbit/s & any/XML/HTML & intranet application \\
+  \begin{tabular}[tbh]{ l || c | c | c | l }
+                & Memory & Bandwidth & pref. format & comment \\  \hline
+  HTML5 Browser &  5 MB & 56 kbit/s & JSON & workplace, internet cafe\\
+  Mobile Device &  512 MB & 384 kbit/s & any & Smart Phone, Tabled \\ 
+  Desktop app. &  1 GB & 10 Mbit/s  & any & PIM suite \\
+  Server app.  &  4 GB & 100 Mbit/s & any/HTML & intranet application \\
   \end{tabular}
   \caption{Constraints of different API clients}
   \label{tab:clientsconstraints}
@@ -813,7 +866,7 @@ WebStorage\footnote{\citeurl{http://www.w3.org/TR/webstorage/}{2012-2-2}}) a
 potentially very bad internet connection, the inability to leave data for later
 sessions (internet cafe) and the restriction to one particular format
 (JSON). However this use case is of importance as the
-OpenSocial~(~\ref{sec:opensocial}) case shows. It is also the primary use case
+OpenSocial~(~\ref{sec:opensocial-background}) case shows. It is also the primary use case
 to justify an API that provides multiple Media Types since it mandates JSON
 while the canonical Media Types (xCard, xCal) support XML.
 
@@ -1097,43 +1150,7 @@ Activity Streams has avoided the misalignment of an official XML format and an u
 %\subsubsection{Hypermedia Support in JSON}
 %@TODO: discuss HAL
 
-\subsection{vCard, iCalendar, xCard and xCal}
 
-The vCard and iCalendar media types seem a bit archaic in today's terms, since
-they're not based on XML or JSON but on the older Internet Message
-Format\cite{RFC5322} (IMF) first defined in RFC822 in 1982. Version 3 of vCard
-was published in 1998\cite{RFC2425} only a few months after the W3C published
-Version 1.0 of XML\cite{Paoli:98:XR} and eight years before JSON became an
-official standard\cite{RFC4627}.
-
-Thus vCard and iCalendar look a lot like email or HTTP headers. Fortunately, the
-xCard\cite{RFC6351} and xCal\cite{RFC6321} standards are now available as
-alternative serializations, so that XML tooling can be used. The standards aim
-for full compatibility between the XML and IMF formats so that no information is
-lost when converting in either direction.
-
-The iCalendar standard defines several properties that can link to external
-representations of the properties value by specifying an ``Alternate Text
-Representation'' parameter. These are comment, summary, description, contact,
-location, resources. The properties attendee and organizer can have a
-``Directory Entry Reference'' parameter that should contain an URI to a person
-resource. One property that can not be dereferenced is ``Related To'': It only
-contains the globally unique identifier of another calendar component.
-
-One problem that arises with the use of hyperlinks in personal information
-management is identification across administrative boundaries. Take for example
-an event that gets sent from one organization to another and contains hyperlinks
-to person representations. These hyperlinks most likely point to an internal
-addressbook of the organization and may not be accessible by the receiver of the
-event information. The receiver however may have his own addressbook containing
-information about the person.
-
-\subsection{Derived JSON formats for PIM data}
-
-%@todo
-TODO Übereinstimmungen und Unterschiede vCard, portable contacts: Which fields of portable contacts are derived from vCard: \url{http://wiki.portablecontacts.net/w/page/17776141/schema}
-
-Calendar Formate nur kurz
 
 \subsection{Microformats, Microdata, RDFa}
 \label{sec:microdata}
