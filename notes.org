@@ -1,4 +1,201 @@
+* Gliederung nach Silvia
+
+
+
+*** related work
+
+**** C.*DAV
+
+**** PoCo
+
+**** OpenSocial
+
+> - Allerdings sind diese APIs entweder komplexer als notwendig (C.*DAV) oder
+>   nicht restful (C.*DAV, OpenSocial). Außerdem wäre es natürlich schön, eine
+>   Schnittstelle zu haben, die beide Anwendungsfälle bedienen kann.
+
+das ist ein Punkt, denn man in der Related work erwähnen kann, aber das 
+ist kein Gliederungspunkt
+
+
+
+*** Anforderungen
+
+ - Herleitung aus C.*DAV, OpenSocial
+ - Anforderungen, die sich aus Kolab ergeben
+> - Die Anforderung von Kolab selbst ist minimal: Synchronisation von 
+> Collections,
+>   denn mehr macht die jetzige IMAP API auch nicht.
+
+gehört in einen Anforderungsabschnitt
+
+
+ - HTML + annotation als Anforderung begründen
+
+>   Warum überhaupt annotated (X)HTML? Suchmaschinen, Semantischer Editor,
+>   Interpretierung durch Browser Extensions (Import in Adressbuch, Kalender),
+>   Serendipitous Reuse
+
+sehr kurz fassen und aufpassen nicht zu sehr auszuholen
+
+
+*** Konzept und Lösungsidee Entwurf
+
+> - Die ATOM Medientypen und Hypermediaunterstützung wurden bereits bei der API
+>   beschrieben.
+
+
+
+> - Es wird gezeigt, dass AtomPub mit ein paar, meist bereits standardisierten
+>   Ergänzungen eine sinnvolle, resourcenorientierte Alternative zu C.*DAV,
+>   OpenSocial ist.
+
+das hier ist jetzt schon das vorstellen einer möglichen Lösung und fällt 
+eher in den Bereich Entwurf
+
+> - Diskussion der Problematik, dass viele Medientypen in XML definiert sind, 
+> aber
+>   viele Webentwickler JSON bevorzugen. Eine automatisierte Übersetzung von XML
+>   Schemas in JSON Schemas ist nicht möglich, also muss für alle XML 
+> Medientypen
+>   eine JSON Äquivalent manuel definiert werden.
+
+Das ist ein Entwurfsthema
+
+> - Darstellung semantically annotated HTML mit drei verschiedenen Formaten,
+>   Begründung der Formatauswahl. Vorschlag zur Implementierung mit einer
+>   Templateengine und automatisierten Erstellung der Microdata Strukturelemente
+
+HTML als weiteren Medientypen ist auch Anforderung und/oder Entwurfsthema
+
+
+> - HTML Forms und ihre Einbettung in eine Hypermedia API:
+>   - Kein PUT/DELETE
+>   - universeller, nichtssagender Medientyp application/x-www-form-urlencoded
+>   - keine link-relation, um auf die Form zur Erstellung einer neuen Resource 
+> zu
+>     verweisen.
+
+wie sehr relevant für deine Implementierung? Aber ansonsten eben ein 
+Detail im HTML-Abschnitt
+
+
+> - Problematik des Updates mit nicht isomorphen Medientypen, Möglichkeiten, 
+> damit
+>   umzugehen
+
+Entwurfs oder Implementierungsthema
+
+*** Implementierung
+
+**** Verwendete Frameworks, Libraries
+
+> - Auf Basis von Jersey, weil empfohlen von Schneider2010 (Vergleich und
+>   Beurteilung von Java Frameworks für Web Services mit REST)
+
+**** Gesammtübersicht über Implementierung
+
+**** Resource Klasse
+
+
+> - Komplexität der Behandlung verschiedener Medientypen versteckt hinter
+>   "Resource" Klasse mit Hilfe von ResourceFacades
+> 
+> - Die Mächtigkeit der Resourceklasse ermöglicht dass der restliche Code,
+>   z.B. CollectionStorage sehr einfach gehalten werden kann.
+> 
+> - Das CollectionStorage Interface kann für verschiedene Storagetypen
+>   implementiert werden und ist auf das Konzept eines Updatefeeds 
+> spezialiesiert.
+
+das sind alles Implementierungsteile die man erwähnen sollte, aber der 
+Leser braucht auf jedenfall einen Gesamtüberblick über die 
+Implementierung und deren Architektur, vllcht würde es helfen mal etwas 
+von den konkreten Themen loszulassen für die Gliederung und etwas 
+allgemeiner zu überlegen, wie so eine Gliederung oder Arbeit aussehen 
+würde und was man wo erwartet
+
+
+**** Wiederverwendung von Komponenten
+
+
+> - Wiederverwendbare Komponenten:
+>   - ResourceFacades Framework inkl. Medientypspezifische Klassen zur 
+> Extraktion,
+>     Transformation v. Daten
+>   - ATOM Framework (z.B. Abdera)
+>   - Extrem hilfreich: Dependency Injection
+>   - JAX-RS überraschenderweise wenig hilfreich
+>   - Einige kleine Helferklassen, die Funktionalität von JAX-RS ersetzen oder
+>     besser zugreifbar machen
+
+**** Zusammenfassung, Fazit
+
+> - Größtes Problem: Fehlende oder unzureichende Libraries zum Parsen, Bauen,
+>   Konvertieren der Medientypen. Erstellung und Pflege solcher Libraries ist 
+> eine
+>   langwierige Fleißarbeit.
+
+***     Zusammenfassung und Ausblick auf mögliche Erweiterungen
+
+**** Gedanken zu Medientyplibraries
+
+
+>   Gedanken zu Libraries für Medientypen: (macht das Sinn?)
+
+würde ich eher als Ausblick sehen und nur kurz andiskutieren
+
+>   - Die Libraries müssen unbekannte Felder beibehalten um Vendorspezifische
+>     Erweiterungen nicht zu beschädigen und um Aufwärtskompatibel zu sein.
+> 
+>   - Das Schema des Datentyps sollte nicht durch Klassen oder Objectfelder
+>     bereits zur Compilezeit statisch festgelegt sein (hartcodiert) sondern 
+> erst
+>     dynamisch zur Laufzeit gebaut werden. Das reduziert den
+>     Implementierungsaufwand der Library und ermöglicht die Erweiterung des
+>     Schemas zur Laufzeit.
+>   
+>     Beispiele: 
+>     - ICal4J hat eine Java Klasse pro bekannter Property
+>     - Apache Shindig hat eine Objekteigenschaft pro bekanntem PoCo Feld
+
+**** Hypermediabetrachtung
+ in einen ganz eigenen Abschnitt eher gegen Ende 
+der Arbeit, da könnte man zB super über (stark/schwach) zusammenhängende 
+Graphen von Ressourcen/Medientypen reden
+
+
 * Gliederung
+
+  DVT
+    Einführung, Motivation, Aufgabenstellung und Aufbau der Arbeit
+    Darstellung der verwendeten Grundlagen
+    Konzept und Lösungsidee
+    Erläuterung des Entwurfs oder der Implementierung
+    Zusammenfassung und Ausblick auf mögliche Erweiterungen
+    Anhänge (optional)
+    Literaturverzeichnis
+    Index (optional)
+
+Erfurt:
+Titelseite
+Zusammenfassung (deutsch) (1 Seite)
+Abstract (englisch) (1 Seite)
+Aufgabenstellung (1 Seite)
+Ggf. Vorwort oder Danksagung
+Inhaltverzeichnis (bis hierhin sollten die Seiten römisch nummeriert sein)
+Einleitung (ca. 5% der Gesamtarbeit, beginnt mit Seite 1)
+Stand der Wissenschaft und Technik (max. 40%)
+Konzept (zusammen mit Umsetzung und Bewertung ca. 50%)
+Umsetzung
+Bewertung
+Zusammenfassung und Ausblick (ca. 5%)
+Literaturverzeichnis
+Anhang
+Selbstständigkeitserklärung
+
+
+
 
 Herleitung der REST API
 

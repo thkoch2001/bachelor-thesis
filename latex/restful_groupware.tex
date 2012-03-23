@@ -124,10 +124,191 @@ optionale Ergänzungen:
 \tableofcontents{}
 
 \begin{abstract}
-
+  % two or three short paragraphs (100-150 words total) background, project aims
+  % and main achievements. From the abstract a reader should be able to
+  % ascertain if the project is of interest to her and presents results that she
+  % would like to know the details of
 \end{abstract}
 \newpage{}
 \pagenumbering{arabic}
+
+
+
+\section{Introduction}
+\label{sec:introduction}
+
+\section{Background and Related Work}
+\label{sec:backgr-relat-work}
+
+\subsection{vCard, xCard, iCal, xCal}
+\label{sec:vcard-xcard-ical}
+
+\subsection{PortableContacts}
+\label{sec:portablecontacts}
+
+\subsection{CardDAV, CalDAV}
+\label{sec:carddav-caldav}
+
+\subsection{OpenSocial}
+\label{sec:opensocial-background}
+
+% > - Allerdings sind diese APIs entweder komplexer als notwendig (C.*DAV) oder
+% >   nicht restful (C.*DAV, OpenSocial). Außerdem wäre es natürlich schön, eine
+% >   Schnittstelle zu haben, die beide Anwendungsfälle bedienen kann.
+
+\section{Requirements and Analysis}
+\label{sec:requ-analys}
+
+%  - Herleitung aus C.*DAV, OpenSocial
+%  - Anforderungen, die sich aus Kolab ergeben
+% > - Die Anforderung von Kolab selbst ist minimal: Synchronisation von 
+% > Collections,
+% >   denn mehr macht die jetzige IMAP API auch nicht.
+
+% - HTML + annotation als Anforderung begründen
+
+% >   Warum überhaupt annotated (X)HTML? Suchmaschinen, Semantischer Editor,
+% >   Interpretierung durch Browser Extensions (Import in Adressbuch, Kalender),
+% >   Serendipitous Reuse
+% sehr kurz fassen und aufpassen nicht zu sehr auszuholen
+
+% Synchronisation als Hauptinteraktion, 2 Searchtypen
+
+\section{Design}
+\label{sec:design}
+
+% > - Es wird gezeigt, dass AtomPub mit ein paar, meist bereits standardisierten
+% >   Ergänzungen eine sinnvolle, resourcenorientierte Alternative zu C.*DAV,
+% >   OpenSocial ist.
+
+% > - Diskussion der Problematik, dass viele Medientypen in XML definiert sind, 
+% > aber
+% >   viele Webentwickler JSON bevorzugen. Eine automatisierte Übersetzung von XML
+% >   Schemas in JSON Schemas ist nicht möglich, also muss für alle XML 
+% > Medientypen
+% >   eine JSON Äquivalent manuel definiert werden.
+
+% > - Darstellung semantically annotated HTML mit drei verschiedenen Formaten,
+% >   Begründung der Formatauswahl. Vorschlag zur Implementierung mit einer
+% >   Templateengine und automatisierten Erstellung der Microdata Strukturelemente
+
+% > - HTML Forms und ihre Einbettung in eine Hypermedia API:
+% >   - Kein PUT/DELETE
+% >   - universeller, nichtssagender Medientyp application/x-www-form-urlencoded
+% >   - keine link-relation, um auf die Form zur Erstellung einer neuen Resource 
+% > zu
+% >     verweisen.
+
+% > - Problematik des Updates mit nicht isomorphen Medientypen, Möglichkeiten, 
+% > damit umzugehen
+
+\section{Implementation}
+\label{sec:implementation}
+
+\subsection{Used Frameworks and Libraries}
+\label{sec:used-fram-libr}
+
+%> - Auf Basis von Jersey, weil empfohlen von Schneider2010 (Vergleich und
+%>   Beurteilung von Java Frameworks für Web Services mit REST)
+
+\subsection{Overview}
+\label{sec:overview}
+
+\subsection{Resource handling}
+\label{sec:resource-handling}
+% Resource Klasse
+
+% Komplexität der Behandlung verschiedener Medientypen versteckt hinter
+% "Resource" Klasse mit Hilfe von ResourceFacades
+
+% Die Mächtigkeit der Resourceklasse ermöglicht dass der restliche Code,
+% z.B. CollectionStorage sehr einfach gehalten werden kann.
+
+\subsection{CollectionStorage}
+\label{sec:collectionstorage}
+
+% Das CollectionStorage Interface kann für verschiedene Storagetypen
+% implementiert werden und ist auf das Konzept eines Updatefeeds spezialiesiert.
+
+\subsection{Reusability of Components}
+\label{sec:reus-comp}
+
+% > - Wiederverwendbare Komponenten:
+% >   - ResourceFacades Framework inkl. Medientypspezifische Klassen zur 
+% > Extraktion,
+% >     Transformation v. Daten
+% >   - ATOM Framework (z.B. Abdera)
+% >   - Extrem hilfreich: Dependency Injection
+% >   - JAX-RS überraschenderweise wenig hilfreich
+% >   - Einige kleine Helferklassen, die Funktionalität von JAX-RS ersetzen oder
+% >     besser zugreifbar machen
+
+% **** Zusammenfassung, Fazit
+
+% > - Größtes Problem: Fehlende oder unzureichende Libraries zum Parsen, Bauen,
+% >   Konvertieren der Medientypen. Erstellung und Pflege solcher Libraries ist 
+% > eine
+% >   langwierige Fleißarbeit.
+
+\section{Results and Discussion}
+\label{sec:results-discussion}
+
+% The main results of your work should be presented, together with critical
+% discussion. The chapter should cover three things (although these would not be
+% used as section headings):
+
+% Findings. Present all the results (products, experimental findings, theories,
+% etc.) generated during the project. This may also include some off-topic
+% findings that were not expected, or which were side-effects of other
+% explorations.
+
+% Goals achieved. Describe the degree to which the findings support the original
+% objectives laid out for the project. The goals may be partially or fully
+% achieved, or exceeded. An experimental project may prove, or disprove the
+% original thesis. A theoretical project may cover some or all of the example
+% cases. Note that reporting of failures to achieve goals is important since a
+% fundamental feature of the assessment procedures is that the processes (how you
+% went about your project) are often as important as the products of the project.
+
+% Further work. This should address two things: firstly, new areas of
+% investigation prompted by developments in this project, and secondly parts of
+% the current work which were not completed due to time constraints and/or
+% problems encountered.
+
+
+% Gedanken zu Libraries für Medientypen: (macht das Sinn?)
+
+% >   - Die Libraries müssen unbekannte Felder beibehalten um Vendorspezifische
+% >     Erweiterungen nicht zu beschädigen und um Aufwärtskompatibel zu sein.
+% > 
+% >   - Das Schema des Datentyps sollte nicht durch Klassen oder Objectfelder
+% >     bereits zur Compilezeit statisch festgelegt sein (hartcodiert) sondern 
+% > erst
+% >     dynamisch zur Laufzeit gebaut werden. Das reduziert den
+% >     Implementierungsaufwand der Library und ermöglicht die Erweiterung des
+% >     Schemas zur Laufzeit.
+% >   
+% >     Beispiele: 
+% >     - ICal4J hat eine Java Klasse pro bekannter Property
+% >     - Apache Shindig hat eine Objekteigenschaft pro bekanntem PoCo Feld
+
+% **** Hypermediabetrachtung in einen ganz eigenen Abschnitt eher gegen Ende der
+% Arbeit, da könnte man zB super über (stark/schwach) zusammenhängende Graphen
+% von Ressourcen/Medientypen reden
+
+\section{Conclusions}
+\label{sec:conclusions}
+
+% The conclusions can be summarised in a fairly short chapter (2 or 3 pages). This
+% chapter brings together many of the points that you will have made in other
+% chapters, especially in the previous results and discussion chapter. Do not be
+% afraid of repeating some of your earlier statements here, albeit using different
+% wording.
+
+
+\section{alles alt hier unten}
+
+
 \section{Introduction}
 
 Although computers became ubiquitous for some time now, they still don't help
