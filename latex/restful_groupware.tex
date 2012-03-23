@@ -55,7 +55,7 @@
 % Entwicklung einer REST-konformen Schnittstelle für die Opensource-Groupware
 % Kolab mit Unterstützung verschiedener Medientypen
 
-\title{Development of a REST API for the free software Groupware Kolab with support for different Media Types}
+\title{A REST API for the Groupware Kolab with support for different Media Types}
 
 \subtitle{bachelor thesis}
 
@@ -1189,20 +1189,11 @@ Pagination link relations for feeds\cite{RFC5005} could be reused to express
 paginated JSON collections as encouraged by the format
 documentation\cite[sec. 5.5]{Amundsen2011a}.
 
-In summary, for Collection+JSON to become usable as a JSON variant of the
-proposed synchronization model, it would need the following simple enhancements:
-
-\begin{itemize}
-\item an indication, that a collection is ordered by modification time
-\item means to indicate deletion of items
-\item means to indicate accepted Media types as an alternative to the write
-  template
-\end{itemize}
 
 % 3.4. links "The links array is an OPTIONAL child property of the items array." and the collection!
 
 \subsubsection{Direct Mapping of ATOM XML}
-
+%@TODO
 JSON ATOM serialization implemented by Apache
 Abdera\footnote{\cite{Snell2008}
   \citeurl{https://cwiki.apache.org/ABDERA/json-serialization.html}{2012-1-7}}
@@ -1218,7 +1209,35 @@ Some problems in loss-less conversion of ATOM to json:\cite{Snell2008}
   \item ATOM supports arbitrary extensions via namespaces.
 \end{itemize}
 
+\subsubsection{Conclusion}
+
+Other related formats considered are the ``Hypertext Application Language''
+(HAL)\footnote{\citeurl{http://stateless.co/hal_specification.html}{2012-03-23}}
+and Microsoft's OData\footnote{\citeurl{http://www.odata.org}{2012-03-23}}. HAL
+is a simple container format that only standardizes linking and embedding of
+resources and is rather meant as a building block or foundation for more
+specialized formats. Collection+JSON as the more specialized format is therefor
+preferable here.
+
+OData shares many similarities with the Atom Publishing Protocol and also
+provides a JSON variant of it. However, despite announcements in March
+2010\footnote{\citeurl{http://web.archive.org/web/20110103120930/http://www.odata.org/blog/2010/3/16/welcome-to-the-new-odataorg!}{2012-03-23}},
+Microsoft has not taken any steps so far to make OData an open standard that
+could be safely used for free software projects.
+
+In summary, the most promising approach for a JSON variant of ATOM seems to
+enhance Collection+JSON in the following points:
+
+\begin{itemize}
+\item an indication, that a collection is ordered by modification time
+\item means to indicate deletion of items
+\item means to indicate accepted Mediatypes as an alternative to the write
+  template
+\item development and adoption of a JSON variant of OpenSearch
+\end{itemize}
+
 % http://code.google.com/apis/youtube/2.0/developers_guide_jsonc.html
+% No replacement for Service document yet
 
 \subsection{Media Type conversion and non-isomorphism}
 

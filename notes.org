@@ -92,7 +92,6 @@ Implementierung und wiederverwendung von Komponenten
     - Apache Shindig hat eine Objekteigenschaft pro bekanntem PoCo Feld
 
 
-
 * Implementation Todos
 ** TODO SLUG Header
 ** TODO Wohin redirect nach delete/put?
