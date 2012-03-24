@@ -403,13 +403,14 @@ the specification truthfully points out\cite[Social API Server, sec
   OpenSocial defines several services for providing access to a container's data.
 \end{quote}
 
+\subsubsection{Fieldings Critique}
+\label{sec:fieldings-critique}
+
 This section examines a critique of Fielding of the
 API\cite{Fielding2008}\footnote{Fielding referred to a concrete implementation,
   the ``SocialSite REST API''.} which helps to further clarify the
 characteristics of a restful API that must be obeyed in this work and to justify
-the proposal of a competing API to an already widely adopted one. The following
-paragraphs quote rules from Fieldings critique and explain how they are violated
-by OpenSocial.
+the proposal of a competing API to an already widely adopted one.
 
 \begin{quote}
   A REST API should not be dependent on any single communication protocol,
@@ -419,10 +420,11 @@ by OpenSocial.
     interaction.]}
 \end{quote}
 
-OpenSocial defines a construct called ``REST-URI-Fragment'' which is a clear
-violation of the above rule. This URI fragment is simply an encoding of
-procedural parameters as elements of an HTTP URI:\cite[Core API Server, sec
-2.1.1.2.2, REST-URI-Fragment]{OSSpec2.0.1}
+OpenSocial defines a construct called ``REST-URI-Fragment'' which is criticized
+by Fielding because ``identification is not separated from interaction''.  This
+URI fragment is in fact an encoding of query parameters as elements of the URI
+path component~\cite[Core API Server, sec 2.1.1.2.2,
+REST-URI-Fragment]{OSSpec2.0.1}:
 
 \begin{quote}
   Each service type defines an associated partial URI format. The base URI for
@@ -430,25 +432,24 @@ procedural parameters as elements of an HTTP URI:\cite[Core API Server, sec
   discovery document. Each service type accepts parameters via the URL
   path. Definitions are of the form:
   
-  \verb:{a}/{b}/{c}:
+  \lstinline:{a}/{b}/{c}:
 \end{quote}
 
-URIs can contain a query component that would be more appropriate to contain
-parameters. This would also have made it clearer to see that the specification
-actually defines services instead of resources. One test showing the misfit is
-to ask how dot-segments ('.' and '..') inside the URI fragment are interpreted
-and whether this conforms with the letter and spirit of the URI
-standard\cite[sec 3.3]{RFC3986}. Another misfit can be seen in the URI fragment
-to retrieve one or multiple albums. In this case the 'c' part in the quoted
-definition above is actually a list of albums to retrieve separated by a slash.
+An even worse misuse of URIs is present in OpenSocial's service to retrieve
+multiple albums. There the ``c'' parameter from above is actually a slash
+separated list of albums to retrieve. The URI standard however makes clear, that
+the path component of an URI is intended to indicate some kind of hierarchic
+order\cite[sec 3.3]{RFC3986}.
 
-Fielding's second bullet point most likely refers to the
-\texttt{X-HTTP-Method-Override} header. This header is a widely
-used\footnote{\citeurl{http://www.subbu.org/blog/2008/07/another-rest-anti-pattern}{2011-12-06}}
-workaround to allow the use of other HTTP methods than GET and POST from HTML
-forms or through firewalls.
+% Fielding's second bullet point most likely refers to the
+% \texttt{X-HTTP-Method-Override} header. This header is a widely
+% used\footnote{\citeurl{http://www.subbu.org/blog/2008/07/another-rest-anti-pattern}{2011-12-06}}
+% workaround to allow the use of other HTTP methods than GET and POST from HTML
+% forms or through firewalls.
 
-The next two points again refer to a more serious issue:
+The main part of the OpenSocial API describes how to form URIs to access
+information or which methods to use on which URIs for different
+actions. Fielding writes:
 
 \begin{quote}
   A REST API should spend almost all of its descriptive effort in defining the
@@ -460,18 +461,26 @@ The next two points again refer to a more serious issue:
     information[\ldots]].}
 \end{quote}
 
-The OpenSocial specification contains a lot of out-of-band information
-describing how to form URIs to access information or which methods to use on
-which URIs for different actions. This means that the OpenSocial API is not
-simple or intuitive to use but requires a client developer to read a lot of
-specification, thus violating the simplicity property of a restful
-architecture. Since the URIs are fixed in the specification and necessarily also
-in clients, the modifiability property is also violated\cite[sec
-2.3]{Fielding2000}.
+The API consequently does not show the kind of simplicity that come with
+embedded Hyperlinks but force developers to hard code URI construction in client
+implementations. Such hard coded clients in turn hinder further evolution of the
+API, the modifiability property or a restful API\cite[sec 2.3]{Fielding2000}.
 
-The following tables give some examples of the specified URIs:
+Tables \ref{tab:OSURIPersons} and \ref{tab:OSURIAlbums} show some examples of
+OpenSocial's hard coded URIs. They also outline a minimal set of functionality
+that is considered in this work for a restful API suitable as a replacement:
 
-\begin{table}[h]
+\begin{itemize}
+\item Mediatypes to represent users and groups
+\item CRUD functions for collections of users and, groups
+\item Representation of group membership
+\item Representation of relations between Users
+\item Hyperlinks to a user's collection of albums
+\end{itemize}
+
+% @TODO link to requirements.
+
+\begin{table}[tbh]
 \begin{tabular}{p{6.5cm} l p{10cm}}
   URI fragment & Method & Description \\
   %\hline
@@ -487,10 +496,11 @@ The following tables give some examples of the specified URIs:
    & DELETE & delete group \\
   \verb:/groups/{User-Id}: & POST & create group \\
 \end{tabular}
-  \caption{URI fragments for peoples and groups in the OpenSocial REST API}
+  \caption{URI fragments for peoples and groups in OpenSocial}
+  \label{tab:OSURIPersons}
 \end{table}
 
-\begin{table}[h]
+\begin{table}[tbh]
 \begin{tabular}{p{9.5cm} l p{8cm}}
   URI fragment & Method & Description \\
   %\hline
@@ -499,7 +509,7 @@ The following tables give some examples of the specified URIs:
   \verb:/mediaItems/{User-Id}/{Group-Id}/{Album-Id}/: \newline \verb:{MediaItem-Id}: & GET & one mediaitem \\
   \verb:/mediaItem/{User-Id}/@self/{Album-Id}: (sic!) & POST & create mediaitem \\
 \end{tabular}
-  \caption{URI fragments for albums and mediaitems in the OpenSocial REST API}
+  \caption{URI fragments for albums and mediaitems in OpenSocial}
   \label{tab:OSURIAlbums}
 \end{table}
 
@@ -509,11 +519,15 @@ since Version 1.0, released in march 2010. This is of course not a big issue in
 itself, but rather a sign that the specification is too verbose and does
 over-specify things that should rather be auto-discovered through hyperlinks.
 
-Fielding mentions in a comment to the same blog post that the OpenSocial API
-``could be made so [restful] with some relatively small changes'' but does not
-specify these changes. However some issues can easily be identified.
+\subsubsection{Possible Improvements}
+\label{sec:poss-impr}
 
-First the data structures defined in OpenSocial do not use URIs to refer to
+Fielding mentions in a comment to the same blog post\cite{Fielding2008} that the
+OpenSocial API ``could be made so [restful] with some relatively small changes''
+but does not specify these changes. However some issues can be easily
+identified.
+
+First, the data structures defined in OpenSocial do not use URIs to refer to
 other resources. Instead they use Object-Ids that must then be inserted in the
 appropriate URI templates. Examples are the \texttt{recipients},
 \texttt{senderId}, \texttt{collectionIds} of messages and the \texttt{ownerId}
@@ -539,23 +553,14 @@ easy consumption by javascript applications. These are vCard for
 persons,\footnote{OpenSocial persons are based on portable contacts which in
   turn borrowed field names from vCards.} ATOM entries\cite{RFC4287} for
 messages, activities and media items and ATOM categories, collections or
-workspaces\cite{RFC5023} for albums and groups. It would probably be necessary
-to add extensions to the mentioned media types but vCard and ATOM both already
-anticipated this need and provided mechanisms to do so.
-
-The use of the ATOM format could promote the adoption of OpenSocial because
-developers could either reuse existing knowledge about ATOM or would be more
-motivated to learn about a system that is based on an already widespread
-format. In fact OpenSocial already mentions ATOM as a way to wrap OpenSocial
-data. However this wrapping does not build extend and reuse ATOM semantics as
-proposed above but just puts the OpenSocial data structures inside the
-entry/content element of ATOM. This kind of misuse of ATOM does of course not
-deliver any advantage on top of the existing plain JSON or XML
-representations.\footnote{compare Bill de Hora, Extensions v Envelopes. 11/2009 
-%\newline
-  \citeurl{http://www.dehora.net/journal/2009/11/28/extensions-v-envelopes}{2011-21-07}}
-Consequently the newest OpenSocial specification deprecates any reference to the
-ATOM format.
+workspaces\cite{RFC5023} for albums and groups. ATOM and vCard both also provide
+extension mechanism.
+  
+OpenSocial even referenced ATOM for some time as a wrapper format for its own
+data structures. This was however done in such a way that it only added
+complexity and totally ignored ATOM's own
+features\cite{dehora2009}. Consequently the newest specification version
+deprecates any reference to the ATOM format.
 
 In Jan Algermissen's ``Classification of HTTP-based
 APIs''\footnote{\citeurl{http://nordsc.com/ext/classification_of_http_based_apis.html}{2011-12-08}},
@@ -566,7 +571,7 @@ in other words: The OpenSocial specification authors might not have had to
 invest a lot to come up with this API specification but maintenance and
 evolution cost may be medium or high.
 
-\subsubsection{Others}
+\subsection{Others}
 
 The Calendar Access Protocol (CAP)\cite{RFC4324} was published in December 2005
 about one year before CalDAV and CalAtom. The standard comprises 131 pages. No
@@ -606,6 +611,282 @@ process.
 % sehr kurz fassen und aufpassen nicht zu sehr auszuholen
 
 % Synchronisation als Hauptinteraktion, 2 Searchtypen
+
+
+% SRS template from http://code.google.com/p/e-bibliophile/wiki/SRS
+%\subsection{Scope}
+% This subsection should
+% a)Identify the software product(s) to be produced by name (e.g., Host DBMS, 
+% Report Generator, etc.);
+% b)Explain what the software product(s) will, and, if necessary, will not do;
+% c)Describe the application of the software being specified, including relevant 
+% benefits, objectives, and goals;
+% d)Be consistent with similar statements in higher level specifications 
+% (e.g., the system requirements specification), if they exist.
+
+\subsection{Scope and General Requirements}
+% This subsection of the SRS should provide a summary of the major functions 
+% that the software will perform. For example, an SRS for an accounting program 
+% may use this part to address customer account maintenance, customer statement, 
+% and invoice preparation without mentioning the vast amount of detail that each 
+% of those functions requires.
+% Sometimes the function summary that is necessary for this part can be taken 
+% directly from the section of the higher level specification (if one exists) 
+% that allocates particular functions to the software product. Note that for the 
+% sake of clarity
+% a)The functions should be organized in a way that makes the list of functions 
+% understandable to the customer or to anyone else reading the document for the 
+% first time.
+% b)Textual or graphical methods can be used to show the different functions 
+% and their relationships. Such a diagram is not intended to show a design of 
+% a product, but simply shows the logical relationships among variables.
+
+The software system designed in this work should provide a web based interface
+for most common interactions with a Groupware system like Kolab. It must obey
+the constraints of the REST architectural style\cite{Fielding2000}.
+
+Guidelines of the design are:
+
+\begin{itemize}
+\item The system should be extensible to support different kind of personal
+  information resources like contacts, events, todo items, journal items and
+  free-busy informations.
+  \item The CRUD operations must be supported: Create, Read, Update, Delete.
+  \item The client must be able to synchronize collections of resources for
+    offline read access and manipulation.
+  \item The design should be considerably ``easier'' to implement then CalDAV,
+    CardDAV or IMAP as well for the server as for the client.
+  \item The design should reuse existing standards where possible.
+  \item The design should support all client types listed in
+    \autoref{sec:user-class-char}.
+  \item The design should support different Media Type representations of
+    resources.
+\end{itemize}
+
+% restful: one entry point, reuse of existing protocols and media types
+% easy to understand and implement
+
+
+\subsection{Replacement for Kolab IMAP, CardDAV and OpenSocial}
+\label{sec:replacement-carddav}
+
+Personal evaluation\footnote{from using, contributing to or evaluating
+  eGroupware, Horde, Kolab, Kontact, Thunderbird} suggests, that many Groupware
+clients and servers use CardDAV exclusively to synchronize contacts collections,
+allowing concurrent modifications of individual contacts via optimistic locking
+(\autoref{sec:locking}). This is also exactly the operation mode of Kolab's IMAP
+use.
+
+Thus the principal requirement is to support discovery and synchronization of
+Groupware collections (Adressbook, Calendar) and CRUD operations on Groupware
+items (Contacts, Events).
+
+A restful alternative for OpenSocial is not in the scope of this work. However
+since PortableContacts is discussed it makes sense to highlight which features
+of OpenSocial, as presented in \autoref{sec:fieldings-critique}, are
+accidentally also supported. The possibility of an unified, restful API for
+CardDAV and OpenSocial should provide further motivation for the presented
+approach.
+
+OpenSocial is mainly used by short living Javascript browser widgets. A
+synchronization protocol may therefor not be seen as adequate on first
+sight. However a restful protocol enables the proper use of the Browser cache so
+that synchronization may not need to start from scratch on every page
+load. Additional indexes could be saved in HTML5 Webstorage\cite{Hickson2011b}.
+
+The main interaction considered for OpenSocial is not the synchronization of
+full collections. Instead it is required that a client can start with the
+representation of a system's user and explore the user's network of groups,
+social relations and media collections.
+
+\subsection{Client Classes and Characteristics}
+\label{sec:user-class-char}
+
+Different kinds of clients should be able to use the API.
+\autoref{tab:clientsconstraints} lists clients whose constraints and
+characteristics should be respected in the design. The choice of clients and their
+characteristics is intentionally conservative to cover a wide range of real
+world use cases.
+
+\begin{table}[tbh]
+  \centering
+  \begin{tabular}[tbh]{ l || c | c | c | l }
+                & Memory & Bandwidth & pref. format & comment \\  \hline
+  bad HTML5 & none & 56 kbit/s & JSON & internet cafe\\
+  good HTML5 & 5 MB & 1 Mbit/s & JSON & workplace\\
+  Mobile Device &  512 MB & 384 kbit/s & any & Smart Phone, Tabled \\ 
+  Desktop app. &  1 GB & 10 Mbit/s  & any & PIM suite \\
+  Server app.  &  4 GB & 100 Mbit/s & any/HTML & intranet application \\
+  \end{tabular}
+  \caption{Constraints of different API clients}
+  \label{tab:clientsconstraints}
+\end{table}
+
+The first line in \autoref{tab:clientsconstraints} ``bad HTML5'' represents a
+one time browser session in an untrusted internet cafe with a very bad
+connection, expecting the data in JSON format. This client does not need to be
+fully supported, but should be considered.
+
+All other clients are expected to be able to cache data from previous sessions
+and have a fairly good internet connection at least for an initial
+synchronization session. The second table line ``good HTML5'' should represent
+the use cases commonly handled by OpenSocial enhanced collaboration
+applications. The last line ``Server app.'' could be an intranet crawler or
+public search engine consuming HTML pages with the ability to parse semantic
+annotations.
+
+\subsection{Data Characteristics}
+\label{sec:data-characteristics}
+
+Lacking sources for more accurate numbers, a couple of conservative estimates
+are made for the size and number of resources in the scope of this work. This
+guesswork is not perfect. But it provides a rationale behind later design
+decisions (\autoref{sec:interactions}) and outlines their applicability for a
+concrete use case.
+
+\subparagraph{Contacts}
+
+It is believed that humans have regular social contacts to around 150
+people\footnote{\citeurl{http://en.wikipedia.org/wiki/Dunbar's_number}{2012-2-29}}. So
+the number of contacts in a users address book collection should at least handle
+1500 contacts.
+
+The average textual data size associated to a contact is expected to be around
+840 bytes\footnote{estimated average bytes per common fields: id 100, name 30, 2 *
+  address 100, 2 * mail 50, instant messenger 50, 2 phone numbers 15, comments
+  30, 3 * url 100}. 100 kb are enough for an image file to identify a face.
+
+So a collection with a data size of $1500 contacts * 840 \frac{bytes}{contact}
+\approx 1MB$ should be a usable address book without profile pictures for many
+users.
+
+\subparagraph{Events}
+
+A very busy person may have 10 events per day. A two years calendar thus
+contains $2*365*10=730$ events. The core data of an event is estimated to
+comprise 356 bytes\footnote{field sizes: start 8, end 8, title 40, location 100,
+  free text 200}. So a useful calendar collection has a data size of $730 events
+* 356 \frac{bytes}{event} \approx 0.25 MB$
+
+\subparagraph{Conclusions} The size of full, useful collections of personal
+information items has the same order of magnitude then the size of a digital
+image taken with today's smart phones. With the worst case bandwidth from
+\autoref{tab:clientsconstraints} the download of a full uncompressed collection
+lasts around $\frac{2 * 1MB}{56kbit/s} \approx 5min$\footnote{The factor 2
+  accounts for field names and syntax elements. Besides other inaccuracies,
+  latency is not taken into account.}. Even with a drastic data compression of
+90\% the transfer would still last over 30 seconds. With the next better
+bandwidth of the mobile device however the transfer duration for the
+uncompressed case is already under one minute ($\approx 42 sec$).
+
+For all described clients the client's storage is large enough to contain at
+least a few collections.
+
+\subsection{Operation Environment}
+
+The application is expected to be installed in a Java servlet container like
+Tomcat or Jetty and to contact a separate storage component. The primarily
+targeted storage component is an IMAP server with a Kolab conform set of
+groupware folders. However the design should not restrict the extension to a
+document database like CouchDB, plain files, relational or XML databases.
+
+%\subsection{Design and Implementation Constraints}
+
+%\subsection{Specific Requirements}
+
+% \subsection{Nested and mixed collections}
+% The design should not unnecessarily hinder that collections could be nested or
+% contain different kinds of media types, e.g. calendar items and contacts. 
+
+% CardDAV explicitly forbids nested and mixed collections to ease the
+% implementation of clients\cite[sec. 5.2]{RFC6352}. However both may make sense
+% in certain scenarios and the protocol should not exclude such scenarios. A
+% collection could for example represent all items related to a project, which
+% include contacts, events, todos and journal entries.
+
+\subsection{Excluded requirements}
+\label{sec:excluded-requirements}
+\subsubsection{Reports, Filters, Projections}
+
+CalDAV and CardDAV define elaborate report, filter and projection
+capabilities. This work considers reports or search only when an important use
+case is not implementable without it and existing, well known specifications can
+be reused.
+
+\subsubsection{Access Control}
+WebDAV defines specific access control semantics and thus imposes those also on
+CalDAV and CardDAV. This work does not consider access control but relies on
+HTTP mechanics to take care of those, especially recent efforts like OpenID and
+OAuth. %\cite{conf/rest/GrafZLW11}.
+
+\subsubsection{Copying and Moving}
+WebDAV introduces the HTTP verbs to COPY and MOVE. The usefulness of such
+functionality must of course be compared to the complexity of the implementation
+and the drawback of incompatibility to plain HTTP.
+
+It is possible to enhance a restful API with copy and move functionality without
+extending HTTP. The only requirement is that additional hyperlinks can be
+attached to the resources of the API. Allamaraju \cite[Ch. 11]{Allamaraju_2010} proposes
+``controller resources'' that act on POST requests and are linked from the
+resources they act on. Custom link relations are used to indicate the semantic
+of the controller resource.
+
+This work does not include initial support for copy or move.
+
+\subsubsection{Versioning}
+WebDAV and therefor CalDAV and CardDAV support the versioning of resources as an
+extension to the HTTP protocol. Versioning is an important feature for a text
+authoring system that may have been the main target for the WebDAV protocol.  It
+does however seem to be of little use for the resources considered
+here. Individual contacts or events are mostly created in one session by one
+user and not modified in several sessions like text documents.
+
+\subsubsection{Make Collections}
+WebDAV introduces the MKCOL HTTP verb to create collections. CardDAV recommends
+that implementations support this to allow users to ``organize their data
+better''. An alternative would be to make use of ATOM categories for
+grouping. Instead of creating a new (empty) collection the user would thus
+create a contact resource with a new category. An ATOM service document could
+then link to a new (virtual, read-only) collection that only contains resources
+of this category.
+
+The Atom Publishing Protocol does not define how collection resources could be
+created. Practitioners recommend a pattern wherein collections of collections
+exist and new collections can be created by posting to the
+former\footnote{\citeurl{http://www.imc.org/atom-protocol/mail-archive/msg11565.html}{2012-3-7}}.
+
+\subsubsection{Locking}
+\label{sec:locking}
+
+As with Versioning, this feature of WebDAV is not considered. Instead of
+locking a resource HTTP supports conditional updates and leaves conflict
+resolution to the client.
+
+\cite[sec. 1]{Nielsen1999} provides three questions to help deciding whether a
+protocol should support locking and which in the present case advise against
+locking: \textit{The content is mergeable} in contrast to binary data like
+images. \textit{The editing is expected to be localized to isolated points in
+  the document}, e.g. changing just one field in a content or event. And
+\textit{the content can be edited while the user is offline}.
+
+\subsubsection{Push notifications}
+This work does not include any means to actively notify (push) a client about
+changes happening on the server. The client needs to initiate a request (pull)
+to the server to look for changes. However separate solutions
+exist\footnote{most notable PubSubHubBub
+  \citeurl{http://code.google.com/p/pubsubhubbub/}{2012-1-5}} to enable a push
+workflow on top of a feed based
+application\cite{Wilde:2009:FQP:1693155.1693220}. It may therefor not be seen as
+a disadvantage to omit push notifications as a
+requirement.\footnote{\cite[sec. 1]{RFC6352} explicitly mentions missing
+  ``change notifications'' as a ``key disadvantage'' of CardDAV.}
+
+\subsubsection{Performance optimization}
+The system is meant to inherit the benefits of a restful architecture. It should
+therefor be possible to attach separate caching intermediaries for read
+requests. Rather then concentrating on the performance of the implementation of
+read requests it should be taken care that the architecture supports external
+caching and thus avoids to serve the same read request multiple times.
 
 
 
@@ -734,6 +1015,32 @@ process.
 % Arbeit, da könnte man zB super über (stark/schwach) zusammenhängende Graphen
 % von Ressourcen/Medientypen reden
 
+
+% Integrates nicely with other techniques: Pubsubhub, OpenID, OAuth
+
+\subsection{Browser Caches as Collection Store}
+\label{sec:browser-caches-as}
+
+The example of OpenSocial shows how important the Browser has become as an
+application platform. However browsers also restrict the options of developers,
+especially in terms of available Webstorage (\autoref{sec:user-class-char}).
+
+Clever use of the Browser cache could raise this limit. The average available
+Cache size is unknown but expected to exceed the Webstorage size by several
+orders of magnitude.
+
+One interesting caching strategy in combination with collections is the use of
+``caching tokens'', i.e. each new version of a resource is available under a new
+URI and served with extremely long cache expiration times. Thus a client only
+learns about a new version of a resource, if another resource, in our case the
+collection, updates its hyperlink to the resource. This is a perfect match to
+the Atom Publishing Protocol which provides updated entries each time a linked
+resource changes.
+
+In this context the exact caching behavior of popular browsers is of interest,
+especially in combination with Content-Location headers or the only-if-cached
+directive.
+
 \section{Conclusions}
 \label{sec:conclusions}
 
@@ -749,276 +1056,6 @@ process.
 
 
 
-\section{Requirements}
-
-
-% SRS template from http://code.google.com/p/e-bibliophile/wiki/SRS
-%\subsection{Scope}
-% This subsection should
-% a)Identify the software product(s) to be produced by name (e.g., Host DBMS, 
-% Report Generator, etc.);
-% b)Explain what the software product(s) will, and, if necessary, will not do;
-% c)Describe the application of the software being specified, including relevant 
-% benefits, objectives, and goals;
-% d)Be consistent with similar statements in higher level specifications 
-% (e.g., the system requirements specification), if they exist.
-
-\subsection{Scope and General Requirements}
-% This subsection of the SRS should provide a summary of the major functions 
-% that the software will perform. For example, an SRS for an accounting program 
-% may use this part to address customer account maintenance, customer statement, 
-% and invoice preparation without mentioning the vast amount of detail that each 
-% of those functions requires.
-% Sometimes the function summary that is necessary for this part can be taken 
-% directly from the section of the higher level specification (if one exists) 
-% that allocates particular functions to the software product. Note that for the 
-% sake of clarity
-% a)The functions should be organized in a way that makes the list of functions 
-% understandable to the customer or to anyone else reading the document for the 
-% first time.
-% b)Textual or graphical methods can be used to show the different functions 
-% and their relationships. Such a diagram is not intended to show a design of 
-% a product, but simply shows the logical relationships among variables.
-
-The software system designed in this work should provide a web based interface
-for most common interactions with a Groupware system like Kolab. It must obey
-the constraints of the REST architectural style\cite{Fielding2000}.
-
-Guidelines of the design are:
-
-\begin{itemize}
-\item The system should be extensible to support different kind of personal
-  information resources like contacts, events, todo items, journal items and
-  free-busy informations.
-  \item The CRUD operations must be supported: Create, Read, Update, Delete.
-  \item The client must be able to synchronize collections of resources for
-    offline read access and manipulation.
-  \item The design should be considerably ``easier'' to implement then CalDAV,
-    CardDAV or IMAP as well for the server as for the client.
-  \item The design should reuse existing standards where possible.
-  \item The design should support all client types listed in
-    \autoref{sec:user-class-char}.
-  \item The design should support different Media Type representations of
-    resources.
-\end{itemize}
-
-% restful: one entry point, reuse of existing protocols and media types
-% easy to understand and implement
-% Collections z.B. für Projekte könnten alle möglichen Typen konsumieren.
-
-\subsection{Replacement for CardDAV}
-\label{sec:replacement-carddav}
-
-The web application should provide at least the main features of the CardDAV
-protocol. It should be demonstrated that a restful application can serve for the
-same purpose and thus that the additional complexity of WebDAV and CardDAV may
-not be necessary for most use cases.
-
-The standard lists the main features of CardDAV\cite[sec. 1]{RFC6352}:
-
-\begin{enumerate}
-\item Ability to use multiple address books with hierarchical layout.
-\item Ability to control access to individual address books and address entries
-  as per WebDAV Access Control List (ACL) [RFC3744].
-\item Principal collections can be used to enumerate and query other users on
-  the system as per WebDAV ACL [RFC3744].
-\item Server-side searching of address data, avoiding the need for clients to
-  download an entire address book in order to do a quick address 'expansion'
-  operation.
-\item Well-defined internationalization support through WebDAV's use of XML.
-\item Use of vCards [RFC2426] for well-defined address schema to enhance client
-  interoperability.
-\item Many limited clients (e.g., mobile devices) contain an HTTP stack that
-  makes implementing WebDAV much easier than other protocols.
-\end{enumerate}
-
-There are some minor features of CardDAV, that are mainly inherited from WebDAV
-and whose general usefulness outside of the scope of a content management system
-could be argued. See \autoref{sec:excluded-requirements} for a discussion of
-those.
-
-
-\subsection{User Classes and Characteristics}
-\label{sec:user-class-char}
-
-Different kinds of clients should be able to use the API.
-\autoref{tab:clientsconstraints} lists clients whose constraints and
-characteristics must be respected in the design. The choice of clients and their
-characteristics is intentionally conservative to cover a wide range of real
-world use cases.
-
-\begin{table}[tbh]
-  \centering
-  \begin{tabular}[tbh]{ l || c | c | c | l }
-                & Memory & Bandwidth & pref. format & comment \\  \hline
-  HTML5 Browser &  5 MB & 56 kbit/s & JSON & workplace, internet cafe\\
-  Mobile Device &  512 MB & 384 kbit/s & any & Smart Phone, Tabled \\ 
-  Desktop app. &  1 GB & 10 Mbit/s  & any & PIM suite \\
-  Server app.  &  4 GB & 100 Mbit/s & any/HTML & intranet application \\
-  \end{tabular}
-  \caption{Constraints of different API clients}
-  \label{tab:clientsconstraints}
-\end{table}
-
-The most problematic client in the list is the web browser with only 5MB of
-storage capacity (via
-WebStorage\footnote{\citeurl{http://www.w3.org/TR/webstorage/}{2012-2-2}}) a
-potentially very bad internet connection, the inability to leave data for later
-sessions (internet cafe) and the restriction to one particular format
-(JSON). However this use case is of importance as the
-OpenSocial~(~\ref{sec:opensocial-background}) case shows. It is also the primary use case
-to justify an API that provides multiple Media Types since it mandates JSON
-while the canonical Media Types (xCard, xCal) support XML.
-
-\subsection{Data Characteristics}
-\label{sec:data-characteristics}
-
-Lacking sources for more accurate numbers, a couple of conservative estimates
-are made for the size and number of resources in the scope of this work. This
-guesswork is not perfect. But it provides a rationale behind later design
-decisions (\autoref{sec:interactions}) and outlines their applicability for a concrete use case.
-
-\subparagraph{Contacts}
-
-It is believed that humans have regular social contacts to around 150
-people\footnote{\citeurl{http://en.wikipedia.org/wiki/Dunbar's_number}{2012-2-29}}. So
-the number of contacts in a users address book collection should at least handle
-1500 contacts.
-
-The average textual data size associated to a contact is expected to be around
-840 bytes\footnote{estimated average bytes per common fields: id 100, name 30, 2 *
-  address 100, 2 * mail 50, instant messenger 50, 2 phone numbers 15, comments
-  30, 3 * url 100}. 100 kb are enough for an image file to identify a face.
-
-So a collection with a data size of $1500 contacts * 840 \frac{bytes}{contact}
-\approx 1MB$ should be a usable address book without profile pictures for many
-users.
-
-\subparagraph{Events}
-
-A very busy person may have 10 events per day. A two years calendar thus
-contains $2*365*10=730$ events. The core data of an event is estimated to
-comprise 356 bytes\footnote{field sizes: start 8, end 8, title 40, location 100,
-  free text 200}. So a useful calendar collection has a data size of $730 events
-* 356 \frac{bytes}{event} \approx 0.25 MB$
-
-\subparagraph{Conclusions} The size of full, useful collections of personal
-information items has the same order of magnitude then the size of a digital
-image taken with today's smart phones. With the worst case bandwidth from
-\autoref{tab:clientsconstraints} the download of a full uncompressed collection
-lasts around $\frac{2 * 1MB}{56kbit/s} \approx 5min$\footnote{The factor 2
-  accounts for field names and syntax elements. Besides other inaccuracies,
-  latency is not taken into account.}. Even with a drastic data compression of
-90\% the transfer would still last over 30 seconds. With the next better
-bandwidth of the mobile device however the transfer duration for the
-uncompressed case is already under one minute ($\approx 42 sec$).
-
-For all described clients the client's storage is large enough to contain at
-least a few collections.
-
-\subsection{Operation Environment}
-
-The application is expected to be installed in a Java servlet container like
-Tomcat or Jetty and to contact a separate storage component. The primarily
-targeted storage component is an IMAP server with a Kolab conform set of
-groupware folders. However the design should not restrict the extension to a
-document database like CouchDB, plain files, relational or XML databases.
-
-%\subsection{Design and Implementation Constraints}
-
-%\subsection{Specific Requirements}
-
-\subsection{Nested and mixed collections}
-The design should not unnecessarily hinder that collections could be nested or
-contain different kinds of media types, e.g. calendar items and contacts. 
-
-\cite[sec. 5.2]{RFC6352} forbids nested and mixed collections to ease the
-implementation of clients. However both may make sense in certain scenarios and
-the protocol should not exclude such scenarios. A collection could for example
-represent all items related to a project, which include contacts, events, todos
-and journal entries.
-
-\subsection{Excluded requirements}
-\label{sec:excluded-requirements}
-\subsubsection{Reports, Filters, Projections}
-
-CalDAV and CardDAV define elaborate report, filter and projection
-capabilities. This work considers reports or search only when an important use
-case is not implementable without it and existing, well known specifications can
-be reused.
-
-\subsubsection{Performance optimization}
-The system is meant to inherit the benefits of a restful architecture. It should
-therefor be possible to attach separate caching intermediaries for read
-requests. Rather then concentrating on the performance of the implementation of
-read requests it should be taken care that the architecture supports external
-caching and thus avoids to serve the same read request multiple times.
-
-\subsubsection{Access Control}
-The aspect of access control would broaden the scope of this work to
-wide. However it could be kept in mind, whether the proposed design could be
-enhanced by a separate access control design as proposed in
-\cite{conf/rest/GrafZLW11}.
-
-\subsubsection{Copying and Moving}
-WebDAV introduces the HTTP verbs to COPY and MOVE. The usefulness of such
-functionality must of course be compared to the complexity of the implementation
-and the drawback of incompatibility to plain HTTP.
-
-It is possible to enhance a restful API with copy and move functionality without
-extending HTTP. The only requirement is that additional hyperlinks can be
-attached to the resources of the API. Allamaraju \cite[Ch. 11]{Allamaraju_2010} proposes
-``controller resources'' that act on POST requests and are linked from the
-resources they act on. Custom link relations are used to indicate the semantic
-of the controller resource.
-
-This work does not include initial support for copy or move.
-
-\subsubsection{Versioning}
-WebDAV and therefor CalDAV and CardDAV support the versioning of resources as an
-extension to the HTTP protocol. Versioning is an important feature for a text
-authoring system that may have been the main target for the WebDAV protocol.  It
-does however seem to be of little use for the resources considered
-here. Individual contacts or events are mostly created in one session by one
-user and not modified in several sessions like text documents.
-
-\subsubsection{Make Collections}
-WebDAV introduces the MKCOL HTTP verb to create collections. CardDAV recommends
-that implementations support this to allow users to ``organize their data
-better''. An alternative would be to make use of ATOM categories for
-grouping. Instead of creating a new (empty) collection the user would thus
-create a contact resource with a new category. An ATOM service document could
-then link to a new (virtual, read-only) collection that only contains resources
-of this category.
-
-The Atom Publishing Protocol does not define how collection resources could be
-created. Practitioners recommend a pattern wherein collections of collections
-exist and new collections can be created by posting to the
-former\footnote{\citeurl{http://www.imc.org/atom-protocol/mail-archive/msg11565.html}{2012-3-7}}.
-
-\subsubsection{Locking}
-As with Versioning, this is feature of WebDAV is not considered. Instead of
-locking a resource HTTP supports conditional updates and leaves conflict
-resolution to the client.
-
-\cite[sec. 1]{Nielsen1999} provides three questions to help deciding whether a
-protocol should support locking and which in the present case advise against
-locking: \textit{The content is mergeable} in contrast to binary data like
-images. \textit{The editing is expected to be localized to isolated points in
-  the document}, e.g. changing just one field in a content or event. And
-\textit{the content can be edited while the user is offline}.
-
-\subsubsection{Push notifications}
-This work does not include any means to actively notify (push) a client about
-changes happening on the server. The client needs to initiate a request (pull)
-to the server to look for changes. However separate solutions
-exist\footnote{most notable PubSubHubBub
-  \citeurl{http://code.google.com/p/pubsubhubbub/}{2012-1-5}} to enable a push
-workflow on top of a feed based
-application\cite{Wilde:2009:FQP:1693155.1693220}. It may therefor not be seen as
-a disadvantage to omit push notifications as a
-requirement.\footnote{\cite[sec. 1]{RFC6352} explicitly mentions missing
-  ``change notifications'' as a ``key disadvantage'' of CardDAV.}
 
 \section{Media Types}
 % http://amundsen.com/hypermedia/
