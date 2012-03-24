@@ -1026,7 +1026,10 @@ caching and thus avoids to serve the same read request multiple times.
 
 % Integrates nicely with other techniques: Pubsubhub, OpenID, OAuth
 
-\subsection{Browser Caches as Collection Store}
+\subsection{Further work}
+\label{sec:further-work}
+
+\subsubsection{Browser Caches as Collection Store}
 \label{sec:browser-caches-as}
 
 The example of OpenSocial shows how important the Browser has become as an
@@ -1048,6 +1051,43 @@ resource changes.
 In this context the exact caching behavior of popular browsers is of interest,
 especially in combination with Content-Location headers or the only-if-cached
 directive.
+
+\subsubsection{Patching Resources}
+\label{sec:patching-resources}
+
+\autoref{sec:effic-synchr-with} introduced Delta Encoding\cite{RFC3229} and
+mentioned that it would also be useful to efficiently respond to GET requests on
+resources that only slightly changed (e.g., by one property field) compared to
+the resource cached by the client.
+
+The same argument applies for the other direction, if a client updates a large
+resource. The HTTP PATCH method\cite{RFC5789} has been especially standardized
+for this case in March 2010. Support for the PATCH method can be advertised in
+the ``Allow'' header of server responses and the ``Accept-Patch'' header
+specifies the Mediatypes of accepted patch formats.
+
+However until today no patch format Mediatypes are listed in the official IANA
+registry\footnote{\citeurl{http://www.iana.org/assignments/media-types/index.html}{2012-03-24}}
+and a draft for a JSON patch format has
+expired\footnote{\citeurl{https://datatracker.ietf.org/doc/draft-pbryan-json-patch}{2012-03-24}}.
+
+More critical for this work is that no means have been foreseen to specify the
+exact representation of a resource to which a PATCH should apply. So given a
+server that can represent contacts in vCard, xCard and PortableContacts under
+the same URI depending on the Mediatype accepted by the client and a byte
+oriented patch Mediatype like the output of the unix \lstinline:diff -e:
+command\footnote{\citeurl{http://www.iana.org/assignments/inst-man-values}{2012-03-24}}. How
+should the server know against which format the patch should be applied?
+
+At least three solutions may be possible:
+\begin{itemize}
+\item A different patch Mediatype is used that is defined to apply to a specific
+  representation.
+\item The server uses separate URIs for different Mediatype representations as
+  suggested by \cite{Raman2006} and accepts PATCH request only against those
+  URIs.
+\item The server uses different entity tags for different representations that it can later use to parse the original resource Mediatype from the etag supplied in the If-MAtch header of the PATCH request.
+\end{itemize}
 
 \section{Conclusions}
 \label{sec:conclusions}
@@ -1782,6 +1822,7 @@ the state of the servers location at the time of the last GET request.
 \end{figure}
 
 \subsubsection{Efficient Synchronization with HTTP Delta encoding}
+\label{sec:effic-synchr-with}
 
 The synchronization method described in \autoref{sec:synchr-coll} can be
 enhanced to reduce the bandwidth usage and general resource usage of both client
@@ -1878,35 +1919,38 @@ Different optimization strategies are possible here, e.g.
 In any case it is mandatory that a client can handle embedded content as well as
 linked content.
 
-\subsubsection{Modifying Resources}
+\subsubsection{Modifying Resources and Offline editing}
 
 Editing, Updating and Deleting of media entries is specified in the Atom
-Publishing Protocol and is useful for this work without modifications or
-additions. Two aspects however are worth to be highlighted.
+Publishing Protocol and is useful for this work without modifications.
 
-As outlined in \autoref{sec:inline-feeds-or} it is possible to include full
-representations of the collection resources in the content tag of an entry. A
-client however is not allowed to use an embedded resource representation as the
-base for an update\cite[sec. 10]{RFC5023}. If the client has not yet retrieved
-the resource from its own URI it thus `` SHOULD perform a GET on the URI of the
-Member Entry before editing it.''[Ibid.] This limitation is consequent since the
-Atom feed does not contain an ETag for an embedded resource. A client thus can
-not make a conditional PUT request only from the information in the
-feed.\footnote{Google adds an etag attribute to the entry tag in its data
-  api. \citeurl{http://code.google.com/apis/gdata/docs/2.0/reference.html\#ResourceVersioning}{2012-2-13}}
+% As outlined in \autoref{sec:inline-feeds-or} it is possible to include full
+% representations of the collection resources in the content tag of an entry. A
+% client however is not allowed to use an embedded resource representation as the
+% base for an update\cite[sec. 10]{RFC5023}. If the client has not yet retrieved
+% the resource from its own URI it thus `` SHOULD perform a GET on the URI of the
+% Member Entry before editing it.''[Ibid.] This limitation is consequent since the
+% Atom feed does not contain an ETag for an embedded resource. A client thus can
+% not make a conditional PUT request only from the information in the
+% feed.\footnote{Google adds an etag attribute to the entry tag in its data
+%   api. \citeurl{http://code.google.com/apis/gdata/docs/2.0/reference.html\#ResourceVersioning}{2012-2-13}}
 
-The second aspect concerns offline editing. A client should offer the user the
+In addition to the normal online workflow, a client should offer the user the
 possibility to create, update and delete resources while being offline and to
 apply this modifications during the next synchronization, much like the IMAP
 protocol used by Kolab. This requirement is trivial to fulfill as long as no
-concurrent edits happen on the server site. In that case the client needs to
-perform an automated or user assisted merge of the conflicting resources. The
-client should always preserve a copy of a resource version as last seen from the
-Server to be able to perform a three-way-merge.
+concurrent edits happen on the server site. In that case the client just PUTs
+the changes the next time it is connected.
+
+In the case of edit conflicts however, the client needs to perform an automated
+or user assisted merge of the conflicting resources. Therefor the client should
+always preserve a copy of a resource version as last seen from the Server to be
+able to perform a three-way-merge.
 
 The problem of offline edits and conflicts is thus similar to the case of a
 failed conditional PUT request due to a concurrent edit. \cite{Nielsen1999}
 describes this case and resolutions in detail.
+
 
 \subsubsection{Special Reports, Queries, Search}
 \label{sec:spec-reports-search}
