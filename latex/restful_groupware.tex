@@ -1545,6 +1545,46 @@ resources are expected to appear.
 \subsection{Overview}
 \label{sec:overview}
 
+\autoref{fig:executionflowoverview} outlines the most important classes for the
+control flow. The implementation relies on Jersey to route calls to the four
+different ``Jersey Resources'' classes, representing Atom Service Documents,
+Atom Collections, Atom Entries and Media Resources of different Mediatypes.
+
+The Jersey Reader/Writer providers are called by Jersey to transform in- and
+output for the Resource classes. The \lstinline:AbderaWriterJerseyProvider: just
+uses the Abdera library. The other two providers are special because they work
+on the universal \lstinline:Resource: class or the related
+\lstinline:UnparsedResource: class. These classes represent the concept of
+resources that can be represented with different Mediatypes. They are discussed
+in detail in \autoref{sec:resource-handling}.
+
+One instance of the CollectionStorage interface is responsible for the
+administration of one collection of Resources. The first four methods implement
+CRUD functionality and the \lstinline:listUpdates: method provides a partial,
+time ordered list of updated resources, including special Resources to indicate
+deletions. This list can be directly transformed in a corresponding AtomPub
+feed.
+
+Like the other classes, the CollectionStorage deals with the universal
+\lstinline:Resource: class. The Precond(itions) parameter is a wrapper class
+around the corresponding HTTP headers\footnote{If-Match, If-None-Match,
+  If-Modified-Since, If-Unmodified-Since}. It provides
+\lstinline:shouldPerform(etag, updated):bool: methods that the storage must call
+with the resource's etag, last update timestamp or both. The CollectionStorage
+indicates with each methods return value, whether it actually performed any
+action. The GetResult and ResultList classes are simple tuple classes wrapping
+one or multiple \lstinline:Resource: instances in case the Preconditions failed
+or otherwise an indication that a ``304 Not Modified'' response should be
+returned.
+
+\begin{figure}[htb]
+  \centering
+  \includegraphics[width=1.2\textwidth]{executionflowoverview}
+
+  \caption{Overview of the execution flow}
+  \label{fig:executionflowoverview}
+\end{figure}
+
 \subsection{Resource handling}
 \label{sec:resource-handling}
 % Resource Klasse
