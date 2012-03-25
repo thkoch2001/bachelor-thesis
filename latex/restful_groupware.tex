@@ -898,7 +898,393 @@ requests. Rather then concentrating on the performance of the implementation of
 read requests it should be taken care that the architecture supports external
 caching and thus avoids to serve the same read request multiple times.
 
-\section{Design}
+
+\section{REST Interactions Design}
+\label{sec:interactions}
+\subsection{Discovery of Collections}
+\label{sec:disc-coll}
+
+An ideal Rest API is accessed by one main URI and all other resources can be
+discovered by following links. A useful Media type to discover available
+collections is the Atom Service Document\cite[sec. 8]{RFC5023}. It contains
+links to collections organized in workspaces and annotated with meta data.
+
+A Groupware client most likely needs to discern the available collections by the
+contained resources as to consume and present them with the appropriate user
+interfaces for contacts, calendar data, etc. A first idea could be to use the
+Media types declared in the ``accept'' tag of a collection to identify types of
+collections. However the specification explicitly states that this tag
+``specifies a type of representation that can be POSTed to a Collection''. If a
+collection can only be read then no accept tag should be present and thus also
+not available for interpretation.
+
+\begin{anylisting}[label=fig:atom-category,
+                   caption={ATOM categories as used by Google and IBM to mark entry
+                            types and a proposal to use a standard scheme URI for type terms}]
+<atom:category scheme="http://schemas.google.com/g/2005#kind"
+               term="http://schemas.google.com/g/2005#contact" />
+
+<atom:category scheme="http://ibm.com/oa/type"
+               term="task" />
+
+<atom:category scheme="http://www.w3.org/2005/Atom/Entry-Kind"
+               term="http://schemas.google.com/g/2005#contact"
+               label="Contact" />
+
+<atom:category scheme="http://www.w3.org/2005/Atom/Entry-Kind"
+               term="http://ibm.com/oa/type#task"
+               label="Task" />
+\end{anylisting}
+
+A standard conform approach is demonstrated by Google's Data
+Protocol\footnote{\citeurl{http://code.google.com/apis/gdata/docs/2.0/elements.html}{2012-2-28}}
+and by an internal project at
+IBM\footnote{\label{snellatomcategory}\citeurl{http://www.imc.org/atom-syntax/mail-archive/msg18208.html}{2012-2-28}}. Both
+use atom categories\cite[sec. 8.3.6]{RFC5023} to mark the type of atom
+entries. James Snell proposed a standard URI to identify the semantic of
+categories\footref{snellatomcategory} but no follow up to this could be
+found. The use of categories to attach arbitrary meaning, e.g ``event type
+(product or promotion), and its status (new, updated, or cancelled)'' to feeds
+and entries is also recommended in \cite[p. 200]{Webber2010}.
+
+To make categories usable for a common Groupware API, the server needs to use a
+categorization scheme understood by the client. If different clients don't agree
+on one scheme the server could still support several.\footnote{As a last resort
+  a client could of course also fetch the feeds and identify the media types of
+  the included media entries.}
+
+An alternative Media Type to Service Documents in JSON could not be found. The
+most promising approach seems to list available collections in a
+\lstinline:application/vnd.collection+json: representation. (\autoref{sec:media-types-coll})
+
+\subsection{Personalized Service Documents} For a Groupware that manages
+confidential information it would make sense to provide personalized Service
+Documents for authenticated users that list only collections that the user is
+authorized to read.\footnote{For this use case it would be convenient, if HTTP
+  would support optional authentication, but it does not or only
+  poorly. \citeurl{http://computerstuff.jdarx.info/content/optional-http-authentication}{2012-2-28}}
+Personalized Service Documents for different users should have different URIs to
+make them cacheable and to acknowledge that each personalized Service Document
+is indeed an individual entity. This however conflicts with the previous goal of
+using one unique Service Document URI as entrance to the API. A solution would
+be to require the user to authenticate when requesting the unique entrance URI
+and to answer with a HTTP code ``307 Temporary Redirect'' to the user's
+personalized Service Document after successful
+authentication.\footnote{Alternative all Service Documents could be served under
+  the entrance URI with different HTTP Content-Location
+  headers\cite[sec. 14.14]{RFC2616}. In that case the personalized Service
+  Document must however also be available at the indicated location.}
+
+% http://www.berenddeboer.net/rest/authentication.html
+
+\subsection{Atom Publishing Protocol}
+\label{sec:atom-publ-prot}
+% Rob Yates \url{mailto:robert_yates@us.ibm.com}
+
+The idea to not only use Service Documents but the complete Atom Publishing
+Protocol as the foundation for a Groupware API is not novel. Rob Yates described
+this idea under the titles ``CalAtom'' and ``CardAtom'' already in
+2006\footnote{\citeurl{http://robubu.com/?cat=2}{2012-3-2}}.
+
+The CalAtom\cite{draft-yates-atompub-calatom-00.txt} proposal uses a
+``features'' tag and associated IANA registry to mark collection types and their
+features. But the examples of category usage above (\autoref{sec:disc-coll}) and
+the availability of OpenSearch for time range searches
+(\autoref{sec:spec-reports-search}) provide confidence that a new tag is not
+required. The features tag was proposed in 2007 by
+\cite{draft-snell-atompub-feature} but did not become a standard.
+
+The Atom format is also used by the Google Data Protocol to publish contacts,
+events and other data
+types\footnote{\citeurl{http://code.google.com/apis/gdata}{2012-3-2}}. Google's
+use of Atom however is a bit special. The resource data is not included in the
+content tag of an entry. Instead a new namespace is used to put the data with
+additional tags directly inside the entry
+tag\footnote{\citeurl{http://web.archive.org/web/20081120001246/http://www.snellspace.com/wp/?p=314}{2012-01-05}}.
+
+% @TODO Atom entries could contain multiple link tags referring to alternative
+% representations of the resource with different (media) type attributes.
+
+\subsection{Synchronizing Collections}
+\label{sec:synchr-coll}
+
+If a Groupware client can synchronize an entire collection to its local memory,
+then there is no need for more sophisticated queries that provide only a subset
+of the collection. The client can answer all queries from its local copy of the
+collection.
+
+In \autoref{sec:data-characteristics} it has been shown that the time necessary
+to synchronize a full collection is under one minute in most cases. This should
+be acceptable for an initial synchronization that is only done once on rare
+occasions when a desktop machine or mobile device is first used. If subsequent
+synchronizations only transfer a few resources, that have changed since the last
+synchronization then such updates can be made in the order of a second.
+
+All client scenarios except of a Web Browser client that is used only once, can
+profit from the above scenario. In such a case other interaction patterns need
+to be used (\autoref{sec:spec-reports-search}).
+
+The Atom Publishing Protocol identifies collections of resources as Atom
+Feeds. Feeds can also be used to synchronize collections. The necessary
+ingredients are the link relation ``next''\cite{RFC5005}, the concept of a
+``deleted entry''\cite{draft-snell-atompub-tombstones-14} and the prerequisite
+that the feed entries must ``be ordered by their "app:edited" property, with the
+most recently edited Entries coming first in the document
+order''\cite[sec. 10]{RFC5023}.
+
+The API server design has the notion of a logical feed that can be split up in
+multiple real Atom feeds linked with the relation ``next''. Updated or new
+entries are always inserted as first element of the first feed since their
+``app:edited'' property is the most recent. Inserting a new entry at the top of
+a feed can lead to entries at the end of the feed being pushed to the subsequent
+feed. This push needs to be atomic such that a client loading subsequent feeds
+may see an entry twice, at the end of a previous feed and the top of the next
+feed, but will never miss an entry in this scenario.
+
+In the case of an initial synchronization, the client loads the initial feed and
+all subsequent feeds linked with the ``next'' relation and adds all Resources
+associated with the feeds entries to its local storage. Resources can either be
+included completely in the content tag of an entry or be linked to by the
+entry. The client memorizes the ``app:edited'' value of the first entry of the
+first feed for subsequent synchronizations.
+
+It is possible, that the collection has been modified during the
+synchronization. Therefor the client should directly conclude with an update
+synchronization. This means that the client starts again to load the first feed
+and applies all updates until it sees an entry with an ``app:edited'' value
+older then the one memorized from the last synchronization. It is possible that
+the client must follow several ``next'' links or even load all feeds in the
+extreme case.
+
+If the client followed a ``next'' link during a synchronization then it will
+make sure at the end of the synchronization that the first feed has not changed
+meanwhile most probably with a conditional GET request. After this last request
+indicates no further changes the client knows that its local collection is in
+the state of the servers location at the time of the last GET request.
+
+\begin{figure}[tb]
+
+  \begin{tikzpicture}
+    [doc/.style={rectangle,draw=blue!30,fill=blue!20, node distance=6em}]
+    \node[doc] (svc) [] {ServiceDoc};
+    \node[doc] (collect) [below=of svc,text width=5em] {Contacts Collection}
+      edge [<-] node {} (svc)
+      edge [->, loop left] node {next} (collect);
+
+    \node[doc] (calcollect) [below right=of svc,text width=5em] {Calendar Collection}
+      edge [<-] node {} (svc);
+
+    \node[doc] (entry) [below=of collect] {Entry (xCard)}
+      edge [<-] node {1..n} (collect)
+      edge [->] node [text width=5em] {personal calendar} (calcollect)
+      edge [->, loop left] node {related xCards} (entry);
+
+    \node[doc] (event) [below=of calcollect] {Entry (xCal event)}
+      edge [<-] node {1..n} (calcollect)
+      edge [->] node [below right] {participants} (entry);
+
+
+  \end{tikzpicture}
+  \caption{Discovery paths from the Service Document to individual Groupware Resources}
+\end{figure}
+
+\subsection{Efficient Synchronization with HTTP Delta encoding}
+\label{sec:effic-synchr-with}
+
+The synchronization method described in \autoref{sec:synchr-coll} can be
+enhanced to reduce the bandwidth usage and general resource usage of both client
+and server. The necessary extension has been described in \cite{Wyman2004} and
+is commonly referred to as RFC3229+Feed since it adds a feed specific Instance
+Method (IM) to the ``Delta encoding in HTTP''
+standard\cite{RFC3229}. Unfortunately nobody has yet invested the effort to
+drive this method through a formal standardization
+process\footnote{\citeurl{http://bob.wyman.us/main/2006/04/microsoft_to_su.html}{2012-3-9}}. It
+is however reported to be widely
+implemented\footnote{\citeurl{http://www.wyman.us/main/2004/09/implementations.html}{2012-1-6}},
+even in the popular Microsoft Internet
+Explorer\footnote{\citeurl{http://blogs.msdn.com/b/rssteam/archive/2006/04/08/571509.aspx}{2012-3-9}}
+and the author claims substantial bandwidths saving opportunities
+\footnote{\citeurl{http://wyman.us/main/2004/10/massive_bandwid.html}{2012-3-9}}.
+
+The idea of delta encoding is that a server can respond to conditional GET
+requests with only a small, special patch. The client applies the patch to its
+cached representation of the requested resource which results in the new version
+of the resource. All currently IANA registered IMs are byte
+oriented\footnote{\citeurl{http://www.iana.org/assignments/inst-man-values/inst-man-values.xml}{2012-3-9}}. These
+methods however don't add substantial benefit for the case of synchronization
+feeds.\footnote{Byte oriented IMs might however be very beneficial to serve
+  updates of xCard/xCal resources if only one or a few fields changed.}
+
+In the case of the proposed feed IM, the client sends a conditional GET to
+request the synchronization feed but indicates in the ``A-IM'' header that it
+understands the feed IM:
+\begin{lstlisting}
+GET /api/collections/contacts HTTP/1.1
+Host: bar.example.net
+If-None-Match: "3631-@2147483647"
+A-IM: feed, gzip
+\end{lstlisting}
+The server responds with a valid feed including the normal head elements but can
+use the etag from the ``If-None-Match'' header to include only those entries in
+the response, that have changed since the time when the etag was valid. This
+implies of course, that the server is able to match the given etag to a
+corresponding list of changes\footnote{The given example already suggests that
+  the etag itself could include database ids or timestamps.}. The server
+response uses HTTP code ``226 IM Used''\cite{RFC3229} to mark the response as a
+special one that is not the regular, cachaable representation.
+
+It is advisable to also include a ``next'' link to the subsequent feed to keep
+compatibility with the synchronization process from \autoref{sec:synchr-coll}
+and prevent the client from accidentally considering the returned feed to
+contain the full collection. The ``next'' link however would probably cause the
+client to unnecessarily follow it, since it has not yet seen an entry with an
+old enough ``app:edited'' value. The server could include additional entries
+from its database to satisfy the client's terminating condition. Or the server
+could include an artificial, minimal
+deleted-entry\cite{draft-snell-atompub-tombstones-14} tag with a non-existent
+ref value and a when value just older then the etag sent by the client:
+\begin{lstlisting}
+<at:deleted-entry xmlns:at="http://purl.org/atompub/tombstones/1.0"
+   ref="tag:example.org,2005:NONEXISTENT"
+   when="2005-11-29T12:11:12Z"/>
+\end{lstlisting}
+The above precautions not to break the client's synchronization logic is
+necessary to permit the server to also respond to RFC3229+Feed requests with
+paginated feeds in cases where more entries have changed then the server is
+comfortable to include in a single response.
+
+\subsection{Media Entries and the content tag}
+\label{sec:inline-feeds-or}
+
+The Atom format provides the opportunity to include a full representation of a
+resource in the content tag of an entry\cite[sec. 4.1.3]{RFC4287}. It is thus
+possible to embed complete xCard or xCal resources in the Atom feed
+and so to relieve the client from issuing many GET requests for each individual
+resource.
+
+The benefit of saved GET requests must be balanced with the possible
+disadvantage of serving the client resource representations already seen. A
+client that does regular updates may probably be interested only in the first
+one or two entries of a feed while the server might have made the effort to
+produce tens of entries.
+
+On the other hand the Atom Format mandates that an entry without embedded
+content must provide a summary element. It may not make much of a difference in
+bandwidth and processing whether a summary is produced or the full content is
+provided.
+
+Different optimization strategies are possible here, e.g.
+
+\begin{itemize}
+\item The first feed in a sequence of paged feeds could contain only very few
+  entries to optimize for regular updates and have more entries in all following
+  feeds.
+\item The server could remember the entries already consumed by an authenticated
+  client and serve only new entries in the first feed.
+\end{itemize}
+
+In any case it is mandatory that a client can handle embedded content as well as
+linked content.
+
+\subsection{Modifying Resources and Offline editing}
+
+Editing, Updating and Deleting of media entries is specified in the Atom
+Publishing Protocol and is useful for this work without modifications.
+
+% As outlined in \autoref{sec:inline-feeds-or} it is possible to include full
+% representations of the collection resources in the content tag of an entry. A
+% client however is not allowed to use an embedded resource representation as the
+% base for an update\cite[sec. 10]{RFC5023}. If the client has not yet retrieved
+% the resource from its own URI it thus `` SHOULD perform a GET on the URI of the
+% Member Entry before editing it.''[Ibid.] This limitation is consequent since the
+% Atom feed does not contain an ETag for an embedded resource. A client thus can
+% not make a conditional PUT request only from the information in the
+% feed.\footnote{Google adds an etag attribute to the entry tag in its data
+%   api. \citeurl{http://code.google.com/apis/gdata/docs/2.0/reference.html\#ResourceVersioning}{2012-2-13}}
+
+In addition to the normal online workflow, a client should offer the user the
+possibility to create, update and delete resources while being offline and to
+apply this modifications during the next synchronization, much like the IMAP
+protocol used by Kolab. This requirement is trivial to fulfill as long as no
+concurrent edits happen on the server site. In that case the client just PUTs
+the changes the next time it is connected.
+
+In the case of edit conflicts however, the client needs to perform an automated
+or user assisted merge of the conflicting resources. Therefor the client should
+always preserve a copy of a resource version as last seen from the Server to be
+able to perform a three-way-merge.
+
+The problem of offline edits and conflicts is thus similar to the case of a
+failed conditional PUT request due to a concurrent edit. \cite{Nielsen1999}
+describes this case and resolutions in detail.
+
+
+\subsection{Special Reports, Queries, Search}
+\label{sec:spec-reports-search}
+
+In few cases it may not be feasible for a client to synchronize a full
+collection, e.g. due to low bandwidth. This section explores restful ways to let
+the client request only a subset (selection) of a collection. More specifically
+the client should be informed about possible query facilities without relying on
+out-of-band information.
+
+A promising approach is to use the de-facto standard
+OpenSearch\cite{Clinton}. According to its homepage it is implemented by most
+major browsers, search engines and many other sites. OpenSearch is also
+recommended for the link type ``search'' in the HTML5
+standard\cite[sec. 4.12.4.12]{Hickson2011a}. The default format of an OpenSearch
+result list is an Atom (or RSS) feed.
+
+OpenSearch defines the (not yet IANA registered) media type
+application/opensearchdescription+xml, which provides necessary information for
+a client to perform queries against a search service. Since possible search
+queries are usually unlimited it is not possible anymore to provide a set of
+static links. Instead the server provides an ``URI Template''\cite{Gregorio2012}
+that instructs the client how to perform an ``URI
+construction''\footnote{OpenSearch is the older standard and referenced as Level
+  1 URI Templates in \cite{Gregorio2012}.}.
+
+The basic OpenSearch standard defines a simple full text search. Thus a user
+could search contacts by name, address or any other field value. Equally events,
+todo items or notes could be searched by keywords.
+
+The next important use case is to show calendar events in a given interval,
+e.g. to present the events for a month, week or day. This can be achieved with
+the OpenSearch Time extension that provides the temporal start and end
+parameters. Rob Yates CalAtom\cite{draft-yates-atompub-calatom-00.txt} proposal
+included a similar time range search as the only but mandatory special report.
+
+Probably useful might be the OpenSocial Geo extension. It could allow to search
+contacts or events in a given geographic region. Even more search types become
+possible with the SRU extension that wraps the ``Search/Retrieval via URL''
+standard with its ``Contextual Query Language''
+(CQL)\footnote{\citeurl{http://www.loc.gov/standards/sru}{2012-3-1}}. The latter
+provides the possibility to sort result sets which might be interesting to
+present an address book sorted by names.
+
+Search result Atom feeds can make use of annotated HTML
+(\autoref{sec:microdata}) in the summaries of entries and should not embed full
+resources in the content tag. Thus the client can still provide a structured
+view of the data, like calendar views or a tabular contacts list without the
+need to transfer full representations.
+
+The OpenSearch specification suggests that links to the OpenSearch Description
+Document for an Atom feed might be added inside a feed tag. There is however no
+reason not to add such a link inside the collection tag of a Service
+Document. This allows a client to directly search a collection without the need
+to get the feed first.
+
+% \subsubsection{Structural and Behavioral Rest Model}
+% @TODO Modelierung der Anwendung mit dem Meta Model nach Schreier.
+% Primary Resources: Contacts, Calendars, ...
+% List Resources: 
+
+
+% http://lists.calconnect.org/pipermail/caldeveloper-l/2012-March/000177.html
+% "The only queries I have seen clients doing are time-range ones."
+% Cyrus Daboo
+
+\section{Other Design Considerations}
 \label{sec:design}
 
 % > - Es wird gezeigt, dass AtomPub mit ein paar, meist bereits standardisierten
@@ -926,315 +1312,49 @@ caching and thus avoids to serve the same read request multiple times.
 % > - Problematik des Updates mit nicht isomorphen Medientypen, Möglichkeiten, 
 % > damit umzugehen
 
-\section{Implementation}
-\label{sec:implementation}
 
-\subsection{Used Frameworks and Libraries}
-\label{sec:used-fram-libr}
-
-%> - Auf Basis von Jersey, weil empfohlen von Schneider2010 (Vergleich und
-%>   Beurteilung von Java Frameworks für Web Services mit REST)
-
-\subsection{Overview}
-\label{sec:overview}
-
-\subsection{Resource handling}
-\label{sec:resource-handling}
-% Resource Klasse
-
-% Komplexität der Behandlung verschiedener Medientypen versteckt hinter
-% "Resource" Klasse mit Hilfe von ResourceFacades
-
-% Die Mächtigkeit der Resourceklasse ermöglicht dass der restliche Code,
-% z.B. CollectionStorage sehr einfach gehalten werden kann.
-
-\subsection{CollectionStorage}
-\label{sec:collectionstorage}
-
-% Das CollectionStorage Interface kann für verschiedene Storagetypen
-% implementiert werden und ist auf das Konzept eines Updatefeeds spezialiesiert.
-
-\subsection{Reusability of Components}
-\label{sec:reus-comp}
-
-% > - Wiederverwendbare Komponenten:
-% >   - ResourceFacades Framework inkl. Medientypspezifische Klassen zur 
-% > Extraktion,
-% >     Transformation v. Daten
-% >   - ATOM Framework (z.B. Abdera)
-% >   - Extrem hilfreich: Dependency Injection
-% >   - JAX-RS überraschenderweise wenig hilfreich
-% >   - Einige kleine Helferklassen, die Funktionalität von JAX-RS ersetzen oder
-% >     besser zugreifbar machen
-
-% **** Zusammenfassung, Fazit
-
-% > - Größtes Problem: Fehlende oder unzureichende Libraries zum Parsen, Bauen,
-% >   Konvertieren der Medientypen. Erstellung und Pflege solcher Libraries ist 
-% > eine
-% >   langwierige Fleißarbeit.
-
-\section{Results and Discussion}
-\label{sec:results-discussion}
-
-% The main results of your work should be presented, together with critical
-% discussion. The chapter should cover three things (although these would not be
-% used as section headings):
-
-% Findings. Present all the results (products, experimental findings, theories,
-% etc.) generated during the project. This may also include some off-topic
-% findings that were not expected, or which were side-effects of other
-% explorations.
-
-% Goals achieved. Describe the degree to which the findings support the original
-% objectives laid out for the project. The goals may be partially or fully
-% achieved, or exceeded. An experimental project may prove, or disprove the
-% original thesis. A theoretical project may cover some or all of the example
-% cases. Note that reporting of failures to achieve goals is important since a
-% fundamental feature of the assessment procedures is that the processes (how you
-% went about your project) are often as important as the products of the project.
-
-% Further work. This should address two things: firstly, new areas of
-% investigation prompted by developments in this project, and secondly parts of
-% the current work which were not completed due to time constraints and/or
-% problems encountered.
-
-% further work
-% establish full compatibility between PoCo and vCard/xCard and make it an IETF standard
-% standardize feed diff http
-
-% Gedanken zu Libraries für Medientypen: (macht das Sinn?)
-
-% >   - Die Libraries müssen unbekannte Felder beibehalten um Vendorspezifische
-% >     Erweiterungen nicht zu beschädigen und um Aufwärtskompatibel zu sein.
-% > 
-% >   - Das Schema des Datentyps sollte nicht durch Klassen oder Objectfelder
-% >     bereits zur Compilezeit statisch festgelegt sein (hartcodiert) sondern 
-% > erst
-% >     dynamisch zur Laufzeit gebaut werden. Das reduziert den
-% >     Implementierungsaufwand der Library und ermöglicht die Erweiterung des
-% >     Schemas zur Laufzeit.
-% >   
-% >     Beispiele: 
-% >     - ICal4J hat eine Java Klasse pro bekannter Property
-% >     - Apache Shindig hat eine Objekteigenschaft pro bekanntem PoCo Feld
-
-% **** Hypermediabetrachtung in einen ganz eigenen Abschnitt eher gegen Ende der
-% Arbeit, da könnte man zB super über (stark/schwach) zusammenhängende Graphen
-% von Ressourcen/Medientypen reden
-
-
-% Integrates nicely with other techniques: Pubsubhub, OpenID, OAuth
-
-\subsection{Further work}
-\label{sec:further-work}
-
-\subsubsection{Browser Caches as Collection Store}
-\label{sec:browser-caches-as}
-
-The example of OpenSocial shows how important the Browser has become as an
-application platform. However browsers also restrict the options of developers,
-especially in terms of available Webstorage (\autoref{sec:user-class-char}).
-
-Clever use of the Browser cache could raise this limit. The average available
-Cache size is unknown but expected to exceed the Webstorage size by several
-orders of magnitude.
-
-One interesting caching strategy in combination with collections is the use of
-``caching tokens'', i.e. each new version of a resource is available under a new
-URI and served with extremely long cache expiration times. Thus a client only
-learns about a new version of a resource, if another resource, in our case the
-collection, updates its hyperlink to the resource. This is a perfect match to
-the Atom Publishing Protocol which provides updated entries each time a linked
-resource changes.
-
-In this context the exact caching behavior of popular browsers is of interest,
-especially in combination with Content-Location headers or the only-if-cached
-directive.
-
-\subsubsection{Patching Resources}
-\label{sec:patching-resources}
-
-\autoref{sec:effic-synchr-with} introduced Delta Encoding\cite{RFC3229} and
-mentioned that it would also be useful to efficiently respond to GET requests on
-resources that only slightly changed (e.g., by one property field) compared to
-the resource cached by the client.
-
-The same argument applies for the other direction, if a client updates a large
-resource. The HTTP PATCH method\cite{RFC5789} has been especially standardized
-for this case in March 2010. Support for the PATCH method can be advertised in
-the ``Allow'' header of server responses and the ``Accept-Patch'' header
-specifies the Mediatypes of accepted patch formats.
-
-However until today no patch format Mediatypes are listed in the official IANA
-registry\footnote{\citeurl{http://www.iana.org/assignments/media-types/index.html}{2012-03-24}}
-and a draft for a JSON patch format has
-expired\footnote{\citeurl{https://datatracker.ietf.org/doc/draft-pbryan-json-patch}{2012-03-24}}.
-
-More critical for this work is that no means have been foreseen to specify the
-exact representation of a resource to which a PATCH should apply. So given a
-server that can represent contacts in vCard, xCard and PortableContacts under
-the same URI depending on the Mediatype accepted by the client and a byte
-oriented patch Mediatype like the output of the unix \lstinline:diff -e:
-command\footnote{\citeurl{http://www.iana.org/assignments/inst-man-values}{2012-03-24}}. How
-should the server know against which format the patch should be applied?
-
-At least three solutions may be possible:
-\begin{itemize}
-\item A different patch Mediatype is used that is defined to apply to a specific
-  representation. (This is recommended in \cite[ch. 11.9]{Allamaraju_2010}.)
-\item The server uses separate URIs for different Mediatype representations as
-  suggested by \cite{Raman2006} and accepts PATCH request only against those
-  URIs.
-\item The server uses different entity tags for different representations that it can later use to parse the original resource Mediatype from the etag supplied in the If-MAtch header of the PATCH request.
-\end{itemize}
-
-\section{Conclusions}
-\label{sec:conclusions}
-
-% The conclusions can be summarised in a fairly short chapter (2 or 3 pages). This
-% chapter brings together many of the points that you will have made in other
-% chapters, especially in the previous results and discussion chapter. Do not be
-% afraid of repeating some of your earlier statements here, albeit using different
-% wording.
-
-
-\section{alles alt hier unten}
-
-
-
-
-
-\section{Media Types}
-% http://amundsen.com/hypermedia/
-% http://martinfowler.com/articles/richardsonMaturityModel.html
-% http://code.google.com/p/implementing-rest/wiki/RMM
-% http://looselyconnected.wordpress.com/2011/03/09/the-richardson-maturity-model-of-rest-and-roy-fielding/
-
-% W3C note: coneg could forward with 302 to a specific representation like http://example.com/people/joe_smith.vcf 
-% \cite[sec. 2.1]{Sauermann2008}
-
-\begin{quote}
-  To some extent, people get REST wrong because I failed to include enough
-  detail on media type design within my dissertation.~--~Roy T. Fielding, \cite{Fielding2008}
-\end{quote}
-
-\cite[sec. 7.2]{Pautasso:2008:RWS:1367497.1367606} identifies the support of different media types as an issue that "can complicate and hinder the interoperability" and "requires more maintenance effort".
-
-\cite{Davis:2011:XTR:1967428.1967437} proposes a XML based REST framework that uses XForms, XQuery, XProc, XSLT and an XML database. It can benefit from the constraint that it only supports XML based media types. It is to be seen, which ideas from this work could be reused in the case of a broader variety of supported media types.
-
-\subsection{Syntax vs. Semantic (Vocabulary)}
-
-The use of standardized media types is one key difference between an API and a
-restful API\cite[sec. 5.2.1.2]{Fielding2000}. Only if the client has knowledge
-about the media type can it do something meaningful with it besides just
-receiving it. In that sense, the often used mime types application/xml or
-application/json are not really media types. They don't tell the browser or user
-anything meaningful beside the \emph{syntax} of the data.\footnote{
-\citeurl{http://blog.programmableweb.com/2011/11/18/rest-api-design-putting-the-type-in-content-type}{2011-21-20}
-and Web Resource Modeling Language \citeurl{http://www.wrml.org}{2011-12-20} both by Mark Massé
-}
-
-To do anything meaningful with plain json or xml, the client programmer must
-normally look up the meaning or \emph{semantic} of the data in the API
-documentation. The data therefor fails the self-descriptive constraint of
-REST.
-
-Compare this with a mime type like \texttt{application/atom+xml}. It specifies
-the syntax (xml) and the semantic (atom) of the data. Of course somebody once
-needed to read the atom specification and program the client with the knowledge
-of how to process this media type. The purpose of standardized media types
-however is that their number is limited enough so that there is a fair chance
-that a client might have implemented a given media type.
-
-Large sites like Google, Facebook or Twitter have the market power to attract
-developers to read their specifications and program clients accordingly. They
-thus don't necessary need to rely on standardized media types. REST however
-envisions a decentralized web in which parties can interact without previous
-knowledge of each other. This becomes possible through the usage of well known
-predefined media types.
-
-%  in the area of semantic
-% standardization. Questions whether and how contact information should also hold
-% space for the place of birth and place and date of death of a
-% person\footnote{\citeurl{https://datatracker.ietf.org/doc/draft-ietf-vcarddav-birth-death-extensions/}{2011-12-20}}
-% are independent from a data serialization format. So is the question whether and
-% how to specify the sex or gender of a
-% person.\footnote{\citeurl{http://www.ietf.org/mail-archive/web/vcarddav/current/msg01778.html}{2011-12-20}}
-
-\subsubsection{XML vs. JSON}
-
-% Data Meta Models http://dret.net/netdret/docs/wilde-cacm2008-document-design-matters/
-
-This section investigates the two most common syntaxes used by media types
-and the issues that arise if an application needs to support both of them.
-
-The application section of the IANA mime type registration has 294 entries
-ending in ``+xml'' and only 3 ending in
-``+json''.\footnote{\citeurl{http://www.iana.org/assignments/media-types/application/index.html}{2011-12-20}}
-This stands in contrast to the rise of public JSON APIs and the decline of XML
-APIs.\footnote{\citeurl{http://blog.programmableweb.com/2011/05/25/1-in-5-apis-say-bye-xml/}{2011-12-20} \citeurl{http://www.readwriteweb.com/cloud/2011/03/programmable-web-apis-popping.php}{2011-12-21}}
-
-%Web developers often prefer JSON over XML because it is perceived as easier to
-%parse, process and smaller in size. XML in comparison is seen as complicate,
-%slow to process and larger in size. - keine Quellen
-A strong argument for JSON as the preferred format for public APIs may be that
-JSON is a subset of JavaScript and thus easily consumable in a web
-browser.\footnote{ECMAScript for XML (E4X) makes XML a first class language
-  construct in the browser but is only supported by Mozilla
-  \citeurl{http://en.wikipedia.org/wiki/ECMAScript_for_XML}{2012-2-2}}
-
-A drawback of this mismatch between the preference of media type designers and
-API consumers is a possible duplication of work and incompatibilities across
-different APIs. An author that wants to offer a public API as JSON is likely to
-find only an existing XML media type, but no one in JSON.  The situation would
-be eased, if a standard mapping from XML schemes to JSON would be possible, but
-that is not the case.
-
-Instead, possible mappings have to trade of the preservation of all structural
-information against the ``friendliness'' of the resulting JSON
-structure\cite{Boyer2011}. Without going into detail, a JSON structure can be
-seen as friendly if it makes best use of JSON's data types, is compact and easy
-to process. \autoref{fig:waysmapxmljson} shows two different examples how to map
-data from XML to JSON with one of them using JSON number values, being more
-compact and probably easier to process.
-
-\begin{multicols}{3}
-\begin{lstlisting}[label=fig:waysmapxmljson,
-                  captionpos=t,
-                  caption={XML fragment}, frame=single]
-<lang pref="1"
-      id="fr" />
-<lang pref="3"
-      id="en" />
-\end{lstlisting}
-\columnbreak
-\begin{lstlisting}[title={unfriendly JSON}, frame=single,
-                  captionpos=t
-]
-"languages": [
-  { "id":"fr",
-    "pref":"1" },
-  { "id":"en",
-    "pref":"3" }
-]
-\end{lstlisting}
-\columnbreak
-\begin{lstlisting}[title={friendly JSON}, frame=single,
-                  captionpos=t
-]
-"languages": {
-  "fr":1,
-  "en":3
-}
-\end{lstlisting}
-\end{multicols}
-
-Activity Streams has avoided the misalignment of an official XML format and an unofficial JSON deviate by defining an XML (ATOM) and JSON format from the beginning.\footnote{\citeurl{http://activitystrea.ms/}{2012-01-21}}
-
-%\subsubsection{Hypermedia Support in JSON}
-%@TODO: discuss HAL
-
+\subsection{Media Type conversion and non-isomorphism}
+
+Two media types are non isomorphic, if at least one of them can express
+information which the other could not express. For example the vcard media type
+defines many property parameters that have no equivalent in portable contacts,
+like language, altid or sort-as. So a conversion of a vcard into portable
+contacts will most likely lose this data.
+
+This data loss could first be a problem when a client receives a
+representation. However since the client negotiated the media type with the
+server it is most likely that it is satisfied with only the data representable
+in that data type.
+
+Now if the client uses such a media type in a put request to update a resource,
+it may not be clear how to deal with the information the client could not
+express in the submitted resource. Should it be deleted or merged with the new
+representation?
+
+Different strategies are possible in such scenarios and must be selected for the
+individual use case:
+
+\begin{enumerate}
+\item The server accepts updates only for one media type while serving other
+  media types in a ``read-only'' mode.
+\item The server accepts PATCH requests\cite{RFC5789} as a compromise while
+  still not accepting certain media types for updates
+  (\autoref{sec:patching-resources}).
+\item The implementer decides to either merge or deletes information not
+  representable in a received media type and lives with the consequences. In the
+  case of contact information this can be a valid strategy since the most
+  essential information is representable in all media types. The server
+  practically only works with data in the intersection of all supported media
+  types.
+\item Available facilities to extend media types are used to establish
+  isomorphism. Vcard for example allows the addition of arbitrary properties
+  prefixed with ``x-''.
+\item The server implements version control so that the situation can be
+  resolved manually later.
+\end{enumerate}
+
+The creation of resources can be handled more liberate then updating, since no
+state on the server exists that could be lost.
 
 
 \subsection{Microformats, Microdata, RDFa}
@@ -1413,12 +1533,306 @@ to agree on a custom link relation for that purpose. The empty form can be
 regarded as an entity of its own, linked from the collection where newly created
 resources are expected to appear.
 
-\subsection{JSON based Media Types for Collections}
+\section{Implementation}
+\label{sec:implementation}
+
+\subsection{Used Frameworks and Libraries}
+\label{sec:used-fram-libr}
+
+%> - Auf Basis von Jersey, weil empfohlen von Schneider2010 (Vergleich und
+%>   Beurteilung von Java Frameworks für Web Services mit REST)
+
+\subsection{Overview}
+\label{sec:overview}
+
+\subsection{Resource handling}
+\label{sec:resource-handling}
+% Resource Klasse
+
+% Komplexität der Behandlung verschiedener Medientypen versteckt hinter
+% "Resource" Klasse mit Hilfe von ResourceFacades
+
+% Die Mächtigkeit der Resourceklasse ermöglicht dass der restliche Code,
+% z.B. CollectionStorage sehr einfach gehalten werden kann.
+
+\subsection{CollectionStorage}
+\label{sec:collectionstorage}
+
+% Das CollectionStorage Interface kann für verschiedene Storagetypen
+% implementiert werden und ist auf das Konzept eines Updatefeeds spezialiesiert.
+
+\subsection{Dependency Injection}
+\label{sec:dependency-injection}
+
+\subsubsection{Preparsed Request Components with Dependency Injection}
+\label{sec:prep-requ-comp}
+
+It seems like an obvious fact that could not be further deduced, that any
+response action to a request must be preluded by a parsing of the request. In
+the case of a REST application this parsing could be further divided in two
+steps:
+\begin{enumerate}
+\item Parse URI, Accept Header and HTTP verb to select the Resource method
+\item Resource method specific parsing as defined by annotations or done in the
+  Resource method
+\end{enumerate}
+
+JAX-RS defines only rudimentary support for the second step by means of
+inflexible annotations. Listing \ref{fig:jaxrs-annotated-queryparams} shows the
+verbosity of parsing a set of standard query parameters for a search
+interface. An alternative is shown in listing \ref{fig:request-components}. The
+parsing of query parameters is delegated to the class
+SearchRequest.\footnote{The QueryParams class is supposed to be an easy
+  interface to access query parameters and apply rudimentary validation in one
+  step.} The request method ``handleGet'' can access the parameters easily
+through the injected SearchRequest instance.
+
+\begin{javalisting}[label=fig:jaxrs-annotated-queryparams,
+                   caption={Verbosity of parsing Requests with JAX-RS}]
+@Get public Response get(@QueryParam("query") String query,
+                         @QueryParam("sort-by") String sortBy,
+                         @QueryParam("offset") int offset,
+                         @QueryParam("limit") int limit ) {
+\end{javalisting}
+
+\begin{javalisting}[label=fig:request-components,
+                   caption={Separating Request parsing from the Resource method}]
+@GET @Inject
+public Response handleGet(SearchRequest sr) { ... }
+
+@RequestScoped
+public class SearchRequest {
+    public final String query, sortBy;
+    public final int offset, limit;
+    
+    @Inject public SearchRequest(QueryParams qp) {
+        query = qp.getNotEmpty("query");
+        sortBy = qp.getOrElse("sort-by", "score");
+        offset = qp.getPositiveIntOrElse("offset", 0);
+        limit = qp.getPositiveIntOrElse("limit", -1);
+    }
+}
+\end{javalisting}
+
+The main advantages of this approach would be:
+
+\begin{itemize}
+\item Classes parsing commonly used query parameters can be reused.
+\item The request method declaration gets much easier to read.
+\item Sophisticated validation can be applied without obfuscating the request method.
+\item Default values for unspecified input could depend on information only
+  available at runtime instead of being provided as static value to the
+  applications source code.
+\end{itemize}
+
+This approach is possible to implement for example with the dependency injection
+support provided by the Jersey
+framework.\footnote{\citeurl{http://codahale.com/what-makes-jersey-interesting-parameter-classes/}{2012-2-5},
+  \citeurl{http://codahale.com/what-makes-jersey-interesting-injection-providers/}{2012-2-5}}
+
+\begin{figure}[tbph]
+  \begin{tikzpicture}
+    [doc/.style={rectangle,draw=blue!30,fill=blue!20, node distance=4.5em}]
+
+    \node[doc] (uriinfo) [] {UriInfo};
+    \node[doc] (queryparams) [below=of uriinfo] {QueryParams}
+      edge [<-] node [left] {depends on} (uriinfo);
+
+    \node[doc] (searchrequest) [below=of queryparams] {SearchRequest}
+      edge [<-] node [left] {parses} (queryparams);
+
+    \node[doc] (pathparams) [right=of uriinfo] {PathParams}
+      edge [<-] node [above] {depends on} (uriinfo);
+
+    \node[doc] (database) [right=of pathparams] {Database};
+
+    \node[doc] (collection) [below=of pathparams] {CollectionStorage}
+      edge [<-] node [right] {connected to} (database)
+      edge [<-] node [right,text width=5em] {collection specified by URI path} (pathparams);
+
+    \node[doc] (searchservice) [below=of collection] {SearchService}
+      edge [<-] node [right,text width=5em] {searches on collection} (collection);
+
+    \node[doc] (resultset) [below=of searchservice] {ResultSet}
+      edge [<-] node [left,text width=5em] {search parameters} (searchrequest)
+      edge [<-] node [right] {produced by} (searchservice);
+  \end{tikzpicture}
+  \caption{Building a processing pipeline with Dependency Injection}
+  \label{fig:dependency-injection-pipeline}
+\end{figure}
+
+\subsubsection{Driving Dependency Injection further}
+
+The use of dependency injection could be extended to comprise several levels of
+dependencies and thus to build processing pipelines.  The information from the
+above SearchRequest class is probably just forwarded by ``handleGet'' to another
+component that executes the search on a given collection. Thus the request
+methot is ultimately interested on the search result set to transform it into a
+response. Consequently the ``handleGet'' method could use dependency injection
+to request the result set and only start working on this. Figure
+\ref{fig:dependency-injection-pipeline} visualizes the hypothetic dependency
+graph of an application specific ResultSet class.
+
+The figure shows how the CollectionStorage to search on is identified by the URI
+path and the search parameters by the SearchRequest class of listing
+\ref{fig:request-components}. The dependency injection is configured to produce
+a ResultSet class by executing a SearchService with the request scoped
+CollectionStorage and SearchRequest.
+
+The idea might be an alternative implementation of processing pipelines to the
+one proposed in \cite{Davis:2011:XTR:1967428.1967437}, which uses XProc, An XML
+Pipeline Language. One advantage of the dependency injection approach would be
+that the processing pipeline can be defined and configured in the same language
+then the rest of the application.
+
+
+%\subsection{Client Design}
+%What needs a client to know, how does it need to work?
+
+
+
+
+\subsection{Reusability of Components}
+\label{sec:reus-comp}
+
+% > - Wiederverwendbare Komponenten:
+% >   - ResourceFacades Framework inkl. Medientypspezifische Klassen zur 
+% > Extraktion,
+% >     Transformation v. Daten
+% >   - ATOM Framework (z.B. Abdera)
+% >   - Extrem hilfreich: Dependency Injection
+% >   - JAX-RS überraschenderweise wenig hilfreich
+% >   - Einige kleine Helferklassen, die Funktionalität von JAX-RS ersetzen oder
+% >     besser zugreifbar machen
+
+% **** Zusammenfassung, Fazit
+
+% > - Größtes Problem: Fehlende oder unzureichende Libraries zum Parsen, Bauen,
+% >   Konvertieren der Medientypen. Erstellung und Pflege solcher Libraries ist 
+% > eine
+% >   langwierige Fleißarbeit.
+
+\section{Results and Discussion}
+\label{sec:results-discussion}
+
+% The main results of your work should be presented, together with critical
+% discussion. The chapter should cover three things (although these would not be
+% used as section headings):
+
+% Findings. Present all the results (products, experimental findings, theories,
+% etc.) generated during the project. This may also include some off-topic
+% findings that were not expected, or which were side-effects of other
+% explorations.
+
+% Goals achieved. Describe the degree to which the findings support the original
+% objectives laid out for the project. The goals may be partially or fully
+% achieved, or exceeded. An experimental project may prove, or disprove the
+% original thesis. A theoretical project may cover some or all of the example
+% cases. Note that reporting of failures to achieve goals is important since a
+% fundamental feature of the assessment procedures is that the processes (how you
+% went about your project) are often as important as the products of the project.
+
+% Further work. This should address two things: firstly, new areas of
+% investigation prompted by developments in this project, and secondly parts of
+% the current work which were not completed due to time constraints and/or
+% problems encountered.
+
+% further work
+% establish full compatibility between PoCo and vCard/xCard and make it an IETF standard
+% standardize feed diff http
+
+% Gedanken zu Libraries für Medientypen: (macht das Sinn?)
+
+% >   - Die Libraries müssen unbekannte Felder beibehalten um Vendorspezifische
+% >     Erweiterungen nicht zu beschädigen und um Aufwärtskompatibel zu sein.
+% > 
+% >   - Das Schema des Datentyps sollte nicht durch Klassen oder Objectfelder
+% >     bereits zur Compilezeit statisch festgelegt sein (hartcodiert) sondern 
+% > erst
+% >     dynamisch zur Laufzeit gebaut werden. Das reduziert den
+% >     Implementierungsaufwand der Library und ermöglicht die Erweiterung des
+% >     Schemas zur Laufzeit.
+% >   
+% >     Beispiele: 
+% >     - ICal4J hat eine Java Klasse pro bekannter Property
+% >     - Apache Shindig hat eine Objekteigenschaft pro bekanntem PoCo Feld
+
+% **** Hypermediabetrachtung in einen ganz eigenen Abschnitt eher gegen Ende der
+% Arbeit, da könnte man zB super über (stark/schwach) zusammenhängende Graphen
+% von Ressourcen/Medientypen reden
+
+
+% Integrates nicely with other techniques: Pubsubhub, OpenID, OAuth
+
+\subsection{Further work}
+\label{sec:further-work}
+
+\subsubsection{Browser Caches as Collection Store}
+\label{sec:browser-caches-as}
+
+The example of OpenSocial shows how important the Browser has become as an
+application platform. However browsers also restrict the options of developers,
+especially in terms of available Webstorage (\autoref{sec:user-class-char}).
+
+Clever use of the Browser cache could raise this limit. The average available
+Cache size is unknown but expected to exceed the Webstorage size by several
+orders of magnitude.
+
+One interesting caching strategy in combination with collections is the use of
+``caching tokens'', i.e. each new version of a resource is available under a new
+URI and served with extremely long cache expiration times. Thus a client only
+learns about a new version of a resource, if another resource, in our case the
+collection, updates its hyperlink to the resource. This is a perfect match to
+the Atom Publishing Protocol which provides updated entries each time a linked
+resource changes.
+
+In this context the exact caching behavior of popular browsers is of interest,
+especially in combination with Content-Location headers or the only-if-cached
+directive.
+
+\subsubsection{Patching Resources}
+\label{sec:patching-resources}
+
+\autoref{sec:effic-synchr-with} introduced Delta Encoding\cite{RFC3229} and
+mentioned that it would also be useful to efficiently respond to GET requests on
+resources that only slightly changed (e.g., by one property field) compared to
+the resource cached by the client.
+
+The same argument applies for the other direction, if a client updates a large
+resource. The HTTP PATCH method\cite{RFC5789} has been especially standardized
+for this case in March 2010. Support for the PATCH method can be advertised in
+the ``Allow'' header of server responses and the ``Accept-Patch'' header
+specifies the Mediatypes of accepted patch formats.
+
+However until today no patch format Mediatypes are listed in the official IANA
+registry\footnote{\citeurl{http://www.iana.org/assignments/media-types/index.html}{2012-03-24}}
+and a draft for a JSON patch format has
+expired\footnote{\citeurl{https://datatracker.ietf.org/doc/draft-pbryan-json-patch}{2012-03-24}}.
+
+More critical for this work is that no means have been foreseen to specify the
+exact representation of a resource to which a PATCH should apply. So given a
+server that can represent contacts in vCard, xCard and PortableContacts under
+the same URI depending on the Mediatype accepted by the client and a byte
+oriented patch Mediatype like the output of the unix \lstinline:diff -e:
+command\footnote{\citeurl{http://www.iana.org/assignments/inst-man-values}{2012-03-24}}. How
+should the server know against which format the patch should be applied?
+
+At least three solutions may be possible:
+\begin{itemize}
+\item A different patch Mediatype is used that is defined to apply to a specific
+  representation. (This is recommended in \cite[ch. 11.9]{Allamaraju_2010}.)
+\item The server uses separate URIs for different Mediatype representations as
+  suggested by \cite{Raman2006} and accepts PATCH request only against those
+  URIs.
+\item The server uses different entity tags for different representations that it can later use to parse the original resource Mediatype from the etag supplied in the If-MAtch header of the PATCH request.
+\end{itemize}
+
+\subsubsection{JSON based Mediatypes for Collections}
 \label{sec:media-types-coll}
 %@TODO
 
 
-\subsubsection{Collection+JSON}
+\paragraph{Collection+JSON}
 \label{sec:collection+json}
 
 
@@ -1475,7 +1889,7 @@ documentation\cite[sec. 5.5]{Amundsen2011a}.
 
 % 3.4. links "The links array is an OPTIONAL child property of the items array." and the collection!
 
-\subsubsection{Direct Mapping of ATOM XML}
+\paragraph{Direct Mapping of ATOM XML}
 %@TODO
 JSON ATOM serialization implemented by Apache
 Abdera\footnote{\cite{Snell2008}
@@ -1492,7 +1906,7 @@ Some problems in loss-less conversion of ATOM to json:\cite{Snell2008}
   \item ATOM supports arbitrary extensions via namespaces.
 \end{itemize}
 
-\subsubsection{Conclusion}
+\paragraph{Conclusion}
 
 Other related formats considered are the ``Hypertext Application Language''
 (HAL)\footnote{\citeurl{http://stateless.co/hal_specification.html}{2012-03-23}}
@@ -1522,47 +1936,155 @@ enhance Collection+JSON in the following points:
 % http://code.google.com/apis/youtube/2.0/developers_guide_jsonc.html
 % No replacement for Service document yet
 
-\subsection{Media Type conversion and non-isomorphism}
+\section{Conclusions}
+\label{sec:conclusions}
 
-Two media types are non isomorphic, if at least one of them can express
-information which the other could not express. For example the vcard media type
-defines many property parameters that have no equivalent in portable contacts,
-like language, altid or sort-as. So a conversion of a vcard into portable
-contacts will most likely lose this data.
+% The conclusions can be summarised in a fairly short chapter (2 or 3 pages). This
+% chapter brings together many of the points that you will have made in other
+% chapters, especially in the previous results and discussion chapter. Do not be
+% afraid of repeating some of your earlier statements here, albeit using different
+% wording.
 
-This data loss could first be a problem when a client receives a
-representation. However since the client negotiated the media type with the
-server it is most likely that it is satisfied with only the data representable
-in that data type.
 
-Now if the client uses such a media type in a put request to update a resource,
-it may not be clear how to deal with the information the client could not
-express in the submitted resource. Should it be deleted or merged with the new
-representation?
+\section{alles alt hier unten}
 
-Different strategies are possible in such scenarios and must be selected for the
-individual use case:
 
-\begin{enumerate}
-\item The server accepts updates only for one media type while serving other
-  media types in a ``read-only'' mode.
-\item The server accepts PATCH requests\cite{RFC5789} as a compromise while
-  still not accepting certain media types for updates.
-\item The implementer decides to either merge or deletes information not
-  representable in a received media type and lives with the consequences. In the
-  case of contact information this can be a valid strategy since the most
-  essential information is representable in all media types. The server
-  practically only works with data in the intersection of all supported media
-  types.
-\item Available facilities to extend media types are used to establish
-  isomorphism. Vcard for example allows the addition of arbitrary properties
-  prefixed with ``x-''.
-\item The server implements version control so that the situation can be
-  resolved manually later.
-\end{enumerate}
 
-The creation of resources can be handled more liberate then updating, since no
-state on the server exists that could be lost.
+
+
+\section{Media Types}
+% http://amundsen.com/hypermedia/
+% http://martinfowler.com/articles/richardsonMaturityModel.html
+% http://code.google.com/p/implementing-rest/wiki/RMM
+% http://looselyconnected.wordpress.com/2011/03/09/the-richardson-maturity-model-of-rest-and-roy-fielding/
+
+% W3C note: coneg could forward with 302 to a specific representation like http://example.com/people/joe_smith.vcf 
+% \cite[sec. 2.1]{Sauermann2008}
+
+\begin{quote}
+  To some extent, people get REST wrong because I failed to include enough
+  detail on media type design within my dissertation.~--~Roy T. Fielding, \cite{Fielding2008}
+\end{quote}
+
+\cite[sec. 7.2]{Pautasso:2008:RWS:1367497.1367606} identifies the support of different media types as an issue that "can complicate and hinder the interoperability" and "requires more maintenance effort".
+
+\cite{Davis:2011:XTR:1967428.1967437} proposes a XML based REST framework that uses XForms, XQuery, XProc, XSLT and an XML database. It can benefit from the constraint that it only supports XML based media types. It is to be seen, which ideas from this work could be reused in the case of a broader variety of supported media types.
+
+\subsection{Syntax vs. Semantic (Vocabulary)}
+
+The use of standardized media types is one key difference between an API and a
+restful API\cite[sec. 5.2.1.2]{Fielding2000}. Only if the client has knowledge
+about the media type can it do something meaningful with it besides just
+receiving it. In that sense, the often used mime types application/xml or
+application/json are not really media types. They don't tell the browser or user
+anything meaningful beside the \emph{syntax} of the data.\footnote{
+\citeurl{http://blog.programmableweb.com/2011/11/18/rest-api-design-putting-the-type-in-content-type}{2011-21-20}
+and Web Resource Modeling Language \citeurl{http://www.wrml.org}{2011-12-20} both by Mark Massé
+}
+
+To do anything meaningful with plain json or xml, the client programmer must
+normally look up the meaning or \emph{semantic} of the data in the API
+documentation. The data therefor fails the self-descriptive constraint of
+REST.
+
+Compare this with a mime type like \texttt{application/atom+xml}. It specifies
+the syntax (xml) and the semantic (atom) of the data. Of course somebody once
+needed to read the atom specification and program the client with the knowledge
+of how to process this media type. The purpose of standardized media types
+however is that their number is limited enough so that there is a fair chance
+that a client might have implemented a given media type.
+
+Large sites like Google, Facebook or Twitter have the market power to attract
+developers to read their specifications and program clients accordingly. They
+thus don't necessary need to rely on standardized media types. REST however
+envisions a decentralized web in which parties can interact without previous
+knowledge of each other. This becomes possible through the usage of well known
+predefined media types.
+
+%  in the area of semantic
+% standardization. Questions whether and how contact information should also hold
+% space for the place of birth and place and date of death of a
+% person\footnote{\citeurl{https://datatracker.ietf.org/doc/draft-ietf-vcarddav-birth-death-extensions/}{2011-12-20}}
+% are independent from a data serialization format. So is the question whether and
+% how to specify the sex or gender of a
+% person.\footnote{\citeurl{http://www.ietf.org/mail-archive/web/vcarddav/current/msg01778.html}{2011-12-20}}
+
+\subsubsection{XML vs. JSON}
+
+% Data Meta Models http://dret.net/netdret/docs/wilde-cacm2008-document-design-matters/
+
+This section investigates the two most common syntaxes used by media types
+and the issues that arise if an application needs to support both of them.
+
+The application section of the IANA mime type registration has 294 entries
+ending in ``+xml'' and only 3 ending in
+``+json''.\footnote{\citeurl{http://www.iana.org/assignments/media-types/application/index.html}{2011-12-20}}
+This stands in contrast to the rise of public JSON APIs and the decline of XML
+APIs.\footnote{\citeurl{http://blog.programmableweb.com/2011/05/25/1-in-5-apis-say-bye-xml/}{2011-12-20} \citeurl{http://www.readwriteweb.com/cloud/2011/03/programmable-web-apis-popping.php}{2011-12-21}}
+
+%Web developers often prefer JSON over XML because it is perceived as easier to
+%parse, process and smaller in size. XML in comparison is seen as complicate,
+%slow to process and larger in size. - keine Quellen
+A strong argument for JSON as the preferred format for public APIs may be that
+JSON is a subset of JavaScript and thus easily consumable in a web
+browser.\footnote{ECMAScript for XML (E4X) makes XML a first class language
+  construct in the browser but is only supported by Mozilla
+  \citeurl{http://en.wikipedia.org/wiki/ECMAScript_for_XML}{2012-2-2}}
+
+A drawback of this mismatch between the preference of media type designers and
+API consumers is a possible duplication of work and incompatibilities across
+different APIs. An author that wants to offer a public API as JSON is likely to
+find only an existing XML media type, but no one in JSON.  The situation would
+be eased, if a standard mapping from XML schemes to JSON would be possible, but
+that is not the case.
+
+Instead, possible mappings have to trade of the preservation of all structural
+information against the ``friendliness'' of the resulting JSON
+structure\cite{Boyer2011}. Without going into detail, a JSON structure can be
+seen as friendly if it makes best use of JSON's data types, is compact and easy
+to process. \autoref{fig:waysmapxmljson} shows two different examples how to map
+data from XML to JSON with one of them using JSON number values, being more
+compact and probably easier to process.
+
+\begin{multicols}{3}
+\begin{lstlisting}[label=fig:waysmapxmljson,
+                  captionpos=t,
+                  caption={XML fragment}, frame=single]
+<lang pref="1"
+      id="fr" />
+<lang pref="3"
+      id="en" />
+\end{lstlisting}
+\columnbreak
+\begin{lstlisting}[title={unfriendly JSON}, frame=single,
+                  captionpos=t
+]
+"languages": [
+  { "id":"fr",
+    "pref":"1" },
+  { "id":"en",
+    "pref":"3" }
+]
+\end{lstlisting}
+\columnbreak
+\begin{lstlisting}[title={friendly JSON}, frame=single,
+                  captionpos=t
+]
+"languages": {
+  "fr":1,
+  "en":3
+}
+\end{lstlisting}
+\end{multicols}
+
+Activity Streams has avoided the misalignment of an official XML format and an unofficial JSON deviate by defining an XML (ATOM) and JSON format from the beginning.\footnote{\citeurl{http://activitystrea.ms/}{2012-01-21}}
+
+%\subsubsection{Hypermedia Support in JSON}
+%@TODO: discuss HAL
+
+
+
+
 
 \section{Design}
 
@@ -1580,7 +2102,6 @@ state on the server exists that could be lost.
 
 % The life cycle of a CollectionStorage is across individual requests to facilitate caching or database connection reuse.
 
-\subsection{Overview}
 
 \subsection{Reusable Patterns and Components}
 
@@ -1631,391 +2152,6 @@ state on the server exists that could be lost.
 
 % Im Gegensatz zu Bildern, wie in \cite{Schreier:2011:MRA:1967428.1967434} können Kontakte komplett inline sein.
 
-\subsection{Interactions}
-\label{sec:interactions}
-\subsubsection{Discovery of Collections}
-\label{sec:disc-coll}
-
-An ideal Rest API is accessed by one main URI and all other resources can be
-discovered by following links. A useful Media type to discover available
-collections is the Atom Service Document\cite[sec. 8]{RFC5023}. It contains
-links to collections organized in workspaces and annotated with meta data.
-
-A Groupware client most likely needs to discern the available collections by the
-contained resources as to consume and present them with the appropriate user
-interfaces for contacts, calendar data, etc. A first idea could be to use the
-Media types declared in the ``accept'' tag of a collection to identify types of
-collections. However the specification explicitly states that this tag
-``specifies a type of representation that can be POSTed to a Collection''. If a
-collection can only be read then no accept tag should be present and thus also
-not available for interpretation.
-
-\begin{anylisting}[label=fig:atom-category,
-                   caption={ATOM categories as used by Google and IBM to mark entry
-                            types and a proposal to use a standard scheme URI for type terms}]
-<atom:category scheme="http://schemas.google.com/g/2005#kind"
-               term="http://schemas.google.com/g/2005#contact" />
-
-<atom:category scheme="http://ibm.com/oa/type"
-               term="task" />
-
-<atom:category scheme="http://www.w3.org/2005/Atom/Entry-Kind"
-               term="http://schemas.google.com/g/2005#contact"
-               label="Contact" />
-
-<atom:category scheme="http://www.w3.org/2005/Atom/Entry-Kind"
-               term="http://ibm.com/oa/type#task"
-               label="Task" />
-\end{anylisting}
-
-A standard conform approach is demonstrated by Google's Data
-Protocol\footnote{\citeurl{http://code.google.com/apis/gdata/docs/2.0/elements.html}{2012-2-28}}
-and by an internal project at
-IBM\footnote{\label{snellatomcategory}\citeurl{http://www.imc.org/atom-syntax/mail-archive/msg18208.html}{2012-2-28}}. Both
-use atom categories\cite[sec. 8.3.6]{RFC5023} to mark the type of atom
-entries. James Snell proposed a standard URI to identify the semantic of
-categories\footref{snellatomcategory} but no follow up to this could be
-found. The use of categories to attach arbitrary meaning, e.g ``event type
-(product or promotion), and its status (new, updated, or cancelled)'' to feeds
-and entries is also recommended in \cite[p. 200]{Webber2010}.
-
-To make categories usable for a common Groupware API, the server needs to use a
-categorization scheme understood by the client. If different clients don't agree
-on one scheme the server could still support several.\footnote{As a last resort
-  a client could of course also fetch the feeds and identify the media types of
-  the included media entries.}
-
-An alternative Media Type to Service Documents in JSON could not be found. The
-most promising approach seems to list available collections in a
-\lstinline:application/vnd.collection+json: representation. (\autoref{sec:media-types-coll})
-
-\subsubsection{Personalized Service Documents} For a Groupware that manages
-confidential information it would make sense to provide personalized Service
-Documents for authenticated users that list only collections that the user is
-authorized to read.\footnote{For this use case it would be convenient, if HTTP
-  would support optional authentication, but it does not or only
-  poorly. \citeurl{http://computerstuff.jdarx.info/content/optional-http-authentication}{2012-2-28}}
-Personalized Service Documents for different users should have different URIs to
-make them cacheable and to acknowledge that each personalized Service Document
-is indeed an individual entity. This however conflicts with the previous goal of
-using one unique Service Document URI as entrance to the API. A solution would
-be to require the user to authenticate when requesting the unique entrance URI
-and to answer with a HTTP code ``307 Temporary Redirect'' to the user's
-personalized Service Document after successful
-authentication.\footnote{Alternative all Service Documents could be served under
-  the entrance URI with different HTTP Content-Location
-  headers\cite[sec. 14.14]{RFC2616}. In that case the personalized Service
-  Document must however also be available at the indicated location.}
-
-% http://www.berenddeboer.net/rest/authentication.html
-
-\subsubsection{Atom Publishing Protocol}
-\label{sec:atom-publ-prot}
-% Rob Yates \url{mailto:robert_yates@us.ibm.com}
-
-The idea to not only use Service Documents but the complete Atom Publishing
-Protocol as the foundation for a Groupware API is not novel. Rob Yates described
-this idea under the titles ``CalAtom'' and ``CardAtom'' already in
-2006\footnote{\citeurl{http://robubu.com/?cat=2}{2012-3-2}}.
-
-The CalAtom\cite{draft-yates-atompub-calatom-00.txt} proposal uses a
-``features'' tag and associated IANA registry to mark collection types and their
-features. But the examples of category usage above (\autoref{sec:disc-coll}) and
-the availability of OpenSearch for time range searches
-(\autoref{sec:spec-reports-search}) provide confidence that a new tag is not
-required. The features tag was proposed in 2007 by
-\cite{draft-snell-atompub-feature} but did not become a standard.
-
-The Atom format is also used by the Google Data Protocol to publish contacts,
-events and other data
-types\footnote{\citeurl{http://code.google.com/apis/gdata}{2012-3-2}}. Google's
-use of Atom however is a bit special. The resource data is not included in the
-content tag of an entry. Instead a new namespace is used to put the data with
-additional tags directly inside the entry
-tag\footnote{\citeurl{http://web.archive.org/web/20081120001246/http://www.snellspace.com/wp/?p=314}{2012-01-05}}.
-
-% @TODO Atom entries could contain multiple link tags referring to alternative
-% representations of the resource with different (media) type attributes.
-
-
-\subsubsection{Synchronizing Collections}
-\label{sec:synchr-coll}
-
-If a Groupware client can synchronize an entire collection to its local memory,
-then there is no need for more sophisticated queries that provide only a subset
-of the collection. The client can answer all queries from its local copy of the
-collection.
-
-In \autoref{sec:data-characteristics} it has been shown that the time necessary
-to synchronize a full collection is under one minute in most cases. This should
-be acceptable for an initial synchronization that is only done once on rare
-occasions when a desktop machine or mobile device is first used. If subsequent
-synchronizations only transfer a few resources, that have changed since the last
-synchronization then such updates can be made in the order of a second.
-
-All client scenarios except of a Web Browser client that is used only once, can
-profit from the above scenario. In such a case other interaction patterns need
-to be used (\autoref{sec:spec-reports-search}).
-
-The Atom Publishing Protocol identifies collections of resources as Atom
-Feeds. Feeds can also be used to synchronize collections. The necessary
-ingredients are the link relation ``next''\cite{RFC5005}, the concept of a
-``deleted entry''\cite{draft-snell-atompub-tombstones-14} and the prerequisite
-that the feed entries must ``be ordered by their "app:edited" property, with the
-most recently edited Entries coming first in the document
-order''\cite[sec. 10]{RFC5023}.
-
-The API server design has the notion of a logical feed that can be split up in
-multiple real Atom feeds linked with the relation ``next''. Updated or new
-entries are always inserted as first element of the first feed since their
-``app:edited'' property is the most recent. Inserting a new entry at the top of
-a feed can lead to entries at the end of the feed being pushed to the subsequent
-feed. This push needs to be atomic such that a client loading subsequent feeds
-may see an entry twice, at the end of a previous feed and the top of the next
-feed, but will never miss an entry in this scenario.
-
-In the case of an initial synchronization, the client loads the initial feed and
-all subsequent feeds linked with the ``next'' relation and adds all Resources
-associated with the feeds entries to its local storage. Resources can either be
-included completely in the content tag of an entry or be linked to by the
-entry. The client memorizes the ``app:edited'' value of the first entry of the
-first feed for subsequent synchronizations.
-
-It is possible, that the collection has been modified during the
-synchronization. Therefor the client should directly conclude with an update
-synchronization. This means that the client starts again to load the first feed
-and applies all updates until it sees an entry with an ``app:edited'' value
-older then the one memorized from the last synchronization. It is possible that
-the client must follow several ``next'' links or even load all feeds in the
-extreme case.
-
-If the client followed a ``next'' link during a synchronization then it will
-make sure at the end of the synchronization that the first feed has not changed
-meanwhile most probably with a conditional GET request. After this last request
-indicates no further changes the client knows that its local collection is in
-the state of the servers location at the time of the last GET request.
-
-\begin{figure}[tb]
-
-  \begin{tikzpicture}
-    [doc/.style={rectangle,draw=blue!30,fill=blue!20, node distance=6em}]
-    \node[doc] (svc) [] {ServiceDoc};
-    \node[doc] (collect) [below=of svc,text width=5em] {Contacts Collection}
-      edge [<-] node {} (svc)
-      edge [->, loop left] node {next} (collect);
-
-    \node[doc] (calcollect) [below right=of svc,text width=5em] {Calendar Collection}
-      edge [<-] node {} (svc);
-
-    \node[doc] (entry) [below=of collect] {Entry (xCard)}
-      edge [<-] node {1..n} (collect)
-      edge [->] node [text width=5em] {personal calendar} (calcollect)
-      edge [->, loop left] node {related xCards} (entry);
-
-    \node[doc] (event) [below=of calcollect] {Entry (xCal event)}
-      edge [<-] node {1..n} (calcollect)
-      edge [->] node [below right] {participants} (entry);
-
-
-  \end{tikzpicture}
-  \caption{Discovery paths from the Service Document to individual Groupware Resources}
-\end{figure}
-
-\subsubsection{Efficient Synchronization with HTTP Delta encoding}
-\label{sec:effic-synchr-with}
-
-The synchronization method described in \autoref{sec:synchr-coll} can be
-enhanced to reduce the bandwidth usage and general resource usage of both client
-and server. The necessary extension has been described in \cite{Wyman2004} and
-is commonly referred to as RFC3229+Feed since it adds a feed specific Instance
-Method (IM) to the ``Delta encoding in HTTP''
-standard\cite{RFC3229}. Unfortunately nobody has yet invested the effort to
-drive this method through a formal standardization
-process\footnote{\citeurl{http://bob.wyman.us/main/2006/04/microsoft_to_su.html}{2012-3-9}}. It
-is however reported to be widely
-implemented\footnote{\citeurl{http://www.wyman.us/main/2004/09/implementations.html}{2012-1-6}},
-even in the popular Microsoft Internet
-Explorer\footnote{\citeurl{http://blogs.msdn.com/b/rssteam/archive/2006/04/08/571509.aspx}{2012-3-9}}
-and the author claims substantial bandwidths saving opportunities
-\footnote{\citeurl{http://wyman.us/main/2004/10/massive_bandwid.html}{2012-3-9}}.
-
-The idea of delta encoding is that a server can respond to conditional GET
-requests with only a small, special patch. The client applies the patch to its
-cached representation of the requested resource which results in the new version
-of the resource. All currently IANA registered IMs are byte
-oriented\footnote{\citeurl{http://www.iana.org/assignments/inst-man-values/inst-man-values.xml}{2012-3-9}}. These
-methods however don't add substantial benefit for the case of synchronization
-feeds.\footnote{Byte oriented IMs might however be very beneficial to serve
-  updates of xCard/xCal resources if only one or a few fields changed.}
-
-In the case of the proposed feed IM, the client sends a conditional GET to
-request the synchronization feed but indicates in the ``A-IM'' header that it
-understands the feed IM:
-\begin{lstlisting}
-GET /api/collections/contacts HTTP/1.1
-Host: bar.example.net
-If-None-Match: "3631-@2147483647"
-A-IM: feed, gzip
-\end{lstlisting}
-The server responds with a valid feed including the normal head elements but can
-use the etag from the ``If-None-Match'' header to include only those entries in
-the response, that have changed since the time when the etag was valid. This
-implies of course, that the server is able to match the given etag to a
-corresponding list of changes\footnote{The given example already suggests that
-  the etag itself could include database ids or timestamps.}. The server
-response uses HTTP code ``226 IM Used''\cite{RFC3229} to mark the response as a
-special one that is not the regular, cachaable representation.
-
-It is advisable to also include a ``next'' link to the subsequent feed to keep
-compatibility with the synchronization process from \autoref{sec:synchr-coll}
-and prevent the client from accidentally considering the returned feed to
-contain the full collection. The ``next'' link however would probably cause the
-client to unnecessarily follow it, since it has not yet seen an entry with an
-old enough ``app:edited'' value. The server could include additional entries
-from its database to satisfy the client's terminating condition. Or the server
-could include an artificial, minimal
-deleted-entry\cite{draft-snell-atompub-tombstones-14} tag with a non-existent
-ref value and a when value just older then the etag sent by the client:
-\begin{lstlisting}
-<at:deleted-entry xmlns:at="http://purl.org/atompub/tombstones/1.0"
-   ref="tag:example.org,2005:NONEXISTENT"
-   when="2005-11-29T12:11:12Z"/>
-\end{lstlisting}
-The above precautions not to break the client's synchronization logic is
-necessary to permit the server to also respond to RFC3229+Feed requests with
-paginated feeds in cases where more entries have changed then the server is
-comfortable to include in a single response.
-
-\subsubsection{Media Entries and the content tag}
-\label{sec:inline-feeds-or}
-
-The Atom format provides the opportunity to include a full representation of a
-resource in the content tag of an entry\cite[sec. 4.1.3]{RFC4287}. It is thus
-possible to embed complete xCard or xCal resources in the Atom feed
-and so to relieve the client from issuing many GET requests for each individual
-resource.
-
-The benefit of saved GET requests must be balanced with the possible
-disadvantage of serving the client resource representations already seen. A
-client that does regular updates may probably be interested only in the first
-one or two entries of a feed while the server might have made the effort to
-produce tens of entries.
-
-On the other hand the Atom Format mandates that an entry without embedded
-content must provide a summary element. It may not make much of a difference in
-bandwidth and processing whether a summary is produced or the full content is
-provided.
-
-Different optimization strategies are possible here, e.g.
-
-\begin{itemize}
-\item The first feed in a sequence of paged feeds could contain only very few
-  entries to optimize for regular updates and have more entries in all following
-  feeds.
-\item The server could remember the entries already consumed by an authenticated
-  client and serve only new entries in the first feed.
-\end{itemize}
-
-In any case it is mandatory that a client can handle embedded content as well as
-linked content.
-
-\subsubsection{Modifying Resources and Offline editing}
-
-Editing, Updating and Deleting of media entries is specified in the Atom
-Publishing Protocol and is useful for this work without modifications.
-
-% As outlined in \autoref{sec:inline-feeds-or} it is possible to include full
-% representations of the collection resources in the content tag of an entry. A
-% client however is not allowed to use an embedded resource representation as the
-% base for an update\cite[sec. 10]{RFC5023}. If the client has not yet retrieved
-% the resource from its own URI it thus `` SHOULD perform a GET on the URI of the
-% Member Entry before editing it.''[Ibid.] This limitation is consequent since the
-% Atom feed does not contain an ETag for an embedded resource. A client thus can
-% not make a conditional PUT request only from the information in the
-% feed.\footnote{Google adds an etag attribute to the entry tag in its data
-%   api. \citeurl{http://code.google.com/apis/gdata/docs/2.0/reference.html\#ResourceVersioning}{2012-2-13}}
-
-In addition to the normal online workflow, a client should offer the user the
-possibility to create, update and delete resources while being offline and to
-apply this modifications during the next synchronization, much like the IMAP
-protocol used by Kolab. This requirement is trivial to fulfill as long as no
-concurrent edits happen on the server site. In that case the client just PUTs
-the changes the next time it is connected.
-
-In the case of edit conflicts however, the client needs to perform an automated
-or user assisted merge of the conflicting resources. Therefor the client should
-always preserve a copy of a resource version as last seen from the Server to be
-able to perform a three-way-merge.
-
-The problem of offline edits and conflicts is thus similar to the case of a
-failed conditional PUT request due to a concurrent edit. \cite{Nielsen1999}
-describes this case and resolutions in detail.
-
-
-\subsubsection{Special Reports, Queries, Search}
-\label{sec:spec-reports-search}
-
-In few cases it may not be feasible for a client to synchronize a full
-collection, e.g. due to low bandwidth. This section explores restful ways to let
-the client request only a subset (selection) of a collection. More specifically
-the client should be informed about possible query facilities without relying on
-out-of-band information.
-
-A promising approach is to use the de-facto standard
-OpenSearch\cite{Clinton}. According to its homepage it is implemented by most
-major browsers, search engines and many other sites. OpenSearch is also
-recommended for the link type ``search'' in the HTML5
-standard\cite[sec. 4.12.4.12]{Hickson2011a}. The default format of an OpenSearch
-result list is an Atom (or RSS) feed.
-
-OpenSearch defines the (not yet IANA registered) media type
-application/opensearchdescription+xml, which provides necessary information for
-a client to perform queries against a search service. Since possible search
-queries are usually unlimited it is not possible anymore to provide a set of
-static links. Instead the server provides an ``URI Template''\cite{Gregorio2012}
-that instructs the client how to perform an ``URI
-construction''\footnote{OpenSearch is the older standard and referenced as Level
-  1 URI Templates in \cite{Gregorio2012}.}.
-
-The basic OpenSearch standard defines a simple full text search. Thus a user
-could search contacts by name, address or any other field value. Equally events,
-todo items or notes could be searched by keywords.
-
-The next important use case is to show calendar events in a given interval,
-e.g. to present the events for a month, week or day. This can be achieved with
-the OpenSearch Time extension that provides the temporal start and end
-parameters. Rob Yates CalAtom\cite{draft-yates-atompub-calatom-00.txt} proposal
-included a similar time range search as the only but mandatory special report.
-
-Probably useful might be the OpenSocial Geo extension. It could allow to search
-contacts or events in a given geographic region. Even more search types become
-possible with the SRU extension that wraps the ``Search/Retrieval via URL''
-standard with its ``Contextual Query Language''
-(CQL)\footnote{\citeurl{http://www.loc.gov/standards/sru}{2012-3-1}}. The latter
-provides the possibility to sort result sets which might be interesting to
-present an address book sorted by names.
-
-Search result Atom feeds can make use of annotated HTML
-(\autoref{sec:microdata}) in the summaries of entries and should not embed full
-resources in the content tag. Thus the client can still provide a structured
-view of the data, like calendar views or a tabular contacts list without the
-need to transfer full representations.
-
-The OpenSearch specification suggests that links to the OpenSearch Description
-Document for an Atom feed might be added inside a feed tag. There is however no
-reason not to add such a link inside the collection tag of a Service
-Document. This allows a client to directly search a collection without the need
-to get the feed first.
-
-% \subsubsection{Structural and Behavioral Rest Model}
-% @TODO Modelierung der Anwendung mit dem Meta Model nach Schreier.
-% Primary Resources: Contacts, Calendars, ...
-% List Resources: 
-
-
-% http://lists.calconnect.org/pipermail/caldeveloper-l/2012-March/000177.html
-% "The only queries I have seen clients doing are time-range ones."
-% Cyrus Daboo
 
 \subsection{Components}
 
@@ -2569,135 +2705,6 @@ if (rb == null)
 
 % Contactzilla.com saves portablecontacts json in MongoDB
 % https://groups.google.com/d/msg/portablecontacts/57R9gGyoqt0/-P0fF4zRjaoJ
-
-\paragraph{Preparsed Request Components with Dependency Injection}
-\label{sec:prep-requ-comp}
-
-It seems like an obvious fact that could not be further deduced, that any
-response action to a request must be preluded by a parsing of the request. In
-the case of a REST application this parsing could be further divided in two
-steps:
-\begin{enumerate}
-\item Parse URI, Accept Header and HTTP verb to select the Resource method
-\item Resource method specific parsing as defined by annotations or done in the
-  Resource method
-\end{enumerate}
-
-JAX-RS defines only rudimentary support for the second step by means of
-inflexible annotations. Listing \ref{fig:jaxrs-annotated-queryparams} shows the
-verbosity of parsing a set of standard query parameters for a search
-interface. An alternative is shown in listing \ref{fig:request-components}. The
-parsing of query parameters is delegated to the class
-SearchRequest.\footnote{The QueryParams class is supposed to be an easy
-  interface to access query parameters and apply rudimentary validation in one
-  step.} The request method ``handleGet'' can access the parameters easily
-through the injected SearchRequest instance.
-
-\begin{javalisting}[label=fig:jaxrs-annotated-queryparams,
-                   caption={Verbosity of parsing Requests with JAX-RS}]
-@Get public Response get(@QueryParam("query") String query,
-                         @QueryParam("sort-by") String sortBy,
-                         @QueryParam("offset") int offset,
-                         @QueryParam("limit") int limit ) {
-\end{javalisting}
-
-\begin{javalisting}[label=fig:request-components,
-                   caption={Separating Request parsing from the Resource method}]
-@GET @Inject
-public Response handleGet(SearchRequest sr) { ... }
-
-@RequestScoped
-public class SearchRequest {
-    public final String query, sortBy;
-    public final int offset, limit;
-    
-    @Inject public SearchRequest(QueryParams qp) {
-        query = qp.getNotEmpty("query");
-        sortBy = qp.getOrElse("sort-by", "score");
-        offset = qp.getPositiveIntOrElse("offset", 0);
-        limit = qp.getPositiveIntOrElse("limit", -1);
-    }
-}
-\end{javalisting}
-
-The main advantages of this approach would be:
-
-\begin{itemize}
-\item Classes parsing commonly used query parameters can be reused.
-\item The request method declaration gets much easier to read.
-\item Sophisticated validation can be applied without obfuscating the request method.
-\item Default values for unspecified input could depend on information only
-  available at runtime instead of being provided as static value to the
-  applications source code.
-\end{itemize}
-
-This approach is possible to implement for example with the dependency injection
-support provided by the Jersey
-framework.\footnote{\citeurl{http://codahale.com/what-makes-jersey-interesting-parameter-classes/}{2012-2-5},
-  \citeurl{http://codahale.com/what-makes-jersey-interesting-injection-providers/}{2012-2-5}}
-
-\begin{figure}[tbph]
-  \begin{tikzpicture}
-    [doc/.style={rectangle,draw=blue!30,fill=blue!20, node distance=4.5em}]
-
-    \node[doc] (uriinfo) [] {UriInfo};
-    \node[doc] (queryparams) [below=of uriinfo] {QueryParams}
-      edge [<-] node [left] {depends on} (uriinfo);
-
-    \node[doc] (searchrequest) [below=of queryparams] {SearchRequest}
-      edge [<-] node [left] {parses} (queryparams);
-
-    \node[doc] (pathparams) [right=of uriinfo] {PathParams}
-      edge [<-] node [above] {depends on} (uriinfo);
-
-    \node[doc] (database) [right=of pathparams] {Database};
-
-    \node[doc] (collection) [below=of pathparams] {CollectionStorage}
-      edge [<-] node [right] {connected to} (database)
-      edge [<-] node [right,text width=5em] {collection specified by URI path} (pathparams);
-
-    \node[doc] (searchservice) [below=of collection] {SearchService}
-      edge [<-] node [right,text width=5em] {searches on collection} (collection);
-
-    \node[doc] (resultset) [below=of searchservice] {ResultSet}
-      edge [<-] node [left,text width=5em] {search parameters} (searchrequest)
-      edge [<-] node [right] {produced by} (searchservice);
-  \end{tikzpicture}
-  \caption{Building a processing pipeline with Dependency Injection}
-  \label{fig:dependency-injection-pipeline}
-\end{figure}
-
-\paragraph{Driving Dependency Injection further}
-
-The use of dependency injection could be extended to comprise several levels of
-dependencies and thus to build processing pipelines.  The information from the
-above SearchRequest class is probably just forwarded by ``handleGet'' to another
-component that executes the search on a given collection. Thus the request
-methot is ultimately interested on the search result set to transform it into a
-response. Consequently the ``handleGet'' method could use dependency injection
-to request the result set and only start working on this. Figure
-\ref{fig:dependency-injection-pipeline} visualizes the hypothetic dependency
-graph of an application specific ResultSet class.
-
-The figure shows how the CollectionStorage to search on is identified by the URI
-path and the search parameters by the SearchRequest class of listing
-\ref{fig:request-components}. The dependency injection is configured to produce
-a ResultSet class by executing a SearchService with the request scoped
-CollectionStorage and SearchRequest.
-
-The idea might be an alternative implementation of processing pipelines to the
-one proposed in \cite{Davis:2011:XTR:1967428.1967437}, which uses XProc, An XML
-Pipeline Language. One advantage of the dependency injection approach would be
-that the processing pipeline can be defined and configured in the same language
-then the rest of the application.
-
-%\paragraph{GenericResourceAttributes}
-%\label{sec:component-genericresourceattrib}
-
-%\subsection{Detailed Design Considerations}
-
-%\subsection{Client Design}
-%What needs a client to know, how does it need to work?
 
 \section{Summary and Conclusions}
 
