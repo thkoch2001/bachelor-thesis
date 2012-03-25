@@ -918,24 +918,6 @@ collections. However the specification explicitly states that this tag
 collection can only be read then no accept tag should be present and thus also
 not available for interpretation.
 
-\begin{anylisting}[label=fig:atom-category,
-                   caption={ATOM categories as used by Google and IBM to mark entry
-                            types and a proposal to use a standard scheme URI for type terms}]
-<atom:category scheme="http://schemas.google.com/g/2005#kind"
-               term="http://schemas.google.com/g/2005#contact" />
-
-<atom:category scheme="http://ibm.com/oa/type"
-               term="task" />
-
-<atom:category scheme="http://www.w3.org/2005/Atom/Entry-Kind"
-               term="http://schemas.google.com/g/2005#contact"
-               label="Contact" />
-
-<atom:category scheme="http://www.w3.org/2005/Atom/Entry-Kind"
-               term="http://ibm.com/oa/type#task"
-               label="Task" />
-\end{anylisting}
-
 A standard conform approach is demonstrated by Google's Data
 Protocol\footnote{\citeurl{http://code.google.com/apis/gdata/docs/2.0/elements.html}{2012-2-28}}
 and by an internal project at
@@ -956,6 +938,28 @@ on one scheme the server could still support several.\footnote{As a last resort
 An alternative Media Type to Service Documents in JSON could not be found. The
 most promising approach seems to list available collections in a
 \lstinline:application/vnd.collection+json: representation. (\autoref{sec:media-types-coll})
+
+\begin{anylisting}[label=fig:atom-category,
+                   caption={ATOM categories as used by Google and IBM to mark entry
+                            types and a proposal to use a standard scheme URI for type terms}]
+<atom:category
+    scheme="http://schemas.google.com/g/2005#kind"
+    term="http://schemas.google.com/g/2005#contact" />
+
+<atom:category 
+    scheme="http://ibm.com/oa/type"
+    term="task" />
+
+<atom:category 
+    scheme="http://www.w3.org/2005/Atom/Entry-Kind"
+    term="http://schemas.google.com/g/2005#contact"
+    label="Contact" />
+
+<atom:category
+     scheme="http://www.w3.org/2005/Atom/Entry-Kind"
+     term="http://ibm.com/oa/type#task"
+     label="Task" />
+\end{anylisting}
 
 \subsection{Personalized Service Documents} For a Groupware that manages
 confidential information it would make sense to provide personalized Service
@@ -1144,7 +1148,8 @@ could include an artificial, minimal
 deleted-entry\cite{draft-snell-atompub-tombstones-14} tag with a non-existent
 ref value and a when value just older then the etag sent by the client:
 \begin{lstlisting}
-<at:deleted-entry xmlns:at="http://purl.org/atompub/tombstones/1.0"
+<at:deleted-entry
+   xmlns:at="http://purl.org/atompub/tombstones/1.0"
    ref="tag:example.org,2005:NONEXISTENT"
    when="2005-11-29T12:11:12Z"/>
 \end{lstlisting}
@@ -1416,8 +1421,11 @@ of creating them on the server site.
         <span itemprop="familyName">Pattern</span>
       </strong></div>
     </a>
-    <div itemscope itemtype="http://schema.org/Organization">
-      <span itemprop="name">Andorian Mining Cooperation</span>
+    <div itemscope
+         itemtype="http://schema.org/Organization">
+      <span itemprop="name">
+        Andorian Mining Cooperation
+      </span>
     </div>
     <div itemprop="email">some@mail.com</div>
     <div>
@@ -2649,15 +2657,16 @@ readable.
                    caption={Implementing the facades approach with Scala's type system}]
 trait Storage[ReqFacade] {
  def create(id: String,
-            body: ResourceHandler with FacadeFactory[ReqFacade])
+            body: ResourceHandler
+                  with FacadeFactory[ReqFacade])
 }
 
 class PostToCollection[StorageReqFacade]
             (storage: Storage[StorageReqFacade]) {
  type MessageBody = ResourceHandler (*@\label{line-scala-compound}@*)
-                      with FacadeFactory[VCard] 
-                      with FacadeFactory[TextSummary]
-                      with FacadeFactory[StorageReqFacade]
+                    with FacadeFactory[VCard] 
+                    with FacadeFactory[TextSummary]
+                    with FacadeFactory[StorageReqFacade]
   
  def post(body:MessageBody) : Response = {
   ...
