@@ -1595,11 +1595,67 @@ returned.
 % Die Mächtigkeit der Resourceklasse ermöglicht dass der restliche Code,
 % z.B. CollectionStorage sehr einfach gehalten werden kann.
 
+The \lstinline:Resource: class is the generalization of a restful HTTP resource
+without a binding to a specific Mediatype. This corresponds to the distinction
+made between a resource and its representations made by
+Fielding\cite[sec. 5.2.1.1]{Fielding2000}. In the context of this work, four
+different kind of properties of resources are distinguished:
+
+\begin{itemize}
+\item two essential properties: unique Id, last update time
+\item generic atom entry properties: title, summary, author
+\item a Mediatype independent interface corresponding to the concept represented
+  by the resource e.g., a person, location, group, organization, event, \ldots
+\item a mediatype specific serialization (representation) of the resource
+\end{itemize}
+
+% @TODO
+
+% JAX-RS versteht unter Resource class something else: 
+% JAX-RS uses annotations in the Resource class to bind it to an URI
+% (@Path) and to different Mediatypes (@Produces, @Consumes).
+
+
 \subsection{CollectionStorage}
 \label{sec:collectionstorage}
 
 % Das CollectionStorage Interface kann für verschiedene Storagetypen
 % implementiert werden und ist auf das Konzept eines Updatefeeds spezialiesiert.
+
+% The collection storage interface offers the necessary means to store and
+% retrieve resources. For clarity this interface is not further broken down into a
+% read-only part and a full read-write interface.
+
+% A collection storage is instantiated with the knowledge of the collection it is
+% responsible for. It therefor typically only returns resources that were
+% previously stored through it although it may share its underlying persistency
+% provider with other collection storage instances.
+
+% The life cycle of a collection storage is scoped to the application. It is
+% therefor possible to attach memory based caching to this component.
+
+% The storage does not expose any support for transactions. Instead every method
+% call represents one atomic action independent from other actions. Conditional
+% request execution is therefor in the responsibility of the storage. Listing
+% \ref{fig:evaluatepreconditions-concurrency}\footnote{found in the JAX-RS
+%   specification on page 28.} shows a possibility for a lost update. Another
+% request could have updated the resource between the etag check and the
+% \lstinline:doUpdate: call.
+
+% \begin{javalisting}[label=fig:evaluatepreconditions-concurrency,
+%                    caption={Potential lost-update problem with JAX-RS}]
+% ResponseBuilder rb = request.evaluatePreconditions(etag);
+% if (rb == null)
+%   return doUpdate(foo);
+%\end{javalisting}
+
+% @TODO a resource should not be build, it the etag has not changed. How to make
+% etag checking as cheap as possible?
+
+% Contactzilla.com saves portablecontacts json in MongoDB
+% https://groups.google.com/d/msg/portablecontacts/57R9gGyoqt0/-P0fF4zRjaoJ
+
+
 
 \subsection{Dependency Injection}
 \label{sec:dependency-injection}
@@ -1629,10 +1685,11 @@ through the injected SearchRequest instance.
 
 \begin{javalisting}[label=fig:jaxrs-annotated-queryparams,
                    caption={Verbosity of parsing Requests with JAX-RS}]
-@Get public Response get(@QueryParam("query") String query,
-                         @QueryParam("sort-by") String sortBy,
-                         @QueryParam("offset") int offset,
-                         @QueryParam("limit") int limit ) {
+@Get public Response get(
+    @QueryParam("query") String query,
+    @QueryParam("sort-by") String sortBy,
+    @QueryParam("offset") int offset,
+    @QueryParam("limit") int limit ) {
 \end{javalisting}
 
 \begin{javalisting}[label=fig:request-components,
@@ -1725,11 +1782,9 @@ Pipeline Language. One advantage of the dependency injection approach would be
 that the processing pipeline can be defined and configured in the same language
 then the rest of the application.
 
-
+%@TODO
 %\subsection{Client Design}
 %What needs a client to know, how does it need to work?
-
-
 
 
 \subsection{Reusability of Components}
@@ -1806,6 +1861,11 @@ then the rest of the application.
 
 \subsection{Further work}
 \label{sec:further-work}
+
+% Apache Abdera 2 hat keine OpenSocial extension
+% Abdera is nicht immutable
+
+% XSL Stylesheets um HTML interface für ATOM zu bauen, z.B. von Google's Feedburner benutzt.
 
 \subsubsection{Browser Caches as Collection Store}
 \label{sec:browser-caches-as}
@@ -2709,44 +2769,6 @@ tasks to perform in a POST or PUT resource method are:
 \item Extract information to be sent to another component, e.g. to notify users
   about changes or to index the new data for search.
 \end{itemize}
-
-\paragraph{CollectionStorage}
-\label{sec:collectionstorage}
-
-The collection storage interface offers the necessary means to store and
-retrieve resources. For clarity this interface is not further broken down into a
-read-only part and a full read-write interface.
-
-A collection storage is instantiated with the knowledge of the collection it is
-responsible for. It therefor typically only returns resources that were
-previously stored through it although it may share its underlying persistency
-provider with other collection storage instances.
-
-The life cycle of a collection storage is scoped to the application. It is
-therefor possible to attach memory based caching to this component.
-
-The storage does not expose any support for transactions. Instead every method
-call represents one atomic action independent from other actions. Conditional
-request execution is therefor in the responsibility of the storage. Listing
-\ref{fig:evaluatepreconditions-concurrency}\footnote{found in the JAX-RS
-  specification on page 28.} shows a possibility for a lost update. Another
-request could have updated the resource between the etag check and the
-\lstinline:doUpdate: call.
-
-\begin{javalisting}[label=fig:evaluatepreconditions-concurrency,
-                   caption={Potential lost-update problem with JAX-RS}]
-ResponseBuilder rb = request.evaluatePreconditions(etag);
-if (rb == null)
-  return doUpdate(foo);
-\end{javalisting}
-
-% @TODO a resource should not be build, it the etag has not changed. How to make
-% etag checking as cheap as possible?
-
-% Contactzilla.com saves portablecontacts json in MongoDB
-% https://groups.google.com/d/msg/portablecontacts/57R9gGyoqt0/-P0fF4zRjaoJ
-
-\section{Summary and Conclusions}
 
 \newpage
 \bibliography{references}{}
