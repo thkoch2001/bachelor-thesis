@@ -1611,6 +1611,9 @@ format is a property ``selected dynamically based on the capabilities or desires
 the recipient and the nature of the
 resource''\cite[p. 87]{Fielding2000}.
 
+\subsubsection{Resource properties}
+\label{sec:resource-properties}
+
 The interface of the \lstinline:Resource: class marks the border between code
 that handles the control flow of an HTTP request, as outlined in
 \autoref{fig:executionflowoverview}, and code that provides information about
@@ -1621,7 +1624,7 @@ work, four different kind of properties of resources are distinguished:
 \item essential administration properties: unique Id, last update time
 \item generic meta properties: title, summary, author
 \item a Mediatype independent interface corresponding to the concept represented
-  by the resource e.g., a person, location, group, organization, event, \ldots
+  by the resource e.g., a person, location, event, product, \ldots
 \item a mediatype specific serialization (representation) of the resource
 \end{itemize}
 
@@ -1638,17 +1641,71 @@ set to the organizer of an ical event. The title of a contact resource in the
 implementation is set to its full name and email. The summary also contains the
 address and phone number.
 
+One use of two mediatype independent interfaces or ``facades'' or a resource is
+exemplified in \autoref{fig:titleandsummary}. The \lstinline:Contact: interface
+is implemented by two classes that can extract the necessary information from
+either a \lstinline:VCard: or a \lstinline:PortableContact: instance. The
+\lstinline:Contact: interface in turn is used by an implementation of the
+\lstinline:TitleAndSummary: interface. The \lstinline:PlainTextTitleAndSummary:
+class in comparison does not work on an intermediary interface but directly on
+the original data structure.
 
+The above mechanism is exposed by the \lstinline:getFacade(Interface): method of
+the \lstinline:Resource: class and used to retrieve a
+\lstinline:TitleAndSummary: facade in order to build an Atom Entry. The code
+using the facade does not need any further knowledge about the type of resource
+it is working with.
 
+\begin{figure}[htb]
+  \centering
+  \includegraphics[width=1\textwidth]{titleandsummary}
 
-% @TODO
+  \caption{Dependency of facades of resources to provide the TitleAndSummary interface}
+  \label{fig:titleandsummary}
+\end{figure}
 
-% JAX-RS versteht unter Resource class something else: 
-% JAX-RS uses annotations in the Resource class to bind it to an URI
-% (@Path) and to different Mediatypes (@Produces, @Consumes).
+The serialization property is exposed by the asMediaType(MediaType,
+OutputStream) method of the \lstinline:Resource: class. Internally this method
+also uses the \lstinline:getFacade(): mechanism to requests an instance of a
+\lstinline:Writer: interface with the additional constraint that the writer must
+produce the requested Mediatype (\autoref{sec:resourcefacades}). Accordingly the
+\lstinline:ResourceWriterJerseyProvider: of \autoref{fig:executionflowoverview}
+is trivially simple: It just calls the asMediaType method of the provided
+resource. The Resource is responsible for providing a mediatype specific
+representation of itself.
+
+The Resource class outlined in this section does not correspond to the equally
+named resource class concept in JAX-RS\cite{JAX-RS1.1}. The JAX-RS resource
+classes in this work are found in the ``Jersey Resources'' package of
+\autoref{fig:executionflowoverview}. But they do not really represent resources
+but rather the binding of resources to URIs and their processing logic.
+
+\subsubsection{Resource life cycle}
+\label{sec:resource-life-cycle}
+
+Resource classes in this work have a three staged life cycle.  The first stage
+is represented by the \lstinline:UnparsedResource: class, instantiated by the
+ResourceReaderJerseyProvider class for post or put requests. In this stage the
+Resource has already been assigned an appropriate \lstinline:Reader:
+implementation according to the Content-Type request header but it has not yet
+received an Id and update timestamp.
+
+The \lstinline:Resource: class represents the second stage, a parsed request
+body with an Id and update timestamp. Only in this stage the getFacade() method
+can be used.
+
+Once a resource has been deleted, it does not vanish entirely. Only the
+associated data originally submitted in the request body is discarded but the Id
+and update timestamp (now referring to the time of deletion) is preserved. Such
+a ``deleted resource'' is used to generate the ``deleted-entry'' entries in the
+AtomPub feed (\autoref{sec:synchr-coll}).
 
 \subsubsection{Resource Facades}
 \label{sec:resourcefacades}
+
+
+
+
 According to this notion, the media type used to represent a resource should not
 influence the processing logic. In an ideal case all possible media types should
 be handled by the same resource method.
@@ -1799,51 +1856,6 @@ Factories would be provided that knows to create meaningful titles and summaries
 for Persons, Events or Todo items independent of the original Media Types. A
 title of a person surely includes the full name, for an event the date and event
 title would be combined and a todo item could include the priority in the title.
-
-\begin{figure}[t]
-  \centering
-  \subfloat{
-  \begin{tikzpicture}
-    [doc/.style={rectangle,draw=blue!30,fill=blue!20, node distance=2em}]
-
-    \node[doc] (input) [] {InputStream};
-    \node[doc] (poco) [below left=of input,text width=4em] {Portable\-Contacts}
-      edge [<-] node [left,text width=2em] {application/ json} (input);
-
-    \node[doc] (vcard) [below=of input] {VCard}
-      edge [<-] node [left,text width=1em] {text/ vcard} (input);
-
-    \node[doc] (xcard) [below right=of input] {XCard}
-      edge [<-] node [right,text width=3em] {application/ vcard+xml} (input);
-
-    \node[doc] (person) [below=of vcard] {Person}
-      edge [<-] node [right] {} (poco)
-      edge [<-] node [right] {} (vcard)
-      edge [<-] node [right] {} (xcard);
-  \end{tikzpicture}  
-  }
-  \subfloat{
-  \begin{tikzpicture}
-    [doc/.style={rectangle,draw=blue!30,fill=blue!20, node distance=2em}]
-
-    \node[doc] (event) [] {Event};
-    \node[doc] (person) [left=of event] {Person};
-    \node[doc] (todo) [right=of event] {Todo Item};
-
-    \node[doc] () [below left=of event] {Title}
-      edge [<-] node [] {} (todo)
-      edge [<-] node [] {} (person)
-      edge [<-] node [] {} (event);
-
-    \node[doc] () [below right=of event] {Summary}
-      edge [<-] node [] {} (todo)
-      edge [<-] node [] {} (person)
-      edge [<-] node [] {} (event);
-  \end{tikzpicture}
-  }
-  \caption{Facade examples with dependencies}
-  \label{fig:facade-ex-dependen}
-\end{figure}
 
 
     % Facades provide read-only access to the data
