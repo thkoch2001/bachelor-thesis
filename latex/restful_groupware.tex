@@ -1853,43 +1853,56 @@ that might be worth of consideration in this direction.
 \subsection{CollectionStorage}
 \label{sec:collectionstorage}
 
-% Das CollectionStorage Interface kann für verschiedene Storagetypen
-% implementiert werden und ist auf das Konzept eines Updatefeeds spezialiesiert.
+The CollectionStorage interface\footnote{The interface may be further broken
+  down in a read-only and a write part which has been avoided for this
+  overview.} is intended to be implementable for a variety of persistency
+providers like relational databases, the file system, document databases like
+CouchDB, MongoDB, eXist. In this context the IMAP folders used by Kolab are just
+a kind of document store.
 
-% The collection storage interface offers the necessary means to store and
-% retrieve resources. For clarity this interface is not further broken down into a
-% read-only part and a full read-write interface.
+A CollectionStorage is instantiated with the knowledge of the collection for
+which it is responsible. Each collection managed by the application corresponds
+to a separate CollectionStorage instance. Several CollectionStorage instances
+might however share the same underlying connection to a persistency provider.
 
-% A collection storage is instantiated with the knowledge of the collection it is
-% responsible for. It therefor typically only returns resources that were
-% previously stored through it although it may share its underlying persistency
-% provider with other collection storage instances.
+The only uncommon requirement for the persistency provider is to provide the
+time ordered list of updates. This list could be thought of as just another kind
+of search or report like the full text and time range search defined by
+OpenSearch (\autoref{sec:spec-reports-search}). A search index library like
+Apache Lucene\footnote{\citeurl{http://lucene.apache.org}{2012-03-26}} can
+provide indexes for full text search on text fields, time range on events or a
+list of all documents ordered by an ``updated'' field.
 
-% The life cycle of a collection storage is scoped to the application. It is
-% therefor possible to attach memory based caching to this component.
+The IMAP based persistency of Kolab does not provide the described
+indexes\footnote{The IMAP SEARCH command\cite[sec 6.4.4]{RFC3501} searches only
+  the message body and headers but not attachments.}. Those must therefor be
+implemented by a separate component.
 
-% The storage does not expose any support for transactions. Instead every method
-% call represents one atomic action independent from other actions. Conditional
-% request execution is therefor in the responsibility of the storage. Listing
-% \ref{fig:evaluatepreconditions-concurrency}\footnote{found in the JAX-RS
-%   specification on page 28.} shows a possibility for a lost update. Another
-% request could have updated the resource between the etag check and the
-% \lstinline:doUpdate: call.
+To make implementation of the interface easy and to correspond to the REST
+characteristic that every request is atomic, 
 
-% \begin{javalisting}[label=fig:evaluatepreconditions-concurrency,
-%                    caption={Potential lost-update problem with JAX-RS}]
-% ResponseBuilder rb = request.evaluatePreconditions(etag);
-% if (rb == null)
-%   return doUpdate(foo);
-%\end{javalisting}
+The CollectionStorage does not expose any support for transactions. This should
+make the interface easier to implement and also corresponds to the REST
+characteristics of statelessness and transfer of full representations. As a
+consequence, the check for HTTP preconditions must be made inside the
+CollectionStorage. Otherwise an update could be lost as demonstrated in Listing
+\ref{fig:evaluatepreconditions-concurrency} from the JAX-RS
+specification\cite[p. 28]{JAX-RS1.1}. In this example a concurrent update by a
+separate HTTP request that would happen between the etag check and the
+\lstinline:doUpdate: call would be overwritten.
+
+\begin{javalisting}[label=fig:evaluatepreconditions-concurrency,
+                   caption={Potential lost-update problem with JAX-RS}]
+ResponseBuilder rb = request.evaluatePreconditions(etag);
+if (rb == null)
+  return doUpdate(foo);
+\end{javalisting}
 
 % @TODO a resource should not be build, it the etag has not changed. How to make
 % etag checking as cheap as possible?
 
 % Contactzilla.com saves portablecontacts json in MongoDB
 % https://groups.google.com/d/msg/portablecontacts/57R9gGyoqt0/-P0fF4zRjaoJ
-
-
 
 \subsection{Dependency Injection}
 \label{sec:dependency-injection}
@@ -2020,9 +2033,83 @@ then the rest of the application.
 %\subsection{Client Design}
 %What needs a client to know, how does it need to work?
 
+\subsection{Producing Semantically annotated HTML}
 
-\subsection{Reusability of Components}
-\label{sec:reus-comp}
+A recent discussion of possibilities to produce semantically annotated HTML can
+be found in \cite[sec. 9.1.3]{DBLP:books/daglib/0023755}. The authors describe a
+method developed as part of a larger ``Web Semantics Design Method'' (WSDM),
+consists of two mappings. The first one is the ``data source mapping (DSM),
+which describes exactly how the reference ontology maps to the actual data
+source.''  The second mapping links HTML tags to elements of the reference
+ontology from the first mapping. Neither the book nor referenced papers however
+go in any more detail about the final step of generating the annotated HTML
+tags.
+
+One important point can be learned from the WSDM description. The production of
+semantically annotated HTML can become a lot easier if the entity is already
+available represented with the targeted vocabulary. A very naive approach to
+produce annotated HTML would be to just manually write the necessary attributes
+in the template and fill them with values from an arbitrary data object, as
+demonstrated in listing \ref{fig:naive-microdata-template}. Even with the
+conciseness of the used template language
+Jade\footnote{\citeurl{http://scalate.fusesource.org/documentation/jade-syntax.html}{2012-2-22}
+  Jade is the most concise among several supported template languages of the
+  Scalate Template Engine.}, the developer still has a lot to type.
+
+\begin{anylisting}[label=fig:naive-microdata-template,
+                   caption={Defining all Microdata attributes manually in an HTML template}]
+-@ var vcard: VCard
+
+div( itemscope itemtype="http://schema.org/Person" 
+     itemid=#{vcard.getProperty("uid")} )
+  span( itemprop="name" )
+    #{vcard.getProperty("fn")}
+  span( itemprop="telephone" ) 
+    #{vcard.getProperty("tel")}
+\end{anylisting}
+
+Compared to the above listing \ref{fig:microdata-template} shows a template
+using a data structure that is aware of the used Microdata vocabulary and wraps
+an instance of a typed Microdata item with its properties. The
+\lstinline:scope: method of the Microdata interface will add the
+\lstinline:itemscope:, \lstinline:itemtype: and \lstinline:itemid: attributes to
+the nested \lstinline:div: element. The \lstinline:prop: method either augments
+a nested element as shown for the \lstinline:name: property or creates the
+correct nested element. The method adds the \lstinline:itemprop: attribute and
+puts the value for this property inside the element.
+
+\begin{anylisting}[label=fig:microdata-template,
+                   caption={Using a Microdata-aware data structure in a template}]
+-@ var md: MicroData
+
+= md.scope
+  div
+    = md.prop("name")
+      span( style="color:red" )
+    = md.prop("telephone")
+    = md.prop("email")
+\end{anylisting}
+
+An implementation of this approach must take care of a few
+peculiarities\cite{Hickson2011}. Some properties don't necessarily use simple
+\lstinline:span: elements, e.g. dates can be better expressed with
+\lstinline:time: elements or URI values most likely appear in an
+\lstinline:a:, \lstinline:img:, \lstinline:link: or \lstinline:object:
+element. Property values could also be put in a \lstinline:content: attribute
+while the element's nested text content is optimized for human
+consumption. Items can be nested, e.g. an item of type PostalAddress could be
+nested inside a Person item.
+
+The proposed approach can be implemented on any template engine as long as it
+permits to capture and manipulate nested HTML elements and to call methods of
+passed in
+objects.\footnote{\citeurl{https://github.com/Paxa/green_monkey}{2012-3-7}
+  provides helpers to produce microdata in rails but is not as automated as the
+  design proposed here.}
+
+
+%\subsection{Reusability of Components}
+%\label{sec:reus-comp}
 
 % > - Wiederverwendbare Komponenten:
 % >   - ResourceFacades Framework inkl. Medientypspezifische Klassen zur 
@@ -2389,403 +2476,9 @@ comprehension of type systems.
 % wording.
 
 
-\section{alles alt hier unten}
-
-
-
-
-
-\section{Media Types}
-% http://amundsen.com/hypermedia/
-% http://martinfowler.com/articles/richardsonMaturityModel.html
-% http://code.google.com/p/implementing-rest/wiki/RMM
-% http://looselyconnected.wordpress.com/2011/03/09/the-richardson-maturity-model-of-rest-and-roy-fielding/
-
-% W3C note: coneg could forward with 302 to a specific representation like http://example.com/people/joe_smith.vcf 
-% \cite[sec. 2.1]{Sauermann2008}
-
-\begin{quote}
-  To some extent, people get REST wrong because I failed to include enough
-  detail on media type design within my dissertation.~--~Roy T. Fielding, \cite{Fielding2008}
-\end{quote}
-
-\cite[sec. 7.2]{Pautasso:2008:RWS:1367497.1367606} identifies the support of different media types as an issue that "can complicate and hinder the interoperability" and "requires more maintenance effort".
-
-\cite{Davis:2011:XTR:1967428.1967437} proposes a XML based REST framework that uses XForms, XQuery, XProc, XSLT and an XML database. It can benefit from the constraint that it only supports XML based media types. It is to be seen, which ideas from this work could be reused in the case of a broader variety of supported media types.
-
-\subsection{Syntax vs. Semantic (Vocabulary)}
-
-The use of standardized media types is one key difference between an API and a
-restful API\cite[sec. 5.2.1.2]{Fielding2000}. Only if the client has knowledge
-about the media type can it do something meaningful with it besides just
-receiving it. In that sense, the often used mime types application/xml or
-application/json are not really media types. They don't tell the browser or user
-anything meaningful beside the \emph{syntax} of the data.\footnote{
-\citeurl{http://blog.programmableweb.com/2011/11/18/rest-api-design-putting-the-type-in-content-type}{2011-21-20}
-and Web Resource Modeling Language \citeurl{http://www.wrml.org}{2011-12-20} both by Mark Massé
-}
-
-To do anything meaningful with plain json or xml, the client programmer must
-normally look up the meaning or \emph{semantic} of the data in the API
-documentation. The data therefor fails the self-descriptive constraint of
-REST.
-
-Compare this with a mime type like \texttt{application/atom+xml}. It specifies
-the syntax (xml) and the semantic (atom) of the data. Of course somebody once
-needed to read the atom specification and program the client with the knowledge
-of how to process this media type. The purpose of standardized media types
-however is that their number is limited enough so that there is a fair chance
-that a client might have implemented a given media type.
-
-Large sites like Google, Facebook or Twitter have the market power to attract
-developers to read their specifications and program clients accordingly. They
-thus don't necessary need to rely on standardized media types. REST however
-envisions a decentralized web in which parties can interact without previous
-knowledge of each other. This becomes possible through the usage of well known
-predefined media types.
-
-%  in the area of semantic
-% standardization. Questions whether and how contact information should also hold
-% space for the place of birth and place and date of death of a
-% person\footnote{\citeurl{https://datatracker.ietf.org/doc/draft-ietf-vcarddav-birth-death-extensions/}{2011-12-20}}
-% are independent from a data serialization format. So is the question whether and
-% how to specify the sex or gender of a
-% person.\footnote{\citeurl{http://www.ietf.org/mail-archive/web/vcarddav/current/msg01778.html}{2011-12-20}}
-
-\subsubsection{XML vs. JSON}
-
-% Data Meta Models http://dret.net/netdret/docs/wilde-cacm2008-document-design-matters/
-
-This section investigates the two most common syntaxes used by media types
-and the issues that arise if an application needs to support both of them.
-
-The application section of the IANA mime type registration has 294 entries
-ending in ``+xml'' and only 3 ending in
-``+json''.\footnote{\citeurl{http://www.iana.org/assignments/media-types/application/index.html}{2011-12-20}}
-This stands in contrast to the rise of public JSON APIs and the decline of XML
-APIs.\footnote{\citeurl{http://blog.programmableweb.com/2011/05/25/1-in-5-apis-say-bye-xml/}{2011-12-20} \citeurl{http://www.readwriteweb.com/cloud/2011/03/programmable-web-apis-popping.php}{2011-12-21}}
-
-%Web developers often prefer JSON over XML because it is perceived as easier to
-%parse, process and smaller in size. XML in comparison is seen as complicate,
-%slow to process and larger in size. - keine Quellen
-A strong argument for JSON as the preferred format for public APIs may be that
-JSON is a subset of JavaScript and thus easily consumable in a web
-browser.\footnote{ECMAScript for XML (E4X) makes XML a first class language
-  construct in the browser but is only supported by Mozilla
-  \citeurl{http://en.wikipedia.org/wiki/ECMAScript_for_XML}{2012-2-2}}
-
-A drawback of this mismatch between the preference of media type designers and
-API consumers is a possible duplication of work and incompatibilities across
-different APIs. An author that wants to offer a public API as JSON is likely to
-find only an existing XML media type, but no one in JSON.  The situation would
-be eased, if a standard mapping from XML schemes to JSON would be possible, but
-that is not the case.
-
-Instead, possible mappings have to trade of the preservation of all structural
-information against the ``friendliness'' of the resulting JSON
-structure\cite{Boyer2011}. Without going into detail, a JSON structure can be
-seen as friendly if it makes best use of JSON's data types, is compact and easy
-to process. \autoref{fig:waysmapxmljson} shows two different examples how to map
-data from XML to JSON with one of them using JSON number values, being more
-compact and probably easier to process.
-
-\begin{multicols}{3}
-\begin{lstlisting}[label=fig:waysmapxmljson,
-                  captionpos=t,
-                  caption={XML fragment}, frame=single]
-<lang pref="1"
-      id="fr" />
-<lang pref="3"
-      id="en" />
-\end{lstlisting}
-\columnbreak
-\begin{lstlisting}[title={unfriendly JSON}, frame=single,
-                  captionpos=t
-]
-"languages": [
-  { "id":"fr",
-    "pref":"1" },
-  { "id":"en",
-    "pref":"3" }
-]
-\end{lstlisting}
-\columnbreak
-\begin{lstlisting}[title={friendly JSON}, frame=single,
-                  captionpos=t
-]
-"languages": {
-  "fr":1,
-  "en":3
-}
-\end{lstlisting}
-\end{multicols}
-
-Activity Streams has avoided the misalignment of an official XML format and an unofficial JSON deviate by defining an XML (ATOM) and JSON format from the beginning.\footnote{\citeurl{http://activitystrea.ms/}{2012-01-21}}
-
-%\subsubsection{Hypermedia Support in JSON}
-%@TODO: discuss HAL
-
-
-
-
-
-\section{Design}
-
-% The design must not support any possible use case but only restful web applications.
-
-% The life cycle of ResourceHandlers is for the application. They receive the called URL as part of the request context as a method parameter.
-% ResourceHandlers could be wired together at run time, instantiated with a set of handler functors which could carry their storage in their closure.
-% Specifying the media types handled by a handler function as annotations is verbose. If I have a method that handles contacts, I need to specify several media types. If a method handler can handle Contacts, Events and Todos, I need to repeat a lot of media types.
-
-% Handler functors return a tuppel of status code, headers set and response body.
-% Alternatively they can return early by throwing a special exception carrying a status code and a message.
-% Exceptions thrown from a ResourceHandler should be serialized in a way easily to consume for the client.
-
-% Concerns: Authorization, Logging, Trigger Message (to indexing system, subscribers), Measure execution time, Support Cross-Origin Resource Sharing (CORS)\footnote{\citeurl{http://www.w3.org/TR/cors/}{2012-2-2}}, Compression
-
-% The life cycle of a CollectionStorage is across individual requests to facilitate caching or database connection reuse.
-
-
-\subsection{Reusable Patterns and Components}
-
-%@TODO
-
-% Reuse is of course in general a good thing. In the context of Model Driven
-% Development (MDD) and code generation it is especially import to identify code
-% that is general enough to be provided by a library of framework and does not
-% need to be generated.
-
-% Minimizing the generated code also minimizes the extend of drawbacks associated
-% with code generation, most importantly conflicts between updates by the code
-% generator and manual modification.
-
-% We have a namespace at our disposal. HTTP suggests to interpret the path component of this namespace in a hierarchic way.
-% The URI must be mapped to a resource, independent of the requested media type or HTTP verb. 
-% It therefor makes sense to do the interpretation of the URI or the path independent from Media type or HTTP verb dispatch.
-
-% wilde-fqas argues that feeds (collections) provide a general enough abstraction 
-
-% Concerns regarding Media Types that needs to be implemented differently for each different Media Type:
-% \begin{itemize}
-% \item validate the Media Type
-% \item provide accessors to read, write parts of the Media Type
-% \item serialize, deserialize the whole Media Type
-% \item converters to other formats
-% \item accessors to common interfaces (projection), e.g. common generic resource attributes or common attributes of a contact
-% \end{itemize}
-% % Attributes of a resource could be virtual or derived, e.g. the size of an image is derived from the binary image data.
-% % Images also contain additional data that could be exposed as attributes.
-
-
-% Candidate areas for re-usability:
-% \begin{itemize}
-% \item link building, URL parsing
-% \item HTML form building, parsing
-% \item generic properties of resources, id
-% \item resource types
-% \item question to storage: does resource still match ETag? Has changed since?
-% \item all links of a resource: Link: intern/extern/undefined, href, rel, title, text, media type
-% \item bool function matchesMediaType(), getMediaType() auf WrappedEntry
-% \item Prüfung, ob ein Update durchgeführt werden soll, gemäß ETAG, ifnotchanged
-% \item Möglichkeit, DatenKlassen mit DatenTypen zu definieren wie in eZ Publish um automatische Views und Edit Ansichten zu ermöglichen.
-% \item Creation of resources: POST to collection with SLUG Header, PUT to URI, normalization of SLUG Header
-% \item Pagination (building and parsing of next and previous URIs, implementation of RFC5005), querying the collections entries provider with the correct parameters (offset, limit).
-% \item Storage interface with transaction support. An application may for example need to notify an indexing component after some resource has been changed. -- No transaction support: Every action that must happen in a transaction together with the resource change must be handled by the storage layer, must be aware of the storage technologie.
-% \end{itemize}
-
-% Im Gegensatz zu Bildern, wie in \cite{Schreier:2011:MRA:1967428.1967434} können Kontakte komplett inline sein.
-
-
-\subsection{Components}
-
-\subsubsection{Dispatcher}
-\label{sec:dispatcher}
-The dispatcher selects the Java method (see \ref{sec:components-actions}) that
-should handle the request. The selection can depend at least on the path
-component of the requested URI, the media types accepted by the client as
-indicated in the request's ACCEPT header and the HTTP verb.
-
-Every project implementing JAX-RS\cite{JAX-RS1.1} needs to have some kind of
-dispatcher component. The specification itself does not identify this
-component. It does however specify the algorithm a dispatcher needs to follow
-and a set of Java annotations which must be used to configure the
-dispatch. These annotations (PATH, GET for the HTTP verb and Produces) are
-demonstrated in listing \ref{fig:jaxrs-annotated-resource-example}.
-
-\begin{javalisting}[label=fig:jaxrs-annotated-resource-example,
-                   caption={Example of a JAX-RS annotated Resource class (by Marek Potociar)}]
-@Path("atm/{cardId}")	
-public class AtmResource {	
-`  
-  @GET 	
-  @Path("balance")	
-  @Produces("text/plain")	
-  public String balance(@PathParam("cardId") String card,	
-                        @QueryParam("pin") String pin) {	
-    return Double.toString(getBalance(card, pin));	
-  }
-\end{javalisting}
- 
-Alternative approaches to configure the dispatcher are not designated by
-JAX-RS. One possible alternative would be to expose an API to manually add
-dispatch routes at runtime and remove the corresponding annotations from the
-source code. 
-
-This approach is indeed implemented e.g. by
-Restlet\footnote{\citeurl{http://wiki.restlet.org/docs_2.1/13-restlet/27-restlet/326-restlet.html}{2012-2-6}},
-Apache Wink\footnote{called ``Dynamic Resources''
-  \citeurl{http://incubator.apache.org/wink/1.1/html/5.1 Registration and
-    Configuration.html}{2012-2-7}} and probably others. Jersey 2.0 is also
-expected to provide an API for the
-dispatcher.\footnote{\citeurl{http://java.net/jira/browse/JERSEY-842}{2012-2-6}}:
-
-Advantages of a dynamic dispatcher configuration would be:
-
-% JAX-RS Path annotations can not take any non constant input, that's not known at compile time.
-% Would be fine to use e.g. an enum of all known URI templates.
-
-\begin{itemize}
-\item The path under which a resource type is served is decoupled from the code
-  defining the behavior of the resource. This could enable the reuse of resource
-  classes or methods in other contexts.
-\item The decision which media types can be consumed or produced may not depend
-  solely on the resource class or method. A resource method may work on a domain
-  specific data type and the set of supported media types may depend on the
-  available converter between media types and the data type. A photo album for example
-  resource may be able to consume any number of different image formats that
-  a separate component can convert to an internal image representation.
-\item The list of supported media types could be created programmatically. This
-  enables reuse of set of equivalent media types or combination of media type
-  categories for example to combine the sets of image, video and audio media
-  types.
-\item The concept of resource classes could be replaced altogether. The life
-  cycle of a resource class in JAX-RS defaults to the request scope. During one
-  request only one resource method is called. Resource methods therefor by
-  default don't share state through resource class attributes. It would therefor
-  be possible to bind individual functors to dispatcher routes and thus
-  composing the equivalent of a resource class at runtime.
-\end{itemize}
-
-%@TODO:
-
-The dispatching as defined in JAX-RS does not define any facility for a resource
-method to decline its possibility to handle a method at runtime. Such a facility
-could either be implemented by a boolean precondition method associated with the
-resource method or by a special Exception type that would restart the request
-dispatch but this time ignoring the method that threw the exception. If no
-alternative request method could be found, the Exception would be propagated and
-subsequently transformed into an appropriate error response.
-
-Thus it would be possible to define generic and special purpose request methods
-even for cases where the static JAX-RS dispatch algorithm does not provide
-sufficient granularity.
-
-While all this flexibility can provide many advantages it has to be kept in mind
-how the framework can gather enough knowledge to still help by autogenerating
-e.g. WADL documents and responses to HEAD and OPTION requests.
-
-
-\subsection{Producing Semantically annotated HTML}
-
-A recent discussion of possibilities to produce semantically annotated HTML can
-be found in \cite[sec. 9.1.3]{DBLP:books/daglib/0023755}. The authors describe a
-method developed as part of a larger ``Web Semantics Design Method'' (WSDM),
-consists of two mappings. The first one is the ``data source mapping (DSM),
-which describes exactly how the reference ontology maps to the actual data
-source.''  The second mapping links HTML tags to elements of the reference
-ontology from the first mapping. Neither the book nor referenced papers however
-go in any more detail about the final step of generating the annotated HTML
-tags.
-
-One important point can be learned from the WSDM description. The production of
-semantically annotated HTML can become a lot easier if the entity is already
-available represented with the targeted vocabulary. A very naive approach to
-produce annotated HTML would be to just manually write the necessary attributes
-in the template and fill them with values from an arbitrary data object, as
-demonstrated in listing \ref{fig:naive-microdata-template}. Even with the
-conciseness of the used template language
-Jade\footnote{\citeurl{http://scalate.fusesource.org/documentation/jade-syntax.html}{2012-2-22}
-  Jade is the most concise among several supported template languages of the
-  Scalate Template Engine.}, the developer still has a lot to type.
-
-\begin{anylisting}[label=fig:naive-microdata-template,
-                   caption={Defining all Microdata attributes manually in an HTML template}]
--@ var vcard: VCard
-
-div( itemscope itemtype="http://schema.org/Person" 
-     itemid=#{vcard.getProperty("uid")} )
-  span( itemprop="name" )
-    #{vcard.getProperty("fn")}
-  span( itemprop="telephone" ) 
-    #{vcard.getProperty("tel")}
-\end{anylisting}
-
-Compared to the above listing \ref{fig:microdata-template} shows a template
-using a data structure that is aware of the used Microdata vocabulary and wraps
-an instance of a typed Microdata item with its properties. The
-\lstinline:scope: method of the Microdata interface will add the
-\lstinline:itemscope:, \lstinline:itemtype: and \lstinline:itemid: attributes to
-the nested \lstinline:div: element. The \lstinline:prop: method either augments
-a nested element as shown for the \lstinline:name: property or creates the
-correct nested element. The method adds the \lstinline:itemprop: attribute and
-puts the value for this property inside the element.
-
-\begin{anylisting}[label=fig:microdata-template,
-                   caption={Using a Microdata-aware data structure in a template}]
--@ var md: MicroData
-
-= md.scope
-  div
-    = md.prop("name")
-      span( style="color:red" )
-    = md.prop("telephone")
-    = md.prop("email")
-\end{anylisting}
-
-An implementation of this approach must take care of a few
-peculiarities\cite{Hickson2011}. Some properties don't necessarily use simple
-\lstinline:span: elements, e.g. dates can be better expressed with
-\lstinline:time: elements or URI values most likely appear in an
-\lstinline:a:, \lstinline:img:, \lstinline:link: or \lstinline:object:
-element. Property values could also be put in a \lstinline:content: attribute
-while the element's nested text content is optimized for human
-consumption. Items can be nested, e.g. an item of type PostalAddress could be
-nested inside a Person item.
-
-The proposed approach can be implemented on any template engine as long as it
-permits to capture and manipulate nested HTML elements and to call methods of
-passed in
-objects.\footnote{\citeurl{https://github.com/Paxa/green_monkey}{2012-3-7}
-  provides helpers to produce microdata in rails but is not as automated as the
-  design proposed here.}
-
-\subsubsection{Other components}
-
-\paragraph{Actions}
-\label{sec:components-actions}
-
-An action is basically the code that should be executed to respond to a client
-request. An action receives all information about a request and is connected to
-the application. It can use and manipulate the application state and produces a
-data structure representing the response. It can be compared to the ``Request
-method'' defined in JAX-RS.
-
-% With JAX-RS it is not possible to define resource methods in different
-% classes, i.e. annotating two different resource classes with the same path.
-
-It is desirable to reuse actions across different consumed media types. Typical
-tasks to perform in a POST or PUT resource method are:
-\begin{itemize}
-\item Transform the input format in a format suitable for the storage component.
-\item Check the validity of the received data.
-\item Extract information to be sent to another component, e.g. to notify users
-  about changes or to index the new data for search.
-\end{itemize}
-
 \newpage
 \bibliography{references}{}
 \bibliographystyle{alphadin}
-
 \section*{Selbstständigkeitserklärung}
 % Keine Kopf- und Fußzeilen ausgeben
 \thispagestyle{empty}
