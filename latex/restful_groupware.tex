@@ -128,6 +128,7 @@ optionale Ergänzungen:
   % and main achievements. From the abstract a reader should be able to
   % ascertain if the project is of interest to her and presents results that she
   % would like to know the details of
+  % Hintergrund, Motivation, Ergebnisse
 \end{abstract}
 \newpage{}
 \pagenumbering{arabic}
@@ -136,6 +137,20 @@ optionale Ergänzungen:
 
 \section{Introduction}
 \label{sec:introduction}
+
+% Die Einleitung führt zum Thema hin. In der Einleitung muss deutlich werden, welche Frage Sie sich
+% und dem Leser beantworten wollen und mit welcher methodischen Vorgehensweise dies
+% geschehen soll. Nach der Lektüre der Einleitung sollte der Leser wissen, was ihn erwartet. Er kennt
+% die Frage, er weiß in groben Zügen, wie Sie die Frage beantworten wollen, und er ist an der
+% Antwort interessiert. Zum Abschluss der Einleitung sollten Sie eine kurze Übersicht über die
+% nachfolgenden Kapitel geben.
+
+% Einleitung (ca 2 Seiten)
+% - Ziel der Arbeit
+% - Beschreibung der Aufgabenstellung
+% - Einbettung des Themas in ein größeres Umfeld
+% - Anreize zum Lesen geben – keine Ergebnisse präsentieren
+% - Kurze Beschreibung der einzelnen Kapitel (max. 1-3 Sätze/Kapitel)
 
 Although computers became ubiquitous for some time now, they still don't help
 their users with their most basic information management needs: Make contacts,
@@ -146,7 +161,6 @@ Most existing solutions are either based on non-free software (Microsoft Outlook
 or require the user to trust his personal data to the commercial
 interests of a multinational corporation.
 %\footnote{Experiences with Android and Data in the cloud \citeurl{http://keithp.com/blogs/calypso}{?}}
-
 
 \section{Background and Related Work}
 \label{sec:backgr-relat-work}
@@ -1544,19 +1558,15 @@ resources are expected to appear.
 \section{Implementation}
 \label{sec:implementation}
 
-\subsection{Used Frameworks and Libraries}
-\label{sec:used-fram-libr}
-
-%> - Auf Basis von Jersey, weil empfohlen von Schneider2010 (Vergleich und
-%>   Beurteilung von Java Frameworks für Web Services mit REST)
 
 \subsection{Control Flow Overview}
 \label{sec:overview}
 
 \autoref{fig:executionflowoverview} outlines the most important classes for the
-control flow. The implementation relies on Jersey to route calls to the four
-different ``Jersey Resources'' classes, representing Atom Service Documents,
-Atom Collections, Atom Entries and Media Resources of different Mediatypes.
+control flow. The implementation relies on the JAX-RS\cite{JAX-RS1.1}
+implementation Jersey to route calls to the four different ``Jersey Resources''
+classes, representing Atom Service Documents, Atom Collections, Atom Entries and
+Media Resources of different Mediatypes.
 
 The Jersey Reader/Writer providers are called by Jersey to transform in- and
 output for the Resource classes. The \lstinline:AbderaWriterJerseyProvider: just
@@ -2180,6 +2190,15 @@ objects.\footnote{\citeurl{https://github.com/Paxa/green_monkey}{2012-3-7}
 
 % Integrates nicely with other techniques: Pubsubhub, OpenID, OAuth
 
+%\subsection{Used Frameworks and Libraries}
+%\label{sec:used-fram-libr}
+
+% Jersey, Guice, Guava, Abdera, ical4J, Scalate
+
+%> - Auf Basis von Jersey, weil empfohlen von Schneider2010 (Vergleich und
+%>   Beurteilung von Java Frameworks für Web Services mit REST)
+
+
 \subsection{Further work}
 \label{sec:further-work}
 
@@ -2474,6 +2493,15 @@ comprehension of type systems.
 % chapters, especially in the previous results and discussion chapter. Do not be
 % afraid of repeating some of your earlier statements here, albeit using different
 % wording.
+
+% Im Schlussteil sollen die wesentlichen Ergebnisse der Arbeit noch einmal herausgestellt werden.
+% Dabei muss auf die eingangs formulierte Fragestellung eingegangen werden. Entweder kann die
+% Frage nun beantwortet werden oder es ist darzulegen, warum sie nicht oder nur teilweise
+% beantwortet werden kann. Im Schlussteil ist auch Kritik an der eigenen methodischen
+% Vorgehensweise zu üben, insbesondere dann, wenn sie nicht die gewünschten Resultate geliefert
+% hat. Aus dieser Kritik oder auch aus neuen Fragen, die bei der Bearbeitung des Themas
+% aufgetaucht sind, sollte dann am Ende ein Ausblick auf die zukünftige Forschung hergeleitet
+% werden.
 
 
 \newpage
