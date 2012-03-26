@@ -1605,23 +1605,378 @@ returned.
 
 The \lstinline:Resource: class is the generalization of a restful HTTP resource
 without a binding to a specific Mediatype. This corresponds to the distinction
-made between a resource and its representations made by
-Fielding\cite[sec. 5.2.1.1]{Fielding2000}. In the context of this work, four
-different kind of properties of resources are distinguished:
+between a resource and its representations in Fielding's
+Dissertation\cite[sec. 5.2.1.1]{Fielding2000}. A representation in a certain
+format is a property ``selected dynamically based on the capabilities or desires of
+the recipient and the nature of the
+resource''\cite[p. 87]{Fielding2000}.
+
+The interface of the \lstinline:Resource: class marks the border between code
+that handles the control flow of an HTTP request, as outlined in
+\autoref{fig:executionflowoverview}, and code that provides information about
+properties of a resource (\autoref{sec:resourcefacades}). In the context of this
+work, four different kind of properties of resources are distinguished:
 
 \begin{itemize}
-\item two essential properties: unique Id, last update time
-\item generic atom entry properties: title, summary, author
+\item essential administration properties: unique Id, last update time
+\item generic meta properties: title, summary, author
 \item a Mediatype independent interface corresponding to the concept represented
   by the resource e.g., a person, location, group, organization, event, \ldots
 \item a mediatype specific serialization (representation) of the resource
 \end{itemize}
+
+The id and update time are required for the synchronization protocol outlined in
+\autoref{sec:interactions}. They do not depend of the nature or content of the
+resource and are attached to the resource by code outside of the
+\lstinline:Resource: class.
+
+The generic meta properties of the resource can be used to fill the
+corresponding tags of an atom entry. They can either be extracted from a
+meaningful property of the resource or be provided to the resource. E.g., the
+author property could be extracted from the meta data of an image file (EXIF),
+set to the organizer of an ical event. The title of a contact resource in the
+implementation is set to its full name and email. The summary also contains the
+address and phone number.
+
+
+
 
 % @TODO
 
 % JAX-RS versteht unter Resource class something else: 
 % JAX-RS uses annotations in the Resource class to bind it to an URI
 % (@Path) and to different Mediatypes (@Produces, @Consumes).
+
+\subsubsection{Resource Facades}
+\label{sec:resourcefacades}
+According to this notion, the media type used to represent a resource should not
+influence the processing logic. In an ideal case all possible media types should
+be handled by the same resource method.
+
+% man kann, aber man muss nicht, also warum willst du dann ein problem lösen?
+% Außerdem mag eine solche Unterscheidung vllcht manchmal aus technischen
+% Gesichtspunkten vielleicht doch Sinn machen, zB wenn ich eine Darstellung
+% einer Resource in textueller Form (zB XML) und in visueller (zB ein JPG) habe,
+% dann mag vllcht unterschiedliche Behandlung doch mal notwendig bzw sinnvoll
+% sein. Außerdem sagt Fielding in Abschnitt 5.2.1.2: "A representation can be
+% included in a message and processed by the recipient according to the control
+% data of the message and the nature of the media type". D.h. die Verarbeitung
+% kann vom Medientyp abhängig sein. Und gerade unter dem Gesichtspunkt, dass du
+% untersuchen sollst, wie man verschiedene Medientypen unterstützen kann, ist es
+% vllcht nicht gut, eine medientypabhängige Verarbeitung auszuschliessen. Wenn
+% möglich will man Codedoppelungen natürlich vermeiden, aber manchmal braucht
+% man eben unterschiedlichen Code.
+
+This ideal contrasts with JAX-RS concepts where the media type can be one
+parameter of the dispatcher logic. This section outlines a pattern tentatively
+named ``Resource Facades'' that should make it easier to handle different media
+types with the same code and thus to facilitate code reuse.
+
+% das fällt vom Himmel, es gibt kein Problem, das du bis zu dem Zeitpunkt
+% beschrieben hast und beschreibst dann ein Pattern, wo auch nicht klar ist wo
+% das her kommt. Wenn du das selber entwickeln willst, musst du erstmal das
+% Problem analyisieren und beschreiben und dann kann man ein Pattern
+% entwickeln. Vor allem gibt es für Pattern auch gewisse Richtlinien wie man
+% diese beschreibt und vielleicht wäre es hilfreich sich daran zu orientieren
+
+A resource method should contain the programming logic executed to serve a
+request of a specific type (e.g. GET, PUT) against a specific resource. The
+programming logic could execute common tasks like the following:
+
+\begin{itemize}
+\item validate the correctness of a submitted resource
+\item check the clients authorization
+\item persist the submitted resource data
+\item trigger notifications containing a summary of the resource
+\item submit the submitted resource to an indexing system
+\item check the submitted resource to be of a certain accepted domain type, like
+  contact, event, todo item or any set of such types
+\end{itemize}
+
+All the above processing tasks should in theory be independent of the media type
+of a resource and only be programmed once to work on any resource format. This
+could be made possible by applying the concept of roles to resources. Roles have
+been described already 15 years ago by \cite{Fowler1997} or a bit later by
+\cite{Baeumer2000}. However no evidence could be found whether roles have been
+used to implement restful systems.
+
+According to \cite{Steimann2008}, there exists several definitions for roles
+which mostly share a few core properties:
+
+\begin{quote}
+  This includes the property that a single object can play several roles of
+  different or the same kind both simultaneously and sequentially, and that the
+  same role can be played by different objects of the same and different
+  kinds. Raised to the type level, this means that the relationship between role
+  types and class types (as sources of role players) is generally m:n.
+\end{quote}
+
+A popular example for roles is a person, that can have the different roles over
+their lifetime (student, professor, single, husband, widower) or in different
+contexts (teacher, father, husband, customer, politician).
+
+% \cite{Steimann2001} repeats the necessity of the dynamic role concept and argues
+% that (Java) interfaces serve as an appropriate mean to handle roles.
+
+Exemplified with the above tasks, a resource can have the role of being
+validated, persisted, summarized or checked for being of a certain type. So like
+in the above quote a facility is needed that can provide m different roles of
+resources that come in n different shapes.
+
+It can be noted, that unlike in the previous example with roles of a person,
+this resource roles examples do not extend the original resource with new
+attributes. A person surely gets additional attributes as a father (references
+to children) or professor (member of faculty). Thus the term ``facade'' in favor
+of role should indicate that only different views of the same data are provided.
+
+Listing \ref{fig:datafacades-api} shows interfaces of a minimal framework to
+provide Facades for Resources. The idea is, that any code that needs information
+from a Resource requests the appropriate Facade from the ResourceHandler. The
+ResourceHandler was instantiated with a FacadeRegistry from which it can request
+Factories for requested Facades. A ResourceHandler must have been instantiated
+with at least one initial input Facade, e.g. an InputStream.
+
+\begin{javalisting}[label=fig:datafacades-api,
+                    float=p,
+                   caption={API of the ResourceFacades component}]
+interface FacadeFactory<T> {
+ T build(ResourceHandler resourceHandler);
+
+ /**
+  * Dependency Facades needed by this factory.
+  */
+ Iterable<? extends Class<?>> getDependencies();
+}
+
+interface FacadeRegistry {
+ /**
+  * Returns Facade factories that could probably
+  * build the requested Facade.
+  *
+  * @param mediaType MediaType of the original Resource
+  * @param clazz requested Facade interface
+  */
+ Iterable<FacadeFactory<?>> getFacadeFactories(MediaType mediaType,
+                                               Class<?> clazz);
+}
+
+interface ResourceHandler {
+ /**
+  * Returns the unique instance of a Facade for this Resource
+  *
+  * Subsequent calls with the same parameter receive the
+  * _same_ unique Facade instance!
+  *
+  * @param clazz requested Facade interface
+  * @return Facade implementation instance
+  */
+ <T> T getFacade(Class<T> clazz);
+
+ /**
+  * Is the requested Facade interface available for this Resource?
+  *
+  * @param clazz Facade interface
+  */
+ boolean hasFacade(Class<?> clazz);
+
+ /**
+  * The MediaType of the original Resource from which this 
+  * ResourceHandler was instantiated.
+  */
+ MediaType getMediaType();
+}
+\end{javalisting}
+
+\autoref{fig:facade-ex-dependen} presents two example use cases for Facades. On
+the left site the request method might want to know the full name of a submitted
+contact resource. It therefor requests a Person facade. Different Person Facade
+factories are registered. The different factories in turn have each a dependency
+on an InputStream parameterized with a Media Type. The provided Media Type makes
+the resolution path unambiguous.
+
+The right site shows dependencies of Title and Summary Facades. Different
+Factories would be provided that knows to create meaningful titles and summaries
+for Persons, Events or Todo items independent of the original Media Types. A
+title of a person surely includes the full name, for an event the date and event
+title would be combined and a todo item could include the priority in the title.
+
+\begin{figure}[t]
+  \centering
+  \subfloat{
+  \begin{tikzpicture}
+    [doc/.style={rectangle,draw=blue!30,fill=blue!20, node distance=2em}]
+
+    \node[doc] (input) [] {InputStream};
+    \node[doc] (poco) [below left=of input,text width=4em] {Portable\-Contacts}
+      edge [<-] node [left,text width=2em] {application/ json} (input);
+
+    \node[doc] (vcard) [below=of input] {VCard}
+      edge [<-] node [left,text width=1em] {text/ vcard} (input);
+
+    \node[doc] (xcard) [below right=of input] {XCard}
+      edge [<-] node [right,text width=3em] {application/ vcard+xml} (input);
+
+    \node[doc] (person) [below=of vcard] {Person}
+      edge [<-] node [right] {} (poco)
+      edge [<-] node [right] {} (vcard)
+      edge [<-] node [right] {} (xcard);
+  \end{tikzpicture}  
+  }
+  \subfloat{
+  \begin{tikzpicture}
+    [doc/.style={rectangle,draw=blue!30,fill=blue!20, node distance=2em}]
+
+    \node[doc] (event) [] {Event};
+    \node[doc] (person) [left=of event] {Person};
+    \node[doc] (todo) [right=of event] {Todo Item};
+
+    \node[doc] () [below left=of event] {Title}
+      edge [<-] node [] {} (todo)
+      edge [<-] node [] {} (person)
+      edge [<-] node [] {} (event);
+
+    \node[doc] () [below right=of event] {Summary}
+      edge [<-] node [] {} (todo)
+      edge [<-] node [] {} (person)
+      edge [<-] node [] {} (event);
+  \end{tikzpicture}
+  }
+  \caption{Facade examples with dependencies}
+  \label{fig:facade-ex-dependen}
+\end{figure}
+
+
+    % Facades provide read-only access to the data
+    % Facades can depend on other Facades and thus reuse work
+    % Facades could do:
+    %     Parse the InputStream with a common JSON/XML framework
+    %     Could check whether the data represents a concept like a contact or calendar item, independent from the underlying Media Type (vCard, xCard, portable contacts, iCal, xCal)
+    %     Could provide a transformation to another representation (XML<->JSON, xCard to portable contacts)
+    %     could extract generic informations from different media types: Title, Authors, Updated, Summary
+    % A Facade (Java Interface) that provides access to the Name of a Contact Resource could be implemented by different classes that could work either on vCard, xCard or Portable Contacts. The resource method does not need to be aware or the original media type of the data.
+
+% The concept is powerful because Facades can easily be added without changing
+% existing classes. In JAX-RS the resource Method needs to decide, on which
+% representation of the data it wants to work. With this concept, a resource
+% method could use several different available Facades to access the data.
+
+% Using a similar concept to build representations (request Facades) for different MediaTypes may not be worth the effort.
+% This would mostly be necessary to handle GET requests. GET requests however are expected to be idempotent and therefor should contain little to no internal side effects.
+% It therefor seems to be reasonable to provide one GET request method for every produced Media Type.
+% Specialized get requests may also execute faster than an approach that needs to dynamically build the processing pipeline.
+
+% JAF + REST proposed in 2007 http://www.javaworld.com/javaworld/jw-10-2007/jw-10-resteasy.html
+
+\paragraph{Related work}
+\label{sec:resourcefacadesrelated-work}
+
+The idea for the Resource Facades concept was triggered by the use of the
+JavaBeans Activation
+Framework\footnote{\citeurl{http://www.oracle.com/technetwork/java/javase/downloads/index-135046.html}{2012-2-24}}
+(JAF) in the JAX-RS specification. In this framework the DataHandler interface
+provides access to available commands for a specific MediaType via the
+getCommand method. The framework however was designed with the needs of a
+Desktop clipboard in mind. Since JAF has been released for Java version 1.4 it
+also does neither support Generics nor uses the advantages of immutability.
+
+\cite{Pradel2008a} presents an approach and implementation in Scala to attach
+roles to arbitrary objects. The work achieves type safe roles without extending
+the underlying language. Using this library has been considered but it was
+discovered too late to be included. Open questions are, how the declared media
+type of a Resource could be considered in the selection of a role implementation
+and how roles could depend on other roles. Another challenge would be to
+preserve role instances and thus to avoid recreating them for every
+invocation. If is furthermore required that roles implement a given
+interface. The Resource Facade approach presented here is slightly different in
+that creation of the facades is implemented independent from the facades
+themselves by the factory classes.
+
+JAX-RS provides the MessageBodyReader and -Writer interfaces. However these
+interfaces are expected to be used only once per request. The resource method
+afterwards needs to work with whatever interface was produced by the
+MessageBodyReader. There exists no facility to request additional
+transformations or facades of a Resource.
+
+It is possible in JAX-RS to request a MessageBodyReader instance from the
+javax.ws.rs.ext.Providers interface. This couldn't however help to get
+additional Facades since the InputStream has already been consumed.
+
+The concept shows similarities with Dependency Injection since dependencies of a
+facade are also provided by an external component. It may be possible that the
+concept could even be implemented on top of an existing Dependency Injection
+framework.\footnote{Scala can provide Dependency Injection solely with language
+  features via the so called ``Cake
+  Pattern''. \citeurl{http://www.warski.org/blog/2011/04/di-in-scala-cake-pattern-pros-cons/}{2012-2-24}
+  or Odersky: ``Scalable Component Abstractions''} Some aspects however may
+require extra care:
+
+\begin{itemize}
+\item Resolving the dependencies of Facade factories must consider the Media
+  Type of the input data.
+\item The scope of an instance is bound to the ResourceHandler which in most
+  cases may be equivalent to the Request scope, but this can't be guaranteed.
+\item Each ResourceHandler manages its own view of available Facades.
+\end{itemize}
+
+The Apache Wink Rest Framework implements a concept called
+``Assets''.\footnote{\citeurl{https://cwiki.apache.org/WINK/59-assets.html}{2012-2-28}}
+Assets are containers for the resource data injected in or returned from
+resource methods. Assets provide methods annotated with \lstinline:@Produces: or
+\lstinline:@Consumes: to handle different Media types. In contrast to Resource
+Facades, the set of supported media types of assets can only be extended by
+extending the asset classes. It is also not possible like in listing
+\ref{fig:facade-ex-dependen} to provide generic Facades for a title or a
+summary.
+
+\paragraph{Scala's type system}
+The proposed Java class diagram in this section has the disadvantage that the
+availability of a facade can not be checked at compile time. It seems however,
+that a more advanced type system could help in this regard.
+
+Listing \ref{fig:facades-with-scala-types} demonstrates features of the Scala
+type system\cite{Odersky2011} that could be of interest here. In the example a
+post method handler has the requirement to access the posted data through the
+facades \lstinline:VCard: and \lstinline:TextSummary:. Additionally the data
+should be forwarded to an implementation of the trait Storage which has its own
+requirement for a facade.
+
+Scala's ``compound types'' feature is used in line \ref{line-scala-compound} to
+combine these requirements into an anonymous type. The ``type alias'' feature
+allows it to assign the identifier \lstinline:MessageBody: to this anonymous
+type and thus to keep the declaration of the \lstinline:post: method short and
+readable.
+
+\begin{javalisting}[label=fig:facades-with-scala-types,
+                   numbers=left,
+                   escapeinside={(*@}{@*)},
+                   caption={Implementing the facades approach with Scala's type system}]
+trait Storage[ReqFacade] {
+ def create(id: String,
+            body: ResourceHandler
+                  with FacadeFactory[ReqFacade])
+}
+
+class PostToCollection[StorageReqFacade]
+            (storage: Storage[StorageReqFacade]) {
+ type MessageBody = ResourceHandler (*@\label{line-scala-compound}@*)
+                    with FacadeFactory[VCard] 
+                    with FacadeFactory[TextSummary]
+                    with FacadeFactory[StorageReqFacade]
+  
+ def post(body:MessageBody) : Response = {
+  ...
+  storage.create("id", body)
+  ...
+ }
+}
+\end{javalisting}
+
+This example and the mentioned work on Scala roles shows that an advanced type
+systems may be able to considerably improve the presented facades approach. A
+more detailed study however is out of the scope of this work and the author's
+comprehension of type systems.
+
+
 
 
 \subsection{CollectionStorage}
@@ -2348,338 +2703,6 @@ sufficient granularity.
 While all this flexibility can provide many advantages it has to be kept in mind
 how the framework can gather enough knowledge to still help by autogenerating
 e.g. WADL documents and responses to HEAD and OPTION requests.
-
-\subsubsection{Resource Facades}
-\label{sec:resourcefacades}
-Fielding discerns between a resource and the representation of a resource in a
-certain format, ``selected dynamically based on the capabilities or desires of
-the recipient and the nature of the resource''\cite[p. 87]{Fielding2000}.
-According to this notion, the media type used to represent a resource should not
-influence the processing logic. In an ideal case all possible media types should
-be handled by the same resource method.
-
-% man kann, aber man muss nicht, also warum willst du dann ein problem lösen?
-% Außerdem mag eine solche Unterscheidung vllcht manchmal aus technischen
-% Gesichtspunkten vielleicht doch Sinn machen, zB wenn ich eine Darstellung
-% einer Resource in textueller Form (zB XML) und in visueller (zB ein JPG) habe,
-% dann mag vllcht unterschiedliche Behandlung doch mal notwendig bzw sinnvoll
-% sein. Außerdem sagt Fielding in Abschnitt 5.2.1.2: "A representation can be
-% included in a message and processed by the recipient according to the control
-% data of the message and the nature of the media type". D.h. die Verarbeitung
-% kann vom Medientyp abhängig sein. Und gerade unter dem Gesichtspunkt, dass du
-% untersuchen sollst, wie man verschiedene Medientypen unterstützen kann, ist es
-% vllcht nicht gut, eine medientypabhängige Verarbeitung auszuschliessen. Wenn
-% möglich will man Codedoppelungen natürlich vermeiden, aber manchmal braucht
-% man eben unterschiedlichen Code.
-
-This ideal contrasts with JAX-RS concepts where the media type can be one
-parameter of the dispatcher logic. This section outlines a pattern tentatively
-named ``Resource Facades'' that should make it easier to handle different media
-types with the same code and thus to facilitate code reuse.
-
-% das fällt vom Himmel, es gibt kein Problem, das du bis zu dem Zeitpunkt
-% beschrieben hast und beschreibst dann ein Pattern, wo auch nicht klar ist wo
-% das her kommt. Wenn du das selber entwickeln willst, musst du erstmal das
-% Problem analyisieren und beschreiben und dann kann man ein Pattern
-% entwickeln. Vor allem gibt es für Pattern auch gewisse Richtlinien wie man
-% diese beschreibt und vielleicht wäre es hilfreich sich daran zu orientieren
-
-A resource method should contain the programming logic executed to serve a
-request of a specific type (e.g. GET, PUT) against a specific resource. The
-programming logic could execute common tasks like the following:
-
-\begin{itemize}
-\item validate the correctness of a submitted resource
-\item check the clients authorization
-\item persist the submitted resource data
-\item trigger notifications containing a summary of the resource
-\item submit the submitted resource to an indexing system
-\item check the submitted resource to be of a certain accepted domain type, like
-  contact, event, todo item or any set of such types
-\end{itemize}
-
-All the above processing tasks should in theory be independent of the media type
-of a resource and only be programmed once to work on any resource format. This
-could be made possible by applying the concept of roles to resources. Roles have
-been described already 15 years ago by \cite{Fowler1997} or a bit later by
-\cite{Baeumer2000}. However no evidence could be found whether roles have been
-used to implement restful systems.
-
-According to \cite{Steimann2008}, there exists several definitions for roles
-which mostly share a few core properties:
-
-\begin{quote}
-  This includes the property that a single object can play several roles of
-  different or the same kind both simultaneously and sequentially, and that the
-  same role can be played by different objects of the same and different
-  kinds. Raised to the type level, this means that the relationship between role
-  types and class types (as sources of role players) is generally m:n.
-\end{quote}
-
-A popular example for roles is a person, that can have the different roles over
-their lifetime (student, professor, single, husband, widower) or in different
-contexts (teacher, father, husband, customer, politician).
-
-% \cite{Steimann2001} repeats the necessity of the dynamic role concept and argues
-% that (Java) interfaces serve as an appropriate mean to handle roles.
-
-Exemplified with the above tasks, a resource can have the role of being
-validated, persisted, summarized or checked for being of a certain type. So like
-in the above quote a facility is needed that can provide m different roles of
-resources that come in n different shapes.
-
-It can be noted, that unlike in the previous example with roles of a person,
-this resource roles examples do not extend the original resource with new
-attributes. A person surely gets additional attributes as a father (references
-to children) or professor (member of faculty). Thus the term ``facade'' in favor
-of role should indicate that only different views of the same data are provided.
-
-Listing \ref{fig:datafacades-api} shows interfaces of a minimal framework to
-provide Facades for Resources. The idea is, that any code that needs information
-from a Resource requests the appropriate Facade from the ResourceHandler. The
-ResourceHandler was instantiated with a FacadeRegistry from which it can request
-Factories for requested Facades. A ResourceHandler must have been instantiated
-with at least one initial input Facade, e.g. an InputStream.
-
-\begin{javalisting}[label=fig:datafacades-api,
-                    float=p,
-                   caption={API of the ResourceFacades component}]
-interface FacadeFactory<T> {
- T build(ResourceHandler resourceHandler);
-
- /**
-  * Dependency Facades needed by this factory.
-  */
- Iterable<? extends Class<?>> getDependencies();
-}
-
-interface FacadeRegistry {
- /**
-  * Returns Facade factories that could probably
-  * build the requested Facade.
-  *
-  * @param mediaType MediaType of the original Resource
-  * @param clazz requested Facade interface
-  */
- Iterable<FacadeFactory<?>> getFacadeFactories(MediaType mediaType,
-                                               Class<?> clazz);
-}
-
-interface ResourceHandler {
- /**
-  * Returns the unique instance of a Facade for this Resource
-  *
-  * Subsequent calls with the same parameter receive the
-  * _same_ unique Facade instance!
-  *
-  * @param clazz requested Facade interface
-  * @return Facade implementation instance
-  */
- <T> T getFacade(Class<T> clazz);
-
- /**
-  * Is the requested Facade interface available for this Resource?
-  *
-  * @param clazz Facade interface
-  */
- boolean hasFacade(Class<?> clazz);
-
- /**
-  * The MediaType of the original Resource from which this 
-  * ResourceHandler was instantiated.
-  */
- MediaType getMediaType();
-}
-\end{javalisting}
-
-\autoref{fig:facade-ex-dependen} presents two example use cases for Facades. On
-the left site the request method might want to know the full name of a submitted
-contact resource. It therefor requests a Person facade. Different Person Facade
-factories are registered. The different factories in turn have each a dependency
-on an InputStream parameterized with a Media Type. The provided Media Type makes
-the resolution path unambiguous.
-
-The right site shows dependencies of Title and Summary Facades. Different
-Factories would be provided that knows to create meaningful titles and summaries
-for Persons, Events or Todo items independent of the original Media Types. A
-title of a person surely includes the full name, for an event the date and event
-title would be combined and a todo item could include the priority in the title.
-
-\begin{figure}[t]
-  \centering
-  \subfloat{
-  \begin{tikzpicture}
-    [doc/.style={rectangle,draw=blue!30,fill=blue!20, node distance=2em}]
-
-    \node[doc] (input) [] {InputStream};
-    \node[doc] (poco) [below left=of input,text width=4em] {Portable\-Contacts}
-      edge [<-] node [left,text width=2em] {application/ json} (input);
-
-    \node[doc] (vcard) [below=of input] {VCard}
-      edge [<-] node [left,text width=1em] {text/ vcard} (input);
-
-    \node[doc] (xcard) [below right=of input] {XCard}
-      edge [<-] node [right,text width=3em] {application/ vcard+xml} (input);
-
-    \node[doc] (person) [below=of vcard] {Person}
-      edge [<-] node [right] {} (poco)
-      edge [<-] node [right] {} (vcard)
-      edge [<-] node [right] {} (xcard);
-  \end{tikzpicture}  
-  }
-  \subfloat{
-  \begin{tikzpicture}
-    [doc/.style={rectangle,draw=blue!30,fill=blue!20, node distance=2em}]
-
-    \node[doc] (event) [] {Event};
-    \node[doc] (person) [left=of event] {Person};
-    \node[doc] (todo) [right=of event] {Todo Item};
-
-    \node[doc] () [below left=of event] {Title}
-      edge [<-] node [] {} (todo)
-      edge [<-] node [] {} (person)
-      edge [<-] node [] {} (event);
-
-    \node[doc] () [below right=of event] {Summary}
-      edge [<-] node [] {} (todo)
-      edge [<-] node [] {} (person)
-      edge [<-] node [] {} (event);
-  \end{tikzpicture}
-  }
-  \caption{Facade examples with dependencies}
-  \label{fig:facade-ex-dependen}
-\end{figure}
-
-
-    % Facades provide read-only access to the data
-    % Facades can depend on other Facades and thus reuse work
-    % Facades could do:
-    %     Parse the InputStream with a common JSON/XML framework
-    %     Could check whether the data represents a concept like a contact or calendar item, independent from the underlying Media Type (vCard, xCard, portable contacts, iCal, xCal)
-    %     Could provide a transformation to another representation (XML<->JSON, xCard to portable contacts)
-    %     could extract generic informations from different media types: Title, Authors, Updated, Summary
-    % A Facade (Java Interface) that provides access to the Name of a Contact Resource could be implemented by different classes that could work either on vCard, xCard or Portable Contacts. The resource method does not need to be aware or the original media type of the data.
-
-% The concept is powerful because Facades can easily be added without changing
-% existing classes. In JAX-RS the resource Method needs to decide, on which
-% representation of the data it wants to work. With this concept, a resource
-% method could use several different available Facades to access the data.
-
-% Using a similar concept to build representations (request Facades) for different MediaTypes may not be worth the effort.
-% This would mostly be necessary to handle GET requests. GET requests however are expected to be idempotent and therefor should contain little to no internal side effects.
-% It therefor seems to be reasonable to provide one GET request method for every produced Media Type.
-% Specialized get requests may also execute faster than an approach that needs to dynamically build the processing pipeline.
-
-% JAF + REST proposed in 2007 http://www.javaworld.com/javaworld/jw-10-2007/jw-10-resteasy.html
-
-\paragraph{Related work}
-\label{sec:resourcefacadesrelated-work}
-
-The idea for the Resource Facades concept was triggered by the use of the
-JavaBeans Activation
-Framework\footnote{\citeurl{http://www.oracle.com/technetwork/java/javase/downloads/index-135046.html}{2012-2-24}}
-(JAF) in the JAX-RS specification. In this framework the DataHandler interface
-provides access to available commands for a specific MediaType via the
-getCommand method. The framework however was designed with the needs of a
-Desktop clipboard in mind. Since JAF has been released for Java version 1.4 it
-also does neither support Generics nor uses the advantages of immutability.
-
-\cite{Pradel2008a} presents an approach and implementation in Scala to attach
-roles to arbitrary objects. The work achieves type safe roles without extending
-the underlying language. Using this library has been considered but it was
-discovered too late to be included. Open questions are, how the declared media
-type of a Resource could be considered in the selection of a role implementation
-and how roles could depend on other roles. Another challenge would be to
-preserve role instances and thus to avoid recreating them for every
-invocation. If is furthermore required that roles implement a given
-interface. The Resource Facade approach presented here is slightly different in
-that creation of the facades is implemented independent from the facades
-themselves by the factory classes.
-
-JAX-RS provides the MessageBodyReader and -Writer interfaces. However these
-interfaces are expected to be used only once per request. The resource method
-afterwards needs to work with whatever interface was produced by the
-MessageBodyReader. There exists no facility to request additional
-transformations or facades of a Resource.
-
-It is possible in JAX-RS to request a MessageBodyReader instance from the
-javax.ws.rs.ext.Providers interface. This couldn't however help to get
-additional Facades since the InputStream has already been consumed.
-
-The concept shows similarities with Dependency Injection since dependencies of a
-facade are also provided by an external component. It may be possible that the
-concept could even be implemented on top of an existing Dependency Injection
-framework.\footnote{Scala can provide Dependency Injection solely with language
-  features via the so called ``Cake
-  Pattern''. \citeurl{http://www.warski.org/blog/2011/04/di-in-scala-cake-pattern-pros-cons/}{2012-2-24}
-  or Odersky: ``Scalable Component Abstractions''} Some aspects however may
-require extra care:
-
-\begin{itemize}
-\item Resolving the dependencies of Facade factories must consider the Media
-  Type of the input data.
-\item The scope of an instance is bound to the ResourceHandler which in most
-  cases may be equivalent to the Request scope, but this can't be guaranteed.
-\item Each ResourceHandler manages its own view of available Facades.
-\end{itemize}
-
-The Apache Wink Rest Framework implements a concept called
-``Assets''.\footnote{\citeurl{https://cwiki.apache.org/WINK/59-assets.html}{2012-2-28}}
-Assets are containers for the resource data injected in or returned from
-resource methods. Assets provide methods annotated with \lstinline:@Produces: or
-\lstinline:@Consumes: to handle different Media types. In contrast to Resource
-Facades, the set of supported media types of assets can only be extended by
-extending the asset classes. It is also not possible like in listing
-\ref{fig:facade-ex-dependen} to provide generic Facades for a title or a
-summary.
-
-\paragraph{Scala's type system}
-The proposed Java class diagram in this section has the disadvantage that the
-availability of a facade can not be checked at compile time. It seems however,
-that a more advanced type system could help in this regard.
-
-Listing \ref{fig:facades-with-scala-types} demonstrates features of the Scala
-type system\cite{Odersky2011} that could be of interest here. In the example a
-post method handler has the requirement to access the posted data through the
-facades \lstinline:VCard: and \lstinline:TextSummary:. Additionally the data
-should be forwarded to an implementation of the trait Storage which has its own
-requirement for a facade.
-
-Scala's ``compound types'' feature is used in line \ref{line-scala-compound} to
-combine these requirements into an anonymous type. The ``type alias'' feature
-allows it to assign the identifier \lstinline:MessageBody: to this anonymous
-type and thus to keep the declaration of the \lstinline:post: method short and
-readable.
-
-\begin{javalisting}[label=fig:facades-with-scala-types,
-                   numbers=left,
-                   escapeinside={(*@}{@*)},
-                   caption={Implementing the facades approach with Scala's type system}]
-trait Storage[ReqFacade] {
- def create(id: String,
-            body: ResourceHandler
-                  with FacadeFactory[ReqFacade])
-}
-
-class PostToCollection[StorageReqFacade]
-            (storage: Storage[StorageReqFacade]) {
- type MessageBody = ResourceHandler (*@\label{line-scala-compound}@*)
-                    with FacadeFactory[VCard] 
-                    with FacadeFactory[TextSummary]
-                    with FacadeFactory[StorageReqFacade]
-  
- def post(body:MessageBody) : Response = {
-  ...
-  storage.create("id", body)
-  ...
- }
-}
-\end{javalisting}
-
-This example and the mentioned work on Scala roles shows that an advanced type
-systems may be able to considerably improve the presented facades approach. A
-more detailed study however is out of the scope of this work and the author's
-comprehension of type systems.
 
 
 \subsection{Producing Semantically annotated HTML}
