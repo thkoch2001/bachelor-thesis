@@ -1277,10 +1277,10 @@ OpenSearch defines the (not yet IANA registered) media type
 application/opensearchdescription+xml, which provides necessary information for
 a client to perform queries against a search service. Since possible search
 queries are usually unlimited it is not possible anymore to provide a set of
-static links. Instead the server provides an ``URI Template''\cite{Gregorio2012}
+static links. Instead the server provides an ``URI Template''\cite{RFC6570}
 that instructs the client how to perform an ``URI
 construction''\footnote{OpenSearch is the older standard and referenced as Level
-  1 URI Templates in \cite{Gregorio2012}.}.
+  1 URI Templates in \cite{RFC6570}.}.
 
 The basic OpenSearch standard defines a simple full text search. Thus a user
 could search contacts by name, address or any other field value. Equally events,
@@ -2344,7 +2344,7 @@ template. This excludes mixed collections of different types.
 Collection+JSON provides query templates but those come without a defined
 semantic. A mapping from OpenSearch to JSON would be helpful to reuse the
 semantic definitions. Also the URI template part should be updated to reuse the
-specification of the upcoming URI templates standard\cite{Gregorio2012}.
+specification of the new URI templates standard\cite{RFC6570}.
 
 Pagination link relations for feeds\cite{RFC5005} could be reused to express
 paginated JSON collections as encouraged by the format
@@ -2463,9 +2463,9 @@ Assets are containers for the resource data injected in or returned from
 resource methods. Assets provide methods annotated with \lstinline:@Produces: or
 \lstinline:@Consumes: to handle different Media types. In contrast to Resource
 Facades, the set of supported media types of assets can only be extended by
-extending the asset classes. It is also not possible like in listing
-\ref{fig:facade-ex-dependen} to provide generic Facades for a title or a
-summary.
+extending the asset classes. It is also not possible like in
+\autoref{fig:titleandsummary} to provide generic Facades for a TitleAndSummary
+or Contact.
 
 \paragraph{Scala's type system}
 The proposed Java class diagram in this section has the disadvantage that the
