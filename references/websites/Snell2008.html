@@ -1,0 +1,5737 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Convert Atom documents to JSON</title>
+<meta http-equiv="PICS-Label" content="(PICS-1.1 &quot;http://www.icra.org/ratingsv02.html&quot; l gen true r (cz 1 lz 1 nz 1 oz 1 vz 1) &quot;http://www.rsac.org/ratingsv01.html&quot; l gen true r (n 0 s 0 v 0 l 0) &quot;http://www.classify.org/safesurf/&quot; l gen true r (SS~~000 1))">
+<link rel="schema.DC" href="http://purl.org/DC/elements/1.0/">
+<link rel="SHORTCUT ICON" href="http://www.ibm.com/favicon.ico">
+<meta name="Owner" content="developerWorks Content/Raleigh/IBM">
+<meta name="DC.Language" scheme="rfc1766" content="en">
+<meta name="IBM.Country" content="ZZ">
+<meta name="Security" content="Public">
+<meta name="IBM.SpecialPurpose" content="SP001">
+<meta name="IBM.PageAttributes" content="sid=1003,1004">
+<meta name="Source" content="v16 Template Generator">
+<meta name="Robots" content="index,follow">
+<meta name="Abstract" content="Converting an Atom document to JSON might, at first, appear to be a fairly straightforward task. Atom is, after all, just a bit of XML and XML-to-JSON conversion tools are widely available. However, the Atom format is more than just a set of XML elements and attributes. A number of subtle details can make proper handling of Atom difficult. This article describes those issues and demonstrates a mechanism implemented by the Apache Abdera project to convert Atom documents into JSON and produces a result that is readable, usable, and complete.">
+<meta name="Description" content="Converting an Atom document to JSON might, at first, appear to be a fairly straightforward task. Atom is, after all, just a bit of XML and XML-to-JSON conversion tools are widely available. However, the Atom format is more than just a set of XML elements and attributes. A number of subtle details can make proper handling of Atom difficult. This article describes those issues and demonstrates a mechanism implemented by the Apache Abdera project to convert Atom documents into JSON and produces a result that is readable, usable, and complete.">
+<meta name="Keywords" content="atom, atom syndication format, json, javascript object notation,       standards, conversion, Snell, James M, Snell, James, James Snell, James M Snell, xml, tttxca, tttosca, tttwaca">
+<meta name="DC.Date" scheme="iso8601" content="2008-01-08">
+<meta name="DC.Type" scheme="IBM_ContentClassTaxonomy" content="CT316">
+<meta name="DC.Subject" scheme="IBM_SubjectTaxonomy" content="TTC00">
+<meta scheme="IBM_WTMCategory" name="IBM.WTMCategory" content="SOFDCXMLZZ">
+<meta name="DC.Rights" content="© Copyright&nbsp;IBM Corporation&nbsp;2008">
+<meta name="IBM.Effective" scheme="W3CDTF" content="2008-01-08">
+<meta name="title" content="Convert Atom documents to JSON">
+
+<!-- HEADER_SCRIPTS_AND_CSS_INCLUDE -->
+<link href="Snell2008_files/all.css" media="all" rel="stylesheet" title="www" type="text/css">
+<link href="Snell2008_files/screen.css" media="screen,projection" rel="stylesheet" title="www" type="text/css">
+<link href="Snell2008_files/screen-uas.css" media="screen,projection" rel="stylesheet" title="www" type="text/css">
+<link href="Snell2008_files/screen-fonts.css" media="screen,projection" rel="stylesheet" title="www" type="text/css">
+<link href="Snell2008_files/handheld.css" media="handheld" rel="stylesheet" title="www" type="text/css">
+<link href="Snell2008_files/print.css" media="print" rel="stylesheet" title="www" type="text/css">
+<link href="Snell2008_files/overlay.css" media="screen,projection" rel="stylesheet" title="www" type="text/css">
+
+<!-- dW-specific CSS -->
+<link href="Snell2008_files/dw-screen.css" media="screen,projection" rel="stylesheet" title="www" type="text/css">
+<link href="Snell2008_files/dw-screen-comments-ratings-signin.css" media="screen,projection" rel="stylesheet" title="www" type="text/css">
+<link href="Snell2008_files/jquery.css" media="screen,projection" rel="stylesheet" title="www" type="text/css">
+<!-- xM Masthead/Footer -->
+<link href="Snell2008_files/dw-mf0311.css" rel="stylesheet" title="www" type="text/css">
+<script src="Snell2008_files/ibmcommon.js" type="text/javascript">//</script><link title="IBM Search" href="http://www.ibm.com/search/opensearch/description.xml" type="application/opensearchdescription+xml" rel="search">
+<script src="Snell2008_files/dynamicnav.js" type="text/javascript">//</script>
+
+<!-- dW functional JS -->
+<script language="JavaScript" src="Snell2008_files/urltactic.js" type="text/javascript"></script>
+<!-- Rating_START -->
+<script language="JavaScript" src="Snell2008_files/showrating.js" type="text/javascript"></script>
+<style type="text/css">
+.metavalue {
+  display: none;
+}
+</style>
+<!-- Rating_END --><!-- RESERVED_HEADER_INCLUDE -->
+<script language="javascript" src="Snell2008_files/ajax1.js" type="text/javascript"></script>
+<script language="javascript" src="Snell2008_files/search_counter-maverick.js" type="text/javascript"></script>
+<script language="javascript" src="Snell2008_files/request_referer_capture-maverick.js" type="text/javascript"></script>
+<script language="JavaScript" type="text/javascript">
+ <!--
+ setDefaultQuery('xmlart');
+ //-->
+</script>
+<script language="JavaScript" type="text/javascript">
+ <!--
+ function openNewWindow(url,tar,arg){window.open(url,tar,arg);}
+ //-->
+</script>
+<!-- Include file support -->
+<script language="JavaScript" type="text/javascript">
+(function($) {
+	jQuery.extend({
+		getInc: function(u,d){
+			if(u==null)return;
+			jQuery.ajax({
+	    		type: "GET",
+			url: u,
+			dataType: "text",
+	        	success: function(t) {
+				jQuery(d).html(t);
+				ibmCommon.initShowHide(jQuery(d).children()[0]);			
+			},
+			async: true
+			});
+		}
+	});
+})(jQuery);
+</script>
+<script charset="UTF-8" src="Snell2008_files/usen-utf8.js" type="text/javascript" id="mhMenu"></script><script charset="UTF-8" src="Snell2008_files/Controller" type="text/javascript" id="wiBundle"></script></head>
+
+<body id="ibm-com">
+<div id="ibm-top" class="ibm-landing-page">
+
+<!-- MASTHEAD_BEGIN -->
+<!-- MASTHEAD_BEGIN -->
+<div class="ibm-access"><a href="#ibm-content">Skip to main content</a></div>
+<div id="ibm-masthead-dw">
+  
+    <!-- TOP ROW -->    
+    <div id="dw-masthead-top-row">
+		<ul id="ibm-unav-home-dw">
+			<li id="ibm-logo">
+				<a href="http://www.ibm.com/us/en/"><img src="Snell2008_files/ibm-smlogo.gif" alt="IBM®" height="16" width="44"></a>
+			</li>
+		</ul>
+        <ul id="ibm-mast-options-dw">
+		    <li id="dw-mast-top-0">
+				<a class="" href="http://www.ibm.com/developerworks/dwwi/DWAuthRouter?m=loginpage&amp;lang=en&amp;d=http%3A%2F%2Fwww.ibm.com%2Fdeveloperworks%2Flibrary%2Fx-atom2json%2Findex.html" title="">Sign in (or register)</a>
+			</li>
+		    <li id="dw-mast-top-1">
+				<a href="#SELECTLANG">English</a><img class="dw-preload" src="Snell2008_files/arrow-down-active.gif" alt="" height="7" width="8">
+			</li>
+		    <li id="dw-mast-top-2" class="dw-mf-hide">
+				<a href="#">[userid] <img src="Snell2008_files/photo.gif" alt="PHOTO" class="dw-mast-profimg" height="20" width="20"></a>
+			</li>
+		</ul>
+	</div>
+    
+    <!-- TOP ROW SLIDER -->
+    <div id="ibm-my-menu-dw">    
+        <div class="ibm-ribbon-pane-dw">
+            <div class="ibm-ribbon-section-dw">
+                <!-- Sign-in -->
+				<div class="dw-mast-columns">                
+					<div class="dw-mast-col-1-1">
+					    <div class="dw-mast-close">
+							<ul>
+								<li><a href="#">Close [x]</a></li>
+							</ul>
+						</div>
+						<div id="dw-mast-sso">
+							<div id="dw-mast-sso-reg">
+								<p>If you don't have an IBM ID and password, <a href="#" onclick="(function () {window.location='/developerworks/dwwi/DWAuthRouter?m=reg&amp;lang=en&amp;d='+encodeURIComponent(location.href);})();">register here</a>.</p>
+							</div>
+							<div id="signin_error_mf" class="no-display"></div>
+							<div id="dw-mast-sso-form">
+								<form id="sForm_mf" action="" method="post" name="sForm_name_mf" onsubmit="return false;">
+									<div id="dw-mast-sso-id" class="dw-mast-sso-id-en">
+										<label for="ibmid_mf">IBM ID:</label>
+										<input class="" id="ibmid_mf" name="ibmid_name_mf" maxlength="100" onkeypress="handleEP(event,this.form,'mf');" type="text">
+									</div>
+									<div id="dw-mast-sso-pw" class="dw-mast-sso-pw-en">
+										<label for="pw_mf">Password:</label>
+										<input class="" id="pw_mf" value="" name="pw_name_mf" maxlength="100" onkeypress="handleEP(event,this.form,'mf');" type="password">
+									</div>
+									<div id="dw-mast-sso-target" class="dw-mast-sso-target-en">
+										<label for="AfterSignIn_mf">After sign in:</label>
+										<select id="AfterSignIn_mf" name="AfterSignIn_name_mf">
+											<option selected="selected" value="">Stay on the current page</option>
+											<option value="/developerworks/mydeveloperworks/profiles/html/myProfileView.do?lang=en">My developerWorks profile</option>
+											<option value="/developerworks/mydeveloperworks/homepage?lang=en">My developerWorks home</option>
+										</select>
+									</div>					
+									<div id="dw-mast-sso-terms">
+										<p class="dw-mf-perm-box">
+											<input id="perm_mf" name="perm_name_mf" type="checkbox"><label for="perm_mf"> Keep me signed in.</label>
+										</p>
+										<p class="dw-mast-sso-terms-en">By clicking <strong>Submit</strong>, you agree to the <a href="https://www.ibm.com/developerworks/community/terms/">developerWorks terms of use</a>.</p>
+									</div>
+									<div>
+										<input class="dw-mf-submit-btn" name="ibm_submit_name_mf" value="Submit" onclick="signin('mf');return false;" type="submit">
+									</div>
+								</form>
+							</div>
+							<div id="dw-mast-sso-update">
+								<ul>
+									<li><a class="ibm-forward-link" href="http://www.ibm.com/developerworks/dwwi/jsp/WSHelp.jsp?lang=en_US">Forgot your IBM ID?</a></li>
+								</ul>
+								<!--[if IE 9]><div class="dw-mf-update-ie9"><![endif]-->
+								<ul class="dw-mf-pwupdate">
+									<li><a class="ibm-forward-link" href="#" onclick="(function () {window.location='https://www.ibm.com/account/profile?page=forgot&amp;lang=en_US&amp;appname=ibm&amp;required=null&amp;d='+encodeURIComponent(getAuthUrl())+'%3Fm%3Dloginpage%26lang%3Den_US%26d%3D'+encodeURIComponent(location.href);})();">Forgot your password?</a></li>
+									<li><a class="ibm-forward-link" href="#" onclick="(function () {window.location='https://www.ibm.com/account/profile?page=chpw&amp;lang=en_US&amp;appname=ibm&amp;required=null&amp;d='+encodeURIComponent(location.href);})();">Change your password</a></li>
+								</ul>
+								<!--[if IE 9]></div><![endif]-->
+							</div>
+							<div id="dw-mast-sso-text">
+								<p>The first time you sign into developerWorks, a <strong>profile</strong>
+ is created for you.  This profile includes the first name, last name, 
+and display name you identified when you registered with developerWorks.
+  <strong>Select information in your developerWorks profile is displayed to the public, but you may edit the information at any time.</strong>  Your first name, last name (unless you choose to hide them), and display name will accompany the content that you post.</p>
+								<p class="dw-mf-secure">All information submitted is secure.</p>
+							</div>
+						</div>
+                    
+						<div id="dw-mast-dname" class="dw-mf-hide">
+							<p>The first time you sign in to developerWorks, a profile is 
+created for you, so you need to choose a display name.  Your display 
+name accompanies the content you post on developerworks.</p><p><strong>Please choose a display name between 3-31 characters</strong>.  Your display name must be unique in the developerWorks community and should not be your email address for privacy reasons.</p>
+							<div id="signin_dname_error_mf" class="no-display"></div>
+							<div id="dw-mast-dname-form">
+								<form id="dForm_mf" action="" method="post" name="dForm_name_mf" onsubmit="return false;">
+									<div id="dw-mast-dname-mf">
+										<label for="dname_mf">Display name:</label>
+										<input id="dname_mf" name="dname_name_mf" maxlength="31" size="25" onkeypress="handleEP(event,this.form,'mf');" type="text">
+									</div>
+									<div id="dw-mast-dname-terms">
+										<p>By clicking <strong>Submit</strong>, you agree to the <a href="https://www.ibm.com/developerworks/community/terms/">developerWorks terms of use</a>.</p>
+									</div>
+									<div>
+										<input class="dw-mf-submit-btn" name="dname_submit_name_mf" value="Submit" onclick="signin('mf');return false;" type="submit">
+									</div>
+								</form>								
+							</div>
+							<div id="dw-mast-dname-secure">
+								<p class="dw-mf-secure">All information submitted is secure.</p>
+							</div>
+						</div>
+
+						<div id="dw-mast-auth" class="dw-mf-hide">
+							<div>
+								<h2>My developerWorks:</h2>
+								<ul>
+									<li><a id="dw-mast-top-0-0" href="http://www.ibm.com/developerworks/mydeveloperworks/profiles/html/myProfileView.do?lang=en">My profile</a></li>
+									<li><a href="http://www.ibm.com/developerworks/mydeveloperworks/homepage?lang=en">My home</a></li>
+									<li><a href="http://www.ibm.com/developerworks/mydeveloperworks/groups/service/html/mycommunities?lang=en">My groups</a></li>
+								</ul>     
+							</div>
+							<div id="dw-mast-notify" class="dw-mf-hide">
+								<h2>My notifications:</h2>
+								<ul>
+									<li><a id="new_notify" href="http://www.ibm.com/developerworks/mydeveloperworks/homepage?lang=en">{[num_notify] new notifications}([num_notify] new notification)</a></li>
+									<li><a id="new_invite" href="http://www.ibm.com/developerworks/mydeveloperworks/profiles/html/wc.do?action=in&amp;requireAuth=true&amp;widgetId=friends&amp;lang=[lang]">{[num_invite] network requests}([num_invite] network request)</a></li>  
+								</ul>
+							</div>
+							<div class="dw-mast-more">
+								<ul class="ibm-link-list">
+									<li><a class="dw-more-link" href="#" onclick="signOut(); return false;"><strong>Sign out</strong></a></li>
+								</ul>
+							</div>
+						</div>
+						
+					</div>					
+                   
+                </div>
+                <!-- Language selector --> 
+				<div class="dw-mast-columns">
+					<div class="dw-mast-col-2-1">
+						<h2>Select a language:</h2>
+						<ul>
+							<li><a id="dw-mast-top-1-0" href="http://www.ibm.com/developerworks/">English</a></li>
+							<li><a href="http://www.ibm.com/developerworks/cn/">中文</a></li>
+							<li><a href="http://www.ibm.com/developerworks/jp/">日本語</a></li>
+							<li><a href="http://www.ibm.com/developerworks/kr/">한국어</a></li>
+						</ul>
+					</div>
+					<div class="dw-mast-col-2-2">
+						<ul>
+							<li><a href="http://www.ibm.com/developerworks/ru/">Русский</a></li>
+							<li><a href="http://www.ibm.com/developerworks/br/">Português (Brasil)</a></li>
+							<li><a href="http://www.ibm.com/developerworks/ssa/">Español</a></li>
+							<li><a href="http://www.ibm.com/developerworks/vn/">Việt</a></li>
+						</ul>
+					</div>
+					<div class="dw-mast-close">
+						<ul>
+							<li><a href="#">Close [x]</a></li>
+						</ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- BOTTOM ROW -->
+    <div id="ibm-universal-nav-dw">
+        <ul id="ibm-unav-links-dw">
+            <li id="ibm-unav-home-dwlogo">
+				<a href="http://www.ibm.com/developerWorks/"><img src="Snell2008_files/dw-wordmark.gif" alt="developerWorks®" height="32" width="218"></a>
+            </li>
+        </ul>
+        <ul id="ibm-menu-links-dw">
+            <li id="dw-mast-nav-0"><a href="http://www.ibm.com/developerworks/topics/">Technical topics</a></li>
+            <li id="dw-mast-nav-1"><a href="http://www.ibm.com/developerworks/downloads/">Evaluation software</a></li>
+            <li id="dw-mast-nav-2"><a href="http://www.ibm.com/developerworks/community/">Community</a></li>
+            <li id="dw-mast-nav-3"><a href="http://www.ibm.com/developerworks/events/">Events</a></li>
+        </ul>
+			<form id="ibm-search-form" action="//www.ibm.com/search/csass/search/" method="get" name="form1">
+				<input name="sn" value="dw" type="hidden">
+				<input name="lang" value="en" type="hidden">
+				<input name="cc" value="US" type="hidden">
+				<input name="en" value="utf" type="hidden">
+				<input name="hpp" value="20" type="hidden">
+				<input name="dws" value="dw" type="hidden">
+				<p>
+				<label for="q"><img alt="Search developerWorks" src="Snell2008_files/c_002.gif" height="1" width="1"></label>
+				<input value="Search developerWorks" name="q" maxlength="100" id="q" type="text">
+				<input id="ibm-search" class="ibm-btn-search" name="Search" value="Search" type="submit">
+				</p>
+			</form>
+    </div>
+    
+    <!-- BOTTOM ROW SLIDER -->
+    <div id="ibm-common-menu-dw">
+        <div class="ibm-ribbon-pane-dw dw-ribbon-pane-en">
+            <div class="ibm-ribbon-section-dw">
+				<!-- Technical topics category -->
+                <div class="dw-mast-columns">
+					<div class="dw-mast-col-3-1">
+						<h2>IBM products:</h2>
+						<ul>
+							<li><a id="dw-mast-nav-0-0" href="http://www.ibm.com/developerworks/aix/">AIX and UNIX</a></li>
+							<li><a href="http://www.ibm.com/developerworks/ibmi/">IBM i</a></li>
+							<li><a href="http://www.ibm.com/developerworks/data/">Information Management</a></li>
+							<li><a href="http://www.ibm.com/developerworks/lotus/">Lotus</a></li>
+							<li><a href="http://www.ibm.com/developerworks/rational/">Rational</a></li>
+							<li><a href="http://www.ibm.com/developerworks/tivoli/">Tivoli</a></li>  
+							<li><a href="http://www.ibm.com/developerworks/websphere/">WebSphere</a></li>     
+						</ul>     
+                    </div>
+					<div class="dw-mast-col-3-2">
+						<h2>Technologies:</h2>
+						<ul>
+							<li><a href="http://www.ibm.com/developerworks/java/">Java technology</a></li>
+							<li><a href="http://www.ibm.com/developerworks/linux/">Linux</a></li>
+							<li><a href="http://www.ibm.com/developerworks/opensource/">Open source</a></li>
+							<li><a href="http://www.ibm.com/developerworks/webservices/">SOA and web services</a></li>
+							<li><a href="http://www.ibm.com/developerworks/web/">Web development</a></li>  
+							<li><a href="http://www.ibm.com/developerworks/xml/">XML</a></li>     
+						</ul>
+                    </div>
+					<div class="dw-mast-col-3-3 dw-mast-col-3-3-en">
+						<h2>Solutions:</h2>
+						<ul>
+							<li><a href="http://www.ibm.com/developerworks/cloud/">Cloud computing</a></li>
+							<li><a href="http://www.ibm.com/developerworks/industry/">Industries</a></li>
+							<li><a href="http://www.ibm.com/developerworks/servicemanagement/">Integrated Service Management</a></li>
+						</ul>
+						<ul>
+							<li class="dw-mast-newgroup"><a href="http://www.ibm.com/developerworks/library/">Technical library</a></li>
+							<li><a href="http://www.ibm.com/developerworks/feeds/">Feeds and syndication</a></li>
+							<li><a href="https://www.ibm.com/developerworks/newsletter/">Newsletters</a></li>
+						</ul>        
+                    </div>
+                    <div class="dw-mast-more dw-mast-more-en">
+						<ul class="ibm-link-list">
+							<li><a class="dw-more-link" href="http://www.ibm.com/developerworks/topics/"><strong>More about Technical topics</strong></a></li>
+						</ul>
+                    </div>
+                    <div class="dw-mast-close">
+						<ul>
+							<li><a href="#">Close [x]</a></li>
+						</ul>
+                    </div>
+				</div>
+				<!-- Evaluation software category -->
+                <div class="dw-mast-columns">
+					<div class="dw-mast-col-1-1">
+						<h2>Find software by:</h2>
+						<ul>
+							<li><a id="dw-mast-nav-1-0" href="http://www.ibm.com/developerworks/downloads/product.html">IBM product</a></li>
+							<li><a href="http://www.ibm.com/developerworks/downloads/evalmethod.html">Evaluation method (Download, online trial, product beta, cloud)</a></li>
+							<li><a href="http://www.ibm.com/developerworks/downloads/industry.html">Industry</a></li>
+						</ul>            
+                    </div>
+                    <div class="dw-mast-more">
+						<ul class="ibm-link-list">
+							<li><a class="dw-more-link" href="http://www.ibm.com/developerworks/downloads/"><strong>More about Evaluation software</strong></a></li>
+						</ul>
+                    </div>
+                    <div class="dw-mast-close">
+						<ul>
+							<li><a href="#">Close [x]</a></li>
+						</ul>
+                    </div>
+				</div>
+				<!-- Community category -->
+                <div class="dw-mast-columns">
+					<div class="dw-mast-col-3-1">
+						<ul>
+							<li><a id="dw-mast-nav-2-0" href="https://www.ibm.com/developerworks/community/homepage/">My home</a></li>
+							<li><a href="https://www.ibm.com/developerworks/community/profiles/">Profiles</a></li>
+							<li><a href="https://www.ibm.com/developerworks/community/groups/">Groups</a></li>
+							<li><a href="https://www.ibm.com/developerworks/community/blogs/">Blogs</a></li>
+							<li><a href="https://www.ibm.com/developerworks/community/bookmarks/">Bookmarks</a></li>  
+						</ul>     
+                    </div>
+					<div class="dw-mast-col-3-2">
+						<ul>
+							<li><a href="https://www.ibm.com/developerworks/forums/">Forums</a></li>
+							<li><a href="https://www.ibm.com/developerworks/mydeveloperworks/wikis/">Wikis</a></li>
+							<li><a href="https://www.ibm.com/developerworks/community/files/">Files</a></li>
+							<li><a href="https://www.ibm.com/developerworks/community/activities/">Activities</a></li>
+							<li><a href="https://www.ibm.com/developerworks/community/podcasts/">Podcasts</a></li>     
+						</ul>
+                    </div>
+					<div class="dw-mast-col-3-3 dw-mast-col-3-3-en">
+						<ul>
+							<li><a href="http://www.ibm.com/developerworks/champion/">IBM Champion program</a></li>
+						</ul>
+                    </div>
+                    <div class="dw-mast-more dw-mast-more-en">
+						<ul class="ibm-link-list">
+							<li><a class="dw-more-link" href="http://www.ibm.com/developerworks/community/"><strong>More about Community</strong></a></li>
+						</ul>
+                    </div>
+                    <div class="dw-mast-close">
+						<ul>
+							<li><a href="#">Close [x]</a></li>
+						</ul>
+                    </div>
+				</div>
+				<!-- Events category -->
+                <div class="dw-mast-columns">
+					<div class="dw-mast-col-1-1">
+						<ul>
+							<li><a id="dw-mast-nav-3-0" href="http://www.ibm.com/developerworks/briefings/">Briefings</a></li>
+							<li><a href="http://www.ibm.com/developerworks/find/webcasts/">Webcasts</a></li>
+							<li><a href="http://www.ibm.com/developerworks/find/events/">Find events (briefings, webcasts, conferences...)</a></li>
+						</ul>            
+                    </div>
+                    <div class="dw-mast-more">
+						<ul class="ibm-link-list">
+							<li><a class="dw-more-link" href="http://www.ibm.com/developerworks/events/"><strong>More about Events</strong></a></li>
+						</ul>
+                    </div>
+                    <div class="dw-mast-close">
+						<ul>
+							<li><a href="#">Close [x]</a></li>
+						</ul>
+                    </div>
+				</div>
+            </div>
+        </div>
+    </div>
+    
+</div>
+<div id="fdiv" class="ibm-access"><embed type="application/x-shockwave-flash" src="Snell2008_files/connect.swf" id="sflash" name="sflash" quality="high" menu="false" wmode="window" movie="https://www.ibm.com/developerworks/js/dw-mf/connect.swf" swliveconnect="true" allowscriptaccess="always" height="1" width="1"></div>
+<!-- MASTHEAD_END --><!-- MASTHEAD_END -->
+
+<div id="ibm-pcon">
+
+<!-- CONTENT_BEGIN -->
+<div id="ibm-content">
+
+<!-- Navigation_Trail_BEGIN -->
+<!-- &nbsp; -->
+      <div id="ibm-content-head"><ul id="ibm-navigation-trail"><li class="ibm-first"><a href="http://www.ibm.com/developerworks/">developerWorks</a></li><li><a href="http://www.ibm.com/developerworks/topics/">Technical topics</a></li><li><a href="http://www.ibm.com/developerworks/xml/">XML</a></li><li><a href="http://www.ibm.com/developerworks/views/xml/library.jsp">Technical library</a></li></ul></div>
+<!-- Navigation_Trail_END -->
+
+<!-- dW_Summary Area_START -->
+<div id="dw-summary-article">
+
+<div class="dw-content-head">
+<h1>Convert Atom documents to JSON</h1><p><em>Avoid loss of important data and context when you to convert from Atom to JSON</em></p>
+</div>
+
+<div class="ibm-container-body ibm-two-column">
+
+<div class="ibm-column ibm-first">
+<div class="author"><a class="dwauthor" rel="#authortip1" href="#author1">James Snell</a> (<a href="mailto:jasnell@us.ibm.com?subject=Convert%20Atom%20documents%20to%20JSON">jasnell@us.ibm.com</a>), Software Engineer, Emerging Technologies, IBM</div><div style="display: none;" id="authortip1" class="dwauthor-onload-state ibm-no-print"><div class="position"><img src="Snell2008_files/p-jsnell.jpg" alt="James Snell" height="80" width="64"></div>James
+ M. Snell is a software engineer in IBM's WebAhead group focusing on the
+ development and practical application of key emerging technologies for 
+IBM's own use. James has participated in the effort to define the Atom 
+Syndication Format and Atom Publishing  Protocol standards and has 
+implemented no less than nine different Atom Publishing Protocol server 
+implementations.</div>
+<p></p>
+<p><strong>Summary:</strong>&nbsp; Converting an Atom document to JSON might, at first, appear to be a fairly
+        straightforward task.  Atom is, after all, just a bit of XML and XML-to-JSON
+        conversion tools are widely available.  However, the Atom format is more than just
+        a set of XML elements and attributes. A number of subtle details  can make proper
+        handling of Atom difficult. This article describes those issues and demonstrates a
+        mechanism implemented by the Apache Abdera project to convert Atom documents into
+        JSON and produces a result that is readable, usable, and complete.</p>
+
+<div id="dw-tag-content" class="ibm-no-print"></div><div id="dw-moretags-access" class="ibm-access"></div>
+<p class="ibm-no-print"></p><div id="dw-tag-this" class="ibm-no-print"><a class="ibm-external-link" onclick="jQuery.launchTagThisWindow(); return false;" href="#">Tag this!</a></div><div id="interestShow" class="ibm-no-print"><div id="dw-interest-anon"><a id="intAnonBtn" class="ibm-external-link" href="">Update My dW interests</a> (<a class="dw-interest" href="https://www.ibm.com/developerworks/dwwi/DWAuthRouter?m=loginpage&amp;d=http%3A%2F%2Fwww.ibm.com%2Fdeveloperworks%2Flibrary%2Fx-atom2json%2Findex.html">Log in</a> | <a class="dw-interest" href="#overlay" onclick="ibmCommon.Overlays.show('dwmyinterestadd', this);return false;">What's this?</a>) <a class="ibm-access" href="#dwmyinterestaddhelp">Skip to help for Update My dW interests</a></div></div><p></p>
+</div>
+
+<div class="ibm-column ibm-second">
+<p class="leading"><strong>Date:</strong>&nbsp; 08 Jan 2008
+<br><strong>Level: </strong>&nbsp;Intermediate
+
+<br>
+
+<br><strong>Comments:</strong> &nbsp; <span id="nCmts">0&nbsp;(<a class="dw-view-comment" href="#icomments">View</a>&nbsp;|&nbsp;<a onclick="showSignIn();return false;" href="#">Add comment</a> - Sign in)</span>
+<!-- Rating_Area_Begin -->
+</p><div id="art-rating-summary"><img alt="Average rating 3 stars based on 9 votes" src="Snell2008_files/stars120x20-3b.jpg" class="dw-avg-rating"> Average rating (9 votes)<br><a class="dw-view-comment" href="#iratings">Rate this article</a></div>
+<!-- Rating_Area_End -->
+<p></p>
+</div>
+
+</div>
+</div>
+<!-- dW_Summary_Area_END -->
+
+<!-- CONTENT_BODY -->
+<div id="ibm-content-body">
+
+<!-- MAIN_COLUMN_BEGIN -->
+<div id="ibm-content-main">
+
+<!-- Related_Searches_Area -->
+<!-- Related_Searches_Area_Begin -->
+<script type="text/javascript" language="javascript">
+	     capture_referrer();
+</script>
+
+<div id="dw-related-searches-article" style="display:none">
+<div class="ibm-container ibm-alternate-two">
+<div class="ibm-container-body">
+
+<!--  START : HTML FOR ARTICLE SEARCH -->
+  <div id="article_results" style="display:block"></div>
+<!--  END : HTML FOR ARTICLE SEARCH -->
+
+</div>
+</div>
+</div>
+<!-- Related_Searches_Area_End -->
+<!-- MAIN_COLUMN_CONTAINER_BEGIN -->
+<div class="ibm-container">
+
+<!-- MAIN_COLUMN_CONTENT_BEGIN -->
+<p>When you convert an Atom document into JSON, you take a great
+      deal of information-rich content and serialize it into a drastically simplified 
+      form. You can more easily use the simpler form of that content in environments where parsing 
+      and properly processing the XML is prohibitively difficult.  The main challenge 
+      to this process is to ensure that important data and context is not lost in the 
+      translation.  The sections that follow discuss each of the key areas of concern when
+      you convert an Atom document.  I assume that the reader has at 
+      least a basic understanding of Atom and JSON.  If you're not familiar with either, 
+      please take the time to look over the <a href="#resources">resources</a> listed at the end of this article 
+      before you continue on.</p>
+            <p><a name="N10053"><span class="atitle">Language metadata</span></a></p>
+            <p>Atom documents contain a mixture of information that is intended to be consumed 
+      by both humans and machines.  The proper presentation of human readable content 
+      such as the titles of entries, category labels, link titles, the description of rights, 
+      and so on, is dependent on a language context that must be preserved properly 
+      during the transformation to JSON.</p>
+            <p>The xml:lang attribute is the mechanism to specify the language used in 
+      an Atom document.  The attribute can appear anywhere within the Atom document and 
+      can either be inherited or overridden by child elements.  The value of the xml:lang 
+      attribute is a "Language Tag" as defined by RFC 4646, entitled "Tags for Identifying 
+      Languages."  These tags provide information about the language that the text was written 
+      in, the script or writing-system used, the regional linguistic variation, and so on.  
+      Such information affects how text will be presented by a user-agent.</p>
+            <p>The example Atom feed shown in Listing 1, despite being somewhat nonsensical, demonstrates 
+      the use of xml:lang within an Atom document.</p>
+            <br><a name="listing1"><strong>Listing 1. An Atom feed using xml:lang</strong></a><br><table border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td class="code-outline"><pre class="displaycode">                
+&lt;feed xmlns="http://www.w3.org/2005/Atom" 
+      xml:lang="en-US"&gt; 
+  &lt;title&gt;This is the title&lt;/title&gt;
+  ... 
+  &lt;entry xml:lang="fr"&gt; 
+    ... 
+    &lt;category term="foo" label="bar" xml:lang="en" /&gt; 
+    &lt;category term="goo" label="baz" /&gt;
+    ... 
+  &lt;/entry&gt; 
+&lt;/feed&gt;
+      </pre></td></tr></tbody></table><br>
+            <p>The xml:lang attribute on the feed element establishes the default language 
+      context for the entire document.  Any descendant element that does not explicitly 
+      override the xml:lang (the title element of the feed, for instance) will automatically 
+      inherit that language.</p>
+
+            <p>Within the JSON serialization, the language context can be captured by converting 
+      the xml:lang attribute into a field.  The transformation rule is simple: output a single 
+      lang field whenever the language context changes.  Listing 2 shows the serialization 
+      of the feed in <a href="#listing1">Listing 1</a>.  Note that the lang field appears for the feed, entry and 
+      the first category, but is omitted on the title and second category; that is because 
+      the latter elements inherit the language of their parent elements.</p>
+            <br><a name="listing2"><strong>Listing 2. The JSON serialization of the feed in Listing 1</strong></a><br><table border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td class="code-outline"><pre class="displaycode">                
+{ 
+  "lang":"en-US", 
+  "title":"This is the title",
+  "entries":[ 
+    { 
+      "lang":"fr" 
+      "categories":[ 
+        { 
+          "lang":"en", 
+          "term":"foo", 
+          "label":"bar" 
+        }, 
+        { 
+          "term":"goo", 
+          "label":"baz" 
+        } 
+      ] 
+    } 
+  ] 
+}
+      </pre></td></tr></tbody></table><br>
+            <p>The xml:lang attribute can appear on any element whose children or attributes 
+      might be considered to be <em>Language Sensitive</em>.  Within the core Atom vocabulary, this 
+      set includes feed, entry, title, rights, subtitle, summary, content, category, link, 
+      author, and contributor.</p>
+            <div class="ibm-alternate-rule"><hr></div><p class="ibm-ind-link ibm-back-to-top"><a href="#ibm-pcon" class="ibm-anchor-up-link">Back to top</a></p><p><a name="N10085"><span class="atitle">IRIs and URIs</span></a></p>
+            <p>In addition to the support for multiple languages, Atom also supports the use of 
+      Internationalized Resource Identifiers, or IRIs.  An IRI is essentially a URI that is 
+      allowed to contain non-ASCII characters.</p>
+            <p>When designing an Atom-to-JSON serialization, it is important to distinguish between 
+      the two uses of IRIs within an Atom document.  In the example shown below in Listing 3, 
+      four elements contain IRI's.</p>
+            <br><a name="listing3"><strong>Listing 3. A feed containing multiple Internationalized Resource Identifiers</strong></a><br><table border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td class="code-outline"><pre class="displaycode">                
+&lt;feed xmlns:a="http://www.w3.org/2005/Atom" 
+        xml:base="http://examplé.org/foó"&gt; 
+  ... 
+  &lt;id&gt;http://examplé.org/foó&lt;/id&gt;
+  &lt;link rel="self" href="" /&gt; 
+  &lt;link href="/blog" /&gt; 
+  &lt;category scheme="http://examplé.org/foó/bar" term="foo" /&gt;
+  ... 
+&lt;/feed&gt;
+      </pre></td></tr></tbody></table><br>
+            <p>The id and category elements use IRIs as identifiers. Despite the fact that 
+      they look like ordinary URLs, such identifiers are not intended to be dereferenceable.  
+      Atom requires that IRIs used in this way have to be absolute, and generally treats 
+      them as opaque values that require no additional processing on the part of Atom consumers.  
+      Within the Atom vocabulary, id and category are the only elements that use IRIs as identifiers.</p>
+            <p>The link element, however, is specifically intended to 
+provide a reference to some other 
+      resource.  The href attribute is expected to specify an IRI that 
+can be dereferenced.  The 
+      value of the attribute can be a relative path and must be 
+processed by Atom consumers to produce the correct results.  Such 
+processing includes converting the IRI to an 
+      equivalent URL. Within the core Atom vocabulary, the icon, logo, 
+uri, link and content elements
+      can contain dereferenceable IRIs.</p>
+            <p>Listing 4 shows the JSON serialization of the id and category elements. Note that the IRIs 
+      are copied as-is, without any additional processing.</p>
+            <br><a name="listing4"><strong>Listing 4. JSON serialization of the id and category elements from Listing 3</strong></a><br><table border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td class="code-outline"><pre class="displaycode">                
+"id":"http://examplé.org/foó" 
+"categories":[
+  {
+    "scheme":"http://examplé.org/foó/bar", 
+    "term":"foo"
+  }
+]
+      </pre></td></tr></tbody></table><br>
+            <p>Dereferenceable IRIs, on the other hand, need to be resolved into fully-qualified, 
+      absolute paths and converted into URLs to be generally useful within JSON, 
+      as illustrated in Listing 5.  Note that "http://xn--exampl-gva.org/fo%C3%B3" is the 
+      ASCII equivalent URL to the IRI  "http://examplé.org/foó".</p>
+            <br><a name="listing5"><strong>Listing 5. JSON serialization of the link elements from Listing 3</strong></a><br><table border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td class="code-outline"><pre class="displaycode">                
+"links":[ 
+  { 
+    "rel":"self", 
+    "href":"http://xn--exampl-gva.org/fo%C3%B3" 
+  }, 
+  { 
+    "href":"http://xn--exampl-gva.org/blog" 
+  } 
+] 
+      </pre></td></tr></tbody></table><br>
+            <p>Any dereferenceable IRI or URI appearing anywhere within the Atom document should 
+      be given similar treatment, especially those appearing within HTML and XHTML markup in 
+      text constructs and content as shown in Listing 6.</p>
+            <br><a name="listing6"><strong>Listing 6. XHTML markup containing relative URI paths</strong></a><br><table border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td class="code-outline"><pre class="displaycode">                
+&lt;a:content type="xhtml"&gt; 
+  &lt;div&gt; 
+    &lt;img src="/images/foo.jpg" /&gt; 
+  &lt;/div&gt; 
+&lt;/a:content&gt;
+     </pre></td></tr></tbody></table><br>
+            <p>Because JSON is incapable of preserving any notion of a Base URI, it is unlikely 
+     that an application using the JSON serialization is capable of properly rendering 
+     markup containing relative URI paths.  It is therefore important that such paths be 
+     resolved automatically during the conversion process as shown in Listing 7.</p>
+            <br><a name="listing7"><strong>Listing 7. JSON serialization of the XHTML markup from Listing 6</strong></a><br><table border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td class="code-outline"><pre class="displaycode">                
+"content":{ 
+  "attributes":{ 
+    "type":"xhtml" 
+  }, 
+  "children":[ 
+    { 
+      "name":"img", 
+      "attributes":{ 
+        "src":"http://example.org/images/foo.jpg" 
+      }, 
+      "children":[] 
+    } 
+  ] 
+}
+     </pre></td></tr></tbody></table><br>
+            <p>This obviously requires the application that produces the serialized JSON output 
+    to be capable of properly parsing the HTML and XHTML markup and picking out the attributes 
+     whose values can be URIs.</p>
+            <div class="ibm-alternate-rule"><hr></div><p class="ibm-ind-link ibm-back-to-top"><a href="#ibm-pcon" class="ibm-anchor-up-link">Back to top</a></p><p><a name="N100EF"><span class="atitle">Repeatable elements</span></a></p>
+            <p>Several elements within the Atom vocabulary are allowed to appear more than 
+     once within a feed or entry. In the JSON serialization, these are rendered as 
+     Arrays as illustrated in Listings 8 and 9.</p>
+            <br><a name="listing8"><strong>Listing 8. Atom feed, entry and source elements can contain multiple atom:author elements</strong></a><br><table border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td class="code-outline"><pre class="displaycode">                
+&lt;author&gt; 
+  &lt;name&gt;James M Snell&lt;/name&gt; 
+&lt;/author&gt; 
+&lt;author&gt; 
+  &lt;name&gt;Jane Doe&lt;/name&gt; 
+&lt;/author&gt;
+     </pre></td></tr></tbody></table><br>
+            <br><a name="listing9"><strong>Listing 9. JSON serialization of the author elements in Listing 8</strong></a><br><table border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td class="code-outline"><pre class="displaycode">                
+"authors":[
+  {
+    "name":"James M Snell",
+  },
+  {
+    "name":"Jane Doe",
+  }
+]
+     </pre></td></tr></tbody></table><br>
+            <p>Within the Atom vocabulary, the author, contributor, category, link, and 
+     entry elements are all repeatable.  Listing 10 through 13 below further illustrate 
+     the conversion of repeatable elements into JSON arrays.  The examples are 
+     fairly self-explanatory, I won't go into the details.</p>
+            <br><a name="listing10"><strong>Listing 10. Multiple Atom category elements</strong></a><br><table border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td class="code-outline"><pre class="displaycode">                
+&lt;category term="foo" 
+  scheme="http://example.org/categories/" /&gt;
+&lt;category term="bar" 
+  scheme="http://example.org/categories/" 
+  label="Bar" /&gt;
+     </pre></td></tr></tbody></table><br>
+            <br><a name="listing11"><strong>Listing 11. JSON serialization of the multiple category elements in Listing 10</strong></a><br><table border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td class="code-outline"><pre class="displaycode">                
+"categories":[
+  {
+    "term":"foo",
+    "scheme":"http://example.org/categories/"
+  },
+  {
+    "term":"bar",
+    "scheme":"http://example.org/categories/", 
+    "label":"Bar"
+  }
+]
+     </pre></td></tr></tbody></table><br>
+            <br><a name="listing12"><strong>Listing 12. Multiple Atom link elements</strong></a><br><table border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td class="code-outline"><pre class="displaycode">                
+&lt;link href="/foo" 
+      rel="related" 
+      title="Related Entry"
+      type="text/html" /&gt;
+&lt;link href="/bar" 
+      title=”Alternate View"
+      type="text/html" /&gt;
+      </pre></td></tr></tbody></table><br>
+            <br><a name="listing13"><strong>Listing 13. JSON serialization of the multiple link elements in Listing 10</strong></a><br><table border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td class="code-outline"><pre class="displaycode">                
+"links":[
+  {
+    "href":"http://example.org/foo",
+    "rel":"related",
+    "title":"Related Entry",
+    "type":"text/html"
+  },
+  {
+    "href":"http://example.com/bar",
+    "title":"Alternate View",
+    "type":"text/html"
+  }
+]
+     </pre></td></tr></tbody></table><br>
+            <div class="ibm-alternate-rule"><hr></div><p class="ibm-ind-link ibm-back-to-top"><a href="#ibm-pcon" class="ibm-anchor-up-link">Back to top</a></p><p><a name="N10136"><span class="atitle">Dates</span></a></p>
+            <p>Date and times within Atom are represented using a subset of the ISO 8601 
+     format specified by RFC 3339.  Listing 14 shows an example of an Atom updated element.</p>
+            <br><a name="listing14"><strong>Listing 14. RFC 3339 date-time in the Atom updated element</strong></a><br><table border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td class="code-outline"><pre class="displaycode">                
+&lt;updated&gt;2007-10-14T12:12:12Z&lt;/updated&gt;
+     </pre></td></tr></tbody></table><br>
+            <p>Because of JSON's data typing model, I have a limited range of options when I
+       serialize a Date.  I can either:</p>
+            <ul>
+                <li>Convert the date to a numeric value indicating the number of seconds that 
+       have passed since midnight UTC on January 1, 1970 (for example, a standard UNIX® timestamp)</li>
+                <li>Convert the date to the JavaScript toString serialization of a date 
+       (for example. Sun Oct 21 2007 12:34:28 GMT-0700 (PDT))</li>
+                <li>Copy the date exactly as it is presented within the Atom document</li>
+            </ul>
+            <p>The first two options have the benefit of working within 
+JavaScript without much work on the part of the developer.  That is, to 
+get a proper 
+     JavaScript Date object, I can simply call new Date(feed.updated).  
+The downside, 
+     however, is that with the first option, potentially important 
+information about the 
+     number the milliseconds and the timezone offset is lost; and with 
+the second, the 
+     toString serialization of the date can vary across implementations 
+and locales.  
+     While using the RFC 3339 serialization requires additional work, it
+ is the only 
+     option that avoids data loss and ambiguity.</p>
+            <br><a name="listing15"><strong>Listing 15. JSON serialization of the updated element in Listing 14</strong></a><br><table border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td class="code-outline"><pre class="displaycode">                
+"updated":"2007-10-14T12:12:12.000Z"
+     </pre></td></tr></tbody></table><br>
+            <p>The JavaScript code in Listing 16 parses RFC 3339 date-times and produces a 
+     proper JavaScript date object.</p>
+            <br><a name="listing16"><strong>Listing 16. JavaScript code for parsing RFC 3339 date-times as used in Atom</strong></a><br><table border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td class="code-outline"><pre class="displaycode">                
+AtomDate = Class.create(); 
+AtomDate.pattern = /^(\d{4})(?:-(\d{2}))?(?:-(\d{2}))?(?:[Tt]   \
+  (\d{2}):(\d{2}):(\d{2})(?:\.(\d*))?)?([Zz])?(?:([+-])(\d{2}):(\d{2}))?$/; 
+AtomDate.localoffset = (new Date()).getTimezoneOffset(); 
+AtomDate.padding = function(val,char,count) { 
+  var value = ""; 
+  while(count &gt; 0) { 
+    if (val &lt; Math.pow(10,count)) value = char + value; 
+    count--; 
+  } 
+  return value + val; 
+} 
+AtomDate.parse = function(val) { 
+  if (!val) throw "Invalid Date"; 
+  if (val instanceof Date) return val; 
+  var m = AtomDate.pattern.exec(val); 
+  var year = new Number(m[1]?m[1]:0); 
+  var month = new Number(m[2]?m[2]:0); 
+  var day = new Number(m[3]?m[3]:0); 
+  var hour = new Number(m[4]?m[4]:0); 
+  var minute = new Number(m[5]?m[5]:0); 
+  var second = new Number(m[6]?m[6]:0); 
+  var millis = new Number(m[7]?m[7]:0); 
+  var gmt = m[8]; 
+  var dir = m[9]; 
+  var offhour = new Number(m[10]?m[10]:0); 
+  var offmin = new Number(m[11]?m[11]:0); 
+  
+  if (dir &amp;&amp; offhour &amp;&amp; offmin) { 
+    var offset = ((offhour * 60) + offmin); 
+    if (dir == "+") { 
+      minute -= offset; 
+    } else if (dir == "-") { 
+      minute += offset; 
+    } 
+  } 
+  return new Date(Date.UTC(year,month,day,hour,minute,second,millis)); 
+}
+
+Object.prototype.value2date = function() { 
+  return AtomDate.parse(this); 
+}
+     </pre></td></tr></tbody></table><br>
+            <p>The value2date function makes it possible to get the value of any string whose value 
+     is an RFC 3339 date as a JavaScript Date.</p>
+            <p>
+                <em>Note:  </em>The regular expression for 
+     AtomDate.pattern is split into multiple lines for formatting purposes.</p>
+            <br><a name="listing17"><strong>Listing 17. Using the date parsing code from Listing 16</strong></a><br><table border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td class="code-outline"><pre class="displaycode">                     
+document.write(m.updated.value2date());
+     </pre></td></tr></tbody></table><br>
+            <div class="ibm-alternate-rule"><hr></div><p class="ibm-ind-link ibm-back-to-top"><a href="#ibm-pcon" class="ibm-anchor-up-link">Back to top</a></p><p><a name="N10186"><span class="atitle">Text constructs</span></a></p>
+            <p>Atom's support for a broad range of text and content options is, by far, the most 
+     complicated and difficult thing to get right in the JSON serialization.  Text constructs 
+     such as the title, subtitle, summary and rights elements can contain plain text, escaped 
+     HTML or XHTML markup; they are language sensitive so the xml:lang context must be considered; 
+     and the HTML and XHTML markup can contain relative URIs that need to be resolved.  The Atom 
+     content element makes things even more difficult by throwing in support for Base64 encoded 
+     content, arbitrary XML markup, and external content referenced using the src attribute.</p>
+            <p>The goal for a JSON serialization of Atom content is to find a generalized representation 
+     that captures all of these options as consistently as possible.  Listing 18 shows an example 
+     feed with three text constructs.</p>
+            <br><a name="listing18"><strong>Listing 18. An Atom feed element with three different types of text constructs</strong></a><br><table border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td class="code-outline"><pre class="displaycode">                
+&lt;feed xmlns="http://www.w3.org/2005/Atom"&gt; 
+  ...
+  &lt;title&gt;Example Feed&lt;/title&gt;
+  &lt;subtitle type="html"&gt;&lt;p&gt;This is an example feed&lt;/p&gt;&lt;/subtitle&gt;
+  &lt;rights xml:lang="fr"&gt;...&lt;/right&gt;
+  ...
+&lt;/feed&gt;
+     </pre></td></tr></tbody></table><br>
+            <p>The title element is considered to be plain text.  It inherits the language context 
+     of feed and is otherwise nondescript.  The subtitle element contains escaped HTML markup.  
+     The rights element is plain text, but overrides the language context.  Listing 19 shows the 
+     JSON serialization of these three elements.</p>
+            <br><a name="listing19"><strong>Listing 19. JSON serialization of the text constructs in Listing 18</strong></a><br><table border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td class="code-outline"><pre class="displaycode">                
+{
+  "title":"Example Feed", 
+  "subtitle":{ 
+    "attributes":{ 
+      "type":"html" 
+    }, 
+    "children":[
+      { 
+        "name":"p", 
+        "attributes":{ }, 
+        "children":["This is an example feed" ] 
+      } 
+    ]
+  },
+  "rights":{
+    "attributes":{
+      "lang":"fr"
+    },
+    "children":[
+      "..."
+    ]
+  } 
+}
+     </pre></td></tr></tbody></table><br>
+            <p>Note that in the simplest case, the title is serialized as a simple string.  However, 
+     because the language context changes in the rights element, despite being plain text, it is 
+     serialized as an object consisting of two fields, attributes and children.</p>
+            <p>For the subtitle element, the HTML markup is parsed and rendered as a hierarchical 
+     structure.  The same structure is used for XHTML markup (Listings 20 and 21).</p>
+            <br><a name="listing20"><strong>Listing 20.  Text construct using XHTML markup</strong></a><br><table border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td class="code-outline"><pre class="displaycode">                
+&lt;subtitle type="xhtml"&gt;
+  &lt;div xmlns="..."&gt;&lt;p&gt;This is an example feed&lt;/p&gt;&lt;/div&gt;
+&lt;/subtitle&gt;
+     </pre></td></tr></tbody></table><br>
+            <br><a name="listing21"><strong>Listing 21. JSON serialization of the XHTML markup in Listing 20</strong></a><br><table border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td class="code-outline"><pre class="displaycode">                
+"subtitle":{ 
+  "attributes":{ "type":"xhtml" }, 
+  "children":[
+    { 
+      "name":"p", 
+      "attributes":{ }, 
+      "children":["This is an example feed" ] 
+    }
+  ] 
+}
+     </pre></td></tr></tbody></table><br>
+            <p>This structure ensures that plain text and markup content is serialized in an unambiguous
+     and consistent way.  The downside, however, is that displaying the content in a Web browser is 
+     not as straightforward as doing a simple document.write(...) or setting the innerHTML property 
+     on a div.  What you need is a way to convert the parsed out structure back into a form that 
+    is easy to display.</p>
+            <p>Listing 22 is a modified version of code originally provided by Sam Ruby that takes the JSON 
+     serialization of an Atom text construct or content element and converts it back into a string.</p>
+            <br><a name="listing22"><strong>Listing 22. JavaScript that reconstructs JSON serialized text constructs into displayable string values</strong></a><br><table border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td class="code-outline"><pre class="displaycode">                
+Array.prototype.hash2value = function () { 
+  var result = ''; 
+  for (var i=0; this.length&gt;=i; i++) if (this[i]) result+=this[i].tag2value(); 
+  return result; 
+} 
+
+Object.prototype.tag2value = function () { 
+  if (this.name) { 
+    var result = String.fromCharCode(60) + this.name; 
+    for (key in this.attributes) { 
+      if (typeof(this.attributes[key]) === 'function') continue; 
+      result += ' ' + key + '="' + this.attributes[key].toString() + '"'; 
+    } 
+    result += '&gt;' + this.children.hash2value(); 
+    result += String.fromCharCode(60) + '/' + this.name + '&gt;'; 
+    return result; 
+  } else return this.toString(); 
+}
+
+Object.prototype.value = function() { 
+  if (this.children) return this.children.hash2value(); 
+  else return this.toString(); 
+} 
+
+Array.prototype.value = function() { 
+  var result = ''; 
+  for (var i = 0; this.length&gt;=i; i++) 
+    if (this[i]) result+=this[i].value(); 
+  return result; 
+}
+     </pre></td></tr></tbody></table><br>
+            <p>The value functions added to the JavaScript Array and Object classes makes 
+     it possible to use the hash2value function without concern about whether a particular 
+     object is serialized as a simple string or an object structure.</p>
+            <br><a name="listing23"><strong>Listing 23. Using the JavaScript code from Listing 22 to display text from the JSON serialization</strong></a><br><table border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td class="code-outline"><pre class="displaycode">                
+document.write(m.title.value()); 
+document.write(m.subtitle.value()); 
+document.write(m.rights.value());
+     </pre></td></tr></tbody></table><br>
+            <p>Using the model presented here, working with extended content types within the atom:content 
+     element is no different than working with plain text, HTML or XHTML. Listing 24 shows four 
+     extended content examples that illustrate the use of alternative media types, arbitrary well-formed 
+     XML, Base64 encoded binary data and referenced content using the src attribute.</p>
+            <br><a name="listing24"><strong>Listing 24. Examples of extended content types</strong></a><br><table border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td class="code-outline"><pre class="displaycode">                     
+&lt;content type="text/plain"&gt;This is plain text&lt;/content&gt;
+
+&lt;content type="application/xml"&gt;&lt;a xmlns="foo"&gt;b&lt;/a&gt;&lt;/content&gt;
+
+&lt;content type="image/jpg"&gt;{base64 encoded data}&lt;/content&gt;
+
+&lt;content type="image/jpg" src="image.jpg" /&gt;
+     </pre></td></tr></tbody></table><br>
+            <p>Listing 25 shows the JSON serializations for each of these content forms.</p>
+            <br><a name="listing25"><strong>Listing 25. JSON serialization of the extended content types from Listing 24</strong></a><br><table border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td class="code-outline"><pre class="displaycode">                
+"content":{ 
+  "attributes":{ "type":"text/plain" }, 
+  "children":["This is plain text" ] 
+} 
+
+"content":{
+  "attributes":{ "type":"application/xml" },
+  "children":[
+    {
+      "name":"a",
+      "attributes": {
+        "xmlns":"foo"
+      },
+      "children":["b"]
+    }
+  ]
+}
+
+"content":{ 
+  "attributes":{ "type":"image/jpg" }, 
+  "children":["{base64 encoded data}" ] 
+} 
+
+"content":{ 
+  "attributes":{ 
+    "type":"image/jpg", 
+    "src":"http://example.org/image.jpg" 
+  }, 
+  "children":["" ] 
+} 
+     </pre></td></tr></tbody></table><br>
+            <div class="ibm-alternate-rule"><hr></div><p class="ibm-ind-link ibm-back-to-top"><a href="#ibm-pcon" class="ibm-anchor-up-link">Back to top</a></p><p><a name="N101F9"><span class="atitle">Extensions</span></a></p>
+            <p>The final area of concern when you serialize Atom to JSON is  how to deal with 
+     extensions.  You have three possible choices:</p>
+            <ul>
+                <li>Ignore all extensions and do not include them in the JSON serializations</li>
+                <li>Serialize known-extensions and ignore everything else</li>
+                <li>Serialize all extensions</li>
+            </ul>
+            <p>The first choice is obviously the easiest choice but limits the overall usefulness 
+     of the JSON representation (which is not necessarily a bad thing).  The second choice 
+     allows the JSON serialization of known extensions to be optimized and simplified but 
+     still limits the usefulness of the serialization.  The third option significantly increases 
+     the overall complexity of the serialization but ensures that all of the information from 
+     the original Atom document is carried through to the JSON representation.</p>
+            <p>First, look at how to optimize the output for a known extension.  
+     The Atom Threading Extension (RFC 4685) provides a means to indicate that one entry is 
+     a response to another. The specification for the threading extension specifies the attributes 
+     and meaning of the in-reply-to element clearly and indicates that multiple in-reply-to elements 
+     can appear within an entry.  Knowing this, you can create an optimized JSON representation of the 
+     in-reply-to element as illustrated in Listings 26 and 27.</p>
+            <br><a name="listing26"><strong>Listing 26. Using the Atom Threading Extension in an Atom Entry</strong></a><br><table border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td class="code-outline"><pre class="displaycode">                
+&lt;entry&gt;
+  ...
+  &lt;thr:in-reply-to ref="tag:example.org,2007:/foo/entries/2" /&gt;
+  &lt;thr:in-reply-to ref="tag:example.org,2007:/foo/entries/3" /&gt;
+  ...
+&lt;/entry&gt;
+     </pre></td></tr></tbody></table><br>
+            <br><a name="listing27"><strong>Listing 27. JSON serialization of the Atom Threading Extensions from Listing 26</strong></a><br><table border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td class="code-outline"><pre class="displaycode">                
+ "inreplyto":[
+   { 
+     "ref":"tag:example.org,2007:/foo/entries/2" 
+   },
+   {
+     "ref":"tag:example.org,2007:/foo/entries/3"
+   }
+ ]
+     </pre></td></tr></tbody></table><br>
+            <p>For unknown extensions, however, you'll use a more 
+verbose and generalized syntax to capture all of the necessary details. 
+Listing 28  shows an example of an entry with a complex, unknown 
+extension element.</p>
+            <br><a name="listing28"><strong>Listing 28. Complex, unknown extension in an Atom entry</strong></a><br><table border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td class="code-outline"><pre class="displaycode">                
+&lt;entry&gt;
+  ...
+  &lt;foo:a xmlns="..."&gt;&lt;foo:b&gt;&lt;foo:c d="e"&gt;f&lt;/foo:c&gt;&lt;/foo:b&gt;&lt;/foo:a&gt;
+  ...
+&lt;/entry&gt;
+     </pre></td></tr></tbody></table><br>
+            <p>The serialization of the extension (Listing 29) is generally identical to 
+     that used for text consisting of HTML or XHTML markup.</p>
+            <br><a name="listing29"><strong>Listing 29. JSON serialization of the extension in Listing 28</strong></a><br><table border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td class="code-outline"><pre class="displaycode">                
+"extensions":[
+  {
+    "name":"foo:a", 
+    "attributes":{ 
+      "xmlns:foo":"http://example.org/unknown-markup" 
+    }, 
+    "children":[
+      { 
+        "name":"foo:b", 
+        "attributes":{ }, 
+        "children":[
+          { 
+            "name":"foo:c", 
+            "attributes":{ "d":"e" }, 
+            "children":["f" ]
+          }
+        ]
+      }
+    ]
+  }
+]
+     </pre></td></tr></tbody></table><br>
+            <div class="ibm-alternate-rule"><hr></div><p class="ibm-ind-link ibm-back-to-top"><a href="#ibm-pcon" class="ibm-anchor-up-link">Back to top</a></p><p><a name="N10241"><span class="atitle">Putting it all together</span></a></p>
+            <p>With this foundation, it is possible to take any Atom document and convert it into 
+     a usable JSON representation.  Listings 30 and 31 provide a complete illustration of 
+     conversion process.  The original Atom document contains relative IRIs, language context, 
+     extensions, a variety of text and content types, etc.  Running this document through any 
+     of the many XML-to-JSON converters available on the Internet will provide a range of 
+     alternative serializations that will invariably suffer data loss or serious usability 
+     problems or both.</p>
+            <br><a name="listing30"><strong>Listing 30. Complete Atom feed document</strong></a><br><table border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td class="code-outline"><pre class="displaycode">                
+&lt;?xml version="1.0" encoding="utf-8" ?&gt; 
+&lt;a:feed xmlns:a="http://www.w3.org/2005/Atom" 
+        xmlns:thr="http://purl.org/syndication/thread/1.0" 
+        xmlns="http://www.w3.org/1999/xhtml" 
+        xmlns:foo="http://example.org/unknown-markup" 
+        xml:lang="en-US" 
+        xml:base="http://example.org/foo" 
+        dir="ltr"&gt; 
+  
+  &lt;a:id&gt;tag:example.org,2007:/foo&lt;/a:id&gt; 
+  &lt;a:title&gt;Example Feed&lt;/a:title&gt; 
+  &lt;a:subtitle type="html"&gt;&lt;![CDATA[&lt;p&gt;This is an example feed&lt;/p&gt;]]&gt;&lt;/a:subtitle&gt; 
+  &lt;a:rights type="xhtml"&gt;
+    &lt;div&gt;
+      &lt;p&gt;Copyright © James M Snell&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/a:rights&gt; 
+  &lt;a:author xmlns="http://www.w3.org/2005/Atom"&gt; 
+    &lt;name&gt;James M Snell&lt;/name&gt; 
+    &lt;email&gt;jasnell@example.org&lt;/email&gt; 
+    &lt;uri&gt;/~jasnell&lt;/uri&gt; 
+  &lt;/a:author&gt; 
+  &lt;a:updated&gt;2007-10-14T12:12:12Z&lt;/a:updated&gt; 
+  &lt;a:link rel="self" href="" /&gt; 
+  &lt;a:link href="/blog" /&gt; 
+  &lt;a:link rel="alternate" type="application/json" href="/blog;json" /&gt; 
+  
+  &lt;a:entry xml:base="entries/1"&gt; 
+    &lt;a:id&gt;tag:example.org,2007:/foo/entries/1&lt;/a:id&gt; 
+    &lt;a:title type="text"&gt;Entry Number One&lt;/a:title&gt; 
+    &lt;a:summary type="xhtml"&gt; 
+      &lt;div&gt; 
+        &lt;p&gt;This is the first entry. You can read it &lt;a href=""&gt;here&lt;/a&gt;&lt;/p&gt; 
+      &lt;/div&gt; 
+    &lt;/a:summary&gt; 
+    &lt;a:rights type="html"&gt;
+      &lt;p&gt;Copyright &amp;copy; James M Snell&lt;/p&gt;
+    &lt;/a:rights&gt; 
+    &lt;a:updated&gt;2007-10-14T12:12:12Z&lt;/a:updated&gt; 
+    &lt;a:link href="" /&gt; 
+    &lt;a:link rel="alternate" type="application/json" href="1;json" /&gt; 
+    &lt;a:link rel="replies" type="application/atom+xml" 
+      href="1;replies" thr:count="10" /&gt; 
+    &lt;a:content type="xhtml"&gt; 
+      &lt;div&gt; 
+        &lt;p&gt;This is the content of the first entry. It contains a picture.&lt;/p&gt; 
+        &lt;img src="/images/foo.jpg" /&gt; 
+      &lt;/div&gt; 
+    &lt;/a:content&gt; 
+    &lt;thr:in-reply-to ref="tag:example.org,2007:/foo/entries/2" /&gt; 
+    &lt;a:category scheme="http://example.org/categories/" term="foo" 
+      label="test" xml:lang="en-US" /&gt; 
+    &lt;a:category scheme="http://example.org/categories/" term="bar" 
+      label="essai" xml:lang="fr" /&gt; 
+    &lt;foo:a&gt;&lt;foo:b&gt;&lt;foo:c d="e"&gt;f&lt;/foo:c&gt;&lt;/foo:b&gt;&lt;/foo:a&gt; 
+  &lt;/a:entry&gt; 
+ 
+  &lt;a:entry xml:base="entries/2" xml:lang="fr"&gt; 
+    &lt;a:id&gt;tag:example.org,2007:/foo/entries/2&lt;/a:id&gt; 
+    &lt;a:title type="text"&gt;La première entrée&lt;/a:title&gt; 
+    &lt;a:summary type="xhtml"&gt; 
+      &lt;div&gt; 
+        &lt;p&gt;Il s'agit de la première entrée. Vous pouvez lire 
+        &lt;a href=""&gt;est ici&lt;/a&gt;&lt;/p&gt; 
+      &lt;/div&gt; 
+    &lt;/a:summary&gt;
+    &lt;a:rights type="html"&gt;
+      &lt;p&gt;Copyright &amp;copy; James M Snell&lt;/p&gt;
+    &lt;/a:rights&gt; 
+    &lt;a:updated&gt;2007-10-14T12:12:11Z&lt;/a:updated&gt; 
+    &lt;a:link href="" /&gt; 
+    &lt;a:link rel="alternate" type="application/json" href="2;json" /&gt; 
+    &lt;a:link rel="replies" type="application/atom+xml" 
+      href="2;replies" thr:count="10" /&gt; 
+    &lt;a:content type="xhtml"&gt; 
+      &lt;div&gt; 
+        &lt;p&gt;Ceci est le contenu de la première entrée. Il contient une image.&lt;/p&gt; 
+        &lt;img src="/images/foo.jpg" /&gt; 
+      &lt;/div&gt; 
+    &lt;/a:content&gt; 
+    &lt;thr:in-reply-to ref="tag:example.org,2007:/foo/entries/1" /&gt; 
+    &lt;a:category scheme="http://example.org/categories/" term="foo" 
+      label="test" xml:lang="en-US" /&gt; 
+    &lt;a:category scheme="http://example.org/categories/" term="bar" 
+      label="essai" xml:lang="fr" /&gt; 
+    &lt;foo:a&gt;&lt;foo:b&gt;&lt;foo:c d="e"&gt;f&lt;/foo:c&gt;&lt;/foo:b&gt;&lt;/foo:a&gt; 
+  &lt;/a:entry&gt; 
+&lt;/a:feed&gt;
+     </pre></td></tr></tbody></table><br>
+            <p>The Atom-to-JSON serialization technique described here provides a result 
+     that is readable, usable, and avoids loss of important contextual data.</p>
+            <br><a name="listing31"><strong>Listing 31. JSON serialization of the
+complete Atom feed document from Listing 30.</strong></a><br><table border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td class="code-outline"><pre class="displaycode">                
+{ 
+ "lang":"en-US", 
+ "dir":"ltr", 
+ "id":"tag:example.org,2007:/foo", 
+ "title":"Example Feed", 
+ "subtitle":{ 
+  "attributes":{ 
+   "type":"html" 
+  }, 
+  "children":[{ 
+    "name":"p", 
+    "attributes":{ }, 
+    "children":["This is an example feed" ] 
+   } ] }, 
+ "rights":{ 
+  "attributes":{ "type":"xhtml" }, 
+  "children":[{ 
+    "name":"p", 
+    "attributes":{ }, 
+    "children":["Copyright \u00a9 James M Snell" ] 
+   } ]}, 
+ "updated":"2007-10-14T12:12:12.000Z", 
+ "authors":[{ 
+   "name":"James M Snell", 
+   "email":"jasnell@example.org", 
+   "uri":"http://example.org/~jasnell" 
+  } ], 
+ "links":[
+   { 
+     "href":"http://example.org/foo", 
+     "rel":"self" 
+   },
+   { 
+     "href":"http://example.org/blog" 
+   },
+   { 
+     "href":"http://example.org/blog;json", 
+     "rel":"alternate", 
+     "type":"application/json" 
+   } ], 
+ "entries":[...],
+ "attributes":{ 
+  "xml:lang":"en-US", 
+  "xml:base":"http://example.org/foo" 
+ }
+}
+     </pre></td></tr></tbody></table><br>
+            <div class="ibm-alternate-rule"><hr></div><p class="ibm-ind-link ibm-back-to-top"><a href="#ibm-pcon" class="ibm-anchor-up-link">Back to top</a></p><p><a name="N1026C"><span class="atitle">Using the Abdera JSON Writer</span></a></p>
+            <p>The technique described here has been implemented as part of the Apache Abdera project.
+     The code in listing 32 demonstrates the use of the Abdera JSON Writer. If you want to 
+     experiment with Atom-to-JSON conversion, please visit the Abdera wiki for information on how 
+     to download the latest development image.</p>
+            <br><a name="listing32"><strong>Listing 32. Using the Apache Abdera JSON Writer</strong></a><br><table border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td class="code-outline"><pre class="displaycode">                
+Abdera abdera = new Abdera();
+Entry entry = abdera.newEntry();
+    
+entry.setId("http://example.org");
+entry.setTitle("Testing the JSON Writer");
+entry.setUpdated(new Date());
+entry.addLink("http://www.example.org");
+entry.addAuthor("James Snell");
+entry.setSummary("This is a test of the JSON Writer");
+    
+entry.writeTo("json", System.out);
+     </pre></td></tr></tbody></table><br>
+            <div class="ibm-alternate-rule"><hr></div><p class="ibm-ind-link ibm-back-to-top"><a href="#ibm-pcon" class="ibm-anchor-up-link">Back to top</a></p><p><a name="N1027E"><span class="atitle">Wrapping up</span></a></p>
+            
+            
+            
+            
+            <p>Converting data from one format to another has always been a difficult task.  With a 
+     data format as rich and capable of Atom, serializing to a format as simple and basic as 
+     JSON can be problematic at best.  While there have been several very good attempts at 
+     getting it right, until an effort is made to produce a standardized transformation, application 
+     developers need to be prepared to deal with multiple, potentially incompatible serializations 
+     that vary broadly in quality.  The technique described here is just one of several possible approaches.</p>
+        <!-- CMA ID: 284571 --> <!-- Site ID: 1 --> <!-- XSLT stylesheet used to transform this file: dw-document-html-6.0.xsl -->
+<br>
+<p><a name="resources"><span class="atitle">Resources</span></a></p><p><strong>Learn</strong></p><ul><li>
+                <a href="http://www.ietf.org/rfc/rfc4287.txt">RFC
+4287</a>: Read more about the Atom Syndication Format, an XML-based 
+document format that describes feeds that syndicate Web content such as 
+weblogs and news headlines to Web sites and directly to user agents.<br><br></li><li>
+                <a href="http://www.ietf.org/rfc/rfc4627.txt">RFC
+4627</a>: Learn more about the JSON Format in a detailed IETF memo.<br><br></li><li>
+                <a href="http://cwiki.apache.org/ABDERA/getting-started.html">Apache Abdera wiki</a>: Learn
+     about the Abdera project and developing Atom-enabled Java app.<br><br></li><li>
+                <a href="http://code.google.com/apis/gdata/json.html">Google's GData APIs</a>: See an alternative approach to converting Atom-to-JSON.<br><br></li><li>
+                <a href="http://www.ibm.com/certify/certs/xmsdreltop.shtml">IBM XML certification</a>: Find out how you can become an IBM-Certified Developer in XML and related technologies.<br><br></li><li>
+                <a href="http://www.ibm.com/developerworks/views/xml/library.jsp">XML technical library</a>: See the developerWorks XML Zone for a wide range of technical articles and tips, tutorials, standards, and IBM Redbooks. <br><br></li><li>
+                <a href="http://www.ibm.com/developerworks/offers/techbriefings/?S_TACT=105AGX06&amp;S_CMP=art">developerWorks technical events and webcasts</a>: Stay current with technology in these sessions.<br><br></li><li>The <a href="http://www.ibm.com/developerworks/apps/SendTo?bookstore=safari">technology
+bookstore</a>: Browse for books on these and other technical topics.<br><br></li></ul><p><strong>Get products and technologies</strong></p><ul><li>
+                <a href="http://www.ibm.com/developerworks/downloads/?S_TACT=105AGX06&amp;S_CMP=art">IBM trial software</a>: Build your next development project with trial software available for download directly from developerWorks.<br><br></li></ul><p><strong>Discuss</strong></p><ul><li><a href="http://www.ibm.com/developerworks/forums/forum.jspa?forumID=1087">Participate in the discussion forum</a>.<br><br></li><li>
+                <a href="http://www.ibm.com/developerworks/forums/dw_xforums.jsp">XML zone discussion forums</a>: Participate in any of several XML-related discussions.<br><br></li><li>
+                <a href="http://www.ibm.com/developerworks/forums/dw_forum.jsp?forum=1080&amp;cat=11">developerWorks XML zone: Share your thoughts:</a>
+ After you read this article, post your comments and thoughts in this 
+forum. The XML zone editors moderate the forum and welcome your input.<br><br></li><li>
+                <a href="http://www.ibm.com/developerworks/blogs/">developerWorks blogs</a>: Check out these blogs and get involved in the <a href="http://www.ibm.com/developerworks/community">developerWorks community</a>.<br><br></li></ul>
+<p><a name="author"><span class="atitle">About the author</span></a></p><div class="ibm-container ibm-portrait-module ibm-alternate-two"><div class="ibm-container-body"><img src="Snell2008_files/p-jsnell.jpg" class="dw-author-img" alt="James Snell" height="80" width="64"><p><a name="author1"> </a>James
+ M. Snell is a software engineer in IBM's WebAhead group focusing on the
+ development and practical application of key emerging technologies for 
+IBM's own use. James has participated in the effort to define the Atom 
+Syndication Format and Atom Publishing  Protocol standards and has 
+implemented no less than nine different Atom Publishing Protocol server 
+implementations.</p></div></div>
+<!-- MAIN_COLUMN_CONTENT_END -->
+
+<!-- OVERLAYS_START -->
+<!-- Report_Abuse_Start -->
+<div class="ibm-common-overlay ibm-no-print" id="reportabuseoverlay">
+   <div class="ibm-head"><p><a class="ibm-common-overlay-close" href="#">Close [x]</a></p></div>
+   <div class="ibm-body">
+      <div class="ibm-main">
+         <a class="ibm-access" name="reportabuseoverlay">Report abuse help</a>   
+         <div class="ibm-title"><h1>Report abuse</h1></div>
+         <div class="ibm-container ibm-alternate">
+            <p><strong>Thank you.</strong>  This entry has been flagged for moderator attention.</p>
+            <div class="ibm-overlay-rule"><hr></div>
+            <div class="ibm-buttons-row">
+               <input onclick="ibmCommon.Overlays.hide('reportabuseoverlay');return false;" class="ibm-btn-cancel-sec dw-btn-cancel-sec" name="ibm-cancel" value="Close" type="button">
+            </div>
+         </div>
+      </div> 
+   </div>
+<div class="ibm-footer"></div>
+</div>
+<!-- Report_Abuse_Error_Start -->
+<div class="ibm-common-overlay ibm-no-print" id="reportabuseoverlayerror">
+   <div class="ibm-head"><p><a class="ibm-common-overlay-close" href="#">Close [x]</a></p></div>
+   <div class="ibm-body">
+      <div class="ibm-main">
+         <a class="ibm-access" name="reportabuseoverlayerror">Report abuse help</a>   
+         <div class="ibm-title"><h1>Report abuse</h1></div>
+         <div class="ibm-container ibm-alternate">
+            <p class="ibm-ind-error"><strong>Report abuse submission failed.  Please try again later.</strong></p>
+            <div class="ibm-overlay-rule"><hr></div>
+            <div class="ibm-buttons-row">
+               <input onclick="ibmCommon.Overlays.hide('reportabuseoverlayerror');return false;" class="ibm-btn-cancel-sec dw-btn-cancel-sec" name="ibm-cancel" value="Close" type="button">
+            </div>
+         </div>
+      </div> 
+   </div>
+<div class="ibm-footer"></div>
+</div>
+<!-- Sign in OVERLAY STARTS HERE --> 
+<div class="ibm-common-overlay" id="signin_overlay">
+<div class="ibm-head">
+<p><a class="ibm-common-overlay-close" href="#" onclick="clearForm();">Close [x]</a></p>
+</div>
+<div class="ibm-body">
+<div class="ibm-main">
+<div class="ibm-title ibm-subtitle">
+<h1>developerWorks: Sign in</h1>
+<div id="ibm-overlay-error-signin" class="no-display"></div>
+</div>
+
+<div class="ibm-container ibm-alternate ibm-buttons-last">
+<div class="ibm-container-body">
+<p class="ibm-overlay-intro">If you don't have an IBM ID and password, <a href="#" onclick="(function () {window.location='/developerworks/dwwi/DWAuthRouter?m=reg&amp;d='+encodeURIComponent(location.href);})();">register here</a>.</p>
+<form class="ibm-column-form" id="sFormId" action="" method="post" name="sForm" onsubmit="return false;">
+<p><label for="ibmid">IBM ID:</label><span><input name="ibm-id" id="ibmid" size="25" class="required" onkeypress="handleEP(event,this.form);" type="text"><br><a class="ibm-forward-link" href="http://www.ibm.com/developerworks/dwwi/jsp/WSHelp.jsp?lang=en_US">Forgot your IBM ID?</a></span>   
+</p> 
+<p><label for="password">Password:</label><span><input name="password" id="password" size="25" value="" class="required" onkeypress="handleEP(event,this.form);" type="password"><br><a class="ibm-forward-link" href="#" onclick="(function () {window.location='https://www.ibm.com/account/profile?page=forgot&amp;lang=en_US&amp;appname=ibm&amp;required=null&amp;d='+encodeURIComponent(getAuthUrl())+'%3Fm%3Dloginpage%26lang%3Den_US%26d%3D'+encodeURIComponent(location.href);})();">Forgot your password?</a><br><a class="ibm-forward-link" href="#" onclick="(function () {window.location='https://www.ibm.com/account/profile?page=chpw&amp;lang=en_US&amp;appname=ibm&amp;required=null&amp;d='+encodeURIComponent(location.href);})();">Change your password</a></span></p> 
+<p class="no-bottom-padding"> 
+   <label for="AfterSignIn">After sign in:</label> 
+   <span>
+
+      <select name="SignInAction" id="AfterSignIn">
+          <option selected="selected" value="">Stay on the current page</option>
+          <option value="/developerworks/mydeveloperworks/profiles/html/myProfileView.do">My developerWorks profile</option>
+          <option value="/developerworks/mydeveloperworks/homepage/">My developerWorks home</option>
+      </select>
+   </span>
+</p>
+<p class="dw-perm-box">
+	<span><input id="perm" name="perm_name" type="checkbox"><label for="perm"> Keep me signed in.</label></span>
+</p>
+<div class="ibm-overlay-rule"><hr></div>
+<p>By clicking <strong>Submit</strong>, you agree to the <a href="https://www.ibm.com/developerworks/community/terms/">developerWorks terms of use</a>.</p>
+<div class="ibm-buttons-row">
+   <p><input class="ibm-btn-arrow-pri" name="ibm-submit" value="Submit" onclick="signin();return false;" type="submit"><span class="ibm-sep">&nbsp;</span>
+<input value="Cancel" name="ibm-cancel" class="ibm-btn-cancel-sec" onclick="clearForm();ibmCommon.Overlays.hide('signin_overlay');return false;" type="button"></p>
+</div>
+</form>
+<div class="ibm-overlay-rule"><hr></div>
+<p>The first time you sign into developerWorks, a profile is created for
+ you. This profile includes the first name, last name, and display name 
+you identified when you registered with developerWorks. 
+<strong>Select information in your developerWorks profile is displayed to the public, but you may edit the information at any time</strong>. Your first name, last name (unless you choose to hide them), and display name will accompany the content that you post.</p>
+<div class="dw-overlay-legal"><p>All information submitted is secure.</p></div>
+</div>
+</div>
+</div>
+</div>
+<div class="ibm-footer"></div>
+</div>
+<!-- Sign in OVERLAY ENDS HERE --> 
+ 
+
+<!-- Display name OVERLAY STARTS HERE --> 
+<div class="ibm-common-overlay" id="displayname_overlay">
+<div class="ibm-head">
+<p><a class="ibm-common-overlay-close" href="#" onclick="clearForm();">Close [x]</a></p>
+</div>
+<div class="ibm-body">
+<div class="ibm-main">
+<div class="ibm-title ibm-subtitle">
+<h1>Choose your display name</h1>
+<div id="ibm-overlay-error-dname" class="no-display"></div>
+</div>
+<div class="ibm-container ibm-alternate ibm-buttons-last">
+<div class="ibm-container-body">
+<p class="ibm-overlay-intro">The first time you sign in to 
+developerWorks, a profile is created for you, so you need to choose a 
+display name.  Your display name accompanies the content you post on 
+developerWorks.</p>
+<p><strong>Please choose a display name between 3-31 characters</strong>. Your display name must be unique in the developerWorks community and should not be your email address for privacy reasons.</p>
+<form id="dFormId" method="post" action="" name="dForm" onsubmit="return false;" class="ibm-column-form">
+<p><label for="displayname">Display name:</label><span><input name="displayname" id="displayname" size="25" onkeypress="handleEP(event,this.form);" type="text"></span><span class="ibm-form-note">(Must be between 3 – 31 characters.)</span>
+</p>
+
+<div class="ibm-overlay-rule"><hr>
+</div>
+<p>By clicking <strong>Submit</strong>, you agree to the <a href="https://www.ibm.com/developerworks/community/terms/">developerWorks terms of use</a>.</p>
+<div class="ibm-buttons-row">
+   <p><input class="ibm-btn-arrow-pri" name="ibm-submit" value="Submit" onclick="signin();return false;" type="submit"><span class="ibm-sep">&nbsp;</span>
+<input value="Cancel" name="ibm-cancel" class="ibm-btn-cancel-sec" onclick="clearForm();ibmCommon.Overlays.hide('displayname_overlay');return false;" type="button"></p>
+</div>
+</form>
+<div class="ibm-overlay-rule"><hr></div>
+<div class="dw-overlay-legal"><p>All information submitted is secure.</p></div>
+</div>
+</div>
+</div>
+</div>
+<div class="ibm-footer"></div>
+</div>
+<!-- Display name OVERLAY ENDS HERE -->
+<!-- OVERLAYS_END -->
+
+<!-- RATINGS START -->
+<p class="ibm-no-print"><span class="atitle"><a name="iratings">Rate this article</a></span></p>
+<input id="art-rating" name="ratinga" value="3" type="hidden"><div id="art-rating-module"><p id="submitErr" class="ibm-ind-error" style="display: none;"><strong>Error: Submission failed. Please try again.</strong></p><p><span id="ratingSectUI"><img alt="Average rating 3 stars based on 9 votes" src="Snell2008_files/stars120x20-3gw.jpg" class="dw-avg-rating"> Average rating (9 votes)</span></p><div class="ibm-container" id="ratingForm"><div class="ibm-container-body dw-container-ratings"><form class="dw-ratings-form" onsubmit="artRating.submitRating(); return false;"><input name="ratingstars" id="rat-1" value="1" type="radio"><label class="rating-label" id="star1" for="rat-1">1 star</label><img id="rat-1-img" alt="1 star" title="1 star" src="Snell2008_files/stars120x20-1w.jpg" class="rating-image"><span class="dw-rating-text">1 star</span><br><input name="ratingstars" id="rat-2" value="2" type="radio"><label class="rating-label" id="star2" for="rat-2">2 stars</label><img id="rat-2-img" alt="2 stars" title="2 stars" src="Snell2008_files/stars120x20-2w.jpg" class="rating-image2"><span class="dw-rating-text">2 stars</span><br><input name="ratingstars" id="rat-3" value="3" type="radio"><label class="rating-label" id="star3" for="rat-3">3 stars</label><img id="rat-3-img" alt="3 stars" title="3 stars" src="Snell2008_files/stars120x20-3w.jpg" class="rating-image2"><span class="dw-rating-text">3 stars</span><br><input name="ratingstars" id="rat-4" value="4" type="radio"><label class="rating-label" id="star4" for="rat-4">4 stars</label><img id="rat-4-img" alt="4 stars" title="4 stars" src="Snell2008_files/stars120x20-4w.jpg" class="rating-image2"><span class="dw-rating-text">4 stars</span><br><input name="ratingstars" id="rat-5" value="5" type="radio"><label class="rating-label" id="star5" for="rat-5">5 stars</label><img id="rat-5-img" alt="5 stars" title="5 stars" src="Snell2008_files/stars120x20-5w.jpg" class="rating-image2"><span class="dw-rating-text">5 stars</span><div class="ibm-buttons-row"><p class="ibm-first"><input value="Submit" name="ibm-submit" class="ibm-btn-arrow-pri dw-ratings-submit" type="submit"></p></div></form></div></div></div>
+<script language="JavaScript" type="text/javascript">
+// <![CDATA[
+   // widget div id and article id as args
+   window.artRating.init('art-rating-module','art-rating-summary');
+// ]]>
+</script>
+<!-- RATINGS END -->
+
+<!-- INLINE_COMMENTS_START -->
+<p class="ibm-no-print"><span class="atitle"><a name="icomments">Comments</a></span></p>
+<div id="threadShow"><div id="cmtTog" style=""><div class="ibm-container ibm-alternate-two dw-commentbox dw-noborder"><p id="cmtHead"><label for="newCmt"><strong>Add comment:</strong></label></p><div class="ibm-container-body dw-commentbox dw-noborder"><p id="signInSect"> <a onclick="showSignIn();return false;" href="#">Sign in</a> or <a href="http://www.ibm.com/developerworks/dwwi/DWAuthRouter?m=register&amp;lang=en&amp;d=http%3A%2F%2Fwww.ibm.com%2Fdeveloperworks%2Flibrary%2Fx-atom2json%2Findex.html%23icomments">register</a>  to leave a comment.</p><p>Note: HTML elements are not supported within comments.</p><span id="infoCmt"></span><form focus="name" enctype="multipart/form-data" method="post" action="" name="form" class="ibm-column-form"><p><textarea disabled="disabled" cols="120" rows="5" name="newCmt" id="newCmt" class="dw-inoperable"></textarea><br></p><div id="notifiedSect"><label for="comment_notification"><span><input name="comment_notification" id="comment_notification" value="1" disabled="disabled" type="checkbox"><span id="notifyText" class="ibm-form-note">Notify me when a comment is added</span></span></label><span id="maxCharsCount" class="ibm-form-note"><span id="charCount">1000</span> characters left</span></div><br><br><p></p><p class="ibm-buttons-row"><input disabled="disabled" value="Post" jquery1275054459750="11" name="postCmt" id="postCmt" class="ibm-btn-arrow-sec dw-btn-arrow-sec" alt="Post your comment" type="button"><br><br></p></form></div></div><div id="topControl" class="ibm-container ibm-alternate-two dw-comment-totals" style="display: none;"><div class="ibm-container-body"><form id="selectComments" method="get" action=""><p><span class="dw-comment-totals-label"><strong>Total comments (<span id="numCmts">0</span>)</strong></span><span><img src="Snell2008_files/c_002.gif" alt="" height="10" width="100"></span><span class="dw-how-many-comments-label" style="display:none" id="dropdownCmts"><label for="howManyComments">Show:</label>&nbsp;<select name="comments" id="howManyComments" class="dw-how-many-comments"><option selected="selected" value="recent">Most recent comments   </option></select><input class="ibm-btn-go" name="ibm-go" value="Go" src="Snell2008_files/short-btn.gif" alt="Go" type="image"><br></span></p></form></div></div><div id="cmtSect"><div class="comment"><div class="dw-icomment-container"><table class="dw-icomment-body" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td><p>Be the first to add a comment</p></td></tr></tbody></table></div></div></div></div><div id="bottomControl" class="ibm-container ibm-alternate-two dw-comment-totals" style="display:none"><div class="ibm-container-body"><form id="selectComments2" method="get" action=""><p><span class="dw-comment-totals-label"><strong>Total comments (<span id="numCmts2">0</span>)</strong></span><span><img src="Snell2008_files/c_002.gif" alt="" height="10" width="100"></span><span class="dw-how-many-comments-label" style="display:none" id="dropdownCmts2"><label for="howManyComments2">Show:</label>&nbsp;<select name="comments" id="howManyComments2" class="dw-how-many-comments"><option selected="selected" value="recent">Most recent comments   </option></select><input class="ibm-btn-go" name="ibm-go" value="Go" src="Snell2008_files/short-btn.gif" alt="Go" type="image"><br></span></p></form></div></div></div>
+<!-- INLINE_COMMENTS_END -->
+
+<p class="ibm-ind-link ibm-back-to-top"><a class="ibm-anchor-up-link" href="#ibm-pcon">Back to top</a></p>
+
+<!-- Overlays -->
+<!-- Zone/Leaf_Interest_Overlay_Start -->
+<div class="ibm-common-overlay ibm-no-print" id="dwmyinterestadd">
+<div class="ibm-head"><p><a class="ibm-common-overlay-close" href="#close">Close [x]</a></p></div>
+<div class="ibm-body">
+<div class="ibm-main">
+<a class="ibm-access" name="dwmyinterestaddhelp">Help: Update or add to My dW interests</a>   
+<div class="ibm-title"><h1>What's this?</h1></div>
+<div class="ibm-container ibm-alternate">
+<p>This little timesaver lets you update your My developerWorks profile 
+with just one click!  The general subject of this content (AIX and UNIX,
+ Information Management, Lotus, Rational, Tivoli, WebSphere, Java, 
+Linux, Open source, SOA and Web services, Web development, or XML) will 
+be added to the interests section of your profile, if it's not there 
+already.  You only need to be logged in to My developerWorks.</p>
+<p>And what's the point of adding your interests to your profile?  
+That's how you find other users with the same interests as yours, and 
+see what they're reading and contributing to the community.  Your 
+interests also help us recommend relevant developerWorks content to you.</p>
+<p><a href="https://www.ibm.com/developerworks/mydeveloperworks/profiles/home.do?lang=en">View your My developerWorks profile</a></p>
+<p class="ibm-access"><a href="#interestShow">Return from help</a></p>
+</div> 
+</div>
+</div>
+<div class="ibm-footer"></div>
+</div>
+
+<div class="ibm-common-overlay ibm-no-print" id="dwmyinterestremove">
+<div class="ibm-head"><p><a class="ibm-common-overlay-close" href="#close">Close [x]</a></p></div>
+<div class="ibm-body">
+<div class="ibm-main">
+<a class="ibm-access" name="dwmyinterestremovehelp">Help: Remove from My dW interests</a> 
+<div class="ibm-title"><h1>What's this?</h1></div>
+<div class="ibm-container ibm-alternate">
+<p>Removing this interest does not alter your profile, but rather 
+removes this piece of content from a list of all content for which 
+you've indicated interest.  In a future enhancement to My 
+developerWorks, you'll be able to see a record of that content.</p>
+<p><a href="https://www.ibm.com/developerworks/mydeveloperworks/profiles/home.do?lang=en">View your My developerWorks profile</a></p>
+<p class="ibm-access"><a href="#interestShow">Return from help</a></p>
+</div> 
+</div>
+</div>
+<div class="ibm-footer"></div>
+</div>
+<!-- Zone/Leaf_Interest_Overlay_End --></div>
+<!-- MAIN_COLUMN_CONTAINER_END -->
+
+<!-- Rating_Meta_BEGIN -->
+<!--Rating_Meta_BEGIN--><div class="metavalue">static.content.url=http://www.ibm.com/developerworks/js/artrating/</div><div class="metavalue">SITE_ID=1</div><div class="metavalue">Zone=XML, Open source, Web development</div><div class="metavalue">ArticleID=284571</div><div class="metavalue">ArticleTitle=Convert Atom documents to JSON</div><div class="metavalue">publish-date=01082008</div><div class="metavalue">author1-email=jasnell@us.ibm.com</div><div class="metavalue">author1-email-cc=</div><script language="javascript" type="text/javascript">document.write('<div class="metavalue">url='+location.href.replace(/</g,  '%3C')+'</div>');</script><div class="metavalue">url=http://www.ibm.com/developerworks/library/x-atom2json/index.html</div><!--Rating_Meta_END-->
+<!-- Rating_Meta_END -->
+
+</div>
+<!-- MAIN_COLUMN_END-->
+
+<!-- RIGHT_COLUMN_BEGIN -->
+<div id="ibm-content-sidebar">
+
+<!-- RIGHT_COLUMN_CONTENT_BEGIN --> 
+<div class="ibm-container"><h2>Table of contents</h2><div class="ibm-container-body"><img alt="" src="Snell2008_files/c.gif" height="1" width="1"><ul class="ibm-bullet-list"><li><a class="ibm-feature-link" href="#N10053">Language metadata</a></li><li><a class="ibm-feature-link" href="#N10085">IRIs and URIs</a></li><li><a class="ibm-feature-link" href="#N100EF">Repeatable elements</a></li><li><a class="ibm-feature-link" href="#N10136">Dates</a></li><li><a class="ibm-feature-link" href="#N10186">Text constructs</a></li><li><a class="ibm-feature-link" href="#N101F9">Extensions</a></li><li><a class="ibm-feature-link" href="#N10241">Putting it all together</a></li><li><a class="ibm-feature-link" href="#N1026C">Using the Abdera JSON Writer</a></li><li><a class="ibm-feature-link" href="#N1027E">Wrapping up</a></li><li><a class="ibm-feature-link" href="#resources">Resources</a></li><li><a class="ibm-feature-link" href="#author">About the author</a></li><li><a class="ibm-feature-link" href="#icomments">Comments</a></li></ul></div></div>
+
+<!-- Tagging_Start -->
+<div id="dw-tag-cloud-container" class="ibm-container"><h2>Tags</h2>
+<div id="dw-tag-help"><a title="" class="dwauthor" rel="#tagtip" id="dwtagtip"><img alt="Help" src="Snell2008_files/help_icon.gif" align="top" height="16" width="16"></a></div>
+<div style="display: none;" id="tagtip" class="dwauthor-onload-state ibm-no-print">Use the <strong>search field</strong> to find all types of content in My developerWorks with that tag.<p>Use the <strong>slider bar</strong> to see more or fewer tags.</p><p>For articles in technology zones (such as Java technology, Linux, Open source, XML), <strong>Popular tags</strong> shows the top tags 
+for <em>all technology zones</em>.  For articles in product zones (such as Info Mgmt, Rational, WebSphere), <strong>Popular tags</strong> shows the top tags for <em>just that product zone</em>.</p><p>For articles in technology zones (such as Java technology, Linux, Open source, XML), <strong>My tags</strong> shows your tags for <em>all technology zones</em>.  For articles in product zones (such as Info Mgmt, Rational, WebSphere), <strong>My tags</strong> shows your tags for <em>just that product zone</em>.</p></div>
+<div class="ibm-access">Use the search field to find all types of content in My developerWorks with that tag.  <em>Popular tags</em> shows the top tags for this particular content zone (for example, Java technology, Linux, WebSphere).  <em>My tags</em> shows your tags for this particular content zone (for example, Java technology, Linux, WebSphere).</div>
+<div class="ibm-container-body">
+<div class="dw-tag-search"><form action="//www.ibm.com/developerworks/mydeveloperworks/bookmarks/html?lang=en" method="get" id="actualtagform" onsubmit="popupform(this, 'join')">
+<p><label for="tagfield"><strong>Search all tags</strong></label><input id="tagfield" name="tag" maxlength="20" size="17" type="text">&nbsp;<input src="Snell2008_files/short-btn.gif" class="ibm-btn-view" alt="submit search" title="submit search" value="Search" type="image"></p></form></div>
+<div class="ibm-rule"><hr></div>
+<div id="dw-tag-select">
+<div id="dw-tag-select-popular"><p><strong>Popular article tags</strong>&nbsp;|&nbsp;<br><a id="a-my" href="javascript:;">My article tags</a><a href="#dw-tag-access" class="ibm-access">Skip to tags list</a></p></div>
+<div id="dw-tag-select-my" class="dw-hidetag"><p><a id="a-popular" href="javascript:;">Popular article tags</a>&nbsp;|&nbsp;<br><strong>My article tags</strong></p><a href="#dw-tag-access" class="ibm-access">Skip to tags list</a></div><div id="dw-tag-access" class="ibm-access"><h2>Popular tags</h2><ul>
+					
+						
+							
+							
+							
+							
+								
+							
+							
+						
+				<li class="f1-72">
+					
+					<a title="ajax 252" class="lotusF4 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=ajax&amp;lang=en')">
+					
+						
+						
+							ajax	
+						
+					
+					<span class="ibm-access">(252)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f2-13">
+					
+					<a title="and 55" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=and&amp;lang=en')">
+					
+						
+						
+							and	
+						
+					
+					<span class="ibm-access">(55)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+								
+							
+							
+							
+							
+						
+				<li class="f3-31">
+					
+					<a title="android 87" class="lotusF2 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=android&amp;lang=en')">
+					
+						
+						
+							android	
+						
+					
+					<span class="ibm-access">(87)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f4-14">
+					
+					<a title="apache 56" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=apache&amp;lang=en')">
+					
+						
+						
+							apache	
+						
+					
+					<span class="ibm-access">(56)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+								
+							
+							
+							
+							
+						
+				<li class="f5-31">
+					
+					<a title="application_and_information_integration 88" class="lotusF2 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=application_and_information_integration&amp;lang=en')">
+					
+						
+							application_a...	
+						
+						
+					
+					<span class="ibm-access">(88)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+							
+							
+							
+								
+							
+						
+				<li class="f6-100">
+					
+					<a title="application_development 534" class="lotusF5 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=application_development&amp;lang=en')">
+					
+						
+							application_...	
+						
+						
+					
+					<span class="ibm-access">(534)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+							
+							
+								
+							
+							
+						
+				<li class="f7-77">
+					
+					<a title="architecture 289" class="lotusF4 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=architecture&amp;lang=en')">
+					
+						
+						
+							architecture	
+						
+					
+					<span class="ibm-access">(289)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f8-8">
+					
+					<a title="architecture_-_application 47" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=architecture_-_application&amp;lang=en')">
+					
+						
+							architecture_-...	
+						
+						
+					
+					<span class="ibm-access">(47)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f9-7">
+					
+					<a title="atom 46" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=atom&amp;lang=en')">
+					
+						
+						
+							atom	
+						
+					
+					<span class="ibm-access">(46)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f10-1">
+					
+					<a title="business_process_management 39" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=business_process_management&amp;lang=en')">
+					
+						
+							business_proce...	
+						
+						
+					
+					<span class="ibm-access">(39)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f11-10">
+					
+					<a title="business_processes 50" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=business_processes&amp;lang=en')">
+					
+						
+							business_proce...	
+						
+						
+					
+					<span class="ibm-access">(50)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+							
+								
+							
+							
+							
+						
+				<li class="f12-47">
+					
+					<a title="cloud 134" class="lotusF3 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=cloud&amp;lang=en')">
+					
+						
+						
+							cloud	
+						
+					
+					<span class="ibm-access">(134)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+								
+							
+							
+							
+							
+						
+				<li class="f13-32">
+					
+					<a title="cloud_computing 90" class="lotusF2 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=cloud_computing&amp;lang=en')">
+					
+						
+							cloud_computi...	
+						
+						
+					
+					<span class="ibm-access">(90)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f14-11">
+					
+					<a title="components 51" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=components&amp;lang=en')">
+					
+						
+						
+							components	
+						
+					
+					<span class="ibm-access">(51)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f15-17">
+					
+					<a title="configuration_and_administration 60" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=configuration_and_administration&amp;lang=en')">
+					
+						
+							configuration_...	
+						
+						
+					
+					<span class="ibm-access">(60)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f16-5">
+					
+					<a title="css_(cascading_style_sheets) 44" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=css_%2528cascading_style_sheets%2529&amp;lang=en')">
+					
+						
+							css_(cascading...	
+						
+						
+					
+					<span class="ibm-access">(44)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+							
+								
+							
+							
+							
+						
+				<li class="f17-50">
+					
+					<a title="databases_and_data_management 143" class="lotusF3 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=databases_and_data_management&amp;lang=en')">
+					
+						
+							databases_and...	
+						
+						
+					
+					<span class="ibm-access">(143)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f18-2">
+					
+					<a title="db2 41" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=db2&amp;lang=en')">
+					
+						
+						
+							db2	
+						
+					
+					<span class="ibm-access">(41)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f19-8">
+					
+					<a title="design 48" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=design&amp;lang=en')">
+					
+						
+						
+							design	
+						
+					
+					<span class="ibm-access">(48)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f20-3">
+					
+					<a title="development 42" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=development&amp;lang=en')">
+					
+						
+						
+							development	
+						
+					
+					<span class="ibm-access">(42)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f21-12">
+					
+					<a title="dojo 53" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=dojo&amp;lang=en')">
+					
+						
+						
+							dojo	
+						
+					
+					<span class="ibm-access">(53)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f22-12">
+					
+					<a title="dom_(document_object_model) 53" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=dom_%2528document_object_model%2529&amp;lang=en')">
+					
+						
+							dom_(document_...	
+						
+						
+					
+					<span class="ibm-access">(53)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+							
+								
+							
+							
+							
+						
+				<li class="f23-46">
+					
+					<a title="eclipse 130" class="lotusF3 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=eclipse&amp;lang=en')">
+					
+						
+						
+							eclipse	
+						
+					
+					<span class="ibm-access">(130)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f24-4">
+					
+					<a title="editing 43" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=editing&amp;lang=en')">
+					
+						
+						
+							editing	
+						
+					
+					<span class="ibm-access">(43)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f25-4">
+					
+					<a title="formatting 43" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=formatting&amp;lang=en')">
+					
+						
+						
+							formatting	
+						
+					
+					<span class="ibm-access">(43)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f26-17">
+					
+					<a title="frameworks 61" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=frameworks&amp;lang=en')">
+					
+						
+						
+							frameworks	
+						
+					
+					<span class="ibm-access">(61)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+							
+								
+							
+							
+							
+						
+				<li class="f27-48">
+					
+					<a title="general_programming 137" class="lotusF3 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=general_programming&amp;lang=en')">
+					
+						
+							general_progr...	
+						
+						
+					
+					<span class="ibm-access">(137)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+								
+							
+							
+							
+							
+						
+				<li class="f28-38">
+					
+					<a title="html 106" class="lotusF2 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=html&amp;lang=en')">
+					
+						
+						
+							html	
+						
+					
+					<span class="ibm-access">(106)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+								
+							
+							
+							
+							
+						
+				<li class="f29-26">
+					
+					<a title="html5 77" class="lotusF2 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=html5&amp;lang=en')">
+					
+						
+						
+							html5	
+						
+					
+					<span class="ibm-access">(77)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f30-12">
+					
+					<a title="integration 53" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=integration&amp;lang=en')">
+					
+						
+						
+							integration	
+						
+					
+					<span class="ibm-access">(53)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f31-9">
+					
+					<a title="interoperability 49" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=interoperability&amp;lang=en')">
+					
+						
+							interoperabili...	
+						
+						
+					
+					<span class="ibm-access">(49)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+							
+							
+							
+								
+							
+						
+				<li class="f32-87">
+					
+					<a title="java 374" class="lotusF5 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=java&amp;lang=en')">
+					
+						
+						
+							java	
+						
+					
+					<span class="ibm-access">(374)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+							
+							
+								
+							
+							
+						
+				<li class="f33-67">
+					
+					<a title="java_technology 225" class="lotusF4 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=java_technology&amp;lang=en')">
+					
+						
+							java_technol...	
+						
+						
+					
+					<span class="ibm-access">(225)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+							
+							
+								
+							
+							
+						
+				<li class="f34-62">
+					
+					<a title="javascript 198" class="lotusF4 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=javascript&amp;lang=en')">
+					
+						
+						
+							javascript	
+						
+					
+					<span class="ibm-access">(198)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f35-19">
+					
+					<a title="jquery 64" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=jquery&amp;lang=en')">
+					
+						
+						
+							jquery	
+						
+					
+					<span class="ibm-access">(64)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f36-1">
+					
+					<a title="jsf 40" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=jsf&amp;lang=en')">
+					
+						
+						
+							jsf	
+						
+					
+					<span class="ibm-access">(40)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f37-1">
+					
+					<a title="json 39" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=json&amp;lang=en')">
+					
+						
+						
+							json	
+						
+					
+					<span class="ibm-access">(39)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f38-6">
+					
+					<a title="json_(javascript_object_notation) 45" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=json_%2528javascript_object_notation%2529&amp;lang=en')">
+					
+						
+							json_(javascri...	
+						
+						
+					
+					<span class="ibm-access">(45)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+							
+							
+							
+								
+							
+						
+				<li class="f39-84">
+					
+					<a title="linux 351" class="lotusF5 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=linux&amp;lang=en')">
+					
+						
+						
+							linux	
+						
+					
+					<span class="ibm-access">(351)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f40-7">
+					
+					<a title="mashups 46" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=mashups&amp;lang=en')">
+					
+						
+						
+							mashups	
+						
+					
+					<span class="ibm-access">(46)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+								
+							
+							
+							
+							
+						
+				<li class="f41-24">
+					
+					<a title="messaging 73" class="lotusF2 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=messaging&amp;lang=en')">
+					
+						
+						
+							messaging	
+						
+					
+					<span class="ibm-access">(73)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f42-11">
+					
+					<a title="mobile 51" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=mobile&amp;lang=en')">
+					
+						
+						
+							mobile	
+						
+					
+					<span class="ibm-access">(51)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f43-3">
+					
+					<a title="mobile_and_embedded_systems 42" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=mobile_and_embedded_systems&amp;lang=en')">
+					
+						
+							mobile_and_emb...	
+						
+						
+					
+					<span class="ibm-access">(42)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f44-2">
+					
+					<a title="mobility 41" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=mobility&amp;lang=en')">
+					
+						
+						
+							mobility	
+						
+					
+					<span class="ibm-access">(41)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f45-5">
+					
+					<a title="multimedia 44" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=multimedia&amp;lang=en')">
+					
+						
+						
+							multimedia	
+						
+					
+					<span class="ibm-access">(44)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f46-4">
+					
+					<a title="namespaces 43" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=namespaces&amp;lang=en')">
+					
+						
+						
+							namespaces	
+						
+					
+					<span class="ibm-access">(43)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+							
+							
+								
+							
+							
+						
+				<li class="f47-78">
+					
+					<a title="open_source 298" class="lotusF4 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=open_source&amp;lang=en')">
+					
+						
+						
+							open_source	
+						
+					
+					<span class="ibm-access">(298)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f48-11">
+					
+					<a title="parsing 51" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=parsing&amp;lang=en')">
+					
+						
+						
+							parsing	
+						
+					
+					<span class="ibm-access">(51)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f49-6">
+					
+					<a title="patterns 45" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=patterns&amp;lang=en')">
+					
+						
+						
+							patterns	
+						
+					
+					<span class="ibm-access">(45)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+								
+							
+							
+							
+							
+						
+				<li class="f50-40">
+					
+					<a title="performance 109" class="lotusF2 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=performance&amp;lang=en')">
+					
+						
+						
+							performance	
+						
+					
+					<span class="ibm-access">(109)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+							
+								
+							
+							
+							
+						
+				<li class="f51-49">
+					
+					<a title="php 140" class="lotusF3 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=php&amp;lang=en')">
+					
+						
+						
+							php	
+						
+					
+					<span class="ibm-access">(140)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+							
+								
+							
+							
+							
+						
+				<li class="f52-43">
+					
+					<a title="php_(hypertext_preprocessor) 121" class="lotusF3 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=php_%2528hypertext_preprocessor%2529&amp;lang=en')">
+					
+						
+							php_(hypertex...	
+						
+						
+					
+					<span class="ibm-access">(121)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f53-11">
+					
+					<a title="programming 52" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=programming&amp;lang=en')">
+					
+						
+						
+							programming	
+						
+					
+					<span class="ibm-access">(52)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+								
+							
+							
+							
+							
+						
+				<li class="f54-37">
+					
+					<a title="python 103" class="lotusF2 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=python&amp;lang=en')">
+					
+						
+						
+							python	
+						
+					
+					<span class="ibm-access">(103)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+								
+							
+							
+							
+							
+						
+				<li class="f55-25">
+					
+					<a title="rest 75" class="lotusF2 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=rest&amp;lang=en')">
+					
+						
+						
+							rest	
+						
+					
+					<span class="ibm-access">(75)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f56-2">
+					
+					<a title="rss_(really_simple_syndication) 41" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=rss_%2528really_simple_syndication%2529&amp;lang=en')">
+					
+						
+							rss_(really_si...	
+						
+						
+					
+					<span class="ibm-access">(41)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f57-4">
+					
+					<a title="ruby 43" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=ruby&amp;lang=en')">
+					
+						
+						
+							ruby	
+						
+					
+					<span class="ibm-access">(43)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+								
+							
+							
+							
+							
+						
+				<li class="f58-27">
+					
+					<a title="schemas 78" class="lotusF2 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=schemas&amp;lang=en')">
+					
+						
+						
+							schemas	
+						
+					
+					<span class="ibm-access">(78)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+								
+							
+							
+							
+							
+						
+				<li class="f59-35">
+					
+					<a title="security 97" class="lotusF2 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=security&amp;lang=en')">
+					
+						
+						
+							security	
+						
+					
+					<span class="ibm-access">(97)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f60-16">
+					
+					<a title="services 59" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=services&amp;lang=en')">
+					
+						
+						
+							services	
+						
+					
+					<span class="ibm-access">(59)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+							
+								
+							
+							
+							
+						
+				<li class="f61-48">
+					
+					<a title="soa 137" class="lotusF3 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=soa&amp;lang=en')">
+					
+						
+						
+							soa	
+						
+					
+					<span class="ibm-access">(137)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+							
+								
+							
+							
+							
+						
+				<li class="f62-53">
+					
+					<a title="soa_(service-oriented_architecture) 155" class="lotusF3 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=soa_%2528service-oriented_architecture%2529&amp;lang=en')">
+					
+						
+							soa_(service-...	
+						
+						
+					
+					<span class="ibm-access">(155)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+								
+							
+							
+							
+							
+						
+				<li class="f63-35">
+					
+					<a title="soap_(simple_object_access_protocol) 98" class="lotusF2 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=soap_%2528simple_object_access_protocol%2529&amp;lang=en')">
+					
+						
+							soap_(simple_...	
+						
+						
+					
+					<span class="ibm-access">(98)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f64-17">
+					
+					<a title="spring 61" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=spring&amp;lang=en')">
+					
+						
+						
+							spring	
+						
+					
+					<span class="ibm-access">(61)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+								
+							
+							
+							
+							
+						
+				<li class="f65-38">
+					
+					<a title="standards 105" class="lotusF2 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=standards&amp;lang=en')">
+					
+						
+						
+							standards	
+						
+					
+					<span class="ibm-access">(105)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f66-17">
+					
+					<a title="standards_and_specifications 61" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=standards_and_specifications&amp;lang=en')">
+					
+						
+							standards_and_...	
+						
+						
+					
+					<span class="ibm-access">(61)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f67-17">
+					
+					<a title="tips 60" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=tips&amp;lang=en')">
+					
+						
+						
+							tips	
+						
+					
+					<span class="ibm-access">(60)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+							
+								
+							
+							
+							
+						
+				<li class="f68-51">
+					
+					<a title="web 147" class="lotusF3 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=web&amp;lang=en')">
+					
+						
+						
+							web	
+						
+					
+					<span class="ibm-access">(147)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+							
+								
+							
+							
+							
+						
+				<li class="f69-50">
+					
+					<a title="web_2.0 145" class="lotusF3 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=web_2.0&amp;lang=en')">
+					
+						
+						
+							web_2.0	
+						
+					
+					<span class="ibm-access">(145)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+								
+							
+							
+							
+							
+						
+				<li class="f70-24">
+					
+					<a title="web_authoring 72" class="lotusF2 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=web_authoring&amp;lang=en')">
+					
+						
+						
+							web_authoring	
+						
+					
+					<span class="ibm-access">(72)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f71-17">
+					
+					<a title="web_development 60" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=web_development&amp;lang=en')">
+					
+						
+							web_developmen...	
+						
+						
+					
+					<span class="ibm-access">(60)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+							
+							
+								
+							
+							
+						
+				<li class="f72-77">
+					
+					<a title="web_services 289" class="lotusF4 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=web_services&amp;lang=en')">
+					
+						
+						
+							web_services	
+						
+					
+					<span class="ibm-access">(289)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f73-15">
+					
+					<a title="websphere 58" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=websphere&amp;lang=en')">
+					
+						
+						
+							websphere	
+						
+					
+					<span class="ibm-access">(58)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f74-5">
+					
+					<a title="wsdl_(web_services_description_language) 44" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=wsdl_%2528web_services_description_language%2529&amp;lang=en')">
+					
+						
+							wsdl_(web_serv...	
+						
+						
+					
+					<span class="ibm-access">(44)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f75-13">
+					
+					<a title="xhtml_(extensible_html) 55" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=xhtml_%2528extensible_html%2529&amp;lang=en')">
+					
+						
+							xhtml_(extensi...	
+						
+						
+					
+					<span class="ibm-access">(55)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+							
+							
+							
+								
+							
+						
+				<li class="f76-93">
+					
+					<a title="xml 445" class="lotusF5 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=xml&amp;lang=en')">
+					
+						
+						
+							xml	
+						
+					
+					<span class="ibm-access">(445)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f77-15">
+					
+					<a title="xpath_(xml_path_language) 57" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=xpath_%2528xml_path_language%2529&amp;lang=en')">
+					
+						
+							xpath_(xml_pat...	
+						
+						
+					
+					<span class="ibm-access">(57)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f78-15">
+					
+					<a title="xquery_(xml_query_language) 57" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=xquery_%2528xml_query_language%2529&amp;lang=en')">
+					
+						
+							xquery_(xml_qu...	
+						
+						
+					
+					<span class="ibm-access">(57)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f79-10">
+					
+					<a title="xslt 50" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=xslt&amp;lang=en')">
+					
+						
+						
+							xslt	
+						
+					
+					<span class="ibm-access">(50)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f80-19">
+					
+					<a title="xslt_(xsl_transformations) 64" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=xslt_%2528xsl_transformations%2529&amp;lang=en')">
+					
+						
+							xslt_(xsl_tran...	
+						
+						
+					
+					<span class="ibm-access">(64)</span>					
+					</a>&nbsp;
+				</li>
+					
+			</ul><p>End of Popular tags</p><h2>My tags</h2><div id="dw-tag-access-my" class="ibm-access"><center>To access My Tags, please <a href="http://www.ibm.com/developerworks/dwwi/DWAuthRouter?m=auth&amp;lang=en&amp;d=http%3A%2F%2Fwww.ibm.com%2Fdeveloperworks%2Flibrary%2Fx-atom2json%2Findex.html">sign in</a><p>Read Popular tags</p></center><br></div><p>End of My tags</p></div>
+<div id="dw-tag-cloud">
+	<div id="dogearTagCloud">
+		<div class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all" id="content-slider"><a style="left: 0%;" class="ui-slider-handle ui-state-default ui-corner-all" href="#"></a></div>
+		
+			
+						
+						
+						
+						
+						
+									
+			
+				<div id="ui-slider-scale"><p><span class="content-slider-more">More</span><span class="content-slider-less">Less</span></p></div>
+			
+		
+	    <div id="cloud-container">
+			<ul>
+					
+						
+							
+							
+							
+							
+								
+							
+							
+						
+				<li class="f1-72">
+					
+					<a title="ajax 252" class="lotusF4 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=ajax&amp;lang=en')">
+					
+						
+						
+							ajax	
+						
+					
+					<span class="ibm-access">(252)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f2-13">
+					
+					<a title="and 55" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=and&amp;lang=en')">
+					
+						
+						
+							and	
+						
+					
+					<span class="ibm-access">(55)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+								
+							
+							
+							
+							
+						
+				<li class="f3-31">
+					
+					<a title="android 87" class="lotusF2 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=android&amp;lang=en')">
+					
+						
+						
+							android	
+						
+					
+					<span class="ibm-access">(87)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f4-14">
+					
+					<a title="apache 56" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=apache&amp;lang=en')">
+					
+						
+						
+							apache	
+						
+					
+					<span class="ibm-access">(56)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+								
+							
+							
+							
+							
+						
+				<li class="f5-31">
+					
+					<a title="application_and_information_integration 88" class="lotusF2 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=application_and_information_integration&amp;lang=en')">
+					
+						
+							application_a...	
+						
+						
+					
+					<span class="ibm-access">(88)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+							
+							
+							
+								
+							
+						
+				<li class="f6-100">
+					
+					<a title="application_development 534" class="lotusF5 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=application_development&amp;lang=en')">
+					
+						
+							application_...	
+						
+						
+					
+					<span class="ibm-access">(534)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+							
+							
+								
+							
+							
+						
+				<li class="f7-77">
+					
+					<a title="architecture 289" class="lotusF4 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=architecture&amp;lang=en')">
+					
+						
+						
+							architecture	
+						
+					
+					<span class="ibm-access">(289)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f8-8">
+					
+					<a title="architecture_-_application 47" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=architecture_-_application&amp;lang=en')">
+					
+						
+							architecture_-...	
+						
+						
+					
+					<span class="ibm-access">(47)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f9-7">
+					
+					<a title="atom 46" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=atom&amp;lang=en')">
+					
+						
+						
+							atom	
+						
+					
+					<span class="ibm-access">(46)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f10-1">
+					
+					<a title="business_process_management 39" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=business_process_management&amp;lang=en')">
+					
+						
+							business_proce...	
+						
+						
+					
+					<span class="ibm-access">(39)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f11-10">
+					
+					<a title="business_processes 50" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=business_processes&amp;lang=en')">
+					
+						
+							business_proce...	
+						
+						
+					
+					<span class="ibm-access">(50)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+							
+								
+							
+							
+							
+						
+				<li class="f12-47">
+					
+					<a title="cloud 134" class="lotusF3 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=cloud&amp;lang=en')">
+					
+						
+						
+							cloud	
+						
+					
+					<span class="ibm-access">(134)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+								
+							
+							
+							
+							
+						
+				<li class="f13-32">
+					
+					<a title="cloud_computing 90" class="lotusF2 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=cloud_computing&amp;lang=en')">
+					
+						
+							cloud_computi...	
+						
+						
+					
+					<span class="ibm-access">(90)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f14-11">
+					
+					<a title="components 51" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=components&amp;lang=en')">
+					
+						
+						
+							components	
+						
+					
+					<span class="ibm-access">(51)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f15-17">
+					
+					<a title="configuration_and_administration 60" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=configuration_and_administration&amp;lang=en')">
+					
+						
+							configuration_...	
+						
+						
+					
+					<span class="ibm-access">(60)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f16-5">
+					
+					<a title="css_(cascading_style_sheets) 44" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=css_%2528cascading_style_sheets%2529&amp;lang=en')">
+					
+						
+							css_(cascading...	
+						
+						
+					
+					<span class="ibm-access">(44)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+							
+								
+							
+							
+							
+						
+				<li class="f17-50">
+					
+					<a title="databases_and_data_management 143" class="lotusF3 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=databases_and_data_management&amp;lang=en')">
+					
+						
+							databases_and...	
+						
+						
+					
+					<span class="ibm-access">(143)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f18-2">
+					
+					<a title="db2 41" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=db2&amp;lang=en')">
+					
+						
+						
+							db2	
+						
+					
+					<span class="ibm-access">(41)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f19-8">
+					
+					<a title="design 48" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=design&amp;lang=en')">
+					
+						
+						
+							design	
+						
+					
+					<span class="ibm-access">(48)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f20-3">
+					
+					<a title="development 42" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=development&amp;lang=en')">
+					
+						
+						
+							development	
+						
+					
+					<span class="ibm-access">(42)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f21-12">
+					
+					<a title="dojo 53" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=dojo&amp;lang=en')">
+					
+						
+						
+							dojo	
+						
+					
+					<span class="ibm-access">(53)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f22-12">
+					
+					<a title="dom_(document_object_model) 53" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=dom_%2528document_object_model%2529&amp;lang=en')">
+					
+						
+							dom_(document_...	
+						
+						
+					
+					<span class="ibm-access">(53)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+							
+								
+							
+							
+							
+						
+				<li class="f23-46">
+					
+					<a title="eclipse 130" class="lotusF3 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=eclipse&amp;lang=en')">
+					
+						
+						
+							eclipse	
+						
+					
+					<span class="ibm-access">(130)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f24-4">
+					
+					<a title="editing 43" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=editing&amp;lang=en')">
+					
+						
+						
+							editing	
+						
+					
+					<span class="ibm-access">(43)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f25-4">
+					
+					<a title="formatting 43" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=formatting&amp;lang=en')">
+					
+						
+						
+							formatting	
+						
+					
+					<span class="ibm-access">(43)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f26-17">
+					
+					<a title="frameworks 61" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=frameworks&amp;lang=en')">
+					
+						
+						
+							frameworks	
+						
+					
+					<span class="ibm-access">(61)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+							
+								
+							
+							
+							
+						
+				<li class="f27-48">
+					
+					<a title="general_programming 137" class="lotusF3 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=general_programming&amp;lang=en')">
+					
+						
+							general_progr...	
+						
+						
+					
+					<span class="ibm-access">(137)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+								
+							
+							
+							
+							
+						
+				<li class="f28-38">
+					
+					<a title="html 106" class="lotusF2 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=html&amp;lang=en')">
+					
+						
+						
+							html	
+						
+					
+					<span class="ibm-access">(106)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+								
+							
+							
+							
+							
+						
+				<li class="f29-26">
+					
+					<a title="html5 77" class="lotusF2 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=html5&amp;lang=en')">
+					
+						
+						
+							html5	
+						
+					
+					<span class="ibm-access">(77)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f30-12">
+					
+					<a title="integration 53" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=integration&amp;lang=en')">
+					
+						
+						
+							integration	
+						
+					
+					<span class="ibm-access">(53)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f31-9">
+					
+					<a title="interoperability 49" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=interoperability&amp;lang=en')">
+					
+						
+							interoperabili...	
+						
+						
+					
+					<span class="ibm-access">(49)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+							
+							
+							
+								
+							
+						
+				<li class="f32-87">
+					
+					<a title="java 374" class="lotusF5 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=java&amp;lang=en')">
+					
+						
+						
+							java	
+						
+					
+					<span class="ibm-access">(374)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+							
+							
+								
+							
+							
+						
+				<li class="f33-67">
+					
+					<a title="java_technology 225" class="lotusF4 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=java_technology&amp;lang=en')">
+					
+						
+							java_technol...	
+						
+						
+					
+					<span class="ibm-access">(225)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+							
+							
+								
+							
+							
+						
+				<li class="f34-62">
+					
+					<a title="javascript 198" class="lotusF4 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=javascript&amp;lang=en')">
+					
+						
+						
+							javascript	
+						
+					
+					<span class="ibm-access">(198)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f35-19">
+					
+					<a title="jquery 64" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=jquery&amp;lang=en')">
+					
+						
+						
+							jquery	
+						
+					
+					<span class="ibm-access">(64)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f36-1">
+					
+					<a title="jsf 40" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=jsf&amp;lang=en')">
+					
+						
+						
+							jsf	
+						
+					
+					<span class="ibm-access">(40)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f37-1">
+					
+					<a title="json 39" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=json&amp;lang=en')">
+					
+						
+						
+							json	
+						
+					
+					<span class="ibm-access">(39)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f38-6">
+					
+					<a title="json_(javascript_object_notation) 45" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=json_%2528javascript_object_notation%2529&amp;lang=en')">
+					
+						
+							json_(javascri...	
+						
+						
+					
+					<span class="ibm-access">(45)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+							
+							
+							
+								
+							
+						
+				<li class="f39-84">
+					
+					<a title="linux 351" class="lotusF5 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=linux&amp;lang=en')">
+					
+						
+						
+							linux	
+						
+					
+					<span class="ibm-access">(351)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f40-7">
+					
+					<a title="mashups 46" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=mashups&amp;lang=en')">
+					
+						
+						
+							mashups	
+						
+					
+					<span class="ibm-access">(46)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+								
+							
+							
+							
+							
+						
+				<li class="f41-24">
+					
+					<a title="messaging 73" class="lotusF2 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=messaging&amp;lang=en')">
+					
+						
+						
+							messaging	
+						
+					
+					<span class="ibm-access">(73)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f42-11">
+					
+					<a title="mobile 51" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=mobile&amp;lang=en')">
+					
+						
+						
+							mobile	
+						
+					
+					<span class="ibm-access">(51)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f43-3">
+					
+					<a title="mobile_and_embedded_systems 42" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=mobile_and_embedded_systems&amp;lang=en')">
+					
+						
+							mobile_and_emb...	
+						
+						
+					
+					<span class="ibm-access">(42)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f44-2">
+					
+					<a title="mobility 41" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=mobility&amp;lang=en')">
+					
+						
+						
+							mobility	
+						
+					
+					<span class="ibm-access">(41)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f45-5">
+					
+					<a title="multimedia 44" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=multimedia&amp;lang=en')">
+					
+						
+						
+							multimedia	
+						
+					
+					<span class="ibm-access">(44)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f46-4">
+					
+					<a title="namespaces 43" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=namespaces&amp;lang=en')">
+					
+						
+						
+							namespaces	
+						
+					
+					<span class="ibm-access">(43)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+							
+							
+								
+							
+							
+						
+				<li class="f47-78">
+					
+					<a title="open_source 298" class="lotusF4 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=open_source&amp;lang=en')">
+					
+						
+						
+							open_source	
+						
+					
+					<span class="ibm-access">(298)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f48-11">
+					
+					<a title="parsing 51" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=parsing&amp;lang=en')">
+					
+						
+						
+							parsing	
+						
+					
+					<span class="ibm-access">(51)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f49-6">
+					
+					<a title="patterns 45" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=patterns&amp;lang=en')">
+					
+						
+						
+							patterns	
+						
+					
+					<span class="ibm-access">(45)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+								
+							
+							
+							
+							
+						
+				<li class="f50-40">
+					
+					<a title="performance 109" class="lotusF2 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=performance&amp;lang=en')">
+					
+						
+						
+							performance	
+						
+					
+					<span class="ibm-access">(109)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+							
+								
+							
+							
+							
+						
+				<li class="f51-49">
+					
+					<a title="php 140" class="lotusF3 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=php&amp;lang=en')">
+					
+						
+						
+							php	
+						
+					
+					<span class="ibm-access">(140)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+							
+								
+							
+							
+							
+						
+				<li class="f52-43">
+					
+					<a title="php_(hypertext_preprocessor) 121" class="lotusF3 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=php_%2528hypertext_preprocessor%2529&amp;lang=en')">
+					
+						
+							php_(hypertex...	
+						
+						
+					
+					<span class="ibm-access">(121)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f53-11">
+					
+					<a title="programming 52" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=programming&amp;lang=en')">
+					
+						
+						
+							programming	
+						
+					
+					<span class="ibm-access">(52)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+								
+							
+							
+							
+							
+						
+				<li class="f54-37">
+					
+					<a title="python 103" class="lotusF2 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=python&amp;lang=en')">
+					
+						
+						
+							python	
+						
+					
+					<span class="ibm-access">(103)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+								
+							
+							
+							
+							
+						
+				<li class="f55-25">
+					
+					<a title="rest 75" class="lotusF2 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=rest&amp;lang=en')">
+					
+						
+						
+							rest	
+						
+					
+					<span class="ibm-access">(75)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f56-2">
+					
+					<a title="rss_(really_simple_syndication) 41" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=rss_%2528really_simple_syndication%2529&amp;lang=en')">
+					
+						
+							rss_(really_si...	
+						
+						
+					
+					<span class="ibm-access">(41)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f57-4">
+					
+					<a title="ruby 43" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=ruby&amp;lang=en')">
+					
+						
+						
+							ruby	
+						
+					
+					<span class="ibm-access">(43)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+								
+							
+							
+							
+							
+						
+				<li class="f58-27">
+					
+					<a title="schemas 78" class="lotusF2 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=schemas&amp;lang=en')">
+					
+						
+						
+							schemas	
+						
+					
+					<span class="ibm-access">(78)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+								
+							
+							
+							
+							
+						
+				<li class="f59-35">
+					
+					<a title="security 97" class="lotusF2 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=security&amp;lang=en')">
+					
+						
+						
+							security	
+						
+					
+					<span class="ibm-access">(97)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f60-16">
+					
+					<a title="services 59" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=services&amp;lang=en')">
+					
+						
+						
+							services	
+						
+					
+					<span class="ibm-access">(59)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+							
+								
+							
+							
+							
+						
+				<li class="f61-48">
+					
+					<a title="soa 137" class="lotusF3 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=soa&amp;lang=en')">
+					
+						
+						
+							soa	
+						
+					
+					<span class="ibm-access">(137)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+							
+								
+							
+							
+							
+						
+				<li class="f62-53">
+					
+					<a title="soa_(service-oriented_architecture) 155" class="lotusF3 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=soa_%2528service-oriented_architecture%2529&amp;lang=en')">
+					
+						
+							soa_(service-...	
+						
+						
+					
+					<span class="ibm-access">(155)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+								
+							
+							
+							
+							
+						
+				<li class="f63-35">
+					
+					<a title="soap_(simple_object_access_protocol) 98" class="lotusF2 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=soap_%2528simple_object_access_protocol%2529&amp;lang=en')">
+					
+						
+							soap_(simple_...	
+						
+						
+					
+					<span class="ibm-access">(98)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f64-17">
+					
+					<a title="spring 61" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=spring&amp;lang=en')">
+					
+						
+						
+							spring	
+						
+					
+					<span class="ibm-access">(61)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+								
+							
+							
+							
+							
+						
+				<li class="f65-38">
+					
+					<a title="standards 105" class="lotusF2 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=standards&amp;lang=en')">
+					
+						
+						
+							standards	
+						
+					
+					<span class="ibm-access">(105)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f66-17">
+					
+					<a title="standards_and_specifications 61" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=standards_and_specifications&amp;lang=en')">
+					
+						
+							standards_and_...	
+						
+						
+					
+					<span class="ibm-access">(61)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f67-17">
+					
+					<a title="tips 60" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=tips&amp;lang=en')">
+					
+						
+						
+							tips	
+						
+					
+					<span class="ibm-access">(60)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+							
+								
+							
+							
+							
+						
+				<li class="f68-51">
+					
+					<a title="web 147" class="lotusF3 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=web&amp;lang=en')">
+					
+						
+						
+							web	
+						
+					
+					<span class="ibm-access">(147)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+							
+								
+							
+							
+							
+						
+				<li class="f69-50">
+					
+					<a title="web_2.0 145" class="lotusF3 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=web_2.0&amp;lang=en')">
+					
+						
+						
+							web_2.0	
+						
+					
+					<span class="ibm-access">(145)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+								
+							
+							
+							
+							
+						
+				<li class="f70-24">
+					
+					<a title="web_authoring 72" class="lotusF2 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=web_authoring&amp;lang=en')">
+					
+						
+						
+							web_authoring	
+						
+					
+					<span class="ibm-access">(72)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f71-17">
+					
+					<a title="web_development 60" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=web_development&amp;lang=en')">
+					
+						
+							web_developmen...	
+						
+						
+					
+					<span class="ibm-access">(60)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+							
+							
+								
+							
+							
+						
+				<li class="f72-77">
+					
+					<a title="web_services 289" class="lotusF4 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=web_services&amp;lang=en')">
+					
+						
+						
+							web_services	
+						
+					
+					<span class="ibm-access">(289)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f73-15">
+					
+					<a title="websphere 58" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=websphere&amp;lang=en')">
+					
+						
+						
+							websphere	
+						
+					
+					<span class="ibm-access">(58)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f74-5">
+					
+					<a title="wsdl_(web_services_description_language) 44" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=wsdl_%2528web_services_description_language%2529&amp;lang=en')">
+					
+						
+							wsdl_(web_serv...	
+						
+						
+					
+					<span class="ibm-access">(44)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f75-13">
+					
+					<a title="xhtml_(extensible_html) 55" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=xhtml_%2528extensible_html%2529&amp;lang=en')">
+					
+						
+							xhtml_(extensi...	
+						
+						
+					
+					<span class="ibm-access">(55)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+							
+							
+							
+								
+							
+						
+				<li class="f76-93">
+					
+					<a title="xml 445" class="lotusF5 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=xml&amp;lang=en')">
+					
+						
+						
+							xml	
+						
+					
+					<span class="ibm-access">(445)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f77-15">
+					
+					<a title="xpath_(xml_path_language) 57" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=xpath_%2528xml_path_language%2529&amp;lang=en')">
+					
+						
+							xpath_(xml_pat...	
+						
+						
+					
+					<span class="ibm-access">(57)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f78-15">
+					
+					<a title="xquery_(xml_query_language) 57" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=xquery_%2528xml_query_language%2529&amp;lang=en')">
+					
+						
+							xquery_(xml_qu...	
+						
+						
+					
+					<span class="ibm-access">(57)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f79-10">
+					
+					<a title="xslt 50" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=xslt&amp;lang=en')">
+					
+						
+						
+							xslt	
+						
+					
+					<span class="ibm-access">(50)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f80-19">
+					
+					<a title="xslt_(xsl_transformations) 64" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=xslt_%2528xsl_transformations%2529&amp;lang=en')">
+					
+						
+							xslt_(xsl_tran...	
+						
+						
+					
+					<span class="ibm-access">(64)</span>					
+					</a>&nbsp;
+				</li>
+					
+			</ul>
+		</div>
+		
+			
+						
+						
+						
+						
+						
+			
+			
+				<div class="ibm-rule"><hr></div><p>View as <strong>cloud</strong>&nbsp;| <a id="alist" class="lotusAction" href="javascript:;">list</a></p>
+			
+		
+		</div> 
+
+		
+			
+			<div class="lotusChunk dw-hidetag" id="dogearTagList">
+			<div id="list-container">
+				<ul class="lotusList lotusEditable lotusTags lotusMeta">
+				
+					
+						
+			
+
+			
+				<li>				
+					<a title="ajax 252" class="lotusLeft my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=ajax&amp;lang=en')">
+						
+							
+							
+								ajax	
+							
+						
+					</a>
+					252
+				</li>
+				
+			
+					
+						
+			
+
+			
+				<li>				
+					<a title="and 55" class="lotusLeft my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=and&amp;lang=en')">
+						
+							
+							
+								and	
+							
+						
+					</a>
+					55
+				</li>
+				
+			
+					
+						
+			
+
+			
+				<li>				
+					<a title="android 87" class="lotusLeft my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=android&amp;lang=en')">
+						
+							
+							
+								android	
+							
+						
+					</a>
+					87
+				</li>
+				
+			
+					
+						
+			
+
+			
+				<li>				
+					<a title="apache 56" class="lotusLeft my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=apache&amp;lang=en')">
+						
+							
+							
+								apache	
+							
+						
+					</a>
+					56
+				</li>
+				
+			
+					
+						
+			
+
+			
+				<li>				
+					<a title="application_and_information_integration 88" class="lotusLeft my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=application_and_information_integration&amp;lang=en')">
+						
+							
+								application_a...	
+							
+							
+						
+					</a>
+					88
+				</li>
+				
+			
+					
+						
+			
+
+			
+				<li>				
+					<a title="application_development 534" class="lotusLeft my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=application_development&amp;lang=en')">
+						
+							
+								application_d...	
+							
+							
+						
+					</a>
+					534
+				</li>
+				
+			
+					
+						
+			
+
+			
+				<li>				
+					<a title="architecture 289" class="lotusLeft my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=architecture&amp;lang=en')">
+						
+							
+							
+								architecture	
+							
+						
+					</a>
+					289
+				</li>
+				
+			
+					
+						
+			
+
+			
+				<li>				
+					<a title="architecture_-_application 47" class="lotusLeft my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=architecture_-_application&amp;lang=en')">
+						
+							
+								architecture_...	
+							
+							
+						
+					</a>
+					47
+				</li>
+				
+			
+					
+						
+			
+
+			
+				<li>				
+					<a title="atom 46" class="lotusLeft my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=atom&amp;lang=en')">
+						
+							
+							
+								atom	
+							
+						
+					</a>
+					46
+				</li>
+				
+			
+					
+						
+			
+
+			
+				<li>				
+					<a title="business_process_management 39" class="lotusLeft my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=business_process_management&amp;lang=en')">
+						
+							
+								business_proc...	
+							
+							
+						
+					</a>
+					39
+				</li>
+				
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+				
+			</ul>
+			</div>
+			
+				
+							
+							
+							
+							
+							
+								
+				
+					<div class="ibm-rule"><hr></div><p>View as <a id="acloud" class="lotusAction" href="javascript:;">cloud</a>&nbsp;| <strong>list</strong></p>
+				
+			
+			</div></div>  
+</div>   
+</div>
+</div>
+<!-- Tagging_End -->
+<!-- Dig_Deeper -->
+
+<!-- High_Visibility_Offer -->
+
+<!-- Special_Offers -->
+
+<!-- RIGHT_COLUMN_CONTENT_END -->
+
+</div>
+<!-- RIGHT_COLUMN_END -->
+
+<!-- CONTENT_BODY_END -->
+</div>
+
+</div>
+<!-- CONTENT_END -->
+
+ <!-- END_IBM-PCON -->
+</div>
+
+<!-- FOOTER_BEGIN -->
+<div id="ibm-footer">
+<!-- IBM footer container; disabled -->
+</div>
+
+<div id="ibm-page-tools-dw">
+	<div id="dw-footer-top-row">
+		<ul id="dw-foot-options">
+			<li id="dw-print"><a class="ibm-print-link" href="#">Print this page</a></li>
+		</ul>
+		<ul id="ibm-foot-options-dw">
+			<li id="dw-foot-0"><a href="#">Share this page</a></li>
+			<li id="dw-foot-1"><a href="#">Follow developerWorks</a></li>
+		</ul>
+	</div>
+
+	<!-- TOP ROW SLIDER -->
+    <div id="dw-page-tools-menu">    
+        <div class="ibm-ribbon-pane-dw">
+            <div class="ibm-ribbon-section-dw">
+				<!-- Share this page -->			
+                <div class="dw-footer-columns">
+                    <div class="dw-footer-col-3-1">
+                        <h2>Share this page:</h2>                       
+						<ul class="ibm-link-list">
+							<li><a id="dw-foot-0-0" class="ibm-facebook-link" href="http://www.facebook.com/sharer.php?u=http%3A%2F%2Fwww.ibm.com%2Fdeveloperworks%2Flibrary%2Fx-atom2json%2Findex.html&amp;t=Convert%20Atom%20documents%20to%20JSON">Facebook</a></li>
+							<li><a class="ibm-linkedin-link" href="http://www.linkedin.com/shareArticle?mini=true&amp;url=http%3A%2F%2Fwww.ibm.com%2Fdeveloperworks%2Flibrary%2Fx-atom2json%2Findex.html&amp;title=Convert%20Atom%20documents%20to%20JSON">LinkedIn</a></li>
+							<li><a class="ibm-twitter-link" href="http://twitter.com/home?status=http%3A%2F%2Fwww.ibm.com%2Fdeveloperworks%2Flibrary%2Fx-atom2json%2Findex.html%20-%20Convert%20Atom%20documents%20to%20JSON">Twitter</a></li>
+						</ul>
+                    </div>
+                    <div class="dw-footer-col-3-2">
+						<ul class="ibm-link-list">
+							<li><a class="ibm-delicious-link" href="http://delicious.com/post?url=http%3A%2F%2Fwww.ibm.com%2Fdeveloperworks%2Flibrary%2Fx-atom2json%2Findex.html&amp;title=Convert%20Atom%20documents%20to%20JSON">Delicious</a></li>
+							<li><a class="ibm-digg-link" href="http://digg.com/submit?phase=2&amp;url=http%3A%2F%2Fwww.ibm.com%2Fdeveloperworks%2Flibrary%2Fx-atom2json%2Findex.html&amp;title=Convert%20Atom%20documents%20to%20JSON">Digg</a></li>
+							<li><a class="ibm-stumbleupon" href="http://www.stumbleupon.com/submit?url=http%3A%2F%2Fwww.ibm.com%2Fdeveloperworks%2Flibrary%2Fx-atom2json%2Findex.html&amp;title=Convert%20Atom%20documents%20to%20JSON">StumbleUpon</a></li>
+						</ul>
+                    </div>
+                    <div class="dw-footer-col-3-3">
+						<ul class="ibm-link-list">
+							<li><a class="ibm-email-link" href="#">Email this page</a></li>
+						</ul>
+                    </div>
+                    <div class="dw-footer-close">
+						<ul>
+							<li><a href="#">Close [x]</a></li>
+						</ul>
+                    </div>
+                </div>
+                <!-- Follow developerWorks -->
+                <div class="dw-footer-columns">
+                    <div class="dw-footer-col-1-1">
+                        <h2>Follow developerWorks:</h2>
+						<ul class="ibm-link-list">
+							<li><a id="dw-foot-1-0" class="ibm-facebook-link" href="http://www.facebook.com/developerworks">Facebook</a></li>
+							<li><a class="ibm-twitter-link" href="http://twitter.com/developerWorks">Twitter</a></li>
+						</ul>
+                    </div>
+                    <div class="dw-footer-close">
+						<ul>
+							<li><a href="#">Close [x]</a></li>
+						</ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="ibm-footer-module-dw">
+	<div class="dw-footer-columns">
+		<div class="dw-footer-col-6-1"> 
+			<h2><a href="http://www.ibm.com/developerworks/topics/">Technical topics</a></h2>
+			<ul>
+				<li><a href="http://www.ibm.com/developerworks/aix/">AIX and UNIX</a></li>
+				<li><a href="http://www.ibm.com/developerworks/ibmi/">IBM i</a></li>
+				<li class="dw-footer-newline dw-footer-newline-en"><a href="http://www.ibm.com/developerworks/data/">Information<br> Management</a></li>
+				<li><a href="http://www.ibm.com/developerworks/lotus/">Lotus</a></li>
+				<li><a href="http://www.ibm.com/developerworks/rational/">Rational</a></li>
+				<li><a href="http://www.ibm.com/developerworks/tivoli/">Tivoli</a></li>
+				<li><a href="http://www.ibm.com/developerworks/websphere/">WebSphere</a></li>
+			</ul>
+			<ul>
+				<li class="dw-footer-newgroup"><a href="http://www.ibm.com/developerworks/cloud/">Cloud computing</a></li>
+				<li><a href="http://www.ibm.com/developerworks/industry/">Industries</a></li>
+				<li class="dw-footer-newline dw-footer-newline-en"><a href="http://www.ibm.com/developerworks/servicemanagement/">Integrated Service<br> Management</a></li>
+			</ul>
+		</div>
+		<div class="dw-footer-col-6-2">
+			<ul>
+				<li><a href="http://www.ibm.com/developerworks/java/">Java technology</a></li>
+				<li><a href="http://www.ibm.com/developerworks/linux/">Linux</a></li>
+				<li><a href="http://www.ibm.com/developerworks/opensource/">Open source</a></li>
+				<li><a href="http://www.ibm.com/developerworks/webservices/">SOA and web services</a></li>
+				<li><a href="http://www.ibm.com/developerworks/web/">Web development</a></li>
+				<li><a href="http://www.ibm.com/developerworks/xml/">XML</a></li>
+			</ul>
+			<h2 class="dw-footer-more"><a href="http://www.ibm.com/developerworks/topics/">More...</a></h2>
+		</div>
+		<div class="dw-footer-col-6-3">
+			<h2><a href="http://www.ibm.com/developerworks/downloads/">Evaluation software</a></h2>
+			<ul>
+				<li><a href="http://www.ibm.com/developerworks/downloads/product.html">By IBM product</a></li>
+				<li><a href="http://www.ibm.com/developerworks/downloads/evalmethod.html">By evaluation method</a></li>
+				<li><a href="http://www.ibm.com/developerworks/downloads/industry.html">By industry</a></li>
+			</ul>
+			<h2 class="dw-footer-newgroup"><a href="http://www.ibm.com/developerworks/events/">Events</a></h2>
+			<ul>
+				<li><a href="http://www.ibm.com/developerworks/briefings/">Briefings</a></li>
+				<li><a href="http://www.ibm.com/developerworks/find/webcasts/">Webcasts</a></li>
+				<li><a href="http://www.ibm.com/developerworks/find/events/">Find events</a></li>
+			</ul>
+		</div>
+		<div class="dw-footer-col-6-4">
+			<h2><a href="http://www.ibm.com/developerworks/community/">Community</a></h2>
+			<ul>
+				<li><a href="http://www.ibm.com/developerworks/forums/">Forums</a></li>
+				<li><a href="http://www.ibm.com/developerworks/community/groups/">Groups</a></li>
+				<li><a href="http://www.ibm.com/developerworks/community/blogs/">Blogs</a></li>
+				<li><a href="http://www.ibm.com/developerworks/mydeveloperworks/wikis/">Wikis</a></li>
+				<li><a href="https://www.ibm.com/developerworks/community/terms/">Terms of use</a></li>
+				<li><a href="https://www.ibm.com/developerworks/community/report/">Report abuse</a></li>
+			</ul>
+			<ul>
+				<li class="dw-footer-newgroup dw-footer-newline"><a href="http://www.ibm.com/developerworks/champion/">IBM Champion<br> program</a></li>
+			</ul>
+			<h2 class="dw-footer-more"><a href="http://www.ibm.com/developerworks/community/">More...</a></h2>
+		</div>
+		<div class="dw-footer-col-6-5">
+			<h2><a href="http://www.ibm.com/developerworks/aboutdw/">About developerWorks</a></h2>
+			<ul>
+				<li><a href="https://www.ibm.com/developerworks/feedback">Site help and feedback</a></li>
+				<li><a href="http://www.ibm.com/developerworks/aboutdw/contacts.html">Contacts</a></li>
+				<li><a href="https://www.ibm.com/developerworks/ideas">Article submissions</a></li>
+			</ul>
+			<h2 class="dw-footer-headonly dw-footer-newgroup">Related resources</h2>
+			<ul>
+				<li><a href="http://www.ibm.com/developerworks/university/">Students and faculty</a></li>
+				<li><a href="http://www.ibm.com/isv/">Business Partners</a></li>
+			</ul>
+		</div>
+		<div class="dw-footer-col-6-6">
+			<h2><a href="http://www.ibm.com/">IBM</a></h2>
+			<ul>
+				<li><a href="http://www.ibm.com/solutions/">Solutions</a></li>
+				<li><a href="http://www.ibm.com/software/">Software</a></li>
+				<li><a href="http://www.ibm.com/software/sw-services/">Software services</a></li>
+				<li><a href="http://www.ibm.com/support/">Support</a></li>
+				<li><a href="http://www.ibm.com/support/publications/us/library/index.shtml">Product information</a></li>
+				<li><a href="http://www.ibm.com/redbooks/">Redbooks</a></li>
+				<li><a href="http://www.ibm.com/privacy/">Privacy</a></li>
+				<li><a href="http://www.ibm.com/accessibility/">Accessibility</a></li>
+			</ul>
+		</div>
+	</div>
+	<!-- Language selector no-script -->
+	<noscript>
+	<div id="dw-footer-selectlang">
+		<h2><a name="SELECTLANG">Select a language:</a></h2>
+		<ul>
+			<li><a href="http://www.ibm.com/developerworks/">English</a></li>
+			<li><a href="http://www.ibm.com/developerworks/cn/">中文</a></li>
+			<li><a href="http://www.ibm.com/developerworks/jp/">日本語</a></li>
+			<li><a href="http://www.ibm.com/developerworks/kr/">한국어</a></li>
+			<li><a href="http://www.ibm.com/developerworks/ru/">Русский</a></li>
+			<li><a href="http://www.ibm.com/developerworks/br/">Português (Brasil)</a></li>
+			<li><a href="http://www.ibm.com/developerworks/ssa/">Español</a></li>
+			<li><a href="http://www.ibm.com/developerworks/vn/">Việt</a></li>
+		</ul>
+	</div>
+	</noscript>
+</div><!-- FOOTER_END -->
+
+ <!-- END_IBM-TOP -->
+<div id="ibm-overlay-top"></div></div>
+ 
+ <!-- SCRIPTS_INCLUDE_BEGIN -->
+<!-- JQuery start -->
+<script type="text/javascript" language="JavaScript" src="Snell2008_files/jquery_002.js"></script>
+<script type="text/javascript" language="JavaScript" src="Snell2008_files/jquery_003.js"></script>
+<script type="text/javascript" language="JavaScript" src="Snell2008_files/ui_002.js"></script>
+<script type="text/javascript" language="JavaScript" src="Snell2008_files/ui.js"></script>
+<!-- xM Masthead/Footer -->
+<script type="text/javascript" language="JavaScript" src="Snell2008_files/jquery_004.js">//</script>
+<script type="text/javascript" language="JavaScript" src="Snell2008_files/jquery.js">//</script>
+<script type="text/javascript" language="JavaScript" src="Snell2008_files/dw_v16.js">//</script>
+<script type="text/javascript" language="JavaScript" src="Snell2008_files/flash-detect.js">//</script>
+<script type="text/javascript" language="JavaScript" src="Snell2008_files/dwsi.js">//</script>
+<script type="text/javascript" language="JavaScript" src="Snell2008_files/dwjquerytags.js"></script>
+<script type="text/javascript" language="JavaScript" src="Snell2008_files/showcomments.js">//</script>
+<script language="JavaScript" type="text/javascript">
+// <![CDATA[
+ jQuery('threadShow').showComments('95%',5,'nCmts','icomments');
+// ]]>
+</script>
+
+<script type="text/javascript" language="JavaScript">
+	jQuery.noConflict();     
+	// Put all your code in your document ready area
+	jQuery(document).ready(function(jQuery) {
+	// Do jQuery stuff using jQuery 
+	jQuery('a.dwauthor').cluetip({
+		local: true,
+		showTitle: false,
+		positionBy: 'bottomTop',
+		sticky: true,	
+		mouseOutClose: true,
+		closeText: '<img src="//dw1.s81c.com/developerworks/js/jquery/cluetip98/i/x.gif" alt="Close" />',
+		arrows: false,
+		dropShadow: true,
+		cluetipClass: 'dwbasic'
+		});
+
+		//tagging
+		login="false";
+		userid="";
+		whichTags = "init";
+		pCont = "";
+		mCont = "";
+		signInMCont = "";
+		accessCont = "";
+		pValue = 0;
+		mValue = 0;
+
+		rBHash = null;
+		rBHash = new Object();
+		rBHash['viperLang'] = 'en';
+		rBHash['urlLang'] = 'en';
+		rBHash['tagThisWinTitle'] = 'Tagit';
+		rBHash['pTags1'] = 'Popular tags';
+		rBHash['pTags2'] = 'End of Popular tags';
+		rBHash['mTags1'] = 'My tags';
+		rBHash['mTags2'] = 'End of My tags';
+		rBHash['alt1'] = 'Loading Content';
+		rBHash['noATags'] = 'No active tags';
+		rBHash['signIn1'] = 'Please ';
+		rBHash['signIn2'] = 'sign in';
+		rBHash['signIn3'] = ' to access';
+		rBHash['signIn4'] = 'My Tags';
+		rBHash['signIn5'] = 'To access My Tags, please ';
+		rBHash['signIn6'] = 'sign in';
+		rBHash['signIn7'] = 'Read Popular tags';
+
+		zoneHash = new Object();
+		zoneHash['aix'] = 'AIX and UNIX zone';
+		zoneHash['ibmi'] = 'IBM i zone';
+		zoneHash['data'] = 'Information Management zone';
+		zoneHash['lotus'] = 'Lotus zone';
+		zoneHash['rational'] = 'Rational zone';
+		zoneHash['tivoli'] = 'Tivoli zone';
+		zoneHash['websphere'] = 'WebSphere zone';
+		zoneHash['architecture'] = 'Technical library';
+		zoneHash['autonomic'] = 'Technical library';
+		zoneHash['java'] = 'Technical library';
+		zoneHash['cloud'] = 'Technical library';
+		zoneHash['industry'] = 'Technical library';
+		zoneHash['library'] = 'Technical library';
+		zoneHash['linux'] = 'Technical library';
+		zoneHash['opensource'] = 'Technical library';
+		zoneHash['power'] = 'Technical library';
+		zoneHash['webservices'] = 'Technical library';
+		zoneHash['web'] = 'Technical library';
+		zoneHash['xml'] = 'Technical library';
+		zoneHash['wireless'] = 'Technical library';
+		jQuery.checkRB();
+		jQuery.getPopularTags("/developerworks/dwtags/dwjquerytabtags?lang=" + rBHash['viperLang'] + "&base=" + jQuery.getNormalizedZoneUrl(location.href));
+		jQuery.getUserTags();
+		if(jQuery.isTutorial(location.href) == "true") {
+			jQuery.getTagsForContent("/developerworks/tagging/UseCaseServlet?lang=" + rBHash['viperLang'] + "&format=maverick&cType=tutorials&use_case=geturltags&action=gettags&url=" + jQuery.normalizeUrl(location.href));
+		}
+		else {
+			jQuery.getTagsForContent("/developerworks/tagging/UseCaseServlet?lang=" + rBHash['viperLang'] + "&format=maverick&cType=articles&use_case=geturltags&action=gettags&url=" + jQuery.normalizeUrl(location.href));
+
+		}
+		
+		// si
+		initSI();
+	});
+ </script>
+ <!-- JQuery end -->
+ <!-- Overlay js -->
+<script language="JavaScript" src="Snell2008_files/overlay.js" type="text/javascript"></script>
+<!-- My dW Interest article -->
+<script language="JavaScript" src="Snell2008_files/showinterest.js" type="text/javascript">//</script>
+<script language="JavaScript" type="text/javascript">
+        // <![CDATA[
+			var contentId = '';
+			var contentAreas = '';
+			var caArr = [];
+			contentId = '284571';
+			contentAreas = 'xml,opensource,web';
+			if(contentAreas != ''){caArr = contentAreas.split(',');}
+			var loginLink = 'https://www.ibm.com/developerworks/dwwi/DWAuthRouter?m=loginpage&d=' + encodeURIComponent(window.location);jQuery('interestShow').showInterest(contentId,'dw-article',{'int_tops':[],'int_prods':[], 'int_prod_fam':[],'int_cont_area':caArr},
+'<div id="dw-interest-anon"><a id="intAnonBtn" class="ibm-external-link" href="">Update My dW interests</a> (<a class="dw-interest" href="' + loginLink + '">Log in</a> | <a class="dw-interest" href="#overlay" onclick="ibmCommon.Overlays.show(\'dwmyinterestadd\', this);return false;">What\'s this?</a>) <a class="ibm-access" href="#dwmyinterestaddhelp">Skip to help for Update My dW interests</a></div>',
+'<div id="dw-interest-add"><a id="intSelectBtn" class="ibm-external-link" href="">Add to My dW interests</a> (<a class="dw-interest" href="#overlay" onclick="ibmCommon.Overlays.show(\'dwmyinterestadd\', this);return false;">What\'s this?</a>) <a class="ibm-access" href="#dwmyinterestaddhelp">Skip to help for Add to My dW interests</a></div>',
+'<div id="dw-interest-remove">Added to My dW interests (<a class="dw-interest" href="https://www.ibm.com/developerworks/mydeveloperworks/profiles/html/myProfileView.do?lang=en">Edit</a>)</div>'
+);
+// ]]>
+</script><!-- BEGIN: Use this section to set page specific variables for the Unica Page Tag -->
+<script language="JavaScript">var NTPT_PGEXTRA="ibmSkillLevel=3&ibmAdoptPhase=-&ibmRole=-";</script>
+<!--END --><!-- SCRIPTS_INCLUDE_END -->
+
+<div id="ibm-metrics">
+<script src="Snell2008_files/stats.js" type="text/javascript">//</script>
+</div>
+
+
+<div style="position: absolute; z-index: 95; display: none;" id="cluetip-waitimage"></div><div style="z-index: 96; display: none; position: absolute;" id="cluetip"><div style="z-index: 95; opacity: 0.1; top: 1px; left: 1px; position: absolute; background-color: rgb(0, 0, 0);"></div><div style="z-index: 94; opacity: 0.1; top: 2px; left: 2px; position: absolute; background-color: rgb(0, 0, 0);"></div><div style="z-index: 93; opacity: 0.1; top: 3px; left: 3px; position: absolute; background-color: rgb(0, 0, 0);"></div><div style="z-index: 92; opacity: 0.1; top: 4px; left: 4px; position: absolute; background-color: rgb(0, 0, 0);"></div><div style="z-index: 91; opacity: 0.1; top: 5px; left: 5px; position: absolute; background-color: rgb(0, 0, 0);"></div><div style="z-index: 90; opacity: 0.1; top: 6px; left: 6px; position: absolute; background-color: rgb(0, 0, 0);"></div><div style="position: relative; z-index: 97;" id="cluetip-outer"><h3 id="cluetip-title"></h3><div id="cluetip-inner"></div></div><div id="cluetip-extra"></div><div style="z-index: 97;" id="cluetip-arrows" class="cluetip-arrows"></div></div></body></html>
