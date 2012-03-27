@@ -203,18 +203,37 @@ Groupware API. Those characteristics are, according to \cite{Fielding2000}:
 \subsection{Kolab}
 \label{sec:kolab}
 
-% @TODO
+``Kolab Groupware'' is the name for a system comprising several independent free
+software products, a relatively small amount of Kolab specific ``glue code'' and
+a special way to configure the involved components. On the server side, Kolab's
+main components are the directory server OpenLDAP, the Mail Transfer Agent
+Postfix and the IMAP server Cyrus. Kolab works with specialized client software
+(see \autoref{sec:imap-as-collection}) which is officially available as free
+extensions to KDE Kontact, Gnome Evolution and the PHP web clients Horde and
+Roundcube.
+
+The development of Kolab started 2002, when the Federal Office for Information
+Security (Bundesamt für Sicherheit in der Informationstechnik) commissioned the
+development of a free alternative to the Microsoft Exchange Server. Kolab has
+been developed by a joint venture of three companies\cite{Stoermer2004}. Today
+Kolab is still developed, supported and distributed by several companies.
+
+A REST API for Kolab aims to make it easier for clients to connect to the Kolab
+server. The REST API should also be implementable by other server solutions and
+maybe evolve into a standardized Groupware API.
 
 A couple of related terms and concepts exist that all more or less overlap with
 the functionality provided by Kolab: Groupware, Personal Information
 Management/Manager (PIM), Group Information Management (GIM), Computer-supported
 cooperative/collaborative work, Knowledge management, (Enterprise) Content
-Management. For the rest of this work a Groupware is a software managing address
-books, calendars, todo items, journals and probably more data for a group of
+Management. Especially scientific literature uses the term Groupware for other
+kind of systems then Kolab\cite[sec. 2.1]{Stoermer2004}. For the rest of this
+work however, a Groupware is understood as a software managing address books,
+calendars, todo items, journals and probably more data for a group of
 collaborating users.
 
-
 \subsection{IMAP as a collection synchronization protocol}
+\label{sec:imap-as-collection}
 
 The Kolab Groupware Server is special in that it uses the Internet Message
 Access Protocol (IMAP) as a synchronization protocol for all its data and thus
@@ -2044,6 +2063,7 @@ then the rest of the application.
 %What needs a client to know, how does it need to work?
 
 \subsection{Producing Semantically annotated HTML}
+% XML transformations with scalate http://scalate.fusesource.org/documentation/scuery.html
 
 A recent discussion of possibilities to produce semantically annotated HTML can
 be found in \cite[sec. 9.1.3]{DBLP:books/daglib/0023755}. The authors describe a
@@ -2269,28 +2289,33 @@ At least three solutions may be possible:
 
 \subsubsection{JSON based Mediatypes for Collections}
 \label{sec:media-types-coll}
-%@TODO
+
+This work examined an API that can serve contact information in different
+Mediatypes based on XML, JSON and RFC822. However it only considered one XML
+based format for the discovery of those. It would be desirable to be able to
+provide an API variant exclusively based on JSON. Therefor a JSON alternative
+for the ATOM Publishing Protocol is needed.
 
 \paragraph{Collection+JSON}
 \label{sec:collection+json}
 
+The Collection+JSON Mimetype (IANA registered in July 2011) by Mike
+Amundsen\cite{Amundsen2011a}\cite[ch. 3]{amundsen2011building} looks like a
+promising candidate for a JSON alternative. The author even states that is has
+been explicitly designed after the model of the Atom Publishing
+Protocol\footnote{\citeurl{http://amundsen.com/media-types/collection}{2012-03-22}}.
 
-Collection+JSON Mime-Type (approved in July 2011) by Mike Amundsen\cite{Amundsen2011a}\cite[ch. 3]{amundsen2011building}.
-
-The author states that is has been explicitly designed after the model of Atom Publishing
-Protocol\footnote{\citeurl{http://amundsen.com/media-types/collection}{2012-03-22}}
-
-The Mediatype consists of
+The Mediatype defines a JSON structure which contains:
 
 \begin{itemize}
-\item Query Templates
-\item items array
-\item Write Template - to create or edit items
-\item Meta data about the collection
-
+\item query templates for the construction of query URIs
+\item an array of collection items
+\item one write template to create or edit items
+\item meta data about the collection
 \end{itemize}
 
-
+Unfortunately, Collection+JSON in its current state is not yet fully usable to
+implement the interactions described in \ref{sec:interactions}.
 
 Collection+JSON does not enforce an order of the elements in a collection. The
 proposed synchronization interaction however is based on the assumption that the
@@ -2306,11 +2331,11 @@ to omit the optional data property and only fill the href property with a link
 to the full representation.
 
 An AtomPub collection declares its accepted media types and assumes that the
-client knows to produce those. The Collection+JSON Mediatype instead provides a
-write template which the client must fill in order to create new items. The
-write template only supports basic key value pairs in accordance to the data
-property. More complex schemes can not be expressed\footnote{It would make sense
-  to rely on JSON schemas to define valid item structures:
+client knows how to produce those. The Collection+JSON Mediatype instead
+provides a write template which the client must fill in order to create new
+items. The write template only supports basic key value pairs in accordance to
+the data property. More complex schemes can not be expressed\footnote{It would
+  make sense to rely on JSON schemas to define valid item structures:
   \citeurl{http://json-schema.org}{2012-03-22}}.
 
 A Collection+JSON document is furthermore restricted to contain only one write
@@ -2325,16 +2350,18 @@ Pagination link relations for feeds\cite{RFC5005} could be reused to express
 paginated JSON collections as encouraged by the format
 documentation\cite[sec. 5.5]{Amundsen2011a}.
 
-
 % 3.4. links "The links array is an OPTIONAL child property of the items array." and the collection!
 
-\paragraph{Direct Mapping of ATOM XML}
-%@TODO
-JSON ATOM serialization implemented by Apache
-Abdera\footnote{\cite{Snell2008}
-  \citeurl{https://cwiki.apache.org/ABDERA/json-serialization.html}{2012-1-7}}
+\paragraph{Direct Mapping of ATOM XML to JSON}
 
-Some problems in loss-less conversion of ATOM to json:\cite{Snell2008}
+James Snell described a mapping of ATOM XML to JSON that should not loose any
+information\cite{Snell2008}\footnote{also implemented in Apache Abdera
+  \citeurl{https://cwiki.apache.org/ABDERA/json-serialization.html}{2012-1-7}}. The
+attempt however to map every feature of ATOM and the inherited extensibility and
+expressiveness of XML results in a very complex and deeply nested JSON
+structure. In detail, Snell identifies a couple of problems that need to be
+dealt with in such a mapping\cite{Snell2008}:
+
 \begin{itemize}
   \item JSON has no equivalent for the xml:lang attribute.
   \item Dereferencable IRIs must be transformed to URIs.
@@ -2345,8 +2372,12 @@ Some problems in loss-less conversion of ATOM to json:\cite{Snell2008}
   \item ATOM supports arbitrary extensions via namespaces.
 \end{itemize}
 
+Considering all the problems, it is understandable that no effort could be found
+since 2008 to formalize the outlined mapping in an IANA registered Mediatype.
+
 \paragraph{Conclusion}
 
+% Google's GDATA Json format, Youtube JSON feed?
 Other related formats considered are the ``Hypertext Application Language''
 (HAL)\footnote{\citeurl{http://stateless.co/hal_specification.html}{2012-03-23}}
 and Microsoft's OData\footnote{\citeurl{http://www.odata.org}{2012-03-23}}. HAL
@@ -2534,4 +2565,4 @@ keiner anderen Prüfungskommission vorgelegt.
 % End:
 %  LocalWords:  RESTful programmatically instantiation hypothetic cacheable
 % LocalWords:  Algermissen interoperability representable isomorphism doubtable
-% LocalWords:  Cacheability
+% LocalWords:  Cacheability extensibility
