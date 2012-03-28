@@ -377,7 +377,11 @@ necessary for the standards this work is based on (149 pages)\footnote{Atom (43)
 contrast to WebDAV, Feeds and related technologies are also widely used so that
 a web developer might already know the latter standards.
 
-% @TODO reference to excluded requirements to show how complicate 
+The large amount of specifications for the WebDAV family is also caused by the
+many different areas touched, like locking, versioning or authentication. This
+work deliberately only focuses on a minimal set of features and delegates
+additional details to other, specialized specifications. The WebDAV requirements
+excluded from consideration are discussed in \ref{sec:excluded-requirements}.
 
 The second and for this work more important characteristic of WebDAV is, that it
 is not restful, as explained by Roy
@@ -507,7 +511,8 @@ API, the modifiability property or a restful API\cite[sec 2.3]{Fielding2000}.
 
 Tables \ref{tab:OSURIPersons} and \ref{tab:OSURIAlbums} show some examples of
 OpenSocial's hard coded URIs. They also outline a minimal set of functionality
-that is considered in this work for a restful API suitable as a replacement:
+that is considered in this work for a restful API suitable as a replacement
+(\autoref{sec:replacement-carddav}):
 
 \begin{itemize}
 \item Mediatypes to represent users and groups
@@ -516,8 +521,6 @@ that is considered in this work for a restful API suitable as a replacement:
 \item Representation of relations between Users
 \item Hyperlinks to a user's collection of albums
 \end{itemize}
-
-% @TODO link to requirements.
 
 \begin{table}[tbh]
 \begin{tabular}{p{6.5cm} l p{10cm}}
@@ -1502,14 +1505,13 @@ Consortium.
 
 \subsection{HTML Forms}
 \label{sec:html-forms}
-%@TODO
-TODO
 
 A web based user interface for a Groupware today has many means to provide data
 editing and submission facilities thanks to powerful Javascript libraries like
 the VIE Editor (\autoref{sec:semantic-anno-use-cases}). The traditional,
-standardized and most compatible way however is the use of HTML forms. These
-however lack a few features that could improve their use for restful systems.
+standardized and most compatible way however is the use of HTML
+forms. Unfortunately these lack a few features that could improve their use for
+restful systems.
 
 HTML has no means to send an etag when submitting a form and no support for
 other HTTP verbs then GET and POST, most importantly PUT and DELETE. A
@@ -1529,9 +1531,9 @@ involved and error prone. Therefor many approaches and implementations exist to
 automate this task. If a machine can work on an existing data model for the
 resource, then this can be used as basis for the automation.
 
-TODO: Means to automatically build forms from descriptions of the data:
-``Dynamic Object Model'' (Dirk Riehle) or ``Adaptive Object-Model'' (Yoder,
-Johnson) implemented e.g. by eZPublish, Drupal
+%TODO: Means to automatically build forms from descriptions of the data:
+%``Dynamic Object Model'' (Dirk Riehle) or ``Adaptive Object-Model'' (Yoder,
+%Johnson) implemented e.g. by eZPublish, Drupal
 %@TODO
 % automatically build forms like eZPublish / Drupal?
 
@@ -1615,13 +1617,6 @@ returned.
 
 \subsection{Resource handling}
 \label{sec:resource-handling}
-% Resource Klasse
-
-% Komplexität der Behandlung verschiedener Medientypen versteckt hinter
-% "Resource" Klasse mit Hilfe von ResourceFacades
-
-% Die Mächtigkeit der Resourceklasse ermöglicht dass der restliche Code,
-% z.B. CollectionStorage sehr einfach gehalten werden kann.
 
 The \lstinline:Resource: class is the generalization of a restful HTTP resource
 without a binding to a specific Mediatype. This corresponds to the distinction
@@ -1843,8 +1838,6 @@ that might be worth of consideration in this direction.
 % Factories for requested Facades. A ResourceHandler must have been instantiated
 % with at least one initial input Facade, e.g. an InputStream.
 
-
-
     % Facades provide read-only access to the data
     % Facades can depend on other Facades and thus reuse work
     % Facades could do:
@@ -1865,10 +1858,6 @@ that might be worth of consideration in this direction.
 % Specialized get requests may also execute faster than an approach that needs to dynamically build the processing pipeline.
 
 % JAF + REST proposed in 2007 http://www.javaworld.com/javaworld/jw-10-2007/jw-10-resteasy.html
-
-
-
-
 
 \subsection{CollectionStorage}
 \label{sec:collectionstorage}
