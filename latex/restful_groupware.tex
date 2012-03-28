@@ -167,24 +167,30 @@ interests of a multinational corporation.
 
 \subsection{REST architectural style}
 
-% @TODO
+The API to be designed in this work must obey the constraints of a REST
+architecture, especially its four interface
+constraints\cite[sec. 5.1.5]{Fielding2000}:
 
-\cite[sec. 5.1.5]{Fielding2000}
+\begin{itemize}
+\item Every resource is referenceable by a unique URI.
+\item Resources are manipulated by the submission of resource representations.
+\item All exchanged messages are self-descriptive which is achieved by using a
+  set of Mediatypes understood by server and client.
+\item The client only knows the entrance URI of an API beforehand. All other
+  permitted URIs are discovered in responses of the server.
+\end{itemize}
 
- ``REST is defined by four
-  interface constraints: identification of resources; manipulation of resources
-  through representations; self-descriptive messages; and, hypermedia as the
-  engine of application state.''
-
-% more on rest in the opensocial chapter
+These constraints are further discussed in \autoref{sec:fieldings-critique} when
+discussing how the OpenSocial API violates them.
 
 The requirement to obey the constraints of REST should cause the system to have
 some characteristics that may be especially advantageous for the use case of a
-Groupware API. Those characteristics are, according to \cite{Fielding2000}:
+Groupware API. Those characteristics are, according to \cite{Fielding2000}
+(cited sections in parentheses):
 
 \begin{itemize}
 \item Cacheability (sec. 5.1.4) can keep the data available also in offline
-  mode, improves performance and scalability.
+  mode, which improves performance and scalability.
 \item Simplicity (sec. 2.3.3) helps to integrate the Groupware with other
   applications, e.g. publishing birthdays of employees in an intranet portal.
 \item Modifiability (sec. 2.3.4) allows to adapt the Groupware to changes in the
@@ -837,6 +843,14 @@ document database like CouchDB, plain files, relational or XML databases.
 % collection could for example represent all items related to a project, which
 % include contacts, events, todos and journal entries.
 
+\subsection{Caching instead of Performance optimization}
+The system is meant to inherit the benefits of a restful architecture,
+especially Cacheability. It should therefor be possible to attach separate
+caching intermediaries for read requests. Rather then concentrating on the
+performance of the implementation of read requests it should be taken care that
+the architecture supports external and internal caching and thus avoids to serve
+the same read request multiple times.
+
 \subsection{Excluded WebDAV requirements}
 \label{sec:excluded-requirements}
 
@@ -908,29 +922,6 @@ locking: \textit{The content is mergeable} in contrast to binary data like
 images. \textit{The editing is expected to be localized to isolated points in
   the document}, e.g. changing just one field in a content or event. And
 \textit{the content can be edited while the user is offline}.
-
-\subsection{Other excluded Requirements}
-\label{sec:other-excl-requ}
-
-\subsubsection{Push notifications} % @TODO
-This work does not include any means to actively notify (push) a client about
-changes happening on the server. The client needs to initiate a request (pull)
-to the server to look for changes. However separate solutions
-exist\footnote{most notable PubSubHubBub
-  \citeurl{http://code.google.com/p/pubsubhubbub/}{2012-1-5}} to enable a push
-workflow on top of a feed based
-application\cite{Wilde:2009:FQP:1693155.1693220}. It may therefor not be seen as
-a disadvantage to omit push notifications as a
-requirement.\footnote{\cite[sec. 1]{RFC6352} explicitly mentions missing
-  ``change notifications'' as a ``key disadvantage'' of CardDAV.}
-
-\subsubsection{Performance optimization}
-The system is meant to inherit the benefits of a restful architecture. It should
-therefor be possible to attach separate caching intermediaries for read
-requests. Rather then concentrating on the performance of the implementation of
-read requests it should be taken care that the architecture supports external
-caching and thus avoids to serve the same read request multiple times.
-
 
 \section{REST Interactions Design}
 \label{sec:interactions}
@@ -2287,6 +2278,10 @@ At least three solutions may be possible:
 \item The server uses different entity tags for different representations that it can later use to parse the original resource Mediatype from the etag supplied in the If-MAtch header of the PATCH request.
 \end{itemize}
 
+A further discussion of patch requests should also consider, whether this
+request type still conforms to the REST interface constraint ``manipulation of
+resources through representations''\cite[sec. 5.1.5]{Fielding2000}.
+
 \subsubsection{JSON based Mediatypes for Collections}
 \label{sec:media-types-coll}
 
@@ -2405,6 +2400,19 @@ enhance Collection+JSON in the following points:
 
 % http://code.google.com/apis/youtube/2.0/developers_guide_jsonc.html
 % No replacement for Service document yet
+
+\subsubsection{Push notifications}
+
+This work does not include any means to actively notify (push) a client about
+changes happening on the server. The client needs to initiate a request (pull)
+to the server to look for changes. However separate solutions
+exist\footnote{most notable PubSubHubBub
+  \citeurl{http://code.google.com/p/pubsubhubbub/}{2012-1-5}} to enable a push
+workflow on top of a feed based
+application\cite{Wilde:2009:FQP:1693155.1693220}. It may therefor not be seen as
+a disadvantage that push notifications have been omitted as a
+requirement.\footnote{\cite[sec. 1]{RFC6352} explicitly mentions missing
+  ``change notifications'' as a ``key disadvantage'' of CardDAV.}
 
 \subsubsection{Resource Facades}
 \label{sec:resourcefacadesfuture-work}
@@ -2565,4 +2573,4 @@ keiner anderen Prüfungskommission vorgelegt.
 % End:
 %  LocalWords:  RESTful programmatically instantiation hypothetic cacheable
 % LocalWords:  Algermissen interoperability representable isomorphism doubtable
-% LocalWords:  Cacheability extensibility
+% LocalWords:  Cacheability extensibility referenceable
