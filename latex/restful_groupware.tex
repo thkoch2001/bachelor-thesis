@@ -10,6 +10,15 @@
 \usepackage{expdlist}
 \usepackage{subfig}
 \usepackage{listings}
+\usepackage{courier}
+
+\lstloadlanguages{% Check Dokumentation for further languages ...
+         XML,
+         %HTML
+         Java
+}
+
+
 % see http://tex.stackexchange.com/questions/35145/maintaining-layout-of-tikz-diagrams-with-tex4ht-converting-as-single-pictures
 \ifx\HCode\UnDef\else\def\pgfsysdriver{pgfsys-tex4ht.def}\fi
 \usepackage{tikz}
@@ -43,11 +52,35 @@
   {} % \end{anylisting}
 
 \lstset{ %
-  language=Java,
+%  language=Java,
   float=tb,
-  frame=single,
-  captionpos=b
+  frame=single, % not b     frame=b,
+  captionpos=b,
+ % http://stackoverflow.com/questions/741985/latex-source-code-listing-like-in-professional-books
+         basicstyle=\footnotesize\ttfamily, % Standardschrift
+         %numbers=left,               % Ort der Zeilennummern
+         numberstyle=\tiny,          % Stil der Zeilennummern
+         %stepnumber=2,               % Abstand zwischen den Zeilennummern
+    numbersep=5pt,              % Abstand der Nummern zum Text
+    tabsize=2,                  % Groesse von Tabs
+    extendedchars=true,         %
+    breaklines=true,            % Zeilen werden Umgebrochen
+%         keywordstyle=\color{red},
+%        keywordstyle=[1]\textbf,    % Stil der Keywords
+%        keywordstyle=[2]\textbf,    %
+%        keywordstyle=[3]\textbf,    %
+%        keywordstyle=[4]\textbf,   \sqrt{\sqrt{}} %
+    stringstyle=\ttfamily, % Farbe der String
+    showspaces=false,           % Leerzeichen anzeigen ?
+    showtabs=false,             % Tabs anzeigen ?
+%    xleftmargin=17pt,
+%    framexleftmargin=17pt,
+%    framexrightmargin=5pt,
+%    framexbottommargin=4pt,
+    %backgroundcolor=\color{lightgray},
+    showstringspaces=false      % Leerzeichen in Strings anzeigen ?        
 }
+
 
 %\titlehead{}
 %\subject{subject}
@@ -111,15 +144,15 @@ bzw. wiederverwendet werden können. Außerdem soll die Hypermediaunterstützung
 der verschiedenen Formate untersucht werden: Wie viel muss ein Client vorher
 wissen und wie viel kann er durch Hyperlinks entdecken?
 
-optionale Ergänzungen:
+% optionale Ergänzungen:
 
-\begin{itemize}
-\item CardDAV als alternatives Protokoll mit Untersuchung der
-  Wiederverwendbarkeit der Komponenten
-\item Mitbetrachtung der Kalenderfunktionalität bei der Hypermediaunterstützung
-\item zumindest lesender Zugriff auf die Kalenderfunktionalität über die
-  REST-Schnittstelle
-\end{itemize}
+% \begin{itemize}
+% \item CardDAV als alternatives Protokoll mit Untersuchung der
+%   Wiederverwendbarkeit der Komponenten
+% \item Mitbetrachtung der Kalenderfunktionalität bei der Hypermediaunterstützung
+% \item zumindest lesender Zugriff auf die Kalenderfunktionalität über die
+%   REST-Schnittstelle
+% \end{itemize}
 
 \tableofcontents{}
 
@@ -159,11 +192,20 @@ them with family and peers.
 
 Most existing solutions are either based on non-free software (Microsoft Outlook),
 or require the user to trust his personal data to the commercial
-interests of a multinational corporation.
+interests of a company.
+
+
+
 %\footnote{Experiences with Android and Data in the cloud \citeurl{http://keithp.com/blogs/calypso}{?}}
 
 \section{Background and Related Work}
 \label{sec:backgr-relat-work}
+
+This section introduces the existing standards and technologies that were the
+starting point for this work. Some of these are meant to be augmented and used
+in the following sections, i.e., REST, Kolab, vCard, iCalendar and
+PortableContacts. For the others, CardDAV, CalDAV and the IMAP use in Kolab, it
+is argued why it seems worthwhile to explore an alternative approach.
 
 \subsection{REST architectural style}
 
@@ -192,7 +234,7 @@ Groupware API. Those characteristics are, according to \cite{Fielding2000}
 \item Cacheability (sec. 5.1.4) can keep the data available also in offline
   mode, which improves performance and scalability.
 \item Simplicity (sec. 2.3.3) helps to integrate the Groupware with other
-  applications, e.g. publishing birthdays of employees in an intranet portal.
+  applications, e.g., publishing birthdays of employees in an intranet portal.
 \item Modifiability (sec. 2.3.4) allows to adapt the Groupware to changes in the
   organization.
 \item Reliability (sec. 2.3.7) can be of great importance, if the ability to
@@ -209,20 +251,22 @@ Groupware API. Those characteristics are, according to \cite{Fielding2000}
 \subsection{Kolab}
 \label{sec:kolab}
 
-``Kolab Groupware'' is the name for a system comprising several independent free
-software products, a relatively small amount of Kolab specific ``glue code'' and
-a special way to configure the involved components. On the server side, Kolab's
-main components are the directory server OpenLDAP, the Mail Transfer Agent
-Postfix and the IMAP server Cyrus. Kolab works with specialized client software
-(see \autoref{sec:imap-as-collection}) which is officially available as free
-extensions to KDE Kontact, Gnome Evolution and the PHP web clients Horde and
-Roundcube.
+This work presents an API usable for the Groupware system Kolab. ``Kolab
+Groupware'' is the name for a system comprising several independent free (as in
+speech) software products, a relatively small amount of Kolab specific ``glue
+code'' and a special way to configure the involved components. On the server
+side, Kolab's main components are the directory server OpenLDAP, the Mail
+Transfer Agent Postfix and the IMAP server Cyrus. Kolab works with specialized
+client software (see \autoref{sec:imap-as-collection}) which is officially
+available as free extensions to KDE Kontact, Gnome Evolution and the PHP web
+clients Horde and Roundcube.
 
 The development of Kolab started 2002, when the Federal Office for Information
 Security (Bundesamt für Sicherheit in der Informationstechnik) commissioned the
 development of a free alternative to the Microsoft Exchange Server. Kolab has
 been developed by a joint venture of three companies\cite{Stoermer2004}. Today
-Kolab is still developed, supported and distributed by several companies.
+Kolab is still developed, supported and distributed collaboratively by multiple
+independent companies.
 
 A REST API for Kolab aims to make it easier for clients to connect to the Kolab
 server. The REST API should also be implementable by other server solutions and
@@ -249,8 +293,11 @@ annotated\footnote{with the IMAP METADATA Extension (RFC 5464)} IMAP
 folders. The current Kolab version still uses its own XML format. Kolab
 version~3 will use XCard and XCal where
 applicable\footnote{\citeurl{http://blogs.fsfe.org/greve/?p=470}{2012-03-28}}.
-
 % see also IMAP LIST Extension for Special-Use Mailboxes RFC 6154
+
+Kolab Clients connect to the (Cyrus) IMAP server, filter all folders of a user
+to find those managed by Kolab and fetch all attachments of mails in those
+folders. Write operations also use the IMAP protocol.
 
 There are a few appealing advantages to this approach:
 
@@ -265,15 +312,20 @@ There are a few appealing advantages to this approach:
 The simplicity of just dropping files in a store used by several concurrent
 clients however also has drawbacks, e.g: there is no moderating logic on the
 server site that could verify the correctness of stored data and there are no
-query capabilities.
+query or report capabilities.
 
 IMAP in general also comes with its own challenges:
 
 \begin{itemize}
-\item The standard documents describing and extending IMAP are
-  many\footnote{\citeurl{http://www.apps.ietf.org/rfc/ipoplist.html}{2012-3-5}}.
+\item ``The'' IMAP standard does not exist. The 108 pages of ``core'' IMAP
+  VERSION 4rev1 specification (RFC 3501) have been augmented with around two
+  dozens of other
+  specifications\footnote{\citeurl{http://www.apps.ietf.org/rfc/ipoplist.html}{2012-3-5}},
+  of which every IMAP server and client implements another subset. The METADATA
+  extension needed for Kolab for example is not (yet) included in the also very
+  popular IMAP server Dovecot.
 \item IMAP imposes a folder structure and does not permit alternative structures
-  like tags as used by Google's gmail.
+  like tags, as used by Google's GMail service.
 \item Sam Varshavchik, author of the Courier Mail Transfer Agent, argues that
   IMAP standard documents are ``contradictory'' and that implementations define
   their own understanding of what IMAP
@@ -298,10 +350,10 @@ IMAP in general also comes with its own challenges:
 \label{sec:vcard-xcard-ical}
 
 vCard is an IETF standardized Mediatype to ``capture and exchange [\ldots]
-information normally stored within an address book or directory
-application''\cite{RFC6350} e.g. about individuals, groups, organizations or
-locations (see the vCard \lstinline:kind: property). Closely connected by
-format, standards body and usage is iCalendar, for ``representing and exchanging
+information normally stored within an address book or directory application''
+\cite{RFC6350} e.g., about individuals, groups, organizations or locations (see
+the vCard \lstinline:KIND: property). Closely connected by format, standards
+body and usage is iCalendar (short iCal), for ``representing and exchanging
 calendaring and scheduling information such as events, to-dos, journal entries,
 and free/busy information''\cite{RFC5545}. Both formats together cover most
 information usually managed by a Groupware system are the base of Kolab's
@@ -321,39 +373,40 @@ alternative serializations, so that XML tooling can be used. The standards aim
 for full compatibility between the XML and IMF formats so that no information is
 lost when converting in either direction.
 
-The iCalendar standard defines several properties that can link to external
-representations of the properties value by specifying an ``Alternate Text
-Representation'' parameter. These are comment, summary, description, contact,
-location, resources. The properties attendee and organizer can have a
-``Directory Entry Reference'' parameter that should contain an URI to a person
-resource. One property that can not be dereferenced is ``Related To'': It only
-contains the globally unique identifier of another calendar component.
+% The iCalendar standard defines several properties that can link to external
+% representations of the properties value by specifying an ``Alternate Text
+% Representation'' parameter. These are comment, summary, description, contact,
+% location, resources. The properties attendee and organizer can have a
+% ``Directory Entry Reference'' parameter that should contain an URI to a person
+% resource. One property that can not be dereferenced is ``Related To'': It only
+% contains the globally unique identifier of another calendar component.
 
-One problem that arises with the use of hyperlinks in personal information
-management is identification across administrative boundaries. Take for example
-an event that gets sent from one organization to another and contains hyperlinks
-to person representations. These hyperlinks most likely point to an internal
-addressbook of the organization and may not be accessible by the receiver of the
-event information. The receiver however may have his own addressbook containing
-information about the person.
+% One problem that arises with the use of hyperlinks in personal information
+% management is identification across administrative boundaries. Take for example
+% an event that gets sent from one organization to another and contains hyperlinks
+% to person representations. These hyperlinks most likely point to an internal
+% addressbook of the organization and may not be accessible by the receiver of the
+% event information. The receiver however may have his own addressbook containing
+% information about the person.
 
 \subsection{PortableContacts}
 \label{sec:portablecontacts}
 
-Portable Contacts\footnote{\citeurl{http://portablecontacts.net}{2012-03-23}} is
-a specification initiated in 2008 by Joseph Smarr while working at the Address
+PortableContacts\footnote{\citeurl{http://portablecontacts.net}{2012-03-23}} is
+a specification initiated in 2008 by Joseph Smarr while working for the Address
 Book internet service
 Plaxo.com\footnote{\citeurl{http://josephsmarr.com/2008/12/31/portable-contacts-the-half-year-in-review}{2012-03-23}}. It
-comprises of a JSON schema for contacts information derived from
-vCard\footnote{\citeurl{http://wiki.portablecontacts.net/w/page/17776141/schema}{2012-03-23}}
-and a protocol for authorized retrieval of contacts. The schema omits many
-properties of the current vCard standard\cite{RFC6350} and introduces properties
-inspired by social networks, e.g. describing social behavior or preferences.
+comprises of a JSON schema for contacts information derived from vCard version
+3\footnote{\citeurl{http://wiki.portablecontacts.net/w/page/17776141/schema}{2012-03-23}}
+and a protocol for authorized retrieval of contacts. The schema misses many
+properties of the current vCard version 4 standard\cite{RFC6350} and introduces
+properties inspired by social networks, e.g. describing social behavior or
+preferences.
 
 The schema and protocol has been adopted by OpenSocial
 (\autoref{sec:opensocial-background}) which is now its main user. The schema
 part of PoCo is thus the most appropriate format currently available to
-represent contacts information in JSON and make it thus easily consumable by
+represent contacts information in JSON and make it easily consumable by
 JavaScript browser applications.
 
 \subsection{WebDAV, CardDAV, CalDAV}
@@ -365,25 +418,30 @@ contacts\footnote{only full free server implementations: Apple Calendar Server,
   Bedeworks, DAViCal, eGroupWare, Owncloud, SOGo, Tine2.0}. Both protocols
 extend WebDAV\cite{RFC4918} and thus inherit its characteristics.
 
+WebDAV extends HTTP to enable ``Distributed Authoring and Versioning''
+(DAV). For this purpose it introduces additional HTTP methods (PROPFIND,
+PROPPATCH, MKCOL, COPY, MOVE, LOCK, UNLOCK) and interprets the URI path
+component as a hierarchic file system.
+
 Two characteristics of WebDAV motivate an investigation of alternative
 approaches. The first is the protocol's complexity that complicates correct
 implementation. Unfortunately complexity is hard to assess. Therefor only some
 indications are provided at this point.
 
 Lisa Dusseault, author of a WebDAV book\cite{Dusseault2004} and the standard
-itself
-wrote\footnote{\citeurl{http://nih.blogspot.com/2008/02/nearly-two-years-ago-i-made-prediction.html}{2012-1-6}}:
+itself expressed her dissatisfaction with
+CalDAV\footnote{\citeurl{http://nih.blogspot.com/2008/02/nearly-two-years-ago-i-made-prediction.html}{2012-1-6}}:
 
 \begin{quote}
-Were I to propose CalDAV today it would probably be CalAtom.
+``Were I to propose CalDAV today it would probably be CalAtom.''\footnote{CalAtom is presented in \autoref{sec:atom-publ-prot}}
 \end{quote}
 
 The three standards WebDAV (127p), CalDAV (107p) and CardDAV (48p) add up to 282
 pages of highly specific standards. This is nearly double as much text as
-necessary for the standards this work is based on (149 pages)\footnote{Atom (43),
-  AtomPub (53), Feed paging (15), OpenSearch (~28), Atom Deleted Entry (10)}. In
-contrast to WebDAV, Feeds and related technologies are also widely used so that
-a web developer might already know the latter standards.
+necessary for the standards this work is based on (149 pages)\footnote{Atom
+  (43), AtomPub (53), Feed paging (15), OpenSearch (28), Atom Deleted Entry
+  (10)}. In contrast to WebDAV, Feeds and related technologies are also more
+widely used so that a web developer might already know the latter standards.
 
 The large amount of specifications for the WebDAV family is also caused by the
 many different areas touched, like locking, versioning or authentication. This
@@ -391,7 +449,7 @@ work deliberately only focuses on a minimal set of features and delegates
 additional details to other, specialized specifications. The WebDAV requirements
 excluded from consideration are discussed in \ref{sec:excluded-requirements}.
 
-The second and for this work more important characteristic of WebDAV is, that it
+The second, and for this work more important characteristic of WebDAV is, that it
 is not restful, as explained by Roy
 Fielding\footnote{\citeurl{http://tech.groups.yahoo.com/group/rest-discuss/message/5874}{2012-3-5}}:
 
@@ -647,11 +705,12 @@ process.
 \section{Requirements and Analysis}
 \label{sec:requ-analys}
 
-%  - Herleitung aus C.*DAV, OpenSocial
-%  - Anforderungen, die sich aus Kolab ergeben
-% > - Die Anforderung von Kolab selbst ist minimal: Synchronisation von 
-% > Collections,
-% >   denn mehr macht die jetzige IMAP API auch nicht.
+The requirements of the Kolab REST API are derived in this section from the way
+how Kolab uses IMAP, from the characteristics of the managed data set and the
+supposed characteristics of typical clients. In addition it is also considered
+that the API may even be usable as a restful alternative for CardDAV, CalDAV and
+parts of OpenSocial. The last subsection explicitly lists why some features of
+WebDAV are not considered as useful requirements for a Groupware API.
 
 % - HTML + annotation als Anforderung begründen
 
@@ -659,9 +718,6 @@ process.
 % >   Interpretierung durch Browser Extensions (Import in Adressbuch, Kalender),
 % >   Serendipitous Reuse
 % sehr kurz fassen und aufpassen nicht zu sehr auszuholen
-
-% Synchronisation als Hauptinteraktion, 2 Searchtypen
-
 
 % SRS template from http://code.google.com/p/e-bibliophile/wiki/SRS
 %\subsection{Scope}
@@ -701,10 +757,10 @@ Guidelines of the design are:
 \item The system should be extensible to support different kind of personal
   information resources like contacts, events, todo items, journal items and
   free-busy informations.
-  \item The CRUD operations must be supported: Create, Read, Update, Delete.
+  \item ``CRUD'' operations must be supported: Create, Read, Update, Delete.
   \item The client must be able to synchronize collections of resources for
     offline read access and manipulation.
-  \item The design should be considerably ``easier'' to implement then CalDAV,
+  \item The design should be considerably ``easier'' to implement than CalDAV,
     CardDAV or IMAP as well for the server as for the client.
   \item The design should reuse existing standards where possible.
   \item The design should support all client types listed in
@@ -717,15 +773,14 @@ Guidelines of the design are:
 % easy to understand and implement
 
 
-\subsection{Replacement for Kolab IMAP, CardDAV and OpenSocial}
+\subsection{Replace Kolab IMAP, CardDAV and OpenSocial}
 \label{sec:replacement-carddav}
 
 Personal evaluation\footnote{from using, contributing to or evaluating
   eGroupware, Horde, Kolab, Kontact, Thunderbird} suggests, that many Groupware
 clients and servers use CardDAV exclusively to synchronize contacts collections,
 allowing concurrent modifications of individual contacts via optimistic locking
-(\autoref{sec:locking}). This is also exactly the operation mode of Kolab's IMAP
-use.
+(\autoref{sec:locking}). This is in principle also the way how Kolab uses IMAP.
 
 Thus the principal requirement is to support discovery and synchronization of
 Groupware collections (Adressbook, Calendar) and CRUD operations on Groupware
@@ -741,22 +796,23 @@ approach.
 OpenSocial is mainly used by short living Javascript browser widgets. A
 synchronization protocol may therefor not be seen as adequate on first
 sight. However a restful protocol enables the proper use of the Browser cache so
-that synchronization may not need to start from scratch on every page
-load. Additional indexes could be saved in HTML5 Webstorage\cite{Hickson2011b}.
+that synchronization may not need to start from scratch on every page load and
+modern browsers can keep additional meta data or indexes in HTML5
+Webstorage\cite{Hickson2011b}.
 
-The main interaction considered for OpenSocial is not the synchronization of
-full collections. Instead it is required that a client can start with the
-representation of a system's user and explore the user's network of groups,
-social relations and media collections.
+Nevertheless, the main interaction considered here as an alternative to
+OpenSocial is not collection synchronization but the discovery of information
+related to one person, the media belonging to a person and the traversal of the
+``social graph'', i.e., the relations between persons.
 
 \subsection{Client Classes and Characteristics}
 \label{sec:user-class-char}
 
 Different kinds of clients should be able to use the API.
-\autoref{tab:clientsconstraints} lists clients whose constraints and
-characteristics should be respected in the design. The choice of clients and their
-characteristics is intentionally conservative to cover a wide range of real
-world use cases.
+\autoref{tab:clientsconstraints} lists exemplary clients whose constraints and
+characteristics should be respected by the design. The choice of clients and
+their characteristics is intentionally conservative to cover a wide range of
+real world use cases.
 
 \begin{table}[tbh]
   \centering
@@ -790,7 +846,7 @@ annotations.
 
 Lacking sources for more accurate numbers, a couple of conservative estimates
 are made for the size and number of resources in the scope of this work. This
-guesswork is not perfect. But it provides a rationale behind later design
+guesswork is not perfect but it provides a rationale for later design
 decisions (\autoref{sec:interactions}) and outlines their applicability for a
 concrete use case.
 
@@ -798,8 +854,7 @@ concrete use case.
 
 It is believed that humans have regular social contacts to around 150
 people\footnote{\citeurl{http://en.wikipedia.org/wiki/Dunbar's_number}{2012-2-29}}. So
-the number of contacts in a users address book collection should at least handle
-1500 contacts.
+an estimation of 1500 contacts in a user's address book should serve most cases.
 
 The average textual data size associated to a contact is expected to be around
 840 bytes\footnote{estimated average bytes per common fields: id 100, name 30, 2 *
@@ -821,15 +876,15 @@ comprise 356 bytes\footnote{field sizes: start 8, end 8, title 40, location 100,
 \subparagraph{Conclusions} The size of full, useful collections of personal
 information items has the same order of magnitude then the size of a digital
 image taken with today's smart phones. With the worst case bandwidth from
-\autoref{tab:clientsconstraints} the download of a full uncompressed collection
+\autoref{tab:clientsconstraints} the download of a full, uncompressed collection
 lasts around $\frac{2 * 1MB}{56kbit/s} \approx 5min$\footnote{The factor 2
   accounts for field names and syntax elements. Besides other inaccuracies,
   latency is not taken into account.}. Even with a drastic data compression of
 90\% the transfer would still last over 30 seconds. With the next better
-bandwidth of the mobile device however the transfer duration for the
-uncompressed case is already under one minute ($\approx 42 sec$).
+bandwidth of the mobile device however, the transfer duration, even for the
+uncompressed case, is already under one minute ($\approx 42 sec$).
 
-For all described clients the client's storage is large enough to contain at
+For all but the first client the storage capacity is large enough to hold at
 least a few collections.
 
 \subsection{Operation Environment}
@@ -885,20 +940,22 @@ HTTP mechanics to take care of those, especially recent efforts like OpenID and
 OAuth. %\cite{conf/rest/GrafZLW11}.
 
 \subsubsection{Copying and Moving}
-WebDAV introduces the HTTP verbs to COPY and MOVE. The usefulness of such
+WebDAV introduces HTTP verbs to COPY and MOVE resources. The usefulness of such
 functionality must of course be compared to the complexity of the implementation
 and the drawback of incompatibility to plain HTTP.
 
 It is possible to enhance a restful API with copy and move functionality without
 extending HTTP. The only requirement is that additional hyperlinks can be
-attached to the resources of the API. Allamaraju \cite[Ch. 11]{Allamaraju_2010} proposes
+attached to the resources\footnote{which is possible through web
+  linking\cite{RFC5988}}. Allamaraju \cite[Ch. 11]{Allamaraju_2010} proposes
 ``controller resources'' that act on POST requests and are linked from the
 resources they act on. Custom link relations are used to indicate the semantic
 of the controller resource.
 
-This work does not include initial support for copy or move.
+This work therefor does not include initial support for copy or move.
 
 \subsubsection{Versioning}
+
 WebDAV and therefor CalDAV and CardDAV support the versioning of resources as an
 extension to the HTTP protocol. Versioning is an important feature for a text
 authoring system that may have been the main target for the WebDAV protocol.  It
@@ -907,31 +964,34 @@ here. Individual contacts or events are mostly created in one session by one
 user and not modified in several sessions like text documents.
 
 \subsubsection{Make Collections}
+
 WebDAV introduces the MKCOL HTTP verb to create collections. CardDAV recommends
 that implementations support this to allow users to ``organize their data
 better''. An alternative would be to make use of ATOM categories for
-grouping. Instead of creating a new (empty) collection the user would thus
-create a contact resource with a new category. An ATOM service document could
-then link to a new (virtual, read-only) collection that only contains resources
-of this category.
+grouping\cite{RFC5023}. Instead of creating a new (empty) collection the user
+would thus create a contact resource with a new category. An ATOM service
+document could then link to a new (virtual, read-only) collection that only
+contains resources of this category.
 
-The Atom Publishing Protocol does not define how collection resources could be
-created. Practitioners recommend a pattern wherein collections of collections
+The Atom Publishing Protocol does not define how Atom collection resources could
+be created. Practitioners recommend a pattern wherein collections of collections
 exist and new collections can be created by posting to the
 former\footnote{\citeurl{http://www.imc.org/atom-protocol/mail-archive/msg11565.html}{2012-3-7}}.
 
 \subsubsection{Locking}
 \label{sec:locking}
 
-As with Versioning, this feature of WebDAV is not considered. Instead of
-locking a resource HTTP supports conditional updates and leaves conflict
-resolution to the client.
+As with Versioning, this feature of WebDAV is not considered. Instead of locking
+a resource, HTTP supports conditional updates and leaves conflict resolution to
+the client.
 
-\cite[sec. 1]{Nielsen1999} provides three questions to help deciding whether a
-protocol should support locking and which in the present case advise against
-locking: \textit{The content is mergeable} in contrast to binary data like
-images. \textit{The editing is expected to be localized to isolated points in
-  the document}, e.g. changing just one field in a content or event. And
+\cite[sec. 1]{Nielsen1999} provides three rules, formulated as questions, to
+help deciding whether a protocol should support locking. In the present case,
+all three rules advise against locking: \textit{The content is mergeable.}
+Conflicting changes in vCard and iCal resources can be easily presented to the
+user. An unmergeable resource would be for example an image. \textit{The editing
+  is expected to be localized to isolated points in the document}, e.g.,
+changing just one field in a content or event. And it is required that
 \textit{the content can be edited while the user is offline}.
 
 \section{REST Interactions Design}
@@ -1693,7 +1753,7 @@ returned.
   \centering
   \includegraphics[width=1.2\textwidth]{executionflowoverview}
 
-  \caption{Overview of the control flow}
+  \caption{main classes controlling the execution flow}
   \label{fig:executionflowoverview}
 \end{figure}
 
@@ -2653,4 +2713,4 @@ keiner anderen Prüfungskommission vorgelegt.
 %  LocalWords:  RESTful programmatically instantiation hypothetic cacheable
 % LocalWords:  Algermissen interoperability representable isomorphism doubtable
 % LocalWords:  Cacheability extensibility referenceable shareable injectable
-%  LocalWords:  dereferenceable
+%  LocalWords:  dereferenceable mergeable unmergeable
