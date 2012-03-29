@@ -1571,11 +1571,83 @@ available under different URIs is no violation of rest principles and even
 encouraged for similar use cases by \cite{Raman2006}.
 
 Unfortunately no link relation is standardized to retrieve an empty form for the
-creation of a new resource.\footnote{The \lstinline:Collection+JSON: Mediatype solves this issue by providing templates for new items inside the collection representation (\autoref{sec:collection+json}).}
- So for the time being server and client would need
-to agree on a custom link relation for that purpose. The empty form can be
-regarded as an entity of its own, linked from the collection where newly created
-resources are expected to appear.
+creation of a new resource.\footnote{The \lstinline:Collection+JSON: Mediatype
+  solves this issue by providing templates for new items inside the collection
+  representation (\autoref{sec:collection+json}).}  So for the time being server
+and client would need to agree on a custom link relation for that purpose. The
+empty form can be regarded as an entity of its own, linked from the collection
+where newly created resources are expected to appear.
+
+\subsection{VCard's (social) network properties}
+\label{sec:vcards-soci-netw}
+
+This section investigates, whether the VCard Mediatype is also usable to
+represent basic concepts of a social network (OpenSocial) in a restful way.
+
+Important concepts of OpenSocial are persons, their relations, their media and
+groups of persons (\autoref{sec:opensocial-background}). The normal discovery
+path of OpenSocial starts with a person, probably the authenticated user.
+
+It is assumed, that the client has somehow (e.g., by redirection after
+authentication) reached a VCard of a person. At this point the following defined
+properties of a VCard can provide useful information for a social network:
+
+\begin{itemize}
+\item The RELATED property expresses a typed relationship to another entity. The
+  possible types have been adopted by the ``XHTML Friends Network''
+  project\footnote{\citeurl{http://gmpg.org/xfn/11}{2012-03-29}} (contact,
+  acquaintance, friend, met, co-worker, colleague, co-resident, neighbor, child,
+  parent, sibling, spouse, kin, muse, crush, date, sweetheart, me) and augmented
+  with agent and emergency.
+\item PHOTO contains or links to a photo of the person.
+\item IMPP provides a reference to contact the person via instant messenger. No
+  website built-in chat (Facebook) is required.
+\item URL is an untyped reference to any website associated with the VCard,
+  intended for ``personal web sites, blogs, and social networking site
+  identifiers''.
+\item \cite{George2011} proposes additional VCard properties explicitly for
+  social network information\footnote{The draft has been abandoned in March 2012
+    due to lack of interest from social network
+    sites. \citeurl{http://www.ietf.org/mail-archive/web/vcarddav/current/msg02509.html}{2012-03-29}}. It
+  includes an ALBUM property to link to a collection of media items belonging to
+  the person.
+\end{itemize}
+
+VCards can not only represent persons but also groups. A VCard with the KIND
+property set to ``group'' may include a MEMBER property listing URIs for its
+members. Thus group VCards with dereferenceable MEMBER URIs could be used to
+list the members of an OpenSocial group. The client would however still need to
+load every member's VCard to display the names or photos of the group members.
+
+Unfortunately the VCard type does not define an inverse link relation ``GROUP''
+to link to a group that a person is a member of. VCard does not even have a
+universal link property like HTML or ATOM which could be used for that purpose.
+
+The recent Web Linking standard\cite{RFC5988} can help in this situation. It
+allows the inclusion of links as HTTP headers explicitly for Mediatypes without
+the ability to include links. The link relation type
+collection\cite{Amundsen2012} can then be used to link to all group VCards
+related to a person.
+
+It would of course be preferable, if VCard would be augmented with a property to
+link to the groups of a person, maybe as part of the social network extension
+draft\cite{George2011}. This situation however also shows a limitation of the
+way how the type of hyperlinks is indicated in VCard. VCard contains a lot of
+properties, that can contain URIs. The type of those URIs then depends of the
+containing property type like PHOTO, IMPP, RELATED, etc.
+
+VCard however lacks a universal LINK property that could refer to the IANA link
+relation
+registry\footnote{\citeurl{http://www.iana.org/assignments/link-relations}{2012-03-29}}
+to indicate its type and thus directly benefit from the semantic standardization
+efforts underlying this registry.
+
+PortableContacts also contains fields equivalent to RELATED, PHOTO, IMPP, URL,
+also misses an ALBUM field but it can not represent a group.
+
+In conclusion, VCard seems to be a viable option to represent social network
+properties and structure if header links are used or with the help of two not
+yet standardized properties ALBUM and GROUP.
 
 \section{Implementation}
 \label{sec:implementation}
@@ -2581,3 +2653,4 @@ keiner anderen Prüfungskommission vorgelegt.
 %  LocalWords:  RESTful programmatically instantiation hypothetic cacheable
 % LocalWords:  Algermissen interoperability representable isomorphism doubtable
 % LocalWords:  Cacheability extensibility referenceable shareable injectable
+%  LocalWords:  dereferenceable

@@ -41,9 +41,6 @@ Herleitung der REST API
   nicht restful (C.*DAV, OpenSocial). Außerdem wäre es natürlich schön, eine
   Schnittstelle zu haben, die beide Anwendungsfälle bedienen kann.
 
-- Die Anforderung von Kolab selbst ist minimal: Synchronisation von Collections,
-  denn mehr macht die jetzige IMAP API auch nicht.
-
 - Es wird gezeigt, dass AtomPub mit ein paar, meist bereits standardisierten
   Ergänzungen eine sinnvolle, resourcenorientierte Alternative zu C.*DAV,
   OpenSocial ist.
@@ -126,39 +123,16 @@ Implementierung und wiederverwendung von Komponenten
 * Implementation Todos
 ** TODO SLUG Header
 ** TODO Wohin redirect nach delete/put?
-** DONE Alle Tombstones am Ende der updates Liste löschen
-** DONE Tombstones für gelöschte Entries
-** DONE EntityTags berücksichtigen
-** DONE Categories für service document und feeds
-** DONE pagination query params
-** DONE Implement Vary header http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.44
-** DONE next link für feeds
 
 * todos 
 ** Darstellung Confusing: PUT/GET on Media Entries, DELETE on Entries, shared ETAG
-
-** TODO OpenSocial abbilden mit vCard
- - Group Kind and MEMBER property containing URIs to the group members
- - RELATED property with types:
-        related-type-value = "contact" / "acquaintance" / "friend" / "met"
-                        / "co-worker" / "colleague" / "co-resident"
-                        / "neighbor" / "child" / "parent"
-                        / "sibling" / "spouse" / "kin" / "muse"
-                        / "crush" / "date" / "sweetheart" / "me"
-                        / "agent" / "emergency"
- - draft for more social network infos in VCard:
-    http://datatracker.ietf.org/doc/draft-ietf-vcarddav-social-networks
-
- 
 ** TODO The abbreviation of the phrase "that is" is written "i.e.". It contains a period after the "i" and one after the "e". A comma is also usually required with is use. This is a sentence containing an example of how to use "that is" (i.e., this sentence is the example). Quite often it is enclosed in parentheses and you should avoid using it too often. 
 ** TODO Sektion über collection media types, besonders collection+json
 ** TODO Einleitungen und Zusammenfassungen für Sektionen und gesammt
 ** TODO PortableContacts beschreiben und mit vCard vergleichen
 ** TODO Implementierung und Beschreibung: vCard/PoCo/xCard/iCal mit den gleichen Mitteln in Java darstellen
-** TODO Kolab beschreiben
 ** TODO Grundlagen beschreiben
   http://theamiableapi.com/2012/03/04/rest-and-the-art-of-protocol-design/
-** TODO Darstellung der Kolab Daten: Kolab migriert z.Z. zu xCard/xCal, daher 1:1
 ** TODO Was hat aufgehalten?
  Macht es Sinn in der Arbeit Punkte zu nennen, die bei dem Versuch der
  Implementierung hinderlich waren? Zumindest solche Punkte, wo einfach noch
@@ -239,14 +213,6 @@ Erläuterung, wie diese sinnvoll kombiniert werden können.
   sie am Ende noch mal als individuelle Unterabschnitte zusammenfassen?
 
 ** welche Komponenten des Entwurfs können für die Unterstützung verschiedener Medientypen gemeinsam genutzt oder wiederverwendet werden?
-
-  Ich habe das Problem, dass ich bisher kaum etwas implementiert habe und daher
-  natürlich stark in der Luft hänge, was konkrete Wiederverwendung von
-  Komponenten angeht.
-
- - StorageComponent implementations
- - Datenstruktur für Kontakte unabhängig vom Serialisierungsformat
- - Das ganze REST Framework, z.B. Jersey, weitere Libraries für ATOM, vCard, PoCo?
 
 ** Hypermediaunterstützung der verschiedenen Formate
 
