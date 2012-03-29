@@ -1,4 +1,4 @@
-\documentclass[12pt,a4paper,twoside]{scrartcl}		% KOMA-Klassen benutzen!
+\documentclass[11pt,a4paper,headsepline,twoside]{scrartcl}		% KOMA-Klassen benutzen!
 
 %\usepackage[ngerman]{babel}			% deutsche Namen/Umlaute
 \usepackage[utf8]{inputenc}			% Zeichensatzkodierung
@@ -11,6 +11,7 @@
 \usepackage{subfig}
 \usepackage{listings}
 \usepackage{courier}
+% \usepackage{fancyhdr}
 
 \lstloadlanguages{% Check Dokumentation for further languages ...
          XML,
@@ -26,7 +27,7 @@
   \usetikzlibrary{decorations.pathmorphing,backgrounds,fit,decorations.pathreplacing}
 
 \usepackage{setspace} % Anderthalbfacher Zeilenabstand ist Standard in den meisten Seminararbeiten. Das Paket setspace ermöglicht ein einfaches Umstellen von normalem, anderthalbfachen oder sogar doppeltem Zeilenabstand. 
-\usepackage[paper=a4paper,inner=40mm,outer=30mm,top=25mm,bottom=25mm]{geometry} %Das geometry Paket dient zur Einrichtung der Seiten. Hier werden die jeweiligen Seitenränder angegeben. Diese wWerte sollten durch die jeweiligen Vorgaben des Seminarleiters oder Instituts ersetzt werden.
+\usepackage[paper=a4paper,inner=25mm,outer=35mm,top=42mm,bottom=50mm]{geometry} %Das geometry Paket dient zur Einrichtung der Seiten. Hier werden die jeweiligen Seitenränder angegeben. Diese wWerte sollten durch die jeweiligen Vorgaben des Seminarleiters oder Instituts ersetzt werden.
 \setlength{\parindent}{1.0em} %Neue Abschnitte werden mit hängendem Einzug gesetzt, parindent definiert. um wie viel der Absat eingerückt wird. Die Einheit em ist abhängig vom verwendeten Zeichensatz und daher absoluten Werten in mm oder cm vorzuziehen. 
 \setcounter{secnumdepth}{3} %Bis zu welcher Gliederungsebene nummeriert werden soll gibt dieser Befehl vor. In Falle 3 werden \section, \subsection und \subsubsection nummereiert.
 \setcounter{tocdepth}{2} %Bis zu welcher Ebene Einträge ins Inhaltsverzeichnis aufgenommen werden. In diesem Beispiel ebenfalls bis Ebene drei (\subsubsection). Ein durch \paragraph ausgewiesener Abschnitt wird demnach nicht im Inhaltsverzeichnis auftauchen. 
@@ -110,7 +111,7 @@ Dipl.-Inf. Silvia Schreier
 \end{center}
 
 \section*{Aufgabenstellung}
-
+\pagestyle{headings}
 \textit{Entwicklung einer REST-konformen Schnittstelle für die 
 Opensource-Groupware Kolab mit Unterstützung verschiedener Medientypen}
 
@@ -1216,13 +1217,17 @@ feeds.\footnote{Byte oriented IMs might however be very beneficial to serve
 
 In the case of the proposed feed IM, the client sends a conditional GET to
 request the synchronization feed but indicates in the ``A-IM'' header that it
-understands the feed IM:
-\begin{lstlisting}
+understands the feed IM, as shown in Listing \ref{fig:feedimgetrequest}.
+
+\begin{anylisting}[label=fig:feedimgetrequest,
+                   float=h,
+                   caption={HTTP GET request using feed delta encoding}]
 GET /api/collections/contacts HTTP/1.1
 Host: bar.example.net
 If-None-Match: "3631-@2147483647"
 A-IM: feed, gzip
-\end{lstlisting}
+\end{anylisting}
+
 The server responds with a valid feed including the normal head elements but can
 use the etag from the ``If-None-Match'' header to include only those entries in
 the response, that have changed since the time when the etag was valid. This
@@ -1750,7 +1755,8 @@ or otherwise an indication that a ``304 Not Modified'' response should be
 returned.
 
 \begin{figure}[htb]
-  \centering
+  %\centering
+  \advance\leftskip-1cm
   \includegraphics[width=1.2\textwidth]{executionflowoverview}
 
   \caption{main classes controlling the execution flow}
@@ -2687,7 +2693,7 @@ comprehension of type systems.
 \bibliographystyle{alphadin}
 \section*{Selbstständigkeitserklärung}
 % Keine Kopf- und Fußzeilen ausgeben
-\thispagestyle{empty}
+%\thispagestyle{empty}
 % Aber trotzdem ins Inhaltsverzeichnis aufnehmen
 % \addcontentsline{toc}{chapter}{Selbstständigkeitserklärung}
 % Hier der offizielle Text der eidesstattlichen Erklärung
