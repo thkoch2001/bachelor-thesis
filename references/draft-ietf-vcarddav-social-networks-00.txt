@@ -1,0 +1,672 @@
+
+
+
+vcarddav                                                       R. George
+Internet-Draft                                                  B. Leiba
+Intended status: Standards Track                                   K. Li
+Expires: April 26, 2012                              Huawei Technologies
+                                                             A. Melnikov
+                                                           Isode Limited
+                                                        October 24, 2011
+
+
+vCard Format Extension : To Represent the Social Network Information of
+                             an Individual
+                 draft-ietf-vcarddav-social-networks-00
+
+Abstract
+
+   This document defines an extension to the vCard data format for
+   representing and exchanging a variety of social network information.
+
+Status of this Memo
+
+   This Internet-Draft is submitted in full conformance with the
+   provisions of BCP 78 and BCP 79.
+
+   Internet-Drafts are working documents of the Internet Engineering
+   Task Force (IETF).  Note that other groups may also distribute
+   working documents as Internet-Drafts.  The list of current Internet-
+   Drafts is at http://datatracker.ietf.org/drafts/current/.
+
+   Internet-Drafts are draft documents valid for a maximum of six months
+   and may be updated, replaced, or obsoleted by other documents at any
+   time.  It is inappropriate to use Internet-Drafts as reference
+   material or to cite them other than as "work in progress."
+
+   This Internet-Draft will expire on April 26, 2012.
+
+Copyright Notice
+
+   Copyright (c) 2011 IETF Trust and the persons identified as the
+   document authors.  All rights reserved.
+
+   This document is subject to BCP 78 and the IETF Trust's Legal
+   Provisions Relating to IETF Documents
+   (http://trustee.ietf.org/license-info) in effect on the date of
+   publication of this document.  Please review these documents
+   carefully, as they describe your rights and restrictions with respect
+   to this document.  Code Components extracted from this document must
+   include Simplified BSD License text as described in Section 4.e of
+   the Trust Legal Provisions and are provided without warranty as
+
+
+
+George, et al.           Expires April 26, 2012                 [Page 1]
+
+Internet-Draft               vCard-Extension                October 2011
+
+
+   described in the Simplified BSD License.
+
+
+Table of Contents
+
+   1.    Introduction . . . . . . . . . . . . . . . . . . . . . . . .  3
+   1.1.  Terminology Used in This Document  . . . . . . . . . . . . .  3
+
+   2.    Social Network Properties  . . . . . . . . . . . . . . . . .  3
+   2.1.  Property: OPENID . . . . . . . . . . . . . . . . . . . . . .  4
+   2.2.  Property: SOCIALPROFILE  . . . . . . . . . . . . . . . . . .  5
+   2.3.  Property: ALBUM  . . . . . . . . . . . . . . . . . . . . . .  6
+   2.4.  Property: DEPICTION  . . . . . . . . . . . . . . . . . . . .  6
+   2.5.  Property: SOCIALCODE . . . . . . . . . . . . . . . . . . . .  8
+   2.6.  Property: INTEREST . . . . . . . . . . . . . . . . . . . . .  9
+   2.7.  Property: XX . . . . . . . . . . . . . . . . . . . . . . . . 10
+
+   3.    Security Considerations  . . . . . . . . . . . . . . . . . . 10
+
+   4.    IANA Considerations  . . . . . . . . . . . . . . . . . . . . 10
+
+   5.    References . . . . . . . . . . . . . . . . . . . . . . . . . 11
+   5.1.  Normative References . . . . . . . . . . . . . . . . . . . . 11
+   5.2.  Informative References . . . . . . . . . . . . . . . . . . . 11
+
+         Authors' Addresses . . . . . . . . . . . . . . . . . . . . . 12
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+George, et al.           Expires April 26, 2012                 [Page 2]
+
+Internet-Draft               vCard-Extension                October 2011
+
+
+1.  Introduction
+
+   [[anchor1: Barry: This version is still very incomplete.  I have
+   included some comments in the appropriate places with the XML "cref"
+   element, so they will show up within "[[ ]]", as this one does.  I am
+   still working on these, and I also want to put in a lot more
+   properties (see Peter's comment, below).]]
+
+   As social networking has become common, it has become clear that
+   users would like to include information in their vCards [RFC6350]
+   about their social networks.  Well organized social network
+   information allows the vCard owner to share his profile information
+   and to import or subscribe to profile information of others on
+   joining a new network.
+
+   This extension takes some property definitions from the vCard OMA CAB
+   Extensions [I-D.ietf-vcarddav-oma-cab-extensions], and that document
+   should be considered as a prerequisite to this one.
+
+1.1.  Terminology Used in This Document
+
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+   document are to be interpreted as described in [RFC2119].  These
+   terms take their normative meaning only when presented in ALL CAPS.
+
+   Syntax specifications shown here use the augmented Backus-Naur Form
+   (ABNF) as described in [RFC5234], and are specified as in the base
+   vcard specification [RFC6350].
+
+
+2.  Social Network Properties
+
+   These properties are related to sharing social-network information.
+   The basis for some of these properties came from the "Friend of a
+   Friend" specification [FOAF], and we thank the authors of that
+   document for their work.
+
+   [[anchor2: Barry: Are there more FoaF items we want to include?]]
+
+   [[anchor3: Peter StA: There are many "social networking" properties
+   outside of FOAF, so using only what's currently in FOAF is somewhat
+   limiting.  Borrowing from http://xmpp.org/extensions/xep-0154.html
+   I'd mention at least the following...]]
+
+   [[anchor4: a.  URLs for avatar (or actual avatar data), biography,
+   online status or presence, publication list, photo site, resume / CV,
+   weblog, wishlist]]
+
+
+
+George, et al.           Expires April 26, 2012                 [Page 3]
+
+Internet-Draft               vCard-Extension                October 2011
+
+
+   [[anchor5: b. personal attributes like eye color, hair color, height,
+   weight, marital status, smoker / non-smoker, zodiac sign (both
+   Chinese and Western), psychological profile (e.g., Myers-Briggs Type
+   Indicator)]]
+
+   [[anchor6: c. other interesting facts such as areas of expertise,
+   clubs of which the object is a member, charitable organizations
+   supported, dietary preferences, hobbies, interests, profession,
+   religious affiliation]]
+
+   [[anchor7: d. various favorite things, such as activities, authors,
+   individual athletes as well as sports teams, beverages, charitable
+   organizations, chatrooms / IRC channels / forums, foods, games,
+   movies, music, places, quotes, TV shows, weblogs, websites]]
+
+   [[anchor8: e. places lived, schools attended, conferences attended
+   (complete list of all IETF meetings you've been to?), etc.]]
+
+   [[anchor9: The list goes on!]]
+
+   [[anchor10: Clearly there is a *lot* of information that one could
+   include under the "social networking" umbrella.  I don't know how
+   much of that possible universe the authors wish to represent here.]]
+
+   [[anchor11: (Personally I'd be willing to help define a broader set
+   of properties than the few already included here, since I did quite a
+   bit of thinking about the topic several years ago when working on
+   XEP-0154.)]]
+
+2.1.  Property: OPENID
+
+   [[anchor12: Barry: Maybe this should be something like
+   "authentication;type=openid:" instead?  That would allow for other
+   authentication types.]]
+
+   Namespace:
+
+   Property name:  OPENID
+
+   Purpose:  OpenID is an open, decentralized user identification
+       standard, allowing users to log onto many services with the same
+       digital identity.  Inclusion of an OpenID URI in a vCard lets
+       others add the vCard owner's ID to their authorization lists.
+       [[anchor13: Barry: We should add an informative reference to
+       OpenID.]]
+
+
+
+
+
+
+George, et al.           Expires April 26, 2012                 [Page 4]
+
+Internet-Draft               vCard-Extension                October 2011
+
+
+   Value type:  A single URI value.
+
+   Cardinality:  *
+
+   Property parameters:  (none)
+
+   Description:
+
+   Format definition:
+       OPENID-param =  pid-param / pref-param /
+               any-param
+       OPENID-value =  uri
+
+   Example:
+
+     OPENID:http://www.alice.openid.example.org
+
+2.2.  Property: SOCIALPROFILE
+
+   [[anchor14: Dany: SERVICE in OMA-CAB and SOCIALPROFILE here seem very
+   similar and both need more details on LABEL for SERVICE or on TYPE
+   for SOCIALPROFILE.  To me, SERVICE (in OMA-CAB) is more complete.]]
+
+   [[anchor15: Simon: I see significant overlap among the following:
+   SOCIALPROFILE (from here), SERVICE (from OMA-CAB), SERVICE-TYPE (from
+   draft-daboo-vcard-service-type).  I would expect the authors to work
+   amongst themselves on merging those proposals, or at least
+   eliminating the overlap (e.g. reusing parts defined in another
+   draft).]]
+
+   Namespace:
+
+   Property name:  SOCIALPROFILE
+
+   Purpose:  Designates the vCard owner's profile page on a particular
+       social network.
+
+   Value type:  A single URI value.
+
+   Cardinality:  *
+
+   Property parameters:  TYPE
+
+   Description:  This property SHOULD include the parameter "TYPE" to
+       specify the name of the social network that it refers to.
+       Usually, that will also be discernible from the URI, which is why
+       it's optional.  But it can be helpful to have it specified
+       explicitly.
+
+
+
+George, et al.           Expires April 26, 2012                 [Page 5]
+
+Internet-Draft               vCard-Extension                October 2011
+
+
+   Format definition:
+       SOCIALPROFILE-param =  pid-param / pref-param /
+               any-param
+       SOCIALPROFILE-value =  uri
+
+   Examples:
+
+     SOCIALPROFILE;type=linkedin:http://www.linkedin.com/in/barryleiba
+
+     SOCIALPROFILE;type=facebook:http://www.facebook.com/barackobama
+
+2.3.  Property: ALBUM
+
+   Namespace:
+
+   Property name:  ALBUM
+
+   Purpose:  Designates an online album, such as a photo album or video
+       album.
+
+   Value type:  A single URI value.
+
+   Cardinality:  *
+
+   Property parameters:  TYPE
+
+   Description:  This property SHOULD include the parameter "TYPE" to
+       specify the type of album that it refers to.  Usually, that will
+       also be discernible from the URI, which is why it's optional.
+       But it can be helpful to have it specified explicitly.
+
+   Format definition:
+       ALBUM-param =  pid-param / pref-param /
+               any-param
+       ALBUM-value =  uri
+
+   Example:
+
+     ALBUM;type=photo:http://picasaweb.google.com/barryleiba
+     ALBUM;type=video:http://www.youtube.com/user/barryleiba
+
+2.4.  Property: DEPICTION
+
+   [[anchor16: Barry: After reading the FoaF description of "depiction",
+   I get the point now, I think.  I've re-written this to take a stab at
+   it.  I've included a reference to a corporate logo, but Simon points
+   out that we also have LOGO in the base, so maybe that part shouldn't
+   be here.]]
+
+
+
+George, et al.           Expires April 26, 2012                 [Page 6]
+
+Internet-Draft               vCard-Extension                October 2011
+
+
+   Namespace:
+
+   Property name:  DEPICTION
+
+   Purpose:  To note that the referenced URI depicts, in come way, the
+       entity represented by this vCard.
+
+   Value type:  A single URI value.
+
+   Cardinality:  *
+
+   Property parameters:
+
+   Description:  DEPICTION can be used to point to images in online
+       photo galleries, specifying which ones include the subject of
+       this vCard (perhaps in addition to other people or things).
+
+       DEPICTION might also be used to refer to videos, icons, avatars,
+       or the like.  Consider someone's avatars in virtual worlds, or
+       one or more corporate logos in a vCard representing a company.
+
+       This is distinct from the PHOTO property, in that the latter is
+       meant to define a specific representation of the vCard subject (a
+       "profile photo", or a publicity headshot, say), while DEPICTION
+       might often be used to say that the subject appears in a group
+       photo or in a photo that is primarily a picture of something or
+       someone else.
+
+   Format definition:
+       DEPICTION-param =  pid-param / pref-param /
+               any-param
+       DEPICTION-value =  uri
+
+   Example:  Suppose a gallery contains the following photos:
+           IMG_001.jpg: Alexey and Barry at a reception.
+           IMG_002.jpg: Alexey, Chris, and Dave having a conversation.
+           IMG_003.jpg: Barry making a comment in the plenary session.
+           IMG_004.jpg: A meeting session that Alexey, Barry, Chris,
+           Dave, and Eric are all attending.
+
+       Barry's vCard might include the following:
+
+     DEPICTION:http://www.example.com/pub/photos/IMG_001.jpg
+     DEPICTION:http://www.example.com/pub/photos/IMG_003.jpg
+     DEPICTION:http://www.example.com/pub/photos/IMG_004.jpg
+
+
+
+
+
+
+George, et al.           Expires April 26, 2012                 [Page 7]
+
+Internet-Draft               vCard-Extension                October 2011
+
+
+2.5.  Property: SOCIALCODE
+
+   [[anchor17: Simon: The use of the TYPE parameter here is
+   underspecified.  It isn't clear whether the TYPE value is a free-form
+   string of if it needs to be registered somewhere.  Will it be
+   displayed to the user?]]
+
+   Namespace:
+
+   Property name:  SOCIALCODE
+
+   Purpose:  Description of the vCard owner, in the form of a "social
+       code", such as the "geek code" (see
+       http://en.wikipedia.org/wiki/Geek_code).  Social codes are
+       popularly used to exchange a large amount of social information
+       in a compact way, and provide a somewhat frivolous and willfully
+       obscure "fun" mechanism for characterizing technical expertise,
+       interests, and habits.
+
+   Value type:  A single text value.
+
+   Cardinality:  *
+
+   Property parameters:  TYPE
+
+   Description:  This property MUST include the parameter "TYPE" to
+       specify the type of social network code being used.  There are no
+       predefined values for "TYPE", here -- the types will be
+       understood (or not) by the vCard users.
+
+       Implementations need to be especially careful with character
+       quoting in this property, because these codes tend to use odd
+       characters, and many might require quoting [RFC6350].
+
+   Format definition:
+       SOCIALCODE-param =  pid-param / pref-param /
+               any-param
+       SOCIALCODE-value =  text
+
+   Example:
+
+     SOCIALCODE;type=geek:"s: a--"
+
+           [Which means "I'm average size, and my age is 20-24."]
+
+
+
+
+
+
+
+George, et al.           Expires April 26, 2012                 [Page 8]
+
+Internet-Draft               vCard-Extension                October 2011
+
+
+2.6.  Property: INTEREST
+
+   [[anchor18: Dany: INTEREST is defined both here and in OMA-CAB.  Both
+   definitions have interesting parameters (INDEX and LEVEL in OMA-CAB
+   and TYPE here).  To me, these 2 definitions may be combined.]]
+
+   Namespace:
+
+   Property name:  INTEREST
+
+   Purpose:  Lists the vCard owner's interests (social, recreational,
+       technical, etc.).  This allows users to identify others with
+       common interests.
+
+   Value type:  A string value consisting of one or more text values
+       separated by a COMMA character (ASCII decimal 44).
+
+   Cardinality:  *
+
+   Property parameters:  TYPE, LANGUAGE
+
+   Description:  This property MAY include the parameter "TYPE" to group
+       interests in categories.  TYPE might be used to separate
+       "business" interests from "social" interests, for example.  There
+       are no predefined values for "TYPE", here -- the types will be
+       understood (or not) by the vCard users, and it's likely that an
+       ad hoc taxonomy will develop, as has happened with social
+       tagging.
+
+       [[anchor19: Simon: I think this is fine, but please specify
+       whether this string is intended to be displayed to the user or
+       not.  (In the base spec, it is not intended to be displayed
+       as-is.  Instead, we expect the vCard app to understand the TYPE
+       value and show something appropriate (either text or an icon).
+       This is made possible because there is a registry of allowed
+       values that defines their semantics.)]]
+
+   Format definition:
+       INTEREST-param =  pid-param / pref-param /
+               any-param
+       INTEREST-value =  text
+
+   Example:
+
+     INTEREST;type=business:Internet standards,consulting,job offers
+     INTEREST;type=social:friends and family,new friends
+     INTEREST;type=hobby:model trains,reading Sci Fi,travel
+     INTEREST;type=music:classical,jazz,folk,opera
+
+
+
+George, et al.           Expires April 26, 2012                 [Page 9]
+
+Internet-Draft               vCard-Extension                October 2011
+
+
+2.7.  Property: XX
+
+   [[anchor20: Template for adding another property, because we expect
+   to add more properties here.  Remove this section before
+   publishing.]]  (This will also hold some references for the time
+   being: [RFC2425] [RFC2426] [RFC2739] [RFC4770] )
+
+   Namespace:
+
+   Property name:
+
+   Purpose:
+
+   Value type:  A single text value.
+
+   Cardinality:  *
+
+   Property parameters:  VALUE, LANGUAGE
+
+   Description:
+
+   Format definition:
+       XX-param =  pid-param / pref-param /
+               any-param
+       XX-value =  text
+
+   Example:
+
+     xx:zz
+
+
+3.  Security Considerations
+
+   This presents no security considerations beyond those in section 9 of
+   the base vcard specification [RFC6350].
+
+   [[anchor21: Barry: I'm quite sure there's more to say here, and that
+   there are some real security (and privacy) considerations, so this is
+   just a placeholder.  We need to think about this seriously before
+   we're done.]]
+
+
+4.  IANA Considerations
+
+   The IANA is requested to add the following entries to the vCard
+   Properties registry, defined in [RFC6350] section 10.3.1.
+
+
+
+
+
+George, et al.           Expires April 26, 2012                [Page 10]
+
+Internet-Draft               vCard-Extension                October 2011
+
+
+     +-----------+---------------+------------------------+
+     | Namespace | Property      | Reference              |
+     +-----------+---------------+------------------------+
+     |           | OPENID        | RFCXXXX, section 2.1   |
+     |           | SOCIALPROFILE | RFCXXXX, section 2.2   |
+     |           | ALBUM         | RFCXXXX, section 2.3   |
+     |           | DEPICTION     | RFCXXXX, section 2.4   |
+     |           | SOCIALCODE    | RFCXXXX, section 2.5   |
+     |           | INTEREST      | RFCXXXX, section 2.6   |
+     +-----------+---------------+------------------------+
+
+
+5.  References
+
+5.1.  Normative References
+
+   [I-D.ietf-vcarddav-oma-cab-extensions]
+              Cauchie, D., Leiba, B., and K. Li, "vCard Format extension
+              : represent vCard extensions defined by the Open Mobile
+              Alliance (OMA) Converged Address Book (CAB) group",
+              draft-ietf-vcarddav-oma-cab-extensions-00 (work in
+              progress), October 2011.
+
+   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", BCP 14, RFC 2119, March 1997.
+
+   [RFC5234]  Crocker, D. and P. Overell, "Augmented BNF for Syntax
+              Specifications: ABNF", STD 68, RFC 5234, January 2008.
+
+   [RFC6350]  Perreault, S., "vCard Format Specification", RFC 6350,
+              August 2011.
+
+5.2.  Informative References
+
+   [FOAF]     Brickley, D. and L. Miller, "FOAF Vocabulary Specification
+              0.98", August 2010, <http://xmlns.com/foaf/spec/>.
+
+              Namespace Document, Marco Polo Edition
+
+   [RFC2425]  Howes, T., Smith, M., and F. Dawson, "A MIME Content-Type
+              for Directory Information", RFC 2425, September 1998.
+
+   [RFC2426]  Dawson, F. and T. Howes, "vCard MIME Directory Profile",
+              RFC 2426, September 1998.
+
+   [RFC2739]  Small, T., Hennessy, D., and F. Dawson, "Calendar
+              Attributes for vCard and LDAP", RFC 2739, January 2000.
+
+
+
+
+George, et al.           Expires April 26, 2012                [Page 11]
+
+Internet-Draft               vCard-Extension                October 2011
+
+
+   [RFC4770]  Jennings, C. and J. Reschke, Ed., "vCard Extensions for
+              Instant Messaging (IM)", RFC 4770, January 2007.
+
+
+Authors' Addresses
+
+   Robins George
+   Huawei Technologies
+   Bangalore, Karnataka  560071
+   India
+
+   Phone: +91-080-41117676
+   Email: robinsgv@gmail.com
+
+
+   Barry Leiba
+   Huawei Technologies
+
+   Phone: +1 646 827 0648
+   Email: barryleiba@computer.org
+   URI:   http://internetmessagingtechnology.org/
+
+
+   Kepeng Li
+   Huawei Technologies
+   Huawei Base, Bantian, Longgang District
+   Shenzhen, Guangdong  518129
+   P. R. China
+
+   Phone: +86-755-28974289
+   Email: likepeng@huawei.com
+
+
+   Alexey Melnikov
+   Isode Limited
+   5 Castle Business Village
+   36 Station Road, Hampton  Middlesex  TW12 2BX
+   UK
+
+   Email: Alexey.Melnikov@isode.com
+   URI:   http://www.melnikov.ca/
+
+
+
+
+
+
+
+
+
+
+George, et al.           Expires April 26, 2012                [Page 12]
+
