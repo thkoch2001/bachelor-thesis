@@ -188,8 +188,6 @@ wissen und wie viel kann er durch Hyperlinks entdecken?
 \newpage{}
 \pagenumbering{arabic}
 
-
-
 \section{Introduction}
 \label{sec:introduction}
 
@@ -207,16 +205,43 @@ wissen und wie viel kann er durch Hyperlinks entdecken?
 % - Anreize zum Lesen geben – keine Ergebnisse präsentieren
 % - Kurze Beschreibung der einzelnen Kapitel (max. 1-3 Sätze/Kapitel)
 
-Although computers became ubiquitous for some time now, they still don't help
-their users with their most basic information management needs: Make contacts,
-calendars, notices and to do items available across different devices and share
-them with family and peers.
+Although computers became ubiquitous for some time now, it is amazing that the
+most basic and obvious personal information management needs don't seem to have
+an acceptable solution. None of several IT companies known to the author has a
+self-controlled Groupware solution that would allow all organization members to
+manage and share contacts or calendars.
 
-Most existing solutions are either based on non-free software (Microsoft Outlook),
-or require the user to trust his personal data to the commercial
-interests of a company.
+It seems that all solutions that are commonly used either depend on the
+proprietary Exchange Server from Microsoft or the proprietary and foreign
+services of Google. These however are no option for users that care about free
+software or privacy.
 
+Only a few free software solutions exist. The most often stated problem of those
+however is missing or defective support for synchronization.
 
+This work investigates, whether a restful approach for a Groupware API might
+contribute to a more reliable interoperability of Groupware clients and servers
+than the current standards CalDAV and CardDAV, which are discussed in
+\autoref{sec:carddav-caldav}. The requirements for a Groupware API are gathered
+by examining the existing free Groupware system Kolab (\autoref{sec:kolab}) and
+adding the most important features of CalDAV and CardDAV
+(\autoref{sec:replacement-carddav}).
+
+It will also be examined, whether a restful API might be more versatile without
+additional complexity. For that purpose is will be considered, how some use
+cases of the OpenSocial specification (\autoref{sec:opensocial-background}) are
+also supported by the rest API via serendipitous reuse of the hypermedia
+properties of the involved Mediatypes (\autoref{sec:vcards-soci-netw}).
+
+A main focus of the work is the support of the API for multiple, different
+Mediatypes, exemplified by alternative representations of contacts. This
+flexibility enables to reuse the API concepts for different types of clients
+(\autoref{sec:user-class-char}) or content.
+
+The Atom Publishing Protocol is proposed as the basis for a Groupware API. A
+prototypical implementation (\autoref{sec:implementation}) of the core
+functionality evaluates its fitness for the requirements outlined in
+\autoref{sec:requ-analys}.
 
 %\footnote{Experiences with Android and Data in the cloud \citeurl{http://keithp.com/blogs/calypso}{?}}
 
@@ -2226,6 +2251,8 @@ then the rest of the application.
 %What needs a client to know, how does it need to work?
 
 \subsection{Producing Semantically annotated HTML}
+\label{sec:prod-semant-annot}
+
 % XML transformations with scalate http://scalate.fusesource.org/documentation/scuery.html
 
 A recent discussion of possibilities to produce semantically annotated HTML can
@@ -2324,6 +2351,97 @@ objects.\footnote{\citeurl{https://github.com/Paxa/green_monkey}{2012-3-7}
 \section{Results and Discussion}
 \label{sec:results-discussion}
 
+This section presents findings made while designing and implementing the
+presented REST API, outlines which proposed goals have been achieved and why
+others were not achieved and proposes further work.
+
+\subsection{Implemented Requirements}
+\label{sec:impl-requ}
+
+The implementation covers the provision of Atom Service Documents, Collections,
+Entries and managed Media Entry Resources of arbitrary Mediatypes. Resources can
+be created, read, updated and deleted with support for conditional requests. The
+Atom Collections support the described synchronization mechanism.
+
+The Resource Facades component provides a framework to process and serve
+arbitrary Mediatypes if the necessary interfaces are implemented. The
+implementation of those interfaces can usually be done in a few lines of code,
+if an appropriate library for the parsing and serialization of the Mediatype is
+available.
+
+Unfortunately no evidence of the existence of the necessary libraries could be
+found. The only active and usable iCalendar and vCard library iCal4J does not
+yet support the newest versions of those standards, especially not their XML
+variants. For PortableContacts, two Java library projects were found,
+JPoco\footnote{\citeurl{http://code.google.com/p/jpoco}{2012-03-30}} and
+asmx-poco\footnote{\citeurl{http://code.google.com/p/asmx-poco}{2012-03-30}},
+but both have not yet produced a release yet and appear abandoned since at least
+2010.
+
+The situation for Microdata support is even worse. A web developer seems to have
+no other choice today then to manually write and fill the necessary HTML
+attributes in an HTML template engine. An alternative, automated approach has
+been proposed in \autoref{sec:prod-semant-annot} but the implementation of a
+corresponding Java library was not possible in the scope of this work.
+
+\subsection{Mediatype libraries}
+\label{sec:mediatype-libraries}
+
+The support of REST for different Mediatypes has been blamed to potentially
+``complicate and hinder the interoperability of a RESTful Web
+service''\cite[sec. 7.2]{Pautasso:2008:RWS:1367497.1367606}. The experience made
+in this work could not find any support for this assumption. It would of course
+be preferable, if all users of an API could be served and satisfied with the
+same Mediatype, but an API author may not be in such an advantageous
+situation. The protocol related code in the server implementation however did
+not become complicate even while serving and accepting arbitrary Mediatypes.
+
+An area of immense complexity however is the parsing, serialization and
+conversion of Mediatypes. This complexity exists every time when two
+communication partners use different internal representations and must be solved
+at some point between those partners. The REST API in this work imposes this
+complexity on the server.
+
+A symptom of the complexity involved with the handling of different Mediatypes
+is the lack of stable or usable libraries. Contrasting to this there are dozens
+of stable REST frameworks and libraries to choose from. It seems that the
+development and maintenance of Mediatype libraries is a neglected area.
+
+In those libraries that exist and were used, some common shortcomings could be
+observed that translate in the following advises for Mediatype libraries:
+
+\begin{itemize}
+\item Unknown fields or properties should be preserved to support vendor
+  extensions or updates in the specification.
+\item Data structures should be immutable. The construction of the data
+  structures should be delegated to separate, mutable Builders.
+\item The scheme should not be hard coded in classes and their properties, but
+  dynamically assembled at runtime. Cal4J, JPoco, asmx-poco or the OpenSocial
+  implementation Apache Shindig all have one Java class for every known field.
+  This requires many lines of unnecessary similar code and hinders extensibility
+  and updates.
+\end{itemize}
+
+\subsection{Reusable Components}
+\label{sec:reusable-components}
+
+The main contribution of this work in terms of reusable components is the
+concept and prototypical implementation of the Resource Facades. The proposed
+design to support Microdata in template engines is also considered to be
+reusable and beneficial for many use cases.
+
+Surprisingly, the API of JAX-RS (or Jersey) was not as helpful as should be
+expected from it official status. A couple of smaller classes were written for
+this work to wrap Jersey's functionality and that should be reusable in
+arbitrary REST projects. Some of those have been presented in
+\autoref{sec:prep-requ-comp}: Preconditions, PathParams or
+PaginationRange. Additionally to this, a separate \lstinline:Routes: class
+centralized the mapping from URI paths to resource classes, a LinkBuilder
+centralized construction of URIs and the reader and writer provider classes
+delegated their work to the resource facades framework. It seems advisable for
+further REST projects to evaluate frameworks offering alternative concepts than
+JAX-RS.
+
 % The main results of your work should be presented, together with critical
 % discussion. The chapter should cover three things (although these would not be
 % used as section headings):
@@ -2350,40 +2468,17 @@ objects.\footnote{\citeurl{https://github.com/Paxa/green_monkey}{2012-3-7}
 % establish full compatibility between PoCo and vCard/xCard and make it an IETF standard
 % standardize feed diff http
 
-% Gedanken zu Libraries für Medientypen: (macht das Sinn?)
-
-% >   - Die Libraries müssen unbekannte Felder beibehalten um Vendorspezifische
-% >     Erweiterungen nicht zu beschädigen und um Aufwärtskompatibel zu sein.
-% > 
-% >   - Das Schema des Datentyps sollte nicht durch Klassen oder Objectfelder
-% >     bereits zur Compilezeit statisch festgelegt sein (hartcodiert) sondern 
-% > erst
-% >     dynamisch zur Laufzeit gebaut werden. Das reduziert den
-% >     Implementierungsaufwand der Library und ermöglicht die Erweiterung des
-% >     Schemas zur Laufzeit.
-% >   
-% >     Beispiele: 
-% >     - ICal4J hat eine Java Klasse pro bekannter Property
-% >     - Apache Shindig hat eine Objekteigenschaft pro bekanntem PoCo Feld
-
 % **** Hypermediabetrachtung in einen ganz eigenen Abschnitt eher gegen Ende der
 % Arbeit, da könnte man zB super über (stark/schwach) zusammenhängende Graphen
 % von Ressourcen/Medientypen reden
 
-
 % Integrates nicely with other techniques: Pubsubhub, OpenID, OAuth
-
-%\subsection{Used Frameworks and Libraries}
-%\label{sec:used-fram-libr}
 
 % Jersey, Guice, Guava, Abdera, ical4J, Scalate
 
 %> - Auf Basis von Jersey, weil empfohlen von Schneider2010 (Vergleich und
 %>   Beurteilung von Java Frameworks für Web Services mit REST)
 
-
-% weitere Komponenten, die JErsey Sachen ersetzen, siehe auch :DI \ref{sec:prep-requ-comp}
-% Linkbuilder, Routes, Transformations (Reader/Writer)
 
 \subsection{Further work}
 \label{sec:further-work}
@@ -2450,7 +2545,9 @@ At least three solutions may be possible:
 \item The server uses separate URIs for different Mediatype representations as
   suggested by \cite{Raman2006} and accepts PATCH request only against those
   URIs.
-\item The server uses different entity tags for different representations that it can later use to parse the original resource Mediatype from the etag supplied in the If-MAtch header of the PATCH request.
+\item The server uses different entity tags for different representations that
+  it can later use to parse the original resource Mediatype from the etag
+  supplied in the If-MAtch header of the PATCH request.
 \end{itemize}
 
 A further discussion of patch requests should also consider, whether this
@@ -2633,8 +2730,8 @@ framework.\footnote{Scala can provide Dependency Injection solely with language
 require extra care:
 
 \begin{itemize}
-\item Resolving the dependencies of Facade factories must consider the Media
-  Type of the input data.
+\item Resolving the dependencies of Facade factories must be parameterizable,
+  e.g., to request a Writer instance for a specific Mediatype.
 \item The scope of an instance is bound to the ResourceHandler which in most
   cases may be equivalent to the Request scope, but this can't be guaranteed.
 \item Each ResourceHandler manages its own view of available Facades.
@@ -2645,7 +2742,7 @@ The Apache Wink Rest Framework implements a concept called
 Assets are containers for the resource data injected in or returned from
 resource methods. Assets provide methods annotated with \lstinline:@Produces: or
 \lstinline:@Consumes: to handle different Media types. In contrast to Resource
-Facades, the set of supported media types of assets can only be extended by
+Facades, the set of supported Mediatypes of assets can only be extended by
 extending the asset classes. It is also not possible like in
 \autoref{fig:titleandsummary} to provide generic Facades for a TitleAndSummary
 or Contact.
@@ -2698,7 +2795,6 @@ systems may be able to considerably improve the presented facades approach. A
 more detailed study however is out of the scope of this work and the author's
 comprehension of type systems.
 
-
 \section{Conclusions}
 \label{sec:conclusions}
 
@@ -2717,6 +2813,38 @@ comprehension of type systems.
 % aufgetaucht sind, sollte dann am Ende ein Ausblick auf die zukünftige Forschung hergeleitet
 % werden.
 
+It has been shown in this work, that a rather uncomplicated, restful Groupware
+API is a usable alternative for more complex solutions like CardDAV or
+OpenSocial. It seems even possible to serve the use cases of both protocols,
+different classes of clients and different Mediatype preference with the same,
+unified, restful approach.
+
+Most of the code necessary for the implementation is not even specific to a
+Groupware API but for other applications as well that offer a restful HTTP API
+and might consume or produce multiple Mediatypes.
+
+A great source of simplification and serendipitous reuse (e.g., VCards for
+social network information, \autoref{sec:vcards-soci-netw}) is caused by the
+hypermedia support of the involved Mediatypes. The inclusion of complete,
+dereferenceable URIs obsoletes the need for verbose API documentations (like
+Opensocial, \autoref{sec:opensocial-background}. The absence of hypermedia
+support, like missing links to groups or albums in vCards, can directly
+constrain the possible use cases of a Mediatype.
+
+Quite a few tremendously useful features of HTTP or the examined Mediatypes were
+discovered during the research for this work, like HTTP delta encoding, Atom's
+support for collection synchronization and categories or the versatility of
+OpenSearch. Those were previously unknown to the author despite several years of
+professional experience in web development. This supports the assumption that
+lack of education might be a primary reason for the lack of REST adoption.
+
+This work encountered complexities and lack of tooling in other areas then
+expected. The initial research was spent to evaluate different platforms to
+implement restful HTTP interactions. This area however proofed to be rather easy
+and well supported compared to the immense shortcomings or even lack of
+Mediatype libraries. This makes one wondering, whether an expert group like
+CalConnect should really work on additional protocols or rather on the problem
+of lacking Mediatype libraries.
 
 \newpage
 \bibliography{references}{}
@@ -2731,4 +2859,4 @@ comprehension of type systems.
 %  LocalWords:  RESTful programmatically instantiation hypothetic cacheable
 % LocalWords:  Algermissen interoperability representable isomorphism doubtable
 % LocalWords:  Cacheability extensibility referenceable shareable injectable
-%  LocalWords:  dereferenceable mergeable unmergeable conformant
+%  LocalWords:  dereferenceable mergeable unmergeable conformant parameterized
