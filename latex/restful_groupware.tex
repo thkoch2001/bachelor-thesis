@@ -82,35 +82,64 @@
     showstringspaces=false      % Leerzeichen in Strings anzeigen ?        
 }
 
-
-%\titlehead{}
-%\subject{subject}
-
-% Entwicklung einer REST-konformen Schnittstelle für die Opensource-Groupware
-% Kolab mit Unterstützung verschiedener Medientypen
-
 \include{titel}
-\thispagestyle{empty}
+%\thispagestyle{empty}
 \cleardoublepage
-\include{erklaerung}
 \pagenumbering{roman}
+\setcounter{page}{3} 
+\include{erklaerung}
 
+\vspace{1cm}
+\Large{\textbf{Zusammenfassung}}
+\vspace{1cm}
+\normalsize{}
 
-% \title{A REST API for the Groupware Kolab with support for different Media Types}
-% \subtitle{bachelor thesis}
-% \author{Thomas Koch}
-% \publishers{Fernuniversität Hagen\\Faculty of mathematics and computer science}
-% \date{\today}
-% \maketitle{}
-% \vspace{3cm}
-% \begin{center}
-%   matriculation number 7250371
-% \end{center}
-% \vspace{3cm}
-% \begin{center}
-% Professor Dr.-Ing. Bernd J. Krämer\\
-% Dipl.-Inf. Silvia Schreier
-% \end{center}
+Es wird angenommen, dass die verfügbaren Groupware APIs CalDAV und CardDAV
+unnötig komplex und fehleranfällig seien. Als Alternative wurde eine REST
+basierte API entworfen und implementiert mit dem Augenmerk auf Einfachheit aber
+weiterhin vielfältigen Anwendungsmöglichkeiten.
+
+Das Vorgeschlagene Konzept basiert auf dem Atom Publishing Protokoll, OpenSearch
+und HTTP. Die Implementierung gestalltete sich einfacher als erwartet trotz der
+Unterstützungsmöglichkeit für beliebige Medientypen. Schwierigkeiten dagegen
+bereitete der Mangel an Bibliotheken zur Behandlung der einzelnen Medientypen.
+
+Es besteht die Hoffnung, dass die Ergebnisse eine weitere Betrachtung von REST
+basierten APIs, besonders dem Atom Publishing Protokoll, motivieren. Solche APIs
+sollten einfacher zu implementieren und weniger fehleranfällig sein.
+
+\vspace{1cm}
+\Large{\textbf{Abstract}}
+\vspace{1cm}
+\normalsize{}
+
+  % two or three short paragraphs (100-150 words total) background, project aims
+  % and main achievements. From the abstract a reader should be able to
+  % ascertain if the project is of interest to her and presents results that she
+  % would like to know the details of
+  % Hintergrund, Motivation, Ergebnisse
+
+  %  What was done?
+  
+  %  Why was it done?
+  Current approaches to Groupware APIs, especially CalDAV and CardDAV, are
+  argued to be unnecessary complex and error prone.  As an alternative, a
+  restful API for a Groupware system has been designed and implemented with the
+  focus on simplicity of the design while still covering a wide range of use
+  cases.
+
+  %  How was it done?
+  The proposed design is based on the Atom Publishing Protocol, OpenSearch
+  and HTTP.
+  %  What was found?
+  The corresponding implementation, supporting arbitrary Mediatypes, was found
+  to be easier then expected. Difficulties were discovered in the insufficient
+  availability of libraries to handle Mediatypes.
+
+  %  What is the significance of the findings?
+  It is hoped that the findings motivate further considerations of restful API
+  designs, especially based on the Atom Publishing Protocol. It is expected that
+  such APIs are easier to implement and less error prone.
 
 \section*{Aufgabenstellung}
 \pagestyle{headings}
@@ -177,14 +206,6 @@ wissen und wie viel kann er durch Hyperlinks entdecken?
 % \end{tabbing}
 
 \tableofcontents{}
-
-\begin{abstract}
-  % two or three short paragraphs (100-150 words total) background, project aims
-  % and main achievements. From the abstract a reader should be able to
-  % ascertain if the project is of interest to her and presents results that she
-  % would like to know the details of
-  % Hintergrund, Motivation, Ergebnisse
-\end{abstract}
 \newpage{}
 \pagenumbering{arabic}
 

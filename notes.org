@@ -2,15 +2,6 @@
 
 http://www.cs.uwaterloo.ca/~brecht/thesis-hints.html
 
-  DVT
-    Einführung, Motivation, Aufgabenstellung und Aufbau der Arbeit
-    Darstellung der verwendeten Grundlagen
-    Konzept und Lösungsidee
-    Erläuterung des Entwurfs oder der Implementierung
-    Zusammenfassung und Ausblick auf mögliche Erweiterungen
-    Anhänge (optional)
-    Literaturverzeichnis
-    Index (optional)
 
 Erfurt:
 Titelseite
