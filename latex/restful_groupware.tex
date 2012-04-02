@@ -1794,17 +1794,23 @@ yet standardized properties ALBUM and GROUP.
 \section{Implementation}
 \label{sec:implementation}
 
+% @TODO ich würde irgendwie auch erwarten, dass ich eine Übersicht über die Ressourcen mit ihren Medientypen und evtl auch ein paar Beispiele für Use Cases bekomme, ggf auch im Anhang
+
 Based on the requirements and design considerations of the previous sections,
 this section presents a Java based implementation of a RESTful Groupware API
-supporting different media types. The solution is based on the
-JAX-RS \cite{JAX-RS1.1} implementation Jersey, relies on dependency injection
-provided by Guice, and introduces a new concept tentatively called ``Resource
-Facades''. The latter abstracts from different possible representations of a
-resource and thus applies a RESTful principle from the network layer in the
-implementation layer.
+supporting different media types. The solution is based on the JAX-RS 1.1
+\cite{JAX-RS1.1} implementation
+Jersey\footnote{\citeurl{http://jersey.java.net}{2012-04-02}}, relies on
+dependency injection provided by
+Guice\footnote{\citeurl{http://code.google.com/p/google-guice}{2012-04-02}}, and
+introduces a new concept tentatively called ``Resource Facades''. The latter
+abstracts from different possible representations of a resource and thus applies
+a RESTful principle from the network layer in the implementation layer.
 
 \subsection{Control Flow Overview}
 \label{sec:overview}
+
+% @TODO Hier fehlt der Überblick über die gesamte Anwendung ein bisschen
 
 \autoref{fig:executionflowoverview} outlines the most important classes for the
 control flow. Jersey routes calls to the four different ``Jersey Resources''
@@ -1813,11 +1819,12 @@ Media Resources of different media types.
 
 The Jersey Reader/Writer providers are called by Jersey to transform in- and
 output for the Resource classes. The \lstinline:AbderaWriterJerseyProvider: just
-uses the Abdera library. The other two providers are special because they work
-on the universal \lstinline:Resource: class or the related
-\lstinline:UnparsedResource: class. These classes represent the concept of
-resources that can be represented with different media types. They are discussed
-in detail in \autoref{sec:resource-handling}.
+uses the Abdera library. The other two providers are special because they read
+or write the universal \lstinline:Resource: class or the related
+\lstinline:UnparsedResource: class instead of more media type specific
+classes. The former classes represent the concept of resources that can be
+represented with different media types. They are discussed in detail in
+\autoref{sec:resource-handling}.
 
 One instance of the CollectionStorage interface is responsible for the
 administration of one collection of Resources. The first four methods implement
@@ -1830,13 +1837,13 @@ Like the other classes, the CollectionStorage deals with the universal
 \lstinline:Resource: class. The Precond(itions) parameter is a wrapper class
 around the corresponding HTTP headers\footnote{If-Match, If-None-Match,
   If-Modified-Since, If-Unmodified-Since}. It provides
-\lstinline;shouldPerform(etag, updated):bool; methods that the storage must call
-with the resource's etag, last update timestamp or both. The CollectionStorage
-indicates with each methods return value whether it actually performed any
-action. The GetResult and ResultList classes are simple tuple classes wrapping
-one or multiple \lstinline:Resource: instances in case the preconditions failed
-or otherwise an indication that a ``304 Not Modified'' response should be
-returned.
+\lstinline;shouldPerform(etag, updated):boolean; methods that the storage must
+call with the resource's etag, last update timestamp or both. The
+CollectionStorage indicates with each methods return value whether it actually
+performed any action. The GetResult and ResultList classes are simple tuple
+classes wrapping one or multiple \lstinline:Resource: instances in case the
+preconditions failed or otherwise an indication that a ``304 Not Modified''
+response should be returned.
 
 \begin{figure}[htb]
   %\centering
@@ -1895,11 +1902,11 @@ address and phone number.
 One use of two mediatype independent interfaces or ``facades'' or a resource is
 exemplified in \autoref{fig:titleandsummary}. The \lstinline:Contact: interface
 is implemented by two classes that can extract the necessary information from
-either a \lstinline:VCard: or a \lstinline:PortableContact: instance. The
-\lstinline:Contact: interface in turn is used by an implementation of the
-\lstinline:TitleAndSummary: interface. The \lstinline:PlainTextTitleAndSummary:
-class in comparison does not work on an intermediary interface but directly on
-the original data structure.
+either a \lstinline:VCard: or a \lstinline:PortableContact: instance. An
+implementation of \lstinline:Contact: in turn is used by an implementation of
+the \lstinline:TitleAndSummary: interface. The
+\lstinline:PlainTextTitleAndSummary: class in comparison does not work on an
+intermediary interface but directly on the original data structure.
 
 The above mechanism is exposed by the \lstinline:getFacade(Interface): method of
 the \lstinline:Resource: class and used to retrieve a
@@ -1934,6 +1941,8 @@ their processing logic.
 
 \subsubsection{Resource life cycle}
 \label{sec:resource-life-cycle}
+
+% @TODO visualisieren?
 
 Resource classes in this work have a four staged life cycle. The first stage is
 represented by the \lstinline:UnparsedResource: class, instantiated by the
@@ -1996,11 +2005,11 @@ REST characteristic that Resources are manipulated by the submission of new
 Representations.
 
 Requests for facades can be further parameterized with a Predicate. The
-Predicate has one \lstinline;apply(FacadeFactory):bool; method which is called
-only for FacadeFactories producing the desired interface. This mechanism is used
-in the implementation to check an \lstinline:isWriteable(MediaType): method on
-factories producing Writer instances and thus to select the correct Writer
-according to the media type accepted by the client. Future work could
+Predicate has one \lstinline;apply(FacadeFactory):boolean; method which is
+called only for FacadeFactories producing the desired interface. This mechanism
+is used in the implementation to check an \lstinline:isWriteable(MediaType):
+method on factories producing Writer instances and thus to select the correct
+Writer according to the media type accepted by the client. Future work could
 considerably enhance this rather brittle mechanism e.g., to check for
 annotations on the class produced by the factory.
 
@@ -2143,10 +2152,14 @@ if (rb == null) return doUpdate(foo);
 % etag checking as cheap as possible?
 
 % Contactzilla.com saves portablecontacts json in MongoDB
-% https://groups.google.com/d/msg/portablecontacts/57R9gGyoqt0/-P0fF4zRjaoJ
+
+%
+https://groups.google.com/d/msg/portablecontacts/57R9gGyoqt0/-P0fF4zRjaoJ
 
 \subsection{Dependency Injection}
 \label{sec:dependency-injection}
+
+% @TODO was einleitendes
 
 \subsubsection{Preparsed Request Components with Dependency Injection}
 \label{sec:prep-requ-comp}
@@ -2175,13 +2188,16 @@ search interface.
     @QueryParam("limit") int limit ) {
 \end{javalisting}
 
-The implementation for this work instead uses value objects and dependency
-injection to isolate request parsing. This can be seen for example in the
-PaginationRange class which should just hold the values of the URI query
-parameters limit and offset. The provider function in Listing
-\ref{fig:paginationrangeprovider} is invoked by Guice when this class is
-required. It depends in turn on UriInfo, extracts the necessary information and
-returns the simple value class PaginationRange.
+The implementation for this work instead uses value objects\footnote{The ``value
+  object'' design pattern describes immutable objects representing values. The
+  equality of value objects depends only on represented value but not on object
+  identity \cite[p. 486]{Fowler2002}.} and dependency injection to isolate
+request parsing. This can be seen for example in the PaginationRange class which
+should just hold the values of the URI query parameters limit and offset. The
+provider function in Listing \ref{fig:paginationrangeprovider} is invoked by
+Guice when this class is required. It depends in turn on UriInfo, extracts the
+necessary information and returns a simple value object of the type
+PaginationRange.
 
 \begin{anylisting}[label=fig:paginationrangeprovider,
                    caption={Scala Dependency Injection provider for the PaginationRange class; intQueryParam extracts a named query parameter or returns the provided default value}]
@@ -2194,7 +2210,7 @@ def paginationRange(uriInfo:UriInfo):PaginationRange = {
 }
 \end{anylisting}
 
-Other similar value classes in the implementation provide injectable access to
+Other similar value objects in the implementation provide injectable access to
 the parsed path parameters (PathParam) or conditional request HTTP headers
 (Preconditions). The main advantages of this approach are supposed to be:
 
@@ -2282,6 +2298,10 @@ then the rest of the application.
 
 \subsection{Producing Semantically annotated HTML}
 \label{sec:prod-semant-annot}
+
+% @TODO das Problem wird nur bedingt klar, vor allem wenn man die Notation in
+% Listing 7 und 8 nicht komplett kennt, aber es wird auf keinen Fall klar,
+% welche Lösung du jetzt umsetzt
 
 % XML transformations with scalate http://scalate.fusesource.org/documentation/scuery.html
 
@@ -2513,6 +2533,7 @@ evaluate frameworks offering alternative concepts than JAX-RS.
 \label{sec:further-work}
 
 % Apache Abdera 2 hat keine OpenSocial extension
+
 % Abdera is nicht immutable
 
 % XSL Stylesheets um HTML interface für ATOM zu bauen, z.B. von Google's Feedburner benutzt.
@@ -2529,16 +2550,24 @@ cache size is unknown but expected to exceed the web-storage size by several
 orders of magnitude.
 
 One interesting caching strategy in combination with collections is the use of
-``caching tokens'', i.e. each new version of a resource is available under a new
-URI and served with extremely long cache expiration times. Thus a client only
-learns about a new version of a resource if another resource, in our case the
-collection, updates its hyperlink to the resource. This is a perfect match to
-the Atom Publishing Protocol which provides updated entries each time a linked
-resource changes.
+time based caching headers (\lstinline:expires: or \lstinline:Cache-Control:
+with the \lstinline:max-age: directive) with long expiration times. The long
+expiration time should keep the resource available even when the browser is
+offline.
 
-In this context the exact caching behavior of popular browsers is of interest,
-especially in combination with Content-Location headers or the only-if-cached
-directive.
+If the resource is updated, the long expiration time would normally prevent the
+browser from updating it. However since the server controls the collection feed
+linking to the resource, it can use a slightly different URI to link to the
+resource on every update, thus forcing the client to do a reload. In this case
+the client must have other means to keep track of the resource identiy: either
+the ID element of the Atom Entry or a property of the resource itself, like the
+UID property of vCard or iCal.
+
+It would or course be even better, if Javascript code running in a browser could
+somehow force a reload of a resource once it has learned from the collection
+feed that the resource has been updated. In this context the exact caching
+behavior of popular browsers is of interest, especially in combination with
+Content-Location headers or the only-if-cached directive.
 
 \subsubsection{Patching Resources}
 \label{sec:patching-resources}
@@ -2619,6 +2648,7 @@ collection feed is ordered by the time of the last modification. Consequently,
 there is also no equivalent to an ATOM
 ``deleted-entry'' \cite{draft-snell-atompub-tombstones-14}, which enables the use
 of an updates feed for synchronization.
+% @TODO wenn man entsprechende Filter anbietet ist die Sortierung nicht mehr unbedingt relevant
 
 The facility to include full item representations directly in the collection
 (the ``data'' property) is restricted to simple key/value pairs. This excludes
@@ -2672,6 +2702,7 @@ Considering all the problems, it is understandable that no effort could be found
 since 2008 to formalize the outlined mapping in an IANA registered media type.
 
 \paragraph{Conclusion}
+% @TODO Fußnoten zu Quellen?
 
 % Google's GDATA Json format, Youtube JSON feed?
 Other related formats considered are the ``Hypertext Application Language''
@@ -2739,6 +2770,7 @@ interface. The Resource Facade approach presented here is slightly different in
 that creation of the facades is implemented independently from the facades
 themselves by the factory classes.
 
+% das Problem gehört meines Erachtens nach vorne wo du deine Lösung beschreibst und motivierst auch ein konkretes Beispiel, warum das bei dir keine gute Lösung ist wäre gut
 JAX-RS provides the MessageBodyReader and -Writer interfaces. However these
 interfaces are expected to be used only once per request. The resource method
 afterwards needs to work with whatever interface was produced by the
@@ -2777,6 +2809,10 @@ extending the asset classes. It is also not possible like in
 or Contact.
 
 \paragraph{Scala's type system}
+
+% @TODO ohne Scala Wissen nicht verständlich
+
+ % @TODO Java class diagram?
 The proposed Java class diagram in this section has the disadvantage that the
 availability of a facade can not be checked at compilation time. It seems
 however that a more advanced type system could help in this regard.
@@ -2822,7 +2858,7 @@ class PostToCollection[StorageReqFacade]
 This example and the mentioned work on Scala roles shows that an advanced type
 systems may be able to considerably improve the presented facades approach. A
 more detailed study however is out of the scope of this work and the author's
-comprehension of type systems.
+comprehension of type systems. % @TODO würde ich nicht schreiben?
 
 \section{Conclusions}
 \label{sec:conclusions}
