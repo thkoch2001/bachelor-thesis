@@ -1,3 +1,10 @@
+* Korrekturen
+ - to-do
+ - groupware klein
+ - id ID
+ - e.g.
+ - see section statt autoref
+
 * Gliederung
 
 http://www.cs.uwaterloo.ca/~brecht/thesis-hints.html
