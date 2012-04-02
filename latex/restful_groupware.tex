@@ -332,7 +332,7 @@ clients Horde and Roundcube.
 The development of Kolab started 2002, when the Federal Office for Information
 Security (Bundesamt für Sicherheit in der Informationstechnik) commissioned the
 development of a free alternative to the Microsoft Exchange Server. Kolab has
-been developed by a joint venture of three companies\cite{Stoermer2004}. Today
+been developed by a joint venture of three companies \cite{Stoermer2004}. Today
 Kolab is still being developed, supported and distributed collaboratively by
 multiple independent companies.
 
@@ -423,20 +423,20 @@ information normally stored within an address book or directory application''
 the vCard \lstinline:KIND: property). Closely connected by format, standards
 body and usage is iCalendar (short iCal), for ``representing and exchanging
 calendaring and scheduling information such as events, to-dos, journal entries,
-and free/busy information''\cite{RFC5545}. Both formats together cover most
+and free/busy information'' \cite{RFC5545}. Both formats together cover most
 information usually managed by a Groupware system are the base of Kolab's
 internal storage, the underlying format of CardDav and CalDAV and thus of most
 free Groupware systems (\autoref{sec:carddav-caldav}).
 
 The vCard and iCalendar media types seem a bit archaic, since they're not based
-on XML or JSON but on the older Internet Message Format\cite{RFC5322} (IMF)
+on XML or JSON but on the older Internet Message Format \cite{RFC5322} (IMF)
 first defined in RFC822 in 1982. Version 3 of vCard was published in
-1998\cite{RFC2425} only a few months after the W3C published Version 1.0 of
-XML\cite{Paoli:98:XR} and eight years before JSON became an official
-standard\cite{RFC4627}.
+1998 \cite{RFC2425} only a few months after the W3C published Version 1.0 of
+XML \cite{Paoli:98:XR} and eight years before JSON became an official
+standard \cite{RFC4627}.
 
 Thus vCard and iCalendar look a lot like email or HTTP headers. Fortunately, the
-xCard\cite{RFC6351} and xCal\cite{RFC6321} standards are now available as
+xCard \cite{RFC6351} and xCal \cite{RFC6321} standards are now available as
 alternative serializations, so that XML tooling can be used. The standards aim
 for full compatibility between the XML and IMF formats so that no information is
 lost when converting in either direction.
@@ -467,7 +467,7 @@ Plaxo.com\footnote{\citeurl{http://josephsmarr.com/2008/12/31/portable-contacts-
 comprises of a JSON schema for contacts information derived from vCard version
 3\footnote{\citeurl{http://wiki.portablecontacts.net/w/page/17776141/schema}{2012-03-23}}
 and a protocol for authorized retrieval of contacts. The schema misses many
-properties of the current vCard version 4 standard\cite{RFC6350} and introduces
+properties of the current vCard version 4 standard \cite{RFC6350} and introduces
 properties inspired by social networks, e.g. describing social behavior or
 preferences.
 
@@ -481,10 +481,10 @@ JavaScript browser applications.
 \label{sec:carddav-caldav}
 
 The most widely implemented Groupware protocols (in free software) today seem to
-be CalDAV\cite{RFC4791} for calendaring and CardDAV\cite{RFC6352} for
+be CalDAV \cite{RFC4791} for calendaring and CardDAV \cite{RFC6352} for
 contacts\footnote{only full free server implementations: Apple Calendar Server,
   Bedeworks, DAViCal, eGroupWare, Owncloud, SOGo, Tine2.0}. Both protocols
-extend WebDAV\cite{RFC4918} and thus inherit its characteristics.
+extend WebDAV \cite{RFC4918} and thus inherit its characteristics.
 
 WebDAV extends HTTP to enable ``Distributed Authoring and Versioning''
 (DAV). For this purpose it introduces additional HTTP methods (PROPFIND,
@@ -496,7 +496,7 @@ approaches. The first is the protocol's complexity that complicates correct
 implementation. Unfortunately complexity is hard to assess. Therefore only some
 indications are provided at this point.
 
-Lisa Dusseault, author of a WebDAV book\cite{Dusseault2004} and the standard
+Lisa Dusseault, author of a WebDAV book \cite{Dusseault2004} and the standard
 itself expressed her dissatisfaction with
 CalDAV\footnote{\citeurl{http://nih.blogspot.com/2008/02/nearly-two-years-ago-i-made-prediction.html}{2012-1-6}}:
 
@@ -564,13 +564,13 @@ CalWS-REST\footnote{\citeurl{http://calconnect.org/CD1012_Intro_Calendaring_V1.1
 % >   nicht restful (C.*DAV, OpenSocial). Außerdem wäre es natürlich schön, eine
 % >   Schnittstelle zu haben, die beide Anwendungsfälle bedienen kann.
 
-OpenSocial\cite{OSSpec2.0.1} specifies a how data of social networks can be
+OpenSocial \cite{OSSpec2.0.1} specifies a how data of social networks can be
 accessed by clients, especially Javascript browser widgets. The broad adoption
 not only by social networks but also for collaboration software\footnote{wiki,
   issue tracker (Confluence, Jira both Atlassian), Groupware (Lotus from IBM),
   Content Management System (Alfresco, Nuxeo)} demonstrates a variety of use
 cases for Browser accessible Groupware data. It has also been proposed to
-implement an OpenSocial system for the Fernuniversität Hagen\cite{Huebner2009}.
+implement an OpenSocial system for the Fernuniversität Hagen \cite{Huebner2009}.
 
 Unfortunately the so called OpenSocial REST API is a poster child for a non
 restful API that does not warrant its name. It is rather service oriented, as
@@ -584,7 +584,7 @@ the specification truthfully points out\cite[Social API Server, sec
 \label{sec:fieldings-critique}
 
 This section examines a critique of Fielding of the
-API\cite{Fielding2008}\footnote{Fielding referred to a concrete implementation,
+API \cite{Fielding2008}\footnote{Fielding referred to a concrete implementation,
   the ``SocialSite REST API''.} which helps to further clarify the
 characteristics of a restful API that must be obeyed in this work and to justify
 the proposal of a competing API to an already widely adopted one.
@@ -699,7 +699,7 @@ over-specify things that should rather be auto-discovered through hyperlinks.
 \subsubsection{Possible Improvements}
 \label{sec:poss-impr}
 
-Fielding mentions in a comment to the same blog post\cite{Fielding2008} that the
+Fielding mentions in a comment to the same blog post \cite{Fielding2008} that the
 OpenSocial API ``could be made so [restful] with some relatively small changes''
 but does not specify these changes. However some issues can be easily
 identified.
@@ -728,15 +728,15 @@ necessary. It seems that there are some already existing media types that could
 be a good fit for OpenSocial but only miss a canonical json representation for
 easy consumption by javascript applications. These are vCard for
 persons,\footnote{OpenSocial persons are based on portable contacts which in
-  turn borrowed field names from vCards.} ATOM entries\cite{RFC4287} for
+  turn borrowed field names from vCards.} ATOM entries \cite{RFC4287} for
 messages, activities and media items and ATOM categories, collections or
-workspaces\cite{RFC5023} for albums and groups. ATOM and vCard both also provide
+workspaces \cite{RFC5023} for albums and groups. ATOM and vCard both also provide
 extension mechanism.
   
 OpenSocial even referenced ATOM for some time as a wrapper format for its own
 data structures. This was however done in such a way that it only added
 complexity and totally ignored ATOM's own
-features\cite{dehora2009}. Consequently the newest specification version
+features \cite{dehora2009}. Consequently the newest specification version
 deprecates any reference to the ATOM format.
 
 In Jan Algermissen's ``Classification of HTTP-based
@@ -750,7 +750,7 @@ evolution cost may be medium or high.
 
 \subsection{Others}
 
-The Calendar Access Protocol (CAP)\cite{RFC4324} was published in December 2005
+The Calendar Access Protocol (CAP) \cite{RFC4324} was published in December 2005
 about one year before CalDAV and CalAtom. The standard comprises 131 pages. No
 evidence of any successful implementation could be found\footnote{One free
   implementation project \citeurl{http://opencap.sourceforge.net}{2012-3-5}
@@ -766,7 +766,7 @@ Microsoft's
 FeedSync\footnote{\citeurl{http://feedsyncsamples.codeplex.com}{2012-3-8}}. FeedSync's
 most important contribution according to \cite{Snell2007} was the concept of a
 ``tombstone'' element to indicate the deletion of entries from a collection. An
-RFC to standardize the tombstone concept\cite{draft-snell-atompub-tombstones-14}
+RFC to standardize the tombstone concept \cite{draft-snell-atompub-tombstones-14}
 for Atom feeds is currently in the late stages of the IETF standardization
 process.
 % http://notes.kateva.org/2008/01/microsoft-feedsync-what-heck-is-it-and.html
@@ -818,7 +818,7 @@ WebDAV are not considered as useful requirements for a Groupware API.
 
 The software system designed in this work should provide a web based interface
 for most common interactions with a Groupware system like Kolab. It must obey
-the constraints of the REST architectural style\cite{Fielding2000}.
+the constraints of the REST architectural style \cite{Fielding2000}.
 
 Guidelines of the design are:
 
@@ -867,7 +867,7 @@ synchronization protocol may therefore not be seen as adequate on first
 sight. However a restful protocol enables the proper use of the Browser cache so
 that synchronization may not need to start from scratch on every page load and
 modern browsers can keep additional meta data or indexes in HTML5
-Webstorage\cite{Hickson2011b}.
+Webstorage \cite{Hickson2011b}.
 
 Nevertheless, the main interaction considered here as an alternative to
 OpenSocial is not collection synchronization but the discovery of information
@@ -1016,7 +1016,7 @@ and the drawback of incompatibility to plain HTTP.
 It is possible to enhance a restful API with copy and move functionality without
 extending HTTP. The only requirement is that additional hyperlinks can be
 attached to the resources\footnote{which is possible through web
-  linking\cite{RFC5988}}. Allamaraju \cite[Ch. 11]{Allamaraju_2010} proposes
+  linking \cite{RFC5988}}. Allamaraju \cite[Ch. 11]{Allamaraju_2010} proposes
 ``controller resources'' that act on POST requests and are linked from the
 resources they act on. Custom link relations are used to indicate the semantic
 of the controller resource.
@@ -1037,7 +1037,7 @@ user and not modified in several sessions like text documents.
 WebDAV introduces the MKCOL HTTP verb to create collections. CardDAV recommends
 that implementations support this to allow users to ``organize their data
 better''. An alternative would be to make use of ATOM categories for
-grouping\cite{RFC5023}. Instead of creating a new (empty) collection the user
+grouping \cite{RFC5023}. Instead of creating a new (empty) collection the user
 would thus create a contact resource with a new category. An ATOM service
 document could then link to a new (virtual, read-only) collection that only
 contains resources of this category.
@@ -1066,8 +1066,8 @@ changing just one field in a content or event. And it is required that
 \section{REST Interactions Design}
 \label{sec:interactions}
 
-The Atom Syndication Format\cite{RFC4287}, Atom Publishing
-Protocol\cite{RFC5023}, OpenSearch\cite{Clinton} and optional extensions are
+The Atom Syndication Format \cite{RFC4287}, Atom Publishing
+Protocol \cite{RFC5023}, OpenSearch \cite{Clinton} and optional extensions are
 presented in this section as existing, fundamental building blocks to allow the
 design of a restful Groupware API.
 
@@ -1164,13 +1164,13 @@ Protocol as the foundation for a Groupware API is not novel. Rob Yates described
 this idea under the titles ``CalAtom'' and ``CardAtom'' already in
 2006\footnote{\citeurl{http://robubu.com/?cat=2}{2012-3-2}}.
 
-The CalAtom\cite{draft-yates-atompub-calatom-00.txt} proposal uses a
+The CalAtom \cite{draft-yates-atompub-calatom-00.txt} proposal uses a
 ``features'' tag and associated IANA registry to mark collection types and their
 features. But the examples of category usage above (\autoref{sec:disc-coll}) and
 the availability of OpenSearch for time range searches
 (\autoref{sec:spec-reports-search}) provide confidence that a new tag is not
 required. The features tag was proposed in 2007 by
-\cite{draft-snell-atompub-feature} but did not become a standard.
+ \cite{draft-snell-atompub-feature} but did not become a standard.
 
 The Atom format is also used by the Google Data Protocol to publish contacts,
 events and other data
@@ -1206,8 +1206,8 @@ interactions.
 
 The Atom Publishing Protocol identifies collections of resources as Atom
 Feeds. Feeds can also be used to synchronize collections. The necessary
-ingredients are the link relation ``next''\cite{RFC5005}, the concept of a
-``deleted entry''\cite{draft-snell-atompub-tombstones-14} and the prerequisite
+ingredients are the link relation ``next'' \cite{RFC5005}, the concept of a
+``deleted entry'' \cite{draft-snell-atompub-tombstones-14} and the prerequisite
 that the feed entries must ``be ordered by their 'app:edited' property, with the
 most recently edited Entries coming first in the document
 order''\cite[sec. 10]{RFC5023}.
@@ -1280,7 +1280,7 @@ enhanced to reduce the bandwidth usage and general resource usage of both client
 and server. The necessary extension has been described in \cite{Wyman2004} and
 is commonly referred to as RFC3229+Feed since it adds a feed specific Instance
 Method (IM) to the ``Delta encoding in HTTP''
-standard\cite{RFC3229}. Unfortunately nobody has yet invested the effort to
+standard \cite{RFC3229}. Unfortunately nobody has yet invested the effort to
 drive this method through a formal standardization
 process\footnote{\citeurl{http://bob.wyman.us/main/2006/04/microsoft_to_su.html}{2012-3-9}}. It
 is however reported to be widely
@@ -1318,7 +1318,7 @@ the response, that have changed since the time when the etag was valid. This
 implies of course that the server is able to match the given etag to a
 corresponding list of changes\footnote{The given example already suggests that
   the etag itself could include database IDs or timestamps.}. The server
-response uses HTTP code ``226 IM Used''\cite{RFC3229} to mark the response as a
+response uses HTTP code ``226 IM Used'' \cite{RFC3229} to mark the response as a
 special one that is not the regular, cachaable representation.
 
 It may be advisable to also include a ``next'' link to the subsequent feed to keep
@@ -1329,7 +1329,7 @@ client to unnecessarily follow it, since it has not yet seen an entry with an
 old enough ``app:edited'' value. The server could include additional entries
 from its database to satisfy the client's terminating condition. Or the server
 could include an artificial, minimal
-deleted-entry\cite{draft-snell-atompub-tombstones-14} tag with a non-existent
+deleted-entry \cite{draft-snell-atompub-tombstones-14} tag with a non-existent
 ref value and a ``when'' value just older then the etag sent by the client:
 
 \begin{lstlisting}
@@ -1402,7 +1402,7 @@ collection. More specifically the client should be informed about possible query
 facilities without relying on out-of-band information.
 
 A promising approach is to use the de-facto standard
-OpenSearch\cite{Clinton}. According to its homepage, it is implemented by most
+OpenSearch \cite{Clinton}. According to its homepage, it is implemented by most
 major browsers, search engines and many other sites. OpenSearch is also
 recommended for the link type ``search'' in the HTML5
 standard\cite[sec. 4.12.4.12]{Hickson2011a}. The default format of an OpenSearch
@@ -1412,7 +1412,7 @@ OpenSearch defines the (not yet IANA registered) media type
 application/opensearchdescription+xml, which provides necessary information for
 a client to perform queries against a search service. Since possible search
 queries are usually unlimited it is not possible anymore to provide a set of
-static links. Instead the server provides an ``URI Template''\cite{RFC6570}
+static links. Instead the server provides an ``URI Template'' \cite{RFC6570}
 that instructs the client how to perform an ``URI
 construction''\footnote{OpenSearch is the older standard and referenced as Level
   1 URI Templates in \cite{RFC6570}.}.
@@ -1424,7 +1424,7 @@ todo items or notes could be searched by keywords.
 The next important use case is to show calendar events in a given interval,
 e.g. to present the events for a month, week or day. This can be achieved with
 the OpenSearch Time extension that provides the temporal start and end
-parameters. Rob Yates' CalAtom\cite{draft-yates-atompub-calatom-00.txt} proposal
+parameters. Rob Yates' CalAtom \cite{draft-yates-atompub-calatom-00.txt} proposal
 included a similar time range search as the only but mandatory special report.
 
 Probably useful might be the OpenSocial Geo extension. It could allow to search
@@ -1512,7 +1512,7 @@ individual use case:
 \begin{enumerate}
 \item The server accepts updates only for one Mediatype while serving other
   Mediatypes in a ``read-only'' mode.
-\item The server accepts PATCH requests\cite{RFC5789} as a compromise while
+\item The server accepts PATCH requests \cite{RFC5789} as a compromise while
   still not accepting certain Mediatypes for updates
   (\autoref{sec:patching-resources}).
 \item The implementer decides to either merge or delete information not
@@ -1544,10 +1544,10 @@ Microformats, Microdata and RDFa, are presented and discussed in
 \cite{Tennison2012}.
 
 There exists no established term yet to refer to the three different
-formats. Practitioners use ``structured data languages''\cite{Sporny2011},
-``machine-readable data format''\cite{Hickson2011}, ``structured data
-markup''\cite{Goel2011} or just ``structured markup''. Scientific publications
-seem to use the term ``Semantic annotation''\cite{instance7} to refer to HTML
+formats. Practitioners use ``structured data languages'' \cite{Sporny2011},
+``machine-readable data format'' \cite{Hickson2011}, ``structured data
+markup'' \cite{Goel2011} or just ``structured markup''. Scientific publications
+seem to use the term ``Semantic annotation'' \cite{instance7} to refer to HTML
 with machine readable semantic data. This work will use the term ``Semantic
 annotation format'' to refer to Microformats, Microdata, RDFa and similar
 formats.
@@ -1557,8 +1557,8 @@ formats.
 
 One major use case for semantic annotations is to help search engines to better
 index the annotated site. The Microformats project was started by a blog search
-engine (Technorati)\cite{Celik2006} and the recent schema.org effort came from
-the three big search engines Google, Bing and Yahoo.\cite{Goel2011} Another use
+engine (Technorati) \cite{Celik2006} and the recent schema.org effort came from
+the three big search engines Google, Bing and Yahoo \cite{Goel2011}. Another use
 case is demonstrated by the Firefox plugin
 ``Operator''.\footnote{\citeurl{https://addons.mozilla.org/en-US/firefox/addon/operator/}{2012-2-20}}
 It allows to extract annotated entities from web pages. A user could thus import
@@ -1566,7 +1566,7 @@ contact or event data from arbitrary web pages in his personal information
 manager with one click\footnote{Apparently, Android phones can directly import
   annotated addresses from web pages too.}. Semantic annotations can also be
 used to make web content accessible to disabled
-people\cite{Yesilada:2007:EDS:1279700.1279704}.
+people \cite{Yesilada:2007:EDS:1279700.1279704}.
 
 Another use case is currently under development as part of the European Union
 Research Project ``Interactive Knowledge Stack'' (IKS) that builds a semantic
@@ -1620,7 +1620,7 @@ the entry, which is especially useful for search results as discussed in
 With at least three different semantic annotation formats, a developer needs to
 decide which to implement. It is possible to implement multiple formats in
 parallel inside the same HTML document, but this means more markup and a more
-complex publishing task\cite{Tennison2012}. This choice is not a choice of
+complex publishing task \cite{Tennison2012}. This choice is not a choice of
 different Mediatypes, but a choice inside the scope of the containing Mediatype
 text/html (or application/xhtml+xml).
 
@@ -1629,10 +1629,10 @@ format, a second consideration the available tooling to produce a particular
 format. The different semantic annotation formats impose certain requirements
 for the used HTML dialect. Microformats can be used with all versions of HTML,
 RDFa with XHTML or HTML5 and Microdata introduces special attributes that work
-only with HTML5\cite{Tennison2012}.
+only with HTML5 \cite{Tennison2012}.
 
 Microdata is part of HTML5 and a standardization effort of the
-W3C\cite{Hickson2011}.  It is also backed up by the schema.org effort of Google
+W3C \cite{Hickson2011}.  It is also backed up by the schema.org effort of Google
 and
 Microsoft.\footnote{\citeurl{http://schema.org/docs/gs.html\#microdata_why}{2012-2-17}}
 The schema.org vocabulary in turn has been mapped to the semantic world by
@@ -1758,15 +1758,15 @@ Unfortunately the VCard type does not define an inverse link relation ``GROUP''
 to link to a group that a person is a member of. VCard does not even have a
 universal link property like HTML or ATOM which could be used for that purpose.
 
-The recent Web Linking standard\cite{RFC5988} can help in this situation. It
+The recent Web Linking standard \cite{RFC5988} can help in this situation. It
 allows the inclusion of links as HTTP headers explicitly for Mediatypes without
 the ability to include links. The link relation type
-collection\cite{Amundsen2012} can then be used to link to all group VCards
+collection \cite{Amundsen2012} can then be used to link to all group VCards
 related to a person.
 
 It would of course be preferable if VCard would be augmented with a property to
 link to the groups of a person, maybe as part of the social network extension
-draft\cite{George2011}. This situation however also shows a limitation of the
+draft \cite{George2011}. This situation however also shows a limitation of the
 way how the type of hyperlinks is indicated in VCard. VCard contains a lot of
 properties that can contain URIs. The type of those URIs then depends of the
 containing property type like PHOTO, IMPP, RELATED, etc.
@@ -1790,7 +1790,7 @@ yet standardized properties ALBUM and GROUP.
 Based on the requirements and design considerations of the previous sections,
 this section presents a Java based implementation of a restful Groupware API
 supporting different Mediatypes. The solution is based on the
-JAX-RS\cite{JAX-RS1.1} implementation Jersey, relies on dependency injection
+JAX-RS \cite{JAX-RS1.1} implementation Jersey, relies on dependency injection
 provided by Guice, and introduces a new concept tentatively called ``Resource
 Facades''. The latter abstracts from different possible representations of a
 resource and thus applies a restful principle from the network layer in the
@@ -1919,7 +1919,7 @@ resource. The Resource is responsible for providing a Mediatype specific
 representation of itself.
 
 The Resource class outlined in this section does not correspond to the equally
-named resource class concept in JAX-RS\cite{JAX-RS1.1}. The latter kind of
+named resource class concept in JAX-RS \cite{JAX-RS1.1}. The latter kind of
 resource classes are found in the ``Jersey Resources'' package of
 \autoref{fig:executionflowoverview}. However such JAX-RS resource classes do not
 really represent REST resources but rather the binding of resources to URIs and
@@ -2334,7 +2334,7 @@ puts the value for this property inside the element.
 \end{anylisting}
 
 An implementation of this approach must take care of a few
-peculiarities\cite{Hickson2011}. Some properties don't necessarily use simple
+peculiarities \cite{Hickson2011}. Some properties don't necessarily use simple
 \lstinline:span: elements, e.g. dates can be better expressed with
 \lstinline:time: elements or URI values most likely appear in an
 \lstinline:a:, \lstinline:img:, \lstinline:link: or \lstinline:object:
@@ -2536,13 +2536,13 @@ directive.
 \subsubsection{Patching Resources}
 \label{sec:patching-resources}
 
-\autoref{sec:effic-synchr-with} introduced Delta Encoding\cite{RFC3229} and
+\autoref{sec:effic-synchr-with} introduced Delta Encoding \cite{RFC3229} and
 mentioned that it would also be useful to efficiently respond to GET requests on
 resources that only slightly changed (e.g., by one property field) compared to
 the resource cached by the client.
 
 The same argument applies for the other direction, if a client updates a large
-resource. The HTTP PATCH method\cite{RFC5789} has been especially standardized
+resource. The HTTP PATCH method \cite{RFC5789} has been especially standardized
 for this case in March 2010. Support for the PATCH method can be advertised in
 the ``Allow'' header of server responses and the ``Accept-Patch'' header
 specifies the Mediatypes of accepted patch formats.
@@ -2589,7 +2589,7 @@ for the ATOM Publishing Protocol is needed.
 \label{sec:collection+json}
 
 The Collection+JSON Mimetype (IANA registered in July 2011) by Mike
-Amundsen\cite{Amundsen2011a}\cite[ch. 3]{amundsen2011building} looks like a
+Amundsen \cite{Amundsen2011a}\cite[ch. 3]{amundsen2011building} looks like a
 promising candidate for a JSON alternative. The author even states that is has
 been explicitly designed after the model of the Atom Publishing
 Protocol\footnote{\citeurl{http://amundsen.com/media-types/collection}{2012-03-22}}.
@@ -2610,7 +2610,7 @@ Collection+JSON does not enforce an order of the elements in a collection. The
 proposed synchronization interaction however is based on the assumption that the
 collection feed is ordered by the time of the last modification. Consequently,
 there is also no equivalent to an ATOM
-``deleted-entry''\cite{draft-snell-atompub-tombstones-14}, which enables the use
+``deleted-entry'' \cite{draft-snell-atompub-tombstones-14}, which enables the use
 of an updates feed for synchronization.
 
 The facility to include full item representations directly in the collection
@@ -2633,9 +2633,9 @@ template. This excludes mixed collections of different types.
 Collection+JSON provides query templates but those come without a defined
 semantic. A mapping from OpenSearch to JSON would be helpful to reuse the
 semantic definitions. Also the URI template part should be updated to reuse the
-specification of the new URI templates standard\cite{RFC6570}.
+specification of the new URI templates standard \cite{RFC6570}.
 
-Pagination link relations for feeds\cite{RFC5005} could be reused to express
+Pagination link relations for feeds \cite{RFC5005} could be reused to express
 paginated JSON collections as encouraged by the format
 documentation\cite[sec. 5.5]{Amundsen2011a}.
 
@@ -2644,12 +2644,12 @@ documentation\cite[sec. 5.5]{Amundsen2011a}.
 \paragraph{Direct Mapping of ATOM XML to JSON}
 
 James Snell described a mapping of ATOM XML to JSON that should not loose any
-information\cite{Snell2008}\footnote{also implemented in Apache Abdera
+information \cite{Snell2008}\footnote{also implemented in Apache Abdera
   \citeurl{https://cwiki.apache.org/ABDERA/json-serialization.html}{2012-1-7}}. However
 the attempt to map every feature of ATOM and the inherited extensibility and
 expressiveness of XML results in a very complex and deeply nested JSON
 structure. In detail, Snell identifies a couple of problems that need to be
-dealt with in such a mapping\cite{Snell2008}:
+dealt with in such a mapping \cite{Snell2008}:
 
 \begin{itemize}
   \item JSON has no equivalent for the xml:lang attribute.
@@ -2703,7 +2703,7 @@ to the server to look for changes. However separate solutions
 exist\footnote{most notable PubSubHubBub
   \citeurl{http://code.google.com/p/pubsubhubbub/}{2012-1-5}} to enable a push
 workflow on top of a feed based
-application\cite{Wilde:2009:FQP:1693155.1693220}. It may therefor not be seen as
+application \cite{Wilde:2009:FQP:1693155.1693220}. It may therefor not be seen as
 a disadvantage that push notifications have been omitted as a
 requirement.\footnote{\cite[sec. 1]{RFC6352} explicitly mentions missing
   ``change notifications'' as a ``key disadvantage'' of CardDAV.}
@@ -2775,7 +2775,7 @@ availability of a facade can not be checked at compilation time. It seems
 however that a more advanced type system could help in this regard.
 
 Listing \ref{fig:facades-with-scala-types} demonstrates features of the Scala
-type system\cite{Odersky2011} that could be of interest here. In the example a
+type system \cite{Odersky2011} that could be of interest here. In the example a
 post method handler has the requirement to access the posted data through the
 facades \lstinline:VCard: and \lstinline:TextSummary:. Additionally the data
 should be forwarded to an implementation of the trait Storage which has its own
