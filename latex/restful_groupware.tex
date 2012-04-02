@@ -226,7 +226,7 @@ wissen und wie viel kann er durch Hyperlinks entdecken?
 % - Anreize zum Lesen geben – keine Ergebnisse präsentieren
 % - Kurze Beschreibung der einzelnen Kapitel (max. 1-3 Sätze/Kapitel)
 
-Although computers became ubiquitous for some time now, it is amazing that the
+Although computers have become ubiquitous for some time now, it is amazing that the
 most basic and obvious personal information management needs don't seem to have
 an acceptable solution. None of several IT companies known to the author has a
 self-controlled Groupware solution that would allow all organization members to
@@ -240,7 +240,7 @@ software or privacy.
 Only a few free software solutions exist. The most often stated problem of those
 however is missing or defective support for synchronization.
 
-This work investigates, whether a restful approach for a Groupware API might
+This work investigates whether a restful approach for a Groupware API might
 contribute to a more reliable interoperability of Groupware clients and servers
 than the current standards CalDAV and CardDAV, which are discussed in
 \autoref{sec:carddav-caldav}. The requirements for a Groupware API are gathered
@@ -248,16 +248,16 @@ by examining the existing free Groupware system Kolab (\autoref{sec:kolab}) and
 adding the most important features of CalDAV and CardDAV
 (\autoref{sec:replacement-carddav}).
 
-It will also be examined, whether a restful API might be more versatile without
-additional complexity. For that purpose is will be considered, how some use
+It will also be examined whether a restful API might be more versatile without
+additional complexity. For that purpose is will be considered how some use
 cases of the OpenSocial specification (\autoref{sec:opensocial-background}) are
 also supported by the rest API via serendipitous reuse of the hypermedia
 properties of the involved Mediatypes (\autoref{sec:vcards-soci-netw}).
 
 A main focus of the work is the support of the API for multiple, different
 Mediatypes, exemplified by alternative representations of contacts. This
-flexibility enables to reuse the API concepts for different types of clients
-(\autoref{sec:user-class-char}) or content.
+flexibility enables the developer to reuse the API concepts for different types
+of clients (\autoref{sec:user-class-char}) or content.
 
 The Atom Publishing Protocol is proposed as the basis for a Groupware API. A
 prototypical implementation (\autoref{sec:implementation}) of the core
@@ -277,14 +277,14 @@ is argued why it seems worthwhile to explore an alternative approach.
 
 \subsection{REST architectural style}
 
-The API to be designed in this work must obey the constraints of a REST
+The API to be designed in this work must respond to the constraints of a REST
 architecture, especially its four interface
 constraints\cite[sec. 5.1.5]{Fielding2000}:
 
 \begin{itemize}
 \item Every resource is referenceable by a unique URI.
 \item Resources are manipulated by the submission of resource representations.
-\item All exchanged messages are self-descriptive which is achieved by using a
+\item All exchanged messages are self-descriptive, which is achieved by using a
   set of Mediatypes understood by server and client.
 \item The client only knows the entrance URI of an API beforehand. All other
   permitted URIs are discovered in responses of the server.
@@ -306,7 +306,7 @@ Groupware API. Those characteristics are, according to \cite{Fielding2000}
 \item Modifiability (sec. 2.3.4) allows to adapt the Groupware to changes in the
   organization.
 \item Reliability (sec. 2.3.7) can be of great importance, if the ability to
-  work depends on the correct working of the Groupware system.
+  work depends on the correct functioning of the Groupware system.
 \item Anarchic scalability (sec. 4.1.4.1) allows a Groupware to function with
   other components that are not under the control of the Groupware
   administrator.
@@ -322,7 +322,7 @@ Groupware API. Those characteristics are, according to \cite{Fielding2000}
 This work presents an API usable for the Groupware system Kolab. ``Kolab
 Groupware'' is the name for a system comprising several independent free (as in
 speech) software products, a relatively small amount of Kolab specific ``glue
-code'' and a special way to configure the involved components. On the server
+code'' and a special way of configuring the involved components. On the server
 side, Kolab's main components are the directory server OpenLDAP, the Mail
 Transfer Agent Postfix and the IMAP server Cyrus. Kolab works with specialized
 client software (see \autoref{sec:imap-as-collection}) which is officially
@@ -333,21 +333,21 @@ The development of Kolab started 2002, when the Federal Office for Information
 Security (Bundesamt für Sicherheit in der Informationstechnik) commissioned the
 development of a free alternative to the Microsoft Exchange Server. Kolab has
 been developed by a joint venture of three companies\cite{Stoermer2004}. Today
-Kolab is still developed, supported and distributed collaboratively by multiple
-independent companies.
+Kolab is still being developed, supported and distributed collaboratively by
+multiple independent companies.
 
 A REST API for Kolab aims to make it easier for clients to connect to the Kolab
 server. The REST API should also be implementable by other server solutions and
 maybe evolve into a standardized Groupware API.
 
 A couple of related terms and concepts exist that all more or less overlap with
-the functionality provided by Kolab: Groupware, Personal Information
-Management/Manager (PIM), Group Information Management (GIM), Computer-supported
-cooperative/collaborative work, Knowledge management, (Enterprise) Content
-Management. Especially scientific literature uses the term Groupware for other
-kind of systems then Kolab\cite[sec. 2.1]{Stoermer2004}. For the rest of this
+the functionality provided by Kolab: groupware, personal information
+management/manager (PIM), group information management (GIM), computer-supported
+cooperative/collaborative work, knowledge management, (enterprise) content
+management. Especially scientific literature uses the term groupware for other
+kinds of systems than Kolab\cite[sec. 2.1]{Stoermer2004}. For the rest of this
 work however, a Groupware is understood as a software managing address books,
-calendars, todo items, journals and probably more data for a group of
+calendars, to-do items, journals and probably more data for a group of
 collaborating users.
 
 \subsection{IMAP as a collection synchronization protocol}
@@ -363,8 +363,8 @@ version~3 will use XCard and XCal where
 applicable\footnote{\citeurl{http://blogs.fsfe.org/greve/?p=470}{2012-03-28}}.
 % see also IMAP LIST Extension for Special-Use Mailboxes RFC 6154
 
-Kolab Clients connect to the (Cyrus) IMAP server, filter all folders of a user
-to find those managed by Kolab and fetch all attachments of mails in those
+Kolab clients connect to the (Cyrus) IMAP server, filter all folders of a user
+to find those managed by Kolab, and fetch all attachments of mails in those
 folders. Write operations also use the IMAP protocol.
 
 There are a few appealing advantages to this approach:
@@ -372,13 +372,13 @@ There are a few appealing advantages to this approach:
 \begin{itemize}
 \item The IMAP infrastructure used for mail can be reused (authentication,
   backup, quotas, shareable folders).
-  \item Data is stored as file attachment. Thus the probably complicate mapping of
-  groupware data items to the needs of a (relational) database is avoided.
+\item Data is stored as file attachment. Thus the probably complicated mapping
+  of groupware data items to the needs of a (relational) database is avoided.
   \item IMAP already supports offline work and later synchronization.
 \end{itemize}
 
 The simplicity of just dropping files in a store used by several concurrent
-clients however also has drawbacks, e.g: there is no moderating logic on the
+clients however also has its drawbacks, e.g: there is no moderating logic on the
 server site that could verify the correctness of stored data and there are no
 query or report capabilities.
 
@@ -493,7 +493,7 @@ component as a hierarchic file system.
 
 Two characteristics of WebDAV motivate an investigation of alternative
 approaches. The first is the protocol's complexity that complicates correct
-implementation. Unfortunately complexity is hard to assess. Therefor only some
+implementation. Unfortunately complexity is hard to assess. Therefore only some
 indications are provided at this point.
 
 Lisa Dusseault, author of a WebDAV book\cite{Dusseault2004} and the standard
@@ -505,10 +505,10 @@ CalDAV\footnote{\citeurl{http://nih.blogspot.com/2008/02/nearly-two-years-ago-i-
 \end{quote}
 
 The three standards WebDAV (127p), CalDAV (107p) and CardDAV (48p) add up to 282
-pages of highly specific standards. This is nearly double as much text as
+pages of highly specific standards. This is nearly twice as much text as
 necessary for the standards this work is based on (149 pages)\footnote{Atom
   (43), AtomPub (53), Feed paging (15), OpenSearch (28), Atom Deleted Entry
-  (10)}. In contrast to WebDAV, Feeds and related technologies are also more
+  (10)}. In contrast to WebDAV, feeds and related technologies are also more
 widely used so that a web developer might already know the latter standards.
 
 The large amount of specifications for the WebDAV family is also caused by the
@@ -614,7 +614,7 @@ REST-URI-Fragment]{OSSpec2.0.1}:
 
 An even worse misuse of URIs is present in OpenSocial's service to retrieve
 multiple albums. There the ``c'' parameter from above is actually a slash
-separated list of albums to retrieve. The URI standard however makes clear, that
+separated list of albums to retrieve. The URI standard however makes clear that
 the path component of an URI is intended to indicate some kind of hierarchic
 order\cite[sec 3.3]{RFC3986}.
 
@@ -638,10 +638,11 @@ actions. Fielding writes:
     information[\ldots]].}
 \end{quote}
 
-The API consequently does not show the kind of simplicity that come with
-embedded Hyperlinks but force developers to hard code URI construction in client
-implementations. Such hard coded clients in turn hinder further evolution of the
-API, the modifiability property or a restful API\cite[sec 2.3]{Fielding2000}.
+The API consequently does not show the kind of simplicity that comes with
+embedded hyperlinks, but forces developers to hard code URI construction in
+client implementations. Such hard coded clients in turn hinder further evolution
+of the API, the modifiability property or a restful API\cite[sec
+2.3]{Fielding2000}.
 
 Tables \ref{tab:OSURIPersons} and \ref{tab:OSURIAlbums} show some examples of
 OpenSocial's hard coded URIs. They also outline a minimal set of functionality
@@ -650,7 +651,7 @@ that is considered in this work for a restful API suitable as a replacement
 
 \begin{itemize}
 \item Mediatypes to represent users and groups
-\item CRUD functions for collections of users and, groups
+\item CRUD functions for collections of users and groups
 \item Representation of group membership
 \item Representation of relations between Users
 \item Hyperlinks to a user's collection of albums
@@ -712,11 +713,11 @@ resources. Thus it does not obviously violate REST like the albums and
 messages. However it does so even worse since there are hidden references only
 defined out-of-band in the specification. One can retrieve the albums, relations
 or messages of a user by filling in the \texttt{userId} in one of the specified
-URI templates. If Users would just contain references to other resources related
-to a user, the specification could already be shortened a lot.
+URI templates. If the person structure would just contain references to other
+resources related to a user, the specification could already be shortened a lot.
 
 Another missed opportunity for a much more intuitive API is the relation of
-media items and albums. This seems to be poster child example for a collection
+media items and albums. This seems to be a poster child example for a collection
 (album) to collection-element (media item) relation which could have made use of
 the hierarchical character of URI paths. OpenSocial however requires the client
 developer to use two different URI templates. (\autoref{tab:OSURIAlbums})
@@ -741,7 +742,7 @@ deprecates any reference to the ATOM format.
 In Jan Algermissen's ``Classification of HTTP-based
 APIs''\footnote{\citeurl{http://nordsc.com/ext/classification_of_http_based_apis.html}{2011-12-08}},
 the OpenSocial REST API would actually be ``HTTP-based Type I'' due to the lack
-of media types and direct hyper links between related resources. Algermissen
+of media types and direct hyperlinks between related resources. Algermissen
 writes that this level has the lowest possible initial cost of all HTTP APIs. Or
 in other words: The OpenSocial specification authors might not have had to
 invest a lot to come up with this API specification but maintenance and
@@ -774,7 +775,7 @@ process.
 \label{sec:requ-analys}
 
 The requirements of the Kolab REST API are derived in this section from the way
-how Kolab uses IMAP, from the characteristics of the managed data set and the
+Kolab uses IMAP, from the characteristics of the managed data set, and the
 supposed characteristics of typical clients. In addition it is also considered
 that the API may even be usable as a restful alternative for CardDAV, CalDAV and
 parts of OpenSocial. The last subsection explicitly lists why some features of
@@ -823,13 +824,13 @@ Guidelines of the design are:
 
 \begin{itemize}
 \item The system should be extensible to support different kind of personal
-  information resources like contacts, events, todo items, journal items and
+  information resources like contacts, events, to-do items, journal items and
   free-busy informations.
   \item ``CRUD'' operations must be supported: Create, Read, Update, Delete.
   \item The client must be able to synchronize collections of resources for
     offline read access and manipulation.
   \item The design should be considerably ``easier'' to implement than CalDAV,
-    CardDAV or IMAP as well for the server as for the client.
+    CardDAV or IMAP for both the server and the client.
   \item The design should reuse existing standards where possible.
   \item The design should support all client types listed in
     \autoref{sec:user-class-char}.
@@ -862,7 +863,7 @@ CardDAV and OpenSocial should provide further motivation for the presented
 approach.
 
 OpenSocial is mainly used by short living Javascript browser widgets. A
-synchronization protocol may therefor not be seen as adequate on first
+synchronization protocol may therefore not be seen as adequate on first
 sight. However a restful protocol enables the proper use of the Browser cache so
 that synchronization may not need to start from scratch on every page load and
 modern browsers can keep additional meta data or indexes in HTML5
@@ -975,7 +976,7 @@ document database like CouchDB, plain files, relational or XML databases.
 % implementation of clients\cite[sec. 5.2]{RFC6352}. However both may make sense
 % in certain scenarios and the protocol should not exclude such scenarios. A
 % collection could for example represent all items related to a project, which
-% include contacts, events, todos and journal entries.
+% include contacts, events, to-dos and journal entries.
 
 \subsection{Caching instead of Performance optimization}
 The system is meant to inherit the benefits of a restful architecture,
@@ -998,8 +999,8 @@ supports all the following features.
 
 CalDAV and CardDAV define elaborate report, filter and projection
 capabilities. This work considers reports or search only when an important use
-case is not implementable without it and existing, well known specifications can
-be reused.
+case is not implementable without it and when existing, well known
+specifications can be reused.
 
 \subsubsection{Access Control}
 WebDAV defines specific access control semantics and thus imposes those also on
@@ -1054,7 +1055,7 @@ a resource, HTTP supports conditional updates and leaves conflict resolution to
 the client.
 
 \cite[sec. 1]{Nielsen1999} provides three rules, formulated as questions, to
-help deciding whether a protocol should support locking. In the present case,
+help decide whether a protocol should support locking. In the present case,
 all three rules advise against locking: \textit{The content is mergeable.}
 Conflicting changes in vCard and iCal resources can be easily presented to the
 user. An unmergeable resource would be for example an image. \textit{The editing
@@ -1079,13 +1080,13 @@ collections is the Atom Service Document\cite[sec. 8]{RFC5023}. It contains
 links to collections organized in workspaces and annotated with meta data.
 
 A Groupware client most likely needs to discern the available collections by the
-contained resources as to consume and present them with the appropriate user
+contained resources so as to consume and present them with the appropriate user
 interfaces, e.g.,for contacts or events. A first idea could be to use the
 Mediatypes declared in the ``accept'' tag of a collection to identify types of
 collections. However the specification explicitly states that this tag
 ``specifies a type of representation that can be POSTed to a
 Collection''\cite[sec. 8.3.4]{RFC5023}. If a collection can only be read, then
-no accept tag should be present and thus also not be available for
+no accept tag should be present and thus neither be available for
 interpretation.
 
 A standard conformant approach is demonstrated by Google's Data
@@ -1096,7 +1097,7 @@ use Atom categories\cite[sec. 8.3.6]{RFC5023} to mark the type of Atom entries,
 as shown in the first two elements of Listing \ref{fig:atom-category}. James
 Snell proposed a standard URI to identify the semantics of
 categories\footref{snellatomcategory}, demonstrated by the last two tags in
-Listing \ref{fig:atom-category}. However no follow up to this could be
+Listing \ref{fig:atom-category}. However no follow-up to this could be
 found. The use of categories to attach arbitrary meaning, e.g, ``event type
 (product or promotion), and its status (new, updated, or cancelled)'' to feeds
 and entries is also recommended in \cite[p. 200]{Webber2010}.
@@ -1137,8 +1138,8 @@ found. The most promising approach seems to list available collections in a
 \subsection{Personalized Service Documents} For a Groupware that manages
 confidential information it would make sense to provide personalized Service
 Documents for authenticated users that list only collections that the user is
-authorized to read.\footnote{For this use case it would be convenient, if HTTP
-  would support optional authentication, but it does not or only
+authorized to read.\footnote{For this use case it would be convenient if HTTP
+  supported optional authentication, but it does not or only
   poorly. \citeurl{http://computerstuff.jdarx.info/content/optional-http-authentication}{2012-2-28}}
 Personalized Service Documents for different users should have different URIs to
 make them cacheable and to acknowledge that each personalized Service Document
@@ -1198,8 +1199,8 @@ synchronizations only transfer a few resources that have changed since the last
 synchronization, then such updates are expected to complete fast enough to not
 be a usability concern.
 
-All client scenarios except of a Web Browser client that is used only once, can
-profit from the above scenario. For such a browser, sections
+All client types, except that of a Web Browser client that is used only once,
+can profit from the above scenario. For such a browser, sections
 \ref{sec:spec-reports-search} and \ref{sec:vcards-soci-netw} propose alternative
 interactions.
 
@@ -1231,7 +1232,7 @@ At the end of this process, the client memorizes the ``app:edited'' value of the
 first entry of the first feed. This timestamp can be used by the client to stop
 subsequent synchronizations at the first entry with an older timestamp.
 
-It is possible, that the collection has been modified during the
+It is possible that the collection will have been modified during the
 synchronization. Therefor the client should directly conclude with an update
 synchronization. This means that the client starts again to load the first feed
 and applies all updates until it sees an entry with an ``app:edited'' value
@@ -1243,7 +1244,7 @@ If the client followed a ``next'' link during a synchronization then it must
 make sure at the end of the synchronization that the first feed has not changed
 meanwhile, most probably with a conditional GET request. After this last request
 indicates no further changes, the client knows that its local collection is in
-the state of the servers collection at the time of the last GET request.
+the state of the server's collection at the time of the last GET request.
 
 % \begin{figure}[tb]
 
@@ -1314,9 +1315,9 @@ A-IM: feed, gzip
 The server responds with a valid feed including the normal head elements but can
 use the etag from the ``If-None-Match'' header to include only those entries in
 the response, that have changed since the time when the etag was valid. This
-implies of course, that the server is able to match the given etag to a
+implies of course that the server is able to match the given etag to a
 corresponding list of changes\footnote{The given example already suggests that
-  the etag itself could include database ids or timestamps.}. The server
+  the etag itself could include database IDs or timestamps.}. The server
 response uses HTTP code ``226 IM Used''\cite{RFC3229} to mark the response as a
 special one that is not the regular, cachaable representation.
 
@@ -1338,7 +1339,7 @@ ref value and a ``when'' value just older then the etag sent by the client:
    when="2005-11-29T12:11:12Z"/>
 \end{lstlisting}
 
-If more entries have changed then the server is comfortable to include in one
+If more entries have changed than the server is comfortable to include in one
 response, then the server is free to respond with a regular feed and the status
 code 200.
 
@@ -1353,14 +1354,14 @@ latter requirement in turn triggers two requirements of the Atom Feed format,
 namely that the entry should have a summary tag and that the content tag must be
 empty\cite[sec. 4.1.1.1,4.1.3.2]{RFC4287}.
 
-It is unfortunate, that the Atom Publishing Protocol does not allow the direct
+It is unfortunate that the Atom Publishing Protocol does not allow the direct
 inclusion of the managed resource in the content tag. This requires the client
-to issue additional GET requests for each resource instead of extracting it
-directly from the feed.
+to issue additional GET requests for each resource instead of extracting the
+resource's content directly from the feed.
 
 \subsection{Modifying Resources and Offline editing}
 
-Editing, Updating and Deleting of media entries is specified in the Atom
+Editing, updating and deleting of media entries is specified in the Atom
 Publishing Protocol and is useful for this work without modifications.
 
 % As outlined in \autoref{sec:inline-feeds-or} it is possible to include full
@@ -1376,14 +1377,14 @@ Publishing Protocol and is useful for this work without modifications.
 
 In addition to the normal online workflow, a client should offer the user the
 possibility to create, update and delete resources while being offline and to
-apply this modifications during the next synchronization, much like the IMAP
+apply these modifications during the next synchronization, much like the IMAP
 protocol used by Kolab. This requirement is trivial to fulfill as long as no
 concurrent edits happen on the server site. In that case the client just PUTs
 the changes the next time it is connected.
 
 In the case of edit conflicts however, the client needs to perform an automated
 or user assisted merge of the conflicting resources. Therefor the client should
-always preserve a copy of a resource version as last seen from the Server to be
+always preserve a copy of a resource version as last seen from the server to be
 able to perform a three-way-merge.
 
 The problem of offline edits and conflicts is thus similar to the case of a
@@ -1423,7 +1424,7 @@ todo items or notes could be searched by keywords.
 The next important use case is to show calendar events in a given interval,
 e.g. to present the events for a month, week or day. This can be achieved with
 the OpenSearch Time extension that provides the temporal start and end
-parameters. Rob Yates CalAtom\cite{draft-yates-atompub-calatom-00.txt} proposal
+parameters. Rob Yates' CalAtom\cite{draft-yates-atompub-calatom-00.txt} proposal
 included a similar time range search as the only but mandatory special report.
 
 Probably useful might be the OpenSocial Geo extension. It could allow to search
@@ -1500,7 +1501,7 @@ representation. However since the client negotiated the Mediatype with the
 server it is most likely that it is satisfied with only the data representable
 in that type.
 
-Now if the client uses such a Mediatype in a put request to update a resource,
+Now if the client uses such a Mediatype in a PUT request to update a resource,
 it may not be clear how to deal with the information that the client could not
 express in the submitted resource. Should it be deleted or should data from the
 server be merged with the new representation?
@@ -1527,7 +1528,7 @@ individual use case:
   resolved manually later.
 \end{enumerate}
 
-The creation of resources can be handled more liberate than updating, since no
+The creation of resources can be handled more freely than updating, since no
 state on the server exists that could be lost.
 
 \subsection{Microformats, Microdata, RDFa}
@@ -1536,13 +1537,13 @@ state on the server exists that could be lost.
 
 HTML documents are primarily meant to be rendered by browsers and interpreted by
 humans. It is hard for a machine to interpret the meaning of text and data
-included in an HTML document. To help this, different techniques have evolved to
+included in an HTML document. To remedy this, different techniques have evolved to
 add additional meta data to HTML thus allowing machines to identify structured
 data in HTML without having an impact on the rendering. The most popular ones,
 Microformats, Microdata and RDFa, are presented and discussed in
 \cite{Tennison2012}.
 
-There is not yet an established term to refer to the three different
+There exists no established term yet to refer to the three different
 formats. Practitioners use ``structured data languages''\cite{Sporny2011},
 ``machine-readable data format''\cite{Hickson2011}, ``structured data
 markup''\cite{Goel2011} or just ``structured markup''. Scientific publications
@@ -1625,7 +1626,7 @@ text/html (or application/xhtml+xml).
 
 A first consideration has to be the ability of expected consumers to handle the
 format, a second consideration the available tooling to produce a particular
-format. The different Semantic annotation formats impose certain requirements
+format. The different semantic annotation formats impose certain requirements
 for the used HTML dialect. Microformats can be used with all versions of HTML,
 RDFa with XHTML or HTML5 and Microdata introduces special attributes that work
 only with HTML5\cite{Tennison2012}.
@@ -1659,14 +1660,14 @@ restful systems.
 
 HTML has no means to send an etag when submitting a form and no support for
 other HTTP verbs then GET and POST, most importantly PUT and DELETE. A
-Discussion to include these however seems to be underway\cite{Amundsen2011}.
+Discussion to include these seems to be underway however \cite{Amundsen2011}.
 
 All forms have the same media type of application/x-www-form-urlencoded,
 although they may represent totally different kind of resources. In practice
 this is often not a problem since the server knows which form to expect and
 selects its parsing routine accordingly.
 
-In cases, where different forms can be expected to be submitted to the same URI,
+In cases where different forms can be expected to be submitted to the same URI,
 e.g. to the URI of a collection, the server needs to be informed about the
 resource type, probably by a hidden form input element.
 
@@ -1681,10 +1682,10 @@ resource, then this can be used as basis for the automation.
 %@TODO
 % automatically build forms like eZPublish / Drupal?
 
-Not yet answered is the question, where or under which condition an HTML form
+Not yet answered is the question where or under which condition an HTML form
 should be submitted to the user. It is certainly not desirable to present HTML
 forms by default in every HTML representation of any resource that the user is
-authorized to modify. And even then, there would still not be any mean for the
+authorized to modify. And even then, there would still not be any means for the
 user to reach an HTML form to create a new resource.
 
 The edit case can be solved with the IANA registered ``edit'' link-relation. An
@@ -1700,7 +1701,7 @@ The above link is a relative Link that just appends a query part to the URI of
 the current page (assuming that the page URI does not already contain a query
 part).
 
-It may be noted here, that making different representations of one resource
+It may be noted here that making different representations of one resource
 available under different URIs is no violation of rest principles and even
 encouraged for similar use cases by \cite{Raman2006}.
 
@@ -1715,14 +1716,14 @@ where newly created resources are expected to appear.
 \subsection{VCard's (social) network properties}
 \label{sec:vcards-soci-netw}
 
-This section investigates, whether the VCard Mediatype is also usable to
+This section investigates whether the VCard Mediatype is also usable to
 represent basic concepts of a social network (OpenSocial) in a restful way.
 
 Important concepts of OpenSocial are persons, their relations, their media and
 groups of persons (\autoref{sec:opensocial-background}). The normal discovery
 path of OpenSocial starts with a person, probably the authenticated user.
 
-It is assumed, that the client has somehow (e.g., by redirection after
+It is assumed that the client has somehow (e.g., by redirection after
 authentication) reached a VCard of a person. At this point the following defined
 properties of a VCard can provide useful information for a social network:
 
@@ -1763,11 +1764,11 @@ the ability to include links. The link relation type
 collection\cite{Amundsen2012} can then be used to link to all group VCards
 related to a person.
 
-It would of course be preferable, if VCard would be augmented with a property to
+It would of course be preferable if VCard would be augmented with a property to
 link to the groups of a person, maybe as part of the social network extension
 draft\cite{George2011}. This situation however also shows a limitation of the
 way how the type of hyperlinks is indicated in VCard. VCard contains a lot of
-properties, that can contain URIs. The type of those URIs then depends of the
+properties that can contain URIs. The type of those URIs then depends of the
 containing property type like PHOTO, IMPP, RELATED, etc.
 
 VCard however lacks a universal LINK property that could refer to the IANA link
@@ -1790,7 +1791,7 @@ Based on the requirements and design considerations of the previous sections,
 this section presents a Java based implementation of a restful Groupware API
 supporting different Mediatypes. The solution is based on the
 JAX-RS\cite{JAX-RS1.1} implementation Jersey, relies on dependency injection
-provided by Guice and introduces a new concept tentatively called ``Resource
+provided by Guice, and introduces a new concept tentatively called ``Resource
 Facades''. The latter abstracts from different possible representations of a
 resource and thus applies a restful principle from the network layer in the
 implementation layer.
@@ -1824,9 +1825,9 @@ around the corresponding HTTP headers\footnote{If-Match, If-None-Match,
   If-Modified-Since, If-Unmodified-Since}. It provides
 \lstinline;shouldPerform(etag, updated):bool; methods that the storage must call
 with the resource's etag, last update timestamp or both. The CollectionStorage
-indicates with each methods return value, whether it actually performed any
+indicates with each methods return value whether it actually performed any
 action. The GetResult and ResultList classes are simple tuple classes wrapping
-one or multiple \lstinline:Resource: instances in case the Preconditions failed
+one or multiple \lstinline:Resource: instances in case the preconditions failed
 or otherwise an indication that a ``304 Not Modified'' response should be
 returned.
 
@@ -1869,7 +1870,7 @@ work, four different kind of properties of resources are distinguished:
 \end{itemize}
 
 The id and update time are required for the synchronization protocol outlined in
-\autoref{sec:interactions}. They do not depend of the nature or content of the
+\autoref{sec:interactions}. They do not depend on the nature or content of the
 resource and are attached to the resource by code outside of the
 \lstinline:Resource: class. The entity tag must differ for each new version of a
 resource. The code to produce and check a resource's entity tag should be
@@ -1909,7 +1910,7 @@ it is working with.
 
 The serialization property is exposed by the asMediaType(MediaType,
 OutputStream) method of the \lstinline:Resource: class. Internally this method
-also uses the \lstinline:getFacade(): mechanism to requests an instance of a
+also uses the \lstinline:getFacade(): mechanism to request an instance of a
 \lstinline:Writer: interface with the additional constraint that the writer must
 produce the requested Mediatype (\autoref{sec:resourcefacades}). Accordingly the
 \lstinline:ResourceWriterJerseyProvider: of \autoref{fig:executionflowoverview}
@@ -1918,7 +1919,7 @@ resource. The Resource is responsible for providing a Mediatype specific
 representation of itself.
 
 The Resource class outlined in this section does not correspond to the equally
-named resource class concept in JAX-RS\cite{JAX-RS1.1}. The later kind of
+named resource class concept in JAX-RS\cite{JAX-RS1.1}. The latter kind of
 resource classes are found in the ``Jersey Resources'' package of
 \autoref{fig:executionflowoverview}. However such JAX-RS resource classes do not
 really represent REST resources but rather the binding of resources to URIs and
@@ -1927,12 +1928,12 @@ their processing logic.
 \subsubsection{Resource life cycle}
 \label{sec:resource-life-cycle}
 
-Resource classes in this work have a four staged life cycle.  The first stage is
+Resource classes in this work have a four staged life cycle. The first stage is
 represented by the \lstinline:UnparsedResource: class, instantiated by the
 ResourceReaderJerseyProvider class for post or put requests. In this stage, the
 resource has already been assigned an appropriate \lstinline:Reader:
 implementation according to the Content-Type request header but it has not yet
-received an Id and update timestamp.
+received an ID and update timestamp.
 
 The \lstinline:Resource: class represents the second stage, a parsed request
 body with an Id and update timestamp. Only in this stage the
@@ -2006,7 +2007,7 @@ annotations on the class produced by the factory.
 
 The Resource Facades concept is implemented only as a proof of
 concept. \autoref{sec:resourcefacadesfuture-work} outlines a lot of future work
-that might be worth of consideration in this direction.
+that might be worth consideration in this direction.
 
 % A resource method should contain the programming logic executed to serve a
 % request of a specific type (e.g. GET, PUT) against a specific resource. The
@@ -2014,7 +2015,7 @@ that might be worth of consideration in this direction.
 
 % \begin{itemize}
 % \item validate the correctness of a submitted resource
-% \item check the clients authorization
+% \item check the client's authorization
 % \item persist the submitted resource data
 % \item trigger notifications containing a summary of the resource
 % \item submit the submitted resource to an indexing system
@@ -2029,7 +2030,7 @@ that might be worth of consideration in this direction.
 % \cite{Baeumer2000}. However no evidence could be found whether roles have been
 % used to implement restful systems.
 
-% According to \cite{Steimann2008}, there exists several definitions for roles
+% According to \cite{Steimann2008}, there exist several definitions for roles
 % which mostly share a few core properties:
 
 % \begin{quote}
@@ -2040,26 +2041,26 @@ that might be worth of consideration in this direction.
 %   types and class types (as sources of role players) is generally m:n.
 % \end{quote}
 
-% A popular example for roles is a person, that can have the different roles over
+% A popular example for roles is a person that can have the different roles over
 % their lifetime (student, professor, single, husband, widower) or in different
 % contexts (teacher, father, husband, customer, politician).
 
 % \cite{Steimann2001} repeats the necessity of the dynamic role concept and argues
-% that (Java) interfaces serve as an appropriate mean to handle roles.
+% that (Java) interfaces serve as an appropriate means to handle roles.
 
 % Exemplified with the above tasks, a resource can have the role of being
 % validated, persisted, summarized or checked for being of a certain type. So like
 % in the above quote a facility is needed that can provide m different roles of
 % resources that come in n different shapes.
 
-% It can be noted, that unlike in the previous example with roles of a person,
-% this resource roles examples do not extend the original resource with new
+% It can be noted that unlike in the previous example with roles of a person,
+% these resource roles examples do not extend the original resource with new
 % attributes. A person surely gets additional attributes as a father (references
 % to children) or professor (member of faculty). Thus the term ``facade'' in favor
 % of role should indicate that only different views of the same data are provided.
 
 % Listing \ref{fig:datafacades-api} shows interfaces of a minimal framework to
-% provide Facades for Resources. The idea is, that any code that needs information
+% provide Facades for Resources. The idea is that any code that needs information
 % from a Resource requests the appropriate Facade from the ResourceHandler. The
 % ResourceHandler was instantiated with a FacadeRegistry from which it can request
 % Factories for requested Facades. A ResourceHandler must have been instantiated
@@ -2075,8 +2076,8 @@ that might be worth of consideration in this direction.
     % A Facade (Java Interface) that provides access to the Name of a Contact Resource could be implemented by different classes that could work either on vCard, xCard or Portable Contacts. The resource method does not need to be aware or the original media type of the data.
 
 % The concept is powerful because Facades can easily be added without changing
-% existing classes. In JAX-RS the resource Method needs to decide, on which
-% representation of the data it wants to work. With this concept, a resource
+% existing classes. In JAX-RS the resource Method needs to decide which
+% representation of the data it wants to work on. With this concept, a resource
 % method could use several different available Facades to access the data.
 
 % Using a similar concept to build representations (request Facades) for different MediaTypes may not be worth the effort.
@@ -2143,7 +2144,7 @@ if (rb == null) return doUpdate(foo);
 \subsubsection{Preparsed Request Components with Dependency Injection}
 \label{sec:prep-requ-comp}
 
-It seems like an obvious fact that could not be further deduced, that any
+It seems like an obvious fact that could not be further deduced that any
 response action to a request must be preluded by a parsing of the request. In
 the case of a REST application this parsing could be further divided in two
 steps:
@@ -2193,7 +2194,7 @@ the parsed path parameters (PathParam) or conditional request HTTP headers
 \begin{itemize}
 \item Classes that parse commonly used query parameters can be reused, even across
   unrelated applications.
-\item The request method declaration gets much easier to read.
+\item The request method declaration becomes much easier to read.
 \item Sophisticated validation can be applied without obfuscating the request method.
 \item Value classes are the right place for additional logic related to the
   wrapped values. The Preconditions class for example contains the logic to
@@ -2204,6 +2205,7 @@ the parsed path parameters (PathParam) or conditional request HTTP headers
   applications source code.
 \end{itemize}
 
+%It is possible to implement this approach
 % This approach is possible to implement for example with the dependency injection
 % support provided by the Jersey
 % framework.\footnote{\citeurl{http://codahale.com/what-makes-jersey-interesting-parameter-classes/}{2012-2-5},
@@ -2279,11 +2281,11 @@ then the rest of the application.
 A recent discussion of possibilities to produce semantically annotated HTML can
 be found in \cite[sec. 9.1.3]{DBLP:books/daglib/0023755}. The authors describe a
 method developed as part of a larger ``Web Semantics Design Method'' (WSDM),
-consists of two mappings. The first one is the ``data source mapping (DSM),
-which describes exactly how the reference ontology maps to the actual data
-source.''  The second mapping links HTML tags to elements of the reference
+which consists of two mappings. The first one is the ``data source mapping
+(DSM), which describes exactly how the reference ontology maps to the actual
+data source.''  The second mapping links HTML tags to elements of the reference
 ontology from the first mapping. Neither the book nor referenced papers however
-go in any more detail about the final step of generating the annotated HTML
+go into any more detail about the final step of generating the annotated HTML
 tags.
 
 One important point can be learned from the WSDM description. The production of
@@ -2374,7 +2376,7 @@ objects.\footnote{\citeurl{https://github.com/Paxa/green_monkey}{2012-3-7}
 
 This section presents findings made while designing and implementing the
 presented REST API, outlines which proposed goals have been achieved and why
-others were not achieved and proposes further work.
+others were not achieved, and proposes further work.
 
 \subsection{Implemented Requirements}
 \label{sec:impl-requ}
@@ -2396,7 +2398,7 @@ yet support the newest versions of those standards, especially not their XML
 variants. For PortableContacts, two Java library projects were found,
 JPoco\footnote{\citeurl{http://code.google.com/p/jpoco}{2012-03-30}} and
 asmx-poco\footnote{\citeurl{http://code.google.com/p/asmx-poco}{2012-03-30}},
-but both have not yet produced a release yet and appear abandoned since at least
+but both have not produced a release yet and appear abandoned since at least
 2010.
 
 The situation for Microdata support is even worse. A web developer seems to have
@@ -2412,10 +2414,10 @@ The support of REST for different Mediatypes has been blamed to potentially
 ``complicate and hinder the interoperability of a RESTful Web
 service''\cite[sec. 7.2]{Pautasso:2008:RWS:1367497.1367606}. The experience made
 in this work could not find any support for this assumption. It would of course
-be preferable, if all users of an API could be served and satisfied with the
+be preferable if all users of an API could be served and satisfied with the
 same Mediatype, but an API author may not be in such an advantageous
 situation. The protocol related code in the server implementation however did
-not become complicate even while serving and accepting arbitrary Mediatypes.
+not become complicated even while serving and accepting arbitrary media types.
 
 An area of immense complexity however is the parsing, serialization and
 conversion of Mediatypes. This complexity exists every time when two
@@ -2429,7 +2431,7 @@ of stable REST frameworks and libraries to choose from. It seems that the
 development and maintenance of Mediatype libraries is a neglected area.
 
 In those libraries that exist and were used, some common shortcomings could be
-observed that translate in the following advises for Mediatype libraries:
+observed that translate in the following advice for media type libraries:
 
 \begin{itemize}
 \item Unknown fields or properties should be preserved to support vendor
@@ -2452,16 +2454,15 @@ design to support Microdata in template engines is also considered to be
 reusable and beneficial for many use cases.
 
 Surprisingly, the API of JAX-RS (or Jersey) was not as helpful as should be
-expected from it official status. A couple of smaller classes were written for
-this work to wrap Jersey's functionality and that should be reusable in
+expected from its official status. A couple of smaller classes were written for
+this work to wrap Jersey's functionality and those should be reusable in
 arbitrary REST projects. Some of those have been presented in
-\autoref{sec:prep-requ-comp}: Preconditions, PathParams or
-PaginationRange. Additionally to this, a separate \lstinline:Routes: class
-centralized the mapping from URI paths to resource classes, a LinkBuilder
-centralized construction of URIs and the reader and writer provider classes
-delegated their work to the resource facades framework. It seems advisable for
-further REST projects to evaluate frameworks offering alternative concepts than
-JAX-RS.
+\autoref{sec:prep-requ-comp}: Preconditions, PathParams or PaginationRange. In
+addition to this, a separate \lstinline:Routes: class centralized the mapping
+from URI paths to resource classes, a LinkBuilder centralized construction of
+URIs and the reader and writer provider classes delegated their work to the
+resource facades framework. It seems advisable for further REST projects to
+evaluate frameworks offering alternative concepts than JAX-RS.
 
 % The main results of your work should be presented, together with critical
 % discussion. The chapter should cover three things (although these would not be
@@ -2512,18 +2513,18 @@ JAX-RS.
 \subsubsection{Browser Caches as Collection Store}
 \label{sec:browser-caches-as}
 
-The example of OpenSocial shows how important the Browser has become as an
+The example of OpenSocial shows how important the browser has become as an
 application platform. However browsers also restrict the options of developers,
 especially in terms of available Webstorage (\autoref{sec:user-class-char}).
 
 Clever use of the Browser cache could raise this limit. The average available
-Cache size is unknown but expected to exceed the Webstorage size by several
+cache size is unknown but expected to exceed the web-storage size by several
 orders of magnitude.
 
 One interesting caching strategy in combination with collections is the use of
 ``caching tokens'', i.e. each new version of a resource is available under a new
 URI and served with extremely long cache expiration times. Thus a client only
-learns about a new version of a resource, if another resource, in our case the
+learns about a new version of a resource if another resource, in our case the
 collection, updates its hyperlink to the resource. This is a perfect match to
 the Atom Publishing Protocol which provides updated entries each time a linked
 resource changes.
@@ -2644,8 +2645,8 @@ documentation\cite[sec. 5.5]{Amundsen2011a}.
 
 James Snell described a mapping of ATOM XML to JSON that should not loose any
 information\cite{Snell2008}\footnote{also implemented in Apache Abdera
-  \citeurl{https://cwiki.apache.org/ABDERA/json-serialization.html}{2012-1-7}}. The
-attempt however to map every feature of ATOM and the inherited extensibility and
+  \citeurl{https://cwiki.apache.org/ABDERA/json-serialization.html}{2012-1-7}}. However
+the attempt to map every feature of ATOM and the inherited extensibility and
 expressiveness of XML results in a very complex and deeply nested JSON
 structure. In detail, Snell identifies a couple of problems that need to be
 dealt with in such a mapping\cite{Snell2008}:
@@ -2722,13 +2723,13 @@ also does neither support Generics nor uses the advantages of immutability.
 \cite{Pradel2008a} presents an approach and implementation in Scala to attach
 roles to arbitrary objects. The work achieves type safe roles without extending
 the underlying language. Using this library has been considered but it was
-discovered too late to be included. Open questions are, how the declared media
+discovered too late to be included. Open questions are how the declared media
 type of a Resource could be considered in the selection of a role implementation
 and how roles could depend on other roles. Another challenge would be to
 preserve role instances and thus to avoid recreating them for every
 invocation. If is furthermore required that roles implement a given
 interface. The Resource Facade approach presented here is slightly different in
-that creation of the facades is implemented independent from the facades
+that creation of the facades is implemented independently from the facades
 themselves by the factory classes.
 
 JAX-RS provides the MessageBodyReader and -Writer interfaces. However these
@@ -2770,8 +2771,8 @@ or Contact.
 
 \paragraph{Scala's type system}
 The proposed Java class diagram in this section has the disadvantage that the
-availability of a facade can not be checked at compile time. It seems however,
-that a more advanced type system could help in this regard.
+availability of a facade can not be checked at compilation time. It seems
+however that a more advanced type system could help in this regard.
 
 Listing \ref{fig:facades-with-scala-types} demonstrates features of the Scala
 type system\cite{Odersky2011} that could be of interest here. In the example a
