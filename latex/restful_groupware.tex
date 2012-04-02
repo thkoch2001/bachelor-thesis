@@ -2835,23 +2835,23 @@ comprehension of type systems.
 % aufgetaucht sind, sollte dann am Ende ein Ausblick auf die zukünftige Forschung hergeleitet
 % werden.
 
-It has been shown in this work, that a rather uncomplicated, restful Groupware
+It has been shown in this work that a rather uncomplicated, restful Groupware
 API is a usable alternative for more complex solutions like CardDAV or
-OpenSocial. It seems even possible to serve the use cases of both protocols,
+OpenSocial. It even seems possible to serve the use cases of both protocols,
 different classes of clients and different Mediatype preference with the same,
 unified, restful approach.
 
 Most of the code necessary for the implementation is not even specific to a
-Groupware API but for other applications as well that offer a restful HTTP API
+Groupware API but usable for other applications that offer a restful HTTP API
 and might consume or produce multiple Mediatypes.
 
-A great source of simplification and serendipitous reuse (e.g., VCards for
-social network information, \autoref{sec:vcards-soci-netw}) is caused by the
-hypermedia support of the involved Mediatypes. The inclusion of complete,
-dereferenceable URIs obsoletes the need for verbose API documentations (like
-Opensocial, \autoref{sec:opensocial-background}. The absence of hypermedia
-support, like missing links to groups or albums in vCards, can directly
-constrain the possible use cases of a Mediatype.
+A great source of simplifcation and serendipitous reuse (e.g., VCards for social
+network information, \autoref{sec:vcards-soci-netw}) is caused by the hypermedia
+support of the involved Mediatypes.  The inclusion of complete, dereferenceable
+URIs makes the need for verbose API documentations obsolete (like Opensocial,
+\autoref{sec:opensocial-background}). The absence of hypermedia support, like
+missing links to groups or albums in vCards, can directly constrain the possible
+use cases of a Mediatype.
 
 Quite a few tremendously useful features of HTTP or the examined Mediatypes were
 discovered during the research for this work, like HTTP delta encoding, Atom's
@@ -2861,10 +2861,10 @@ professional experience in web development. This supports the assumption that
 lack of education might be a primary reason for the lack of REST adoption.
 
 This work encountered complexities and lack of tooling in other areas then
-expected. The initial research was spent to evaluate different platforms to
-implement restful HTTP interactions. This area however proofed to be rather easy
+expected. The initial research was spent on evaluating different platforms to
+implement restful HTTP interactions. This area however proved to be rather easy
 and well supported compared to the immense shortcomings or even lack of
-Mediatype libraries. This makes one wondering, whether an expert group like
+Mediatype libraries. This makes one wonder whether an expert group like
 CalConnect should really work on additional protocols or rather on the problem
 of lacking Mediatype libraries.
 
