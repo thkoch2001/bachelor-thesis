@@ -1876,7 +1876,7 @@ representations.
 \subsection{Control Flow Overview}
 \label{sec:overview}
 
-% @TODO Hier fehlt der Überblick über die gesamte Anwendung ein bisschen
+% Schreier: Hier fehlt der Überblick über die gesamte Anwendung ein bisschen
 
 \autoref{fig:executionflowoverview} outlines the most important classes for the
 control flow. Jersey routes calls to the four different ``Jersey Resources''
@@ -2008,7 +2008,7 @@ their processing logic.
 \subsubsection{Resource life cycle}
 \label{sec:resource-life-cycle}
 
-% @TODO visualisieren?
+% schreier: visualisieren?
 
 Resource classes in this work have a four staged life cycle. The first stage is
 represented by the \lstinline:UnparsedResource: class, instantiated by the
@@ -2826,13 +2826,14 @@ The media type defines a JSON structure which contains:
 Unfortunately, Collection+JSON in its current state is not yet fully usable to
 implement the interactions described in \ref{sec:interactions}.
 
-Collection+JSON does not enforce an order of the elements in a collection. The
-proposed synchronization interaction however is based on the assumption that the
+Collection+JSON does not enforce an order of the elements in a collection or at
+least the notion that collections can be paginated with a \lstinline:next:
+link-relation and that consecutive feeds respect an ordering. The proposed
+synchronization interaction however is based on the assumption that the
 collection feed is ordered by the time of the last modification. Consequently,
-there is also no equivalent to an ATOM
-``deleted-entry'' \cite{draft-snell-atompub-tombstones-14}, which enables the use
-of an updates feed for synchronization.
-% @TODO wenn man entsprechende Filter anbietet ist die Sortierung nicht mehr unbedingt relevant
+there is also no equivalent to an ATOM ``deleted-entry''
+\cite{draft-snell-atompub-tombstones-14}, which enables the use of an updates
+feed for synchronization.
 
 The facility to include full item representations directly in the collection
 (the ``data'' property) is restricted to simple key/value pairs. This excludes

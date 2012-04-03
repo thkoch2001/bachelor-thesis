@@ -83,16 +83,6 @@ Vorstellung der Medientypen inkl. Hypermediaunterstützung
  - HTML
    - the semantik of links in PoCo/vCard/iCal is defined by the field (property) where they appear.
 
-** Wie viel muss ein Client vorher wissen?
-
- - Standard
-   - Der Client muss die Medientypen verstehen, inkl. OpenSearch, PoCo
-   - Der Client muss die zur semantischen Annotation verwendeten Schemata kennen 
-   - Noch kein Standard, aber bald: Atom deleted entry
-   - Der Client muss alle weiteren genutzten IETF bzw. W3C standards implementieren
- - Keine Standards
-   - Der Client muss eine link relation auf eine HTML Form zum Anlegen neuer Resourcen kennen
-   - Der Client muss die zur typisierung von Collections verwendeten Atom Categories verstehen
 
 * Persistency for Groupware Data
 Relational Databases vs. NoSQL databases vs. plain files
@@ -121,12 +111,6 @@ Relational databases are not practical for contacts, events or todos. Common pat
 % Concerns: Authorization, Logging, Trigger Message (to indexing system, subscribers), Measure execution time, Support Cross-Origin Resource Sharing (CORS)\footnote{\citeurl{http://www.w3.org/TR/cors/}{2012-2-2}}, Compression
 
 % The life cycle of a CollectionStorage is across individual requests to facilitate caching or database connection reuse.
-
-* Synchronization
-
-Portable Contacts has a filter ``updatedSince''.
-
-How is synchronization done in CardDAV?
 
 * Media Types
 
