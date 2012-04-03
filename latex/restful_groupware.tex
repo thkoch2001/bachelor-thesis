@@ -1073,8 +1073,10 @@ that might also be left optional are discussed in the following section
 
 An ideal Rest API is accessed by one main URI and all other resources can be
 discovered by following links. A useful media type to discover available
-collections is the Atom Service Document\cite[sec. 8]{RFC5023}. It contains
-links to collections organized in workspaces and annotated with meta data.
+collections is the Atom Service Document\cite[sec. 8]{RFC5023}. Figure
+\ref{fig:atomservicedoc} shows an example containing a content management
+workspace linking to blog post and picture collections and a groupware workspace
+with an address book and a calendar.
 
 A groupware client most likely needs to discern the available collections by the
 contained resources so as to consume and present them with the appropriate user
@@ -1110,7 +1112,41 @@ found. The most promising approach seems to list available collections in a
 \lstinline:application/vnd.collection+json: representation
 (\autoref{sec:media-types-coll}).
 
+\begin{anylisting}[language=xml,
+                   label=fig:atomservicedoc,
+                   caption={An Atom Service Document linking to groupware collections}]
+<service xmlns="http://www.w3.org/2007/app"
+         xmlns:a="http://www.w3.org/2005/Atom"
+         xml:base="http://my.server.com/thkoch" >
+ <workspace>
+  <a:title>Content Management</a:title>
+  <collection href="blog/main" >
+   <a:title>My Blog Entries</a:title>
+   <categories href="cms/cats/forMain.categories" />
+  </collection>
+  <collection href="gallery" >
+   <a:title>Pictures</a:title>
+   <accept>image/png</accept> <accept>image/jpeg</accept>
+  </collection>
+ </workspace>
+ <workspace>
+  <a:title>Groupware<a:title>
+   <collection href="gw/collections/contacts" >
+    <a:title>personal addresses</a:title>
+    <accept>application/vcard+xml</accept>
+    <a:category term="private" />
+  </collection>
+   <collection href="gw/collections/calendar" >
+    <a:title>personal calendar</a:title>
+    <accept>application/calendar+xml</accept>
+  </collection>
+ </workspace>
+</service>
+\end{anylisting}
+
+
 \begin{anylisting}[label=fig:atom-category,
+                   language=xml,
                    caption={ATOM categories as used by Google and IBM to mark entry
                             types and a proposal to use a standard scheme URI for type terms}]
 <atom:category
@@ -1121,16 +1157,15 @@ found. The most promising approach seems to list available collections in a
     scheme="http://ibm.com/oa/type"
     term="task" />
 
-<atom:category 
+<atom:category  label="Contact"
     scheme="http://www.w3.org/2005/Atom/Entry-Kind"
-    term="http://schemas.google.com/g/2005#contact"
-    label="Contact" />
+    term="http://schemas.google.com/g/2005#contact" />
 
-<atom:category
+<atom:category  label="Task"
      scheme="http://www.w3.org/2005/Atom/Entry-Kind"
-     term="http://ibm.com/oa/type#task"
-     label="Task" />
+     term="http://ibm.com/oa/type#task" />
 \end{anylisting}
+
 
 \subsection{Personalized Service Documents} For a groupware that manages
 confidential information it would make sense to provide personalized Service
@@ -1161,13 +1196,13 @@ Protocol as the foundation for a groupware API is not novel. Rob Yates described
 this idea under the titles ``CalAtom'' and ``CardAtom'' already in
 2006\footnote{\citeurl{http://robubu.com/?cat=2}{2012-3-2}}.
 
-The CalAtom \cite{draft-yates-atompub-calatom-00.txt} proposal uses a
+The CalAtom \cite{draft-yates-atompub-calatom-00.txt} proposal introduces a
 ``features'' tag and associated IANA registry to mark collection types and their
 features. But the examples of category usage above (\autoref{sec:disc-coll}) and
 the availability of OpenSearch for time range searches
 (\autoref{sec:spec-reports-search}) provide confidence that a new tag is not
 required. The features tag was proposed in 2007 by
- \cite{draft-snell-atompub-feature} but did not become a standard.
+\cite{draft-snell-atompub-feature} but did not become a standard.
 
 The Atom format is also used by the Google Data Protocol to publish contacts,
 events and other data
@@ -1177,10 +1212,49 @@ content tag of an entry. Instead a new namespace is used to put the data with
 additional tags directly inside the entry
 tag\footnote{\citeurl{http://web.archive.org/web/20081120001246/http://www.snellspace.com/wp/?p=314}{2012-01-05}}.
 
-% @TODO Atom entries could contain multiple link tags referring to alternative
+Listing \ref{fig:atomcollection} shows a minimal Atom feed example containing
+entry elements for each contact resource in an address book.
+
+% Atom entries could contain multiple link tags referring to alternative
 % representations of the resource with different (media) type attributes.
 
-% @TODO Beispiel für Atom feed
+\begin{anylisting}[language=xml,
+                   label=fig:atomcollection,
+                   caption={An Atom feed representing an address book collection}]
+<feed xmlns="http://www.w3.org/2005/Atom"
+      app:xmlns="http://www.w3.org/2007/app"
+      xml:base="http://my.server.com/thkoch" >
+ <link rel="next" href="gw/collections/contacts?offset=20" />
+ <link rel="search" title="full text contacts search"
+       href="gw/osd/contacts?t=fulltext" 
+       type="application/opensearchdescription+xml" />
+
+ <title>personal addresses</title>
+ <updated>2007-02-123T17:09:02Z</updated>
+ <author>Thomas Koch</author>
+ <id>urn:uuid:personal_addresses_0123456</id>
+
+ <entry>
+  <title>Max Carpenter</title>
+  <id>urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a</id>
+  <updated>2007-02-123T17:09:02Z</updated>
+  <app:edited>2007-02-123T17:09:02Z</app:edited>
+
+  <summary type="text">
+    Max Carpenter <m.carpenter@mycompany.com>
+    Phone: +01-23-4567
+  </summary>
+  <content type="application/vcard+xml"
+     src="gw/media/contacts/1225c695" />
+  <link rel="edit-media"
+     href="gw/media/contacts/1225c695" />
+  <link rel="edit"
+     src="gw/collections/contacts/1225c695" />
+ </entry>
+
+ <!-- more entry elements ... -->
+</feed>
+\end{anylisting}
 
 \subsection{Synchronizing collections}
 \label{sec:synchr-coll}
@@ -1415,14 +1489,44 @@ recommended for the link type ``search'' in the HTML5
 standard\cite[sec. 4.12.4.12]{Hickson2011a}. The default format of an OpenSearch
 result list is an Atom (or RSS) feed.
 
-OpenSearch defines the (not yet IANA registered) media type
-application/opensearchdescription+xml, which provides necessary information for
-a client to perform queries against a search service. Since possible search
-queries are usually unlimited it is not possible anymore to provide a set of
-static links. Instead the server provides an ``URI Template'' \cite{RFC6570}
-that instructs the client how to perform an ``URI
-construction''\footnote{OpenSearch is the older standard and referenced as Level
-  1 URI Templates in \cite{RFC6570}.}.
+\begin{anylisting}[language=xml,
+                   label=fig:opensearch,
+                   mathescape=true,
+                   caption={An opensearch description document embedded in an Atom service document}]
+<service xmlns="http://www.w3.org/2007/app"
+         xmlns:a="http://www.w3.org/2005/Atom"
+         xml:base="http://my.server.com/thkoch" >
+ <workspace>
+  <a:title>Groupware<a:title>
+   <collection href="gw/collections/contacts" >
+    <a:title>personal addresses</a:title>
+    <accept>application/vcard+xml</accept>
+    <a:category term="private" />
+
+    <OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">
+     <ShortName>Contacts Search</ShortName>
+     <Description>search in all text elements of contacts</Description>
+     <Url type="application/atom+xml" 
+      template="http://my.server.com/thkoch/gw/collections/contacts/? $\hookleftarrow$
+       $\hookrightarrow$ q={searchTerms}&amp;pw={startPage?}"/>
+    </OpenSearchDescription>
+
+  </collection>
+ </workspace>
+</service>
+\end{anylisting}
+
+OpenSearch defines a search description document with the (not yet IANA
+registered) media type application/opensearchdescription+xml. Figure
+\ref{fig:opensearch} shows an opensearch XML document embedded in the collection
+tag of an Atom Service Document.
+
+OpenSearch provides the necessary information for a client to perform queries
+against a search service. Since possible search queries are usually unlimited it
+is not possible anymore to provide a set of static links. Instead the server
+provides an ``URI Template'' \cite{RFC6570} that instructs the client how to
+perform an ``URI construction''\footnote{OpenSearch is the older standard and
+  referenced as Level 1 URI Templates in \cite{RFC6570}.}.
 
 The basic OpenSearch standard defines a simple full text search. Thus a user
 could search contacts by name, address or any other field value. Equally events,
@@ -1449,14 +1553,13 @@ list without the need to transfer full representations.
 
 The OpenSearch specification suggests that links to the OpenSearch Description
 Document for an Atom feed might be added inside a feed tag. There is however no
-reason not to add such a link inside the collection tag of a Service
-Document. This allows a client to directly search a collection without the need
-to get the feed first.
-
-% @TODO Beispiel für OpenSearch specification document
+reason not to add such a link inside the collection tag of a Service Document or
+even the full opensearch description document as shown in figure
+\ref{opensearch}. This allows a client to directly search a collection without
+the need to get the feed first.
 
 % \subsubsection{Structural and Behavioral Rest Model}
-% @TODO Modelierung der Anwendung mit dem Meta Model nach Schreier.
+% Modelierung der Anwendung mit dem Meta Model nach Schreier.
 % Primary Resources: Contacts, Calendars, ...
 % List Resources: 
 
@@ -1544,7 +1647,10 @@ be lost.\footnote{The problem of ``POST once'' is orthogonal to that of media
 
 \subsection{Microformats, Microdata, RDFa}
 \label{sec:microdata}
-%TODO Schreier:nach dem lesen des einführenden Abschnitts weiss der Leser nicht, was er im Rest des Abschnitts zu erwarten hat, dementsprechend ist die Motivation für die Abschnitte unklar und es fällt schwer den roten Faden zu finden
+% TODO Schreier:nach dem lesen des einführenden Abschnitts weiss der Leser
+% nicht, was er im Rest des Abschnitts zu erwarten hat, dementsprechend ist die
+% Motivation für die Abschnitte unklar und es fällt schwer den roten Faden zu
+% finden
 
 HTML documents are primarily meant to be rendered by browsers and interpreted by
 humans. It is hard for a machine to interpret the meaning of text and data
@@ -1687,10 +1793,10 @@ involved and error prone. Therefor many approaches and implementations exist to
 automate this task. If a machine can work on an existing data model for the
 resource, then this can be used as basis for the automation.
 
-%TODO: Means to automatically build forms from descriptions of the data:
+%  Means to automatically build forms from descriptions of the data:
 %``Dynamic Object Model'' (Dirk Riehle) or ``Adaptive Object-Model'' (Yoder,
 %Johnson) implemented e.g. by eZPublish, Drupal
-%@TODO
+%
 % automatically build forms like eZPublish / Drupal?
 
 Not yet answered is the question where or under which condition an HTML form
@@ -1799,7 +1905,9 @@ yet standardized properties ALBUM and GROUP.
 \section{Implementation}
 \label{sec:implementation}
 
-% @TODO ich würde irgendwie auch erwarten, dass ich eine Übersicht über die Ressourcen mit ihren Medientypen und evtl auch ein paar Beispiele für Use Cases bekomme, ggf auch im Anhang
+% @TODO ich würde irgendwie auch erwarten, dass ich eine Übersicht über die
+% Ressourcen mit ihren Medientypen und evtl auch ein paar Beispiele für Use
+% Cases bekomme, ggf auch im Anhang
 
 Based on the requirements and design considerations of the previous sections,
 this section presents a Java based implementation of a RESTful groupware API
@@ -2153,7 +2261,7 @@ ResponseBuilder rb = request.evaluatePreconditions(etag);
 if (rb == null) return doUpdate(foo);
 \end{javalisting}
 
-% @TODO a resource should not be build, it the etag has not changed. How to make
+% a resource should not be build, it the etag has not changed. How to make
 % etag checking as cheap as possible?
 
 % Contactzilla.com saves portablecontacts json in MongoDB
@@ -2718,12 +2826,12 @@ since 2008 to formalize the outlined mapping in an IANA registered media type.
 
 % Google's GDATA Json format, Youtube JSON feed?
 Other related formats considered are the ``Hypertext Application Language''
-(HAL)\footnote{\citeurl{http://stateless.co/hal_specification.html}{2012-03-23}}
-and Microsoft's OData\footnote{\citeurl{http://www.odata.org}{2012-03-23}}. HAL
-is a simple container format that only standardizes linking and embedding of
-resources and is rather meant as a building block or foundation for more
-specialized formats. Collection+JSON as the more specialized format is therefor
-preferable here.
+(HAL) \cite{Kelly2011} and Microsoft's
+OData\footnote{\citeurl{http://www.odata.org}{2012-03-23}}. HAL is a simple
+container format that only standardizes linking and embedding of resources and
+is rather meant as a building block or foundation for more specialized
+formats. Collection+JSON as the more specialized format is therefor preferable
+here.
 
 OData shares many similarities with the Atom Publishing Protocol and also
 provides a JSON variant of it. However, despite announcements in March
@@ -2750,25 +2858,23 @@ enhance Collection+JSON in the following points:
 This work does not include any means to actively notify (push) a client about
 changes happening on the server. The client needs to initiate a request (pull)
 to the server to look for changes. However separate solutions
-exist\footnote{most notable PubSubHubBub
-  \citeurl{http://code.google.com/p/pubsubhubbub/}{2012-1-5}} to enable a push
-workflow on top of a feed based
-application \cite{Wilde:2009:FQP:1693155.1693220}. It may therefor not be seen as
-a disadvantage that push notifications have been omitted as a
-requirement.\footnote{\cite[sec. 1]{RFC6352} explicitly mentions missing
-  ``change notifications'' as a ``key disadvantage'' of CardDAV.}
+exist\footnote{most notable PubSubHubBub \cite{Fitzpatrick2010}} to enable a push
+  workflow on top of a feed based application
+  \cite{Wilde:2009:FQP:1693155.1693220}. It may therefor not be seen as a
+  disadvantage that push notifications have been omitted as a
+  requirement.\footnote{\cite[sec. 1]{RFC6352} explicitly mentions missing
+    ``change notifications'' as a ``key disadvantage'' of CardDAV.}
 
 \subsubsection{Resource Facades}
 \label{sec:resourcefacadesfuture-work}
 
 The idea for the Resource Facades concept was triggered by the use of the
-JavaBeans Activation
-Framework\footnote{\citeurl{http://www.oracle.com/technetwork/java/javase/downloads/index-135046.html}{2012-2-24}}
-(JAF) in the JAX-RS specification. In this framework the DataHandler interface
-provides access to available commands for a specific MediaType via the
-getCommand method. The framework however was designed with the needs of a
-Desktop clipboard in mind. Since JAF has been released for Java version 1.4 it
-also does neither support Generics nor uses the advantages of immutability.
+JavaBeans Activation Framework (JAF)\cite{Calder2006} in the JAX-RS
+specification. In this framework the DataHandler interface provides access to
+available commands for a specific MediaType via the getCommand method. The
+framework however was designed with the needs of a Desktop clipboard in
+mind. Since JAF has been released for Java version 1.4 it also does neither
+support Generics nor uses the advantages of immutability.
 
 \cite{Pradel2008a} presents an approach and implementation in Scala to attach
 roles to arbitrary objects. The work achieves type safe roles without extending
@@ -2790,17 +2896,15 @@ MessageBodyReader. There exists no facility to request additional
 transformations or facades of a Resource.
 
 It is possible in JAX-RS to request a MessageBodyReader instance from the
-javax.ws.rs.ext.Providers interface. This couldn't however help to get
-additional Facades since the InputStream has already been consumed.
+\lstinline:Providers: interface. This couldn't however help to get additional
+Facades since the InputStream has already been consumed.
 
 The concept shows similarities with Dependency Injection since dependencies of a
 facade are also provided by an external component. It may be possible that the
 concept could even be implemented on top of an existing Dependency Injection
 framework.\footnote{Scala can provide Dependency Injection solely with language
-  features via the so called ``Cake
-  Pattern''. \citeurl{http://www.warski.org/blog/2011/04/di-in-scala-cake-pattern-pros-cons/}{2012-2-24}
-  or Odersky: ``Scalable Component Abstractions''} Some aspects however may
-require extra care:
+  features via the so called Cake Pattern \cite{Warski2011} \cite{Odersky2005}.}
+ Some aspects however may require extra care:
 
 \begin{itemize}
 \item Resolving the dependencies of Facade factories must be parameterizable,
