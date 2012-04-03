@@ -183,8 +183,6 @@ wissen und wie viel kann er durch Hyperlinks entdecken?
 \section{Introduction}
 \label{sec:introduction}
 
-% @TODO Erläuterung d. Aufgabe, Ziele, Vorgehen
-
 % Die Einleitung führt zum Thema hin. In der Einleitung muss deutlich werden, welche Frage Sie sich
 % und dem Leser beantworten wollen und mit welcher methodischen Vorgehensweise dies
 % geschehen soll. Nach der Lektüre der Einleitung sollte der Leser wissen, was ihn erwartet. Er kennt
@@ -194,51 +192,76 @@ wissen und wie viel kann er durch Hyperlinks entdecken?
 
 % Einleitung (ca 2 Seiten)
 % - Ziel der Arbeit
+
+% - present a restful architecture as a useful and advantageous alternative to
+% more complex and not restful approaches like CalDAV, CardDAV and OpenSocial.
+
 % - Beschreibung der Aufgabenstellung
+
+%   - RESTful Groupware API
+%   - wie können ganz verschiedene Medientypen unterstützt werden
+%   - wiederverwendbare Komponenten
+%   - betrachtung des Hypermedia supports, was muss Client wissen
+%   - 
+
 % - Einbettung des Themas in ein größeres Umfeld
-% - Anreize zum Lesen geben – keine Ergebnisse präsentieren
-% - Kurze Beschreibung der einzelnen Kapitel (max. 1-3 Sätze/Kapitel)
 
-Although computers have become ubiquitous for some time now, it is amazing that the
-most basic and obvious personal information management needs don't seem to have
-an acceptable solution. None of several IT companies known to the author has a
-self-controlled groupware solution that would allow all organization members to
-manage and share contacts or calendars.
+Personal information in the following is meant to comprise addresses, calendars,
+to-do items and short notes. Most people possess collections of such data and
+since computers have become ubiquitous for some time now it is a normal desire
+to access this information on different devices and keep it synchronized.
 
-It seems that all solutions that are commonly used either depend on the
-proprietary Exchange server from Microsoft or the proprietary and foreign
-services of Google. These however are no option for users that care about free
-software or privacy.
+The author's experience suggests however that this apparently simple task does
+not yet have an acceptable solution. Acceptable here means a free software
+solution, based on free standards, easy to install and maintain by an
+experienced computer user on its own hardware. This issue gets more pressing
+since many users deliver their own and others' personal data to the commercial
+interests of huge companies in return for a convenient user experience.
 
-% @TODO Kolab als Beispiel einführen
+New efforts in the area of free solutions are the recent standardization of the
+CalDAV and CardDAV groupware protocols and new versions of the related media
+types vCard and iCalendar. Independently of this, OpenSocial specifies an
+alternative personal data protocol to the offerings of the current monopolist.
 
-% @TODO Bullshit!
-% Only a few free software solutions exist. The most often stated problem of those
-% however is missing or defective support for synchronization.
+Unfortunately the listed protocols do not adhere to the constraints of a RESTful
+architecture and are considered in this work to be more complex then necessary.
+This work therefore investigates whether a RESTful approach for a groupware API
+might contribute a simpler and even unified alternative that could serve the
+personal data use cases of all above protocols.
 
-% This work investigates whether a RESTful approach for a groupware API might
-% contribute to a more reliable interoperability of groupware clients and servers
-% than the current standards CalDAV and CardDAV, which are discussed in
-% \autoref{sec:carddav-caldav}. The requirements for a groupware API are gathered
-% by examining the existing free groupware system Kolab (\autoref{sec:kolab}) and
-% adding the most important features of CalDAV and CardDAV
-% (\autoref{sec:replacement-carddav}).
+The desired versatility requires such an API to support multiple, different
+media types, exemplified by alternative representations of contacts. This work
+presents a corresponding design and implementation. It is especially studied,
+how such an API can use hypermedia to minimize the necessary prior knowledge of
+an API client.
 
-It will also be examined whether a RESTful API might be more versatile without
-additional complexity. For that purpose is will be considered how some use
-cases of the OpenSocial specification (\autoref{sec:opensocial-background}) are
-also supported by the rest API via serendipitous reuse of the hypermedia
-properties of the involved media types (\autoref{sec:vcards-soci-netw}).
+Section \ref{sec:backgr-relat-work} starts with a very short background about
+the architectural style called ``Representational state transfer'' (REST)
+pointing out those properties that make this style especially interesting for a
+groupware system. It then introduces the groupware system Kolab that served as a
+model in this work for the requirements of this type of applications. The rest
+of the section presents related protocols and data types to handle groupware
+data.
 
-A main focus of the work is the support of the API for multiple, different
-media types, exemplified by alternative representations of contacts. This
-flexibility enables the developer to reuse the API concepts for different types
-of clients (\autoref{sec:user-class-char}) or content.
+The requirements and analysis section \ref{sec:requ-analys} derives the
+requirements of this work's API design from the existing API of Kolab and the
+popular protocols CalDAV and CardDAV. The features of the OpenSocial person API
+are considered as optional additions.
 
-The Atom Publishing Protocol is proposed as the basis for a groupware API. A
-prototypical implementation (\autoref{sec:implementation}) of the core
-functionality evaluates its fitness for the requirements outlined in
-\autoref{sec:requ-analys}.
+The design part is split in the core interactions of collection synchronization,
+editing and querying (section~\ref{sec:interactions}) and features that build on
+top of those (section \ref{sec:design}): support for alternative media types,
+HTML with semantic annotations and features providing alternatives to OpenSocial.
+
+The Java implementation described in section \ref{sec:implementation} is based
+on the rest framework Jersey and uses dependency injection provided by Guice. A
+supposedly new method to handle resources is introduced under the name
+``resource facades''. The last subsection proposes an approach to automate the
+augmentation of HTML with semantic annotations in template engines.
+
+Findings and proposed future works follow in section
+\ref{sec:results-discussion} before section \ref{sec:conclusions} ends with the
+author's conclusions.
 
 %\footnote{Experiences with Android and Data in the cloud \citeurl{http://keithp.com/blogs/calypso}{?}}
 
@@ -2222,10 +2245,15 @@ if (rb == null) return doUpdate(foo);
 %
 https://groups.google.com/d/msg/portablecontacts/57R9gGyoqt0/-P0fF4zRjaoJ
 
-\subsection{Dependency Injection}
+\subsection{Dependency injection}
 \label{sec:dependency-injection}
 
-% @TODO was einleitendes
+Dependency injection describes a programming technique that isolates the
+instantiation of objects and their dependencies from the code using these
+objects. Despite the general usefulness of this technique that is not the scope
+of this work, it has been extremely helpful to extract repetitive request
+parsing aspects from the main part of the request processing logic, as shown in
+the following.
 
 \subsubsection{Preparsed Request Components with Dependency Injection}
 \label{sec:prep-requ-comp}
@@ -2479,27 +2507,6 @@ passed in
 objects.\footnote{\citeurl{https://github.com/Paxa/green_monkey}{2012-3-7}
   provides helpers to produce microdata in rails but is not as automated as the
   design proposed here.}
-
-
-%\subsection{Reusability of Components}
-%\label{sec:reus-comp}
-
-% > - Wiederverwendbare Komponenten:
-% >   - ResourceFacades Framework inkl. Medientypspezifische Klassen zur 
-% > Extraktion,
-% >     Transformation v. Daten
-% >   - ATOM Framework (z.B. Abdera)
-% >   - Extrem hilfreich: Dependency Injection
-% >   - JAX-RS überraschenderweise wenig hilfreich
-% >   - Einige kleine Helferklassen, die Funktionalität von JAX-RS ersetzen oder
-% >     besser zugreifbar machen
-
-% **** Zusammenfassung, Fazit
-
-% > - Größtes Problem: Fehlende oder unzureichende Libraries zum Parsen, Bauen,
-% >   Konvertieren der Medientypen. Erstellung und Pflege solcher Libraries ist 
-% > eine
-% >   langwierige Fleißarbeit.
 
 \section{Results and Discussion}
 \label{sec:results-discussion}
@@ -3061,8 +3068,8 @@ comprehension of type systems. % @TODO würde ich nicht schreiben?
 % werden.
 
 It has been shown in this work that a rather uncomplicated, RESTful groupware
-API is a usable alternative for more complex solutions like CardDAV or
-OpenSocial. It even seems possible to serve the use cases of both protocols,
+API can serve as a usable alternative for more complex solutions like CardDAV or
+OpenSocial. It even seems possible to cover the use cases of both protocols,
 different classes of clients and different media type preference with the same,
 unified, RESTful approach.
 
