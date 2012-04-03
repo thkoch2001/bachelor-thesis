@@ -1,10 +1,3 @@
-* Korrekturen
- - to-do
- - groupware klein
- - id ID
- - e.g.
- - see section statt autoref
-
 * Gliederung
 
 http://www.cs.uwaterloo.ca/~brecht/thesis-hints.html
@@ -26,8 +19,6 @@ Zusammenfassung und Ausblick (ca. 5%)
 Literaturverzeichnis
 Anhang
 Selbstständigkeitserklärung
-
-
 
 
 Herleitung der REST API

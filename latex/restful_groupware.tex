@@ -94,7 +94,7 @@
 \vspace{1cm}
 \normalsize{}
 
-Es wird angenommen, dass die verfügbaren Groupware APIs CalDAV und CardDAV
+Es wird angenommen, dass die verfügbaren groupware APIs CalDAV und CardDAV
 unnötig komplex und fehleranfällig seien. Als Alternative wurde eine REST
 basierte API entworfen und implementiert mit dem Augenmerk auf Einfachheit aber
 weiterhin vielfältigen Anwendungsmöglichkeiten.
@@ -122,9 +122,9 @@ sollten einfacher zu implementieren und weniger fehleranfällig sein.
   %  What was done?
   
   %  Why was it done?
-  Current approaches to Groupware APIs, especially CalDAV and CardDAV, are
+  Current approaches to groupware APIs, especially CalDAV and CardDAV, are
   argued to be unnecessary complex and error prone.  As an alternative, a
-  RESTful API for a Groupware system has been designed and implemented with the
+  RESTful API for a groupware system has been designed and implemented with the
   focus on simplicity of the design while still covering a wide range of use
   cases.
 
@@ -212,6 +212,8 @@ wissen und wie viel kann er durch Hyperlinks entdecken?
 \section{Introduction}
 \label{sec:introduction}
 
+% @TODO Erläuterung d. Aufgabe, Ziele, Vorgehen
+
 % Die Einleitung führt zum Thema hin. In der Einleitung muss deutlich werden, welche Frage Sie sich
 % und dem Leser beantworten wollen und mit welcher methodischen Vorgehensweise dies
 % geschehen soll. Nach der Lektüre der Einleitung sollte der Leser wissen, was ihn erwartet. Er kennt
@@ -229,24 +231,27 @@ wissen und wie viel kann er durch Hyperlinks entdecken?
 Although computers have become ubiquitous for some time now, it is amazing that the
 most basic and obvious personal information management needs don't seem to have
 an acceptable solution. None of several IT companies known to the author has a
-self-controlled Groupware solution that would allow all organization members to
+self-controlled groupware solution that would allow all organization members to
 manage and share contacts or calendars.
 
 It seems that all solutions that are commonly used either depend on the
-proprietary Exchange Server from Microsoft or the proprietary and foreign
+proprietary Exchange server from Microsoft or the proprietary and foreign
 services of Google. These however are no option for users that care about free
 software or privacy.
 
-Only a few free software solutions exist. The most often stated problem of those
-however is missing or defective support for synchronization.
+% @TODO Kolab als Beispiel einführen
 
-This work investigates whether a RESTful approach for a Groupware API might
-contribute to a more reliable interoperability of Groupware clients and servers
-than the current standards CalDAV and CardDAV, which are discussed in
-\autoref{sec:carddav-caldav}. The requirements for a Groupware API are gathered
-by examining the existing free Groupware system Kolab (\autoref{sec:kolab}) and
-adding the most important features of CalDAV and CardDAV
-(\autoref{sec:replacement-carddav}).
+% @TODO Bullshit!
+% Only a few free software solutions exist. The most often stated problem of those
+% however is missing or defective support for synchronization.
+
+% This work investigates whether a RESTful approach for a groupware API might
+% contribute to a more reliable interoperability of groupware clients and servers
+% than the current standards CalDAV and CardDAV, which are discussed in
+% \autoref{sec:carddav-caldav}. The requirements for a groupware API are gathered
+% by examining the existing free groupware system Kolab (\autoref{sec:kolab}) and
+% adding the most important features of CalDAV and CardDAV
+% (\autoref{sec:replacement-carddav}).
 
 It will also be examined whether a RESTful API might be more versatile without
 additional complexity. For that purpose is will be considered how some use
@@ -259,7 +264,7 @@ media types, exemplified by alternative representations of contacts. This
 flexibility enables the developer to reuse the API concepts for different types
 of clients (\autoref{sec:user-class-char}) or content.
 
-The Atom Publishing Protocol is proposed as the basis for a Groupware API. A
+The Atom Publishing Protocol is proposed as the basis for a groupware API. A
 prototypical implementation (\autoref{sec:implementation}) of the core
 functionality evaluates its fitness for the requirements outlined in
 \autoref{sec:requ-analys}.
@@ -297,20 +302,20 @@ discussing how the OpenSocial API violates them.
 
 The requirement to obey the constraints of REST should cause the system to have
 some characteristics that may be especially advantageous for the use case of a
-Groupware API. Those characteristics are, according to \cite{Fielding2000}
+groupware API. Those characteristics are, according to \cite{Fielding2000}
 (cited sections in parentheses):
 
 \begin{itemize}
 \item Cacheability (sec. 5.1.4) can keep the data available also in offline
   mode, which improves performance and scalability.
-\item Simplicity (sec. 2.3.3) helps to integrate the Groupware with other
+\item Simplicity (sec. 2.3.3) helps to integrate the groupware with other
   applications, e.g., publishing birthdays of employees in an intranet portal.
-\item Modifiability (sec. 2.3.4) allows to adapt the Groupware to changes in the
+\item Modifiability (sec. 2.3.4) allows to adapt the groupware to changes in the
   organization.
 \item Reliability (sec. 2.3.7) can be of great importance, if the ability to
-  work depends on the correct functioning of the Groupware system.
-\item Anarchic scalability (sec. 4.1.4.1) allows a Groupware to function with
-  other components that are not under the control of the Groupware
+  work depends on the correct functioning of the groupware system.
+\item Anarchic scalability (sec. 4.1.4.1) allows a groupware to function with
+  other components that are not under the control of the groupware
   administrator.
 \end{itemize}
 
@@ -321,7 +326,7 @@ Groupware API. Those characteristics are, according to \cite{Fielding2000}
 \subsection{Kolab}
 \label{sec:kolab}
 
-This work presents an API usable for the Groupware system Kolab. ``Kolab
+This work presents an API usable for the groupware system Kolab. ``Kolab
 Groupware'' is the name for a system comprising several independent free (as in
 speech) software products, a relatively small amount of Kolab specific ``glue
 code'' and a special way of configuring the involved components. On the server
@@ -335,14 +340,14 @@ and the PHP web clients Horde and Roundcube.
 
 The development of Kolab started 2002, when the Federal Office for Information
 Security (Bundesamt für Sicherheit in der Informationstechnik) commissioned the
-development of a free alternative to the Microsoft Exchange Server. Kolab has
+development of a free alternative to the Microsoft Exchange server. Kolab has
 been developed by a joint venture of three companies \cite{Stoermer2004}. Today
 Kolab is still being developed, supported and distributed collaboratively by
 multiple independent companies.
 
 A REST API for Kolab aims to make it easier for clients to connect to the Kolab
 server. The REST API should also be implementable by other server solutions and
-maybe evolve into a standardized Groupware API.
+maybe evolve into a standardized groupware API.
 
 A couple of related terms and concepts exist that all more or less overlap with
 the functionality provided by Kolab: groupware, personal information
@@ -350,14 +355,14 @@ management/manager (PIM), group information management (GIM), computer-supported
 cooperative/collaborative work, knowledge management, (enterprise) content
 management. Especially scientific literature uses the term groupware for other
 kinds of systems than Kolab\cite[sec. 2.1]{Stoermer2004}. For the rest of this
-work however, a Groupware is understood as a software managing address books,
+work however, a groupware is understood as a software managing address books,
 calendars, to-do items, journals and probably more data for a group of
 collaborating users.
 
 \subsection{IMAP as a collection synchronization protocol}
 \label{sec:imap-as-collection}
 
-The Kolab Groupware Server is special in that it uses the Internet Message
+The Kolab groupware server is special in that it uses the Internet Message
 Access Protocol (IMAP) as a synchronization protocol for all its data and thus
 the IMAP server as a database. Every resource managed by Kolab is attached as an
 XML document to a dummy mail message in one of several specially
@@ -423,14 +428,14 @@ IMAP in general also comes with its own challenges:
 
 vCard is an IETF standardized media type to ``capture and exchange [\ldots]
 information normally stored within an address book or directory application''
-\cite{RFC6350} e.g., about individuals, groups, organizations or locations (see
+\cite{RFC6350}, e.g., about individuals, groups, organizations or locations (see
 the vCard \lstinline:KIND: property). Closely connected by the same format, same
 standards body (IETF) and usage is iCalendar (short iCal), for ``representing
 and exchanging calendaring and scheduling information such as events, to-dos,
 journal entries, and free/busy information'' \cite{RFC5545}. Both formats
-together cover most information usually managed by a Groupware system are the
+together cover most information usually managed by a groupware system are the
 base of Kolab's internal storage, the underlying format of CardDav and CalDAV
-and thus of most free Groupware systems (\autoref{sec:carddav-caldav}).
+and thus of most free groupware systems (\autoref{sec:carddav-caldav}).
 
 The vCard and iCalendar media types seem a bit archaic, since they are not based
 on XML or JSON but on the older Internet Message Format \cite{RFC5322} (IMF)
@@ -472,7 +477,7 @@ comprises of a JSON schema for contacts information derived from vCard version
 3\footnote{\citeurl{http://wiki.portablecontacts.net/w/page/17776141/schema}{2012-03-23}}
 and a protocol for authorized retrieval of contacts. The schema misses many
 properties of the current vCard version 4 standard \cite{RFC6350} and introduces
-properties inspired by social networks, e.g. describing social behavior or
+properties inspired by social networks, e.g., describing social behavior or
 preferences.
 
 The schema and protocol has been adopted by OpenSocial (see section
@@ -484,7 +489,7 @@ JavaScript browser applications.
 \subsection{WebDAV, CardDAV, CalDAV}
 \label{sec:carddav-caldav}
 
-The most widely implemented Groupware protocols (in free software) today seem to
+The most widely implemented groupware protocols (in free software) today seem to
 be CalDAV \cite{RFC4791} for calendaring and CardDAV \cite{RFC6352} for
 contacts\footnote{only full free server implementations: Apple Calendar Server,
   Bedeworks, DAViCal, eGroupWare, Owncloud, SOGo, Tine2.0}. Both protocols
@@ -570,9 +575,9 @@ CalWS-REST\footnote{\citeurl{http://calconnect.org/CD1012_Intro_Calendaring_V1.1
 OpenSocial \cite{OSSpec2.0.1} specifies how data of social networks can be
 accessed by clients, especially Javascript browser widgets. The broad adoption
 not only by social networks but also for collaboration software\footnote{wiki,
-  issue tracker (Confluence, Jira both Atlassian), Groupware (Lotus from IBM),
+  issue tracker (Confluence, Jira both Atlassian), groupware (Lotus from IBM),
   Content Management System (Alfresco, Nuxeo)} demonstrates a variety of use
-cases for Browser accessible Groupware data. It has also been proposed to
+cases for Browser accessible groupware data. It has also been proposed to
 implement an OpenSocial system for the FernUniversität in Hagen
 \cite{Huebner2009}.
 
@@ -751,7 +756,7 @@ Kolab uses IMAP, from the characteristics of the managed data set, and the
 supposed characteristics of typical clients. In addition it is also considered
 that the API may even be usable as a RESTful alternative for CardDAV, CalDAV and
 parts of OpenSocial. The last subsection explicitly lists why some features of
-WebDAV are not considered as useful requirements for a Groupware API.
+WebDAV are not considered as useful requirements for a groupware API.
 
 % - HTML + annotation als Anforderung begründen
 
@@ -789,7 +794,7 @@ WebDAV are not considered as useful requirements for a Groupware API.
 % a product, but simply shows the logical relationships among variables.
 
 The software system designed in this work should provide a web based interface
-for most common interactions with a Groupware system like Kolab. It must obey
+for most common interactions with a groupware system like Kolab. It must obey
 the constraints of the REST architectural style \cite{Fielding2000}.
 
 Guidelines of the design are:
@@ -818,13 +823,13 @@ Guidelines of the design are:
 \label{sec:replacement-carddav}
 
 Personal evaluation\footnote{from using, contributing to or evaluating
-  eGroupware, Horde, Kolab, Kontact, Thunderbird} suggests, that many Groupware
+  eGroupware, Horde, Kolab, Kontact, Thunderbird} suggests, that many groupware
 clients and servers use CardDAV exclusively to synchronize contacts collections,
 allowing concurrent modifications of individual contacts via optimistic locking
 (\autoref{sec:locking}). This is in principle also the way how Kolab uses IMAP.
 
 Thus the principal requirement is to support discovery and synchronization of
-Groupware collections (Adressbook, Calendar) and CRUD operations on Groupware
+groupware collections (Adressbook, Calendar) and CRUD operations on groupware
 items (Contacts, Events).
 
 A RESTful alternative for OpenSocial is not in the scope of this work. However
@@ -955,7 +960,7 @@ document database like Apache CouchDB, plain files, relational or XML databases.
 
 % \subsection{Nested and mixed collections}
 % The design should not unnecessarily hinder that collections could be nested or
-% contain different kinds of media types, e.g. calendar items and contacts. 
+% contain different kinds of media types, e.g., calendar items and contacts. 
 
 % CardDAV explicitly forbids nested and mixed collections to ease the
 % implementation of clients\cite[sec. 5.2]{RFC6352}. However both may make sense
@@ -1071,7 +1076,7 @@ discovered by following links. A useful media type to discover available
 collections is the Atom Service Document\cite[sec. 8]{RFC5023}. It contains
 links to collections organized in workspaces and annotated with meta data.
 
-A Groupware client most likely needs to discern the available collections by the
+A groupware client most likely needs to discern the available collections by the
 contained resources so as to consume and present them with the appropriate user
 interfaces, e.g.,for contacts or events. A first idea could be to use the
 media types declared in the ``accept'' tag of a collection to identify types of
@@ -1094,7 +1099,7 @@ found. The use of categories to attach arbitrary meaning, e.g, ``event type
 (product or promotion), and its status (new, updated, or cancelled)'' to feeds
 and entries is also recommended in \cite[p. 200]{Webber2010}.
 
-To make categories usable for a common Groupware API, the server needs to use a
+To make categories usable for a common groupware API, the server needs to use a
 categorization scheme understood by the client. If different clients don't agree
 on one scheme the server could still support several.\footnote{As a last resort
   a client could of course also fetch the feeds and identify the media types of
@@ -1127,7 +1132,7 @@ found. The most promising approach seems to list available collections in a
      label="Task" />
 \end{anylisting}
 
-\subsection{Personalized Service Documents} For a Groupware that manages
+\subsection{Personalized Service Documents} For a groupware that manages
 confidential information it would make sense to provide personalized Service
 Documents for authenticated users that list only collections that the user is
 authorized to read.\footnote{For this use case it would be convenient if HTTP
@@ -1152,7 +1157,7 @@ authentication.\footnote{Alternatively, all Service Documents could be served un
 % Rob Yates \url{mailto:robert_yates@us.ibm.com}
 
 The idea to not only use Service Documents but the complete Atom Publishing
-Protocol as the foundation for a Groupware API is not novel. Rob Yates described
+Protocol as the foundation for a groupware API is not novel. Rob Yates described
 this idea under the titles ``CalAtom'' and ``CardAtom'' already in
 2006\footnote{\citeurl{http://robubu.com/?cat=2}{2012-3-2}}.
 
@@ -1180,7 +1185,7 @@ tag\footnote{\citeurl{http://web.archive.org/web/20081120001246/http://www.snell
 \subsection{Synchronizing collections}
 \label{sec:synchr-coll}
 
-If a Groupware client can synchronize an entire collection to its local memory,
+If a groupware client can synchronize an entire collection to its local memory,
 then there is no need for more sophisticated queries that provide only a subset
 of the collection. The client can answer all queries from its local copy of the
 collection.
@@ -1268,7 +1273,7 @@ after some time and should issue a warning.
 
 
 %   \end{tikzpicture}
-%   \caption{Discovery paths from the Service Document to individual Groupware Resources}
+%   \caption{Discovery paths from the Service Document to individual groupware Resources}
 % \end{figure}
 
 \subsection{Efficient Synchronization with HTTP Delta encoding}
@@ -1398,7 +1403,7 @@ describes this case and resolutions in detail.
 \label{sec:spec-reports-search}
 
 In few cases it may not be feasible for a client to synchronize a full
-collection, e.g. due to low bandwidth or limited memory. This section explores
+collection, e.g., due to low bandwidth or limited memory. This section explores
 RESTful ways to let the client request only a subset (selection) of a
 collection. More specifically the client should be informed about possible query
 facilities without relying on out-of-band information.
@@ -1421,10 +1426,10 @@ construction''\footnote{OpenSearch is the older standard and referenced as Level
 
 The basic OpenSearch standard defines a simple full text search. Thus a user
 could search contacts by name, address or any other field value. Equally events,
-todo items or notes could be searched by keywords.
+to-do items or notes could be searched by keywords.
 
 The next important use case is to show calendar events in a given interval,
-e.g. to present the events for a month, week or day. This can be achieved with
+e.g., to present the events for a month, week or day. This can be achieved with
 the OpenSearch Time extension that provides the temporal start and end
 parameters. Rob Yates' CalAtom \cite{draft-yates-atompub-calatom-00.txt} proposal
 included a similar time range search as the only but mandatory special report.
@@ -1465,7 +1470,7 @@ to get the feed first.
 
 This section discusses remaining design considerations that are not directly
 connected to the interactions of the Atom Publishing Protocol and OpenSearch but
-rather to the media types and formats used to represent Groupware specific data.
+rather to the media types and formats used to represent groupware specific data.
 
 % > - Es wird gezeigt, dass AtomPub mit ein paar, meist bereits standardisierten
 % >   Ergänzungen eine sinnvolle, resourcenorientierte Alternative zu C.*DAV,
@@ -1584,7 +1589,7 @@ building editing interfaces for those. A modified entity can then be sent to the
 server via AJAX in a format called ``json-ld'' that serializes semantic data to
 JSON.\footnote{\citeurl{http://json-ld.org}{2012-2-20} the iana registration of
   the mime type \lstinline:application/ld+json: is currently discussed} For a
-Groupware, this editor could be used to automatically create HTML forms instead
+groupware, this editor could be used to automatically create HTML forms instead
 of creating them on the server site.
 
 \begin{anylisting}[label=fig:microdata-atom-summary,
@@ -1657,7 +1662,7 @@ chair of the RDF Web Applications Working Group at the W3C.
 
 %@TODO bezug zur Arbeit?
 
-A web based user interface for a Groupware today has many means to provide data
+A web based user interface for a groupware today has many means to provide data
 editing and submission facilities thanks to powerful Javascript libraries like
 the VIE Editor (\autoref{sec:semantic-anno-use-cases}). The traditional,
 standardized and most compatible way however is the use of HTML
@@ -1674,7 +1679,7 @@ this is often not a problem since the server knows which form to expect and
 selects its parsing routine accordingly.
 
 In cases where different forms can be expected to be submitted to the same URI,
-e.g. to the URI of a collection, the server needs to be informed about the
+e.g., to the URI of a collection, the server needs to be informed about the
 resource type, probably by a hidden form input element.
 
 The manual creation of HTML forms and associated form parsers and validators is
@@ -1797,7 +1802,7 @@ yet standardized properties ALBUM and GROUP.
 % @TODO ich würde irgendwie auch erwarten, dass ich eine Übersicht über die Ressourcen mit ihren Medientypen und evtl auch ein paar Beispiele für Use Cases bekomme, ggf auch im Anhang
 
 Based on the requirements and design considerations of the previous sections,
-this section presents a Java based implementation of a RESTful Groupware API
+this section presents a Java based implementation of a RESTful groupware API
 supporting different media types. The solution is based on the JAX-RS 1.1
 \cite{JAX-RS1.1} implementation
 Jersey\footnote{\citeurl{http://jersey.java.net}{2012-04-02}}, relies on
@@ -1875,15 +1880,15 @@ properties of a resource (\autoref{sec:resourcefacades}). In the context of this
 work, four different kind of properties of resources are distinguished:
 
 \begin{itemize}
-\item essential administration properties: unique Id, last update time, HTTP
+\item essential administration properties: unique ID, last update time, HTTP
   entity tag
 \item generic meta properties: title, summary, author
 \item a media type independent interface corresponding to the concept represented
-  by the resource e.g., a person, location, event, product, \ldots
+  by the resource, e.g., a person, location, event, product, \ldots
 \item a media type specific serialization (representation) of the resource
 \end{itemize}
 
-The id and update time are required for the synchronization protocol outlined in
+The ID and update time are required for the synchronization protocol outlined in
 \autoref{sec:interactions}. They do not depend on the nature or content of the
 resource and are attached to the resource by code outside of the
 \lstinline:Resource: class. The entity tag must differ for each new version of a
@@ -1952,12 +1957,12 @@ implementation according to the Content-Type request header but it has not yet
 received an ID and update timestamp.
 
 The \lstinline:Resource: class represents the second stage, a parsed request
-body with an Id and update timestamp. Only in this stage the
+body with an ID and update timestamp. Only in this stage the
 \lstinline:getFacade(): method can be used.
 
 Once a resource has been deleted, it does not vanish entirely, but enters stage
 three. Only the associated data originally submitted in the request body is
-discarded but the Id and update timestamp (now referring to the time of
+discarded but the ID and update timestamp (now referring to the time of
 deletion) is preserved. Such a ``deleted resource'' is used to generate a
 corresponding ``deleted-entry'' tombstone in the AtomPub feed
 (\autoref{sec:synchr-coll}).
@@ -2010,7 +2015,7 @@ called only for FacadeFactories producing the desired interface. This mechanism
 is used in the implementation to check an \lstinline:isWriteable(MediaType):
 method on factories producing Writer instances and thus to select the correct
 Writer according to the media type accepted by the client. Future work could
-considerably enhance this rather brittle mechanism e.g., to check for
+considerably enhance this rather brittle mechanism, e.g., to check for
 annotations on the class produced by the factory.
 
 \begin{figure}[htb]
@@ -2026,7 +2031,7 @@ concept. \autoref{sec:resourcefacadesfuture-work} outlines a lot of future work
 that might be worth consideration in this direction.
 
 % A resource method should contain the programming logic executed to serve a
-% request of a specific type (e.g. GET, PUT) against a specific resource. The
+% request of a specific type (e.g., GET, PUT) against a specific resource. The
 % programming logic could execute common tasks like the following:
 
 % \begin{itemize}
@@ -2080,7 +2085,7 @@ that might be worth consideration in this direction.
 % from a Resource requests the appropriate Facade from the ResourceHandler. The
 % ResourceHandler was instantiated with a FacadeRegistry from which it can request
 % Factories for requested Facades. A ResourceHandler must have been instantiated
-% with at least one initial input Facade, e.g. an InputStream.
+% with at least one initial input Facade, e.g., an InputStream.
 
     % Facades provide read-only access to the data
     % Facades can depend on other Facades and thus reuse work
@@ -2362,12 +2367,12 @@ puts the value for this property inside the element.
 
 An implementation of this approach must take care of a few
 peculiarities \cite{Hickson2011}. Some properties don't necessarily use simple
-\lstinline:span: elements, e.g. dates can be better expressed with
+\lstinline:span: elements, e.g., dates can be better expressed with
 \lstinline:time: elements or URI values most likely appear in an
 \lstinline:a:, \lstinline:img:, \lstinline:link: or \lstinline:object:
 element. Property values could also be put in a \lstinline:content: attribute
 while the element's nested text content is optimized for human
-consumption. Items can be nested, e.g. an item of type PostalAddress could be
+consumption. Items can be nested, e.g., an item of type PostalAddress could be
 nested inside a Person item.
 
 The proposed approach can be implemented on any template engine as long as it
@@ -2401,9 +2406,11 @@ objects.\footnote{\citeurl{https://github.com/Paxa/green_monkey}{2012-3-7}
 \section{Results and Discussion}
 \label{sec:results-discussion}
 
+% @TODO Hypermedia diskutieren: Was muss ein Client vorher wissen?
+
 This section presents findings made while designing and implementing the
 presented REST API, outlines which proposed goals have been achieved and why
-others were not achieved, and proposes further work.
+others were not achieved, and proposes future work.
 
 \subsection{Implemented Requirements}
 \label{sec:impl-requ}
@@ -2420,8 +2427,9 @@ if an appropriate library for the parsing and serialization of the media type is
 available.
 
 Unfortunately no evidence of the existence of the necessary libraries could be
-found. The only active and usable iCalendar and vCard library iCal4J does not
-yet support the newest versions of those standards, especially not their XML
+found. The only active and usable iCalendar and vCard library
+iCal4J\footnote{\citeurl{http://wiki.modularity.net.au/ical4j}{2012-04-03}} does
+not yet support the newest versions of those standards, especially not their XML
 variants. For PortableContacts, two Java library projects were found,
 JPoco\footnote{\citeurl{http://code.google.com/p/jpoco}{2012-03-30}} and
 asmx-poco\footnote{\citeurl{http://code.google.com/p/asmx-poco}{2012-03-30}},
@@ -2480,6 +2488,8 @@ concept and prototypical implementation of the Resource Facades. The proposed
 design to support Microdata in template engines is also considered to be
 reusable and beneficial for many use cases.
 
+% @TODO Routes und Linkbuilder in sep. URI Implementation Kapitel ansprechen?
+
 Surprisingly, the API of JAX-RS (or Jersey) was not as helpful as should be
 expected from its official status. A couple of smaller classes were written for
 this work to wrap Jersey's functionality and those should be reusable in
@@ -2529,8 +2539,10 @@ evaluate frameworks offering alternative concepts than JAX-RS.
 %>   Beurteilung von Java Frameworks für Web Services mit REST)
 
 
-\subsection{Further work}
+\subsection{Future work}
 \label{sec:further-work}
+
+% @TODO einleitender Satz
 
 % Apache Abdera 2 hat keine OpenSocial extension
 
@@ -2863,6 +2875,8 @@ comprehension of type systems. % @TODO würde ich nicht schreiben?
 \section{Conclusions}
 \label{sec:conclusions}
 
+% @TODO Check gegen Aufgabenstellung
+
 % The conclusions can be summarised in a fairly short chapter (2 or 3 pages). This
 % chapter brings together many of the points that you will have made in other
 % chapters, especially in the previous results and discussion chapter. Do not be
@@ -2878,14 +2892,14 @@ comprehension of type systems. % @TODO würde ich nicht schreiben?
 % aufgetaucht sind, sollte dann am Ende ein Ausblick auf die zukünftige Forschung hergeleitet
 % werden.
 
-It has been shown in this work that a rather uncomplicated, RESTful Groupware
+It has been shown in this work that a rather uncomplicated, RESTful groupware
 API is a usable alternative for more complex solutions like CardDAV or
 OpenSocial. It even seems possible to serve the use cases of both protocols,
 different classes of clients and different media type preference with the same,
 unified, RESTful approach.
 
 Most of the code necessary for the implementation is not even specific to a
-Groupware API but usable for other applications that offer a RESTful HTTP API
+groupware API but usable for other applications that offer a RESTful HTTP API
 and might consume or produce multiple media types.
 
 A great source of simplifcation and serendipitous reuse (e.g., VCards for social
