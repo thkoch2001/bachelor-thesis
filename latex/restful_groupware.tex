@@ -176,35 +176,6 @@ bzw. wiederverwendet werden können. Außerdem soll die Hypermediaunterstützung
 der verschiedenen Formate untersucht werden: Wie viel muss ein Client vorher
 wissen und wie viel kann er durch Hyperlinks entdecken?
 
-% optionale Ergänzungen:
-
-% \begin{itemize}
-% \item CardDAV als alternatives Protokoll mit Untersuchung der
-%   Wiederverwendbarkeit der Komponenten
-% \item Mitbetrachtung der Kalenderfunktionalität bei der Hypermediaunterstützung
-% \item zumindest lesender Zugriff auf die Kalenderfunktionalität über die
-%   REST-Schnittstelle
-% \end{itemize}
-
-% \section*{Selbstständigkeitserklärung}
-% % Keine Kopf- und Fußzeilen ausgeben
-% %\thispagestyle{empty}
-% % Aber trotzdem ins Inhaltsverzeichnis aufnehmen
-% % \addcontentsline{toc}{chapter}{Selbstständigkeitserklärung}
-% % Hier der offizielle Text der eidesstattlichen Erklärung
-% Ich erkläre hiermit, dass ich die vorliegende Arbeit selbstständig und ohne
-% Benutzung anderer als der angegebenen Hilfsmittel angefertigt habe; die aus
-% fremden Quellen direkt oder indirekt übernommenen Gedanken sind als solche
-% kenntlich gemacht.  Die Arbeit wurde bisher in gleicher oder ähnlicher Form
-% keiner anderen Prüfungskommission vorgelegt.
-% % Etwas Abstand für die Unterschrift
-% \vspace{3cm}
-% % Hier kommt die Unterschrift drüber
-% \begin{tabbing}
-% \hspace{6cm}  \= \kill
-% \textit{Kreuzlingen, 4. April 2012} \> \textit{Thomas Koch}
-% \end{tabbing}
-
 \tableofcontents{}
 \newpage{}
 \pagenumbering{arabic}
@@ -1805,7 +1776,7 @@ forms by default in every HTML representation of any resource that the user is
 authorized to modify. And even then, there would still not be any means for the
 user to reach an HTML form to create a new resource.
 
-%@TODO link-relation nicht eingeführt?
+% link-relation nicht eingeführt?
 The edit case can be solved with the IANA registered ``edit'' link-relation. An
 HTML page representing an editable resource could just use a link element for
 the purpose of signaling the client the location where it can retrieve an
@@ -1905,7 +1876,7 @@ yet standardized properties ALBUM and GROUP.
 \section{Implementation}
 \label{sec:implementation}
 
-% @TODO ich würde irgendwie auch erwarten, dass ich eine Übersicht über die
+% ich würde irgendwie auch erwarten, dass ich eine Übersicht über die
 % Ressourcen mit ihren Medientypen und evtl auch ein paar Beispiele für Use
 % Cases bekomme, ggf auch im Anhang
 
@@ -1919,6 +1890,14 @@ Guice\footnote{\citeurl{http://code.google.com/p/google-guice}{2012-04-02}}, and
 introduces a new concept tentatively called ``Resource Facades''. The latter
 abstracts from different possible representations of a resource and thus applies
 a RESTful principle from the network layer in the implementation layer.
+
+Four different resource categories make up the API's core. Three of them are
+part of the Atom Publishing Protocol: The service document, collection feed and
+collection entry. These are available only as their corresponding Atom XML media
+type. The fourth resource category corresponds to the resources managed by the
+API called media entries in Atom. in the case of the groupware API these are
+mainly contacts and events. The latter are available in multiple, alternative
+representations.
 
 \subsection{Control Flow Overview}
 \label{sec:overview}
@@ -2149,7 +2128,7 @@ that might be worth consideration in this direction.
 % \item trigger notifications containing a summary of the resource
 % \item submit the submitted resource to an indexing system
 % \item check the submitted resource to be of a certain accepted domain type, like
-%   contact, event, todo item or any set of such types
+%   contact, event, to-do item or any set of such types
 % \end{itemize}
 
 % All the above processing tasks should in theory be independent of the media type
@@ -2404,10 +2383,47 @@ then the rest of the application.
   \label{fig:dependency-injection-pipeline}
 \end{figure}
 
+\subsection{Routing and URI construction}
+\label{sec:rout-uri-constr}
 
-%@TODO
-%\subsection{Client Design}
-%What needs a client to know, how does it need to work?
+The normal way to bind JAX-RS resource classes to URI paths is provided by means
+of the \lstinline:@Path: annotation. This has however several
+disadvantages. First it hinders reuse of the resource classes in applications
+with different URI paths. Furthermore it hinders the dynamic binding of new
+paths to resources at runtime or the binding of methods from different classes
+to the same path, e.g., to add additional HTTP method handlers. Finally all
+definitions of paths are scattered throughout the code.
+
+The implementation used the ``subresources'' feature of JAX-RS, which can help
+at least to centralize the definition of URI paths in a \lstinline:Routes:
+class. Methods of this class have \lstinline:@Path: annotations but no HTTP
+method annotations. They don't handle the requests but instead instantiate and
+return the appropriate JAX-RS resource classes which in turn have methods with
+annotations for the supported HTTP methods.
+
+The path templates themselves are static string members of the
+\lstinline:Routes: class and thus also available for a \lstinline:LinkBuilder:
+subclass of \lstinline:Routes:. The latter can be requested via dependency
+injection and provides methods to construct links to all resources managed by
+the system.
+
+The centralization of routing and link building has one very important advantage
+for REST applications. If such a central interface exists, than no other place
+in the code, nor the public documentation should know which URIs are matched and
+build by the interface. This would hopefully hinder all involved parties to
+expect or document static URI patterns and instead force anybody to follow
+hyperlinks.
+
+The handling of URIs could have been implemented much more elegant by building
+path templates dynamically at runtime. Unfortunately Jersey does only support
+the static definition of paths at compile time thus only static strings could be
+used for the definition. The upcoming version Jersey~2 however should provide
+dynamic path
+construction\footnote{\citeurl{http://java.net/jira/browse/JERSEY-842}{2012-2-6}}. Other frameworks, e.g.
+Restlet\footnote{\citeurl{http://wiki.restlet.org/docs_2.1/13-restlet/27-restlet/326-restlet.html}{2012-2-6}} and
+Apache Wink\footnote{called ``Dynamic Resources''
+  \citeurl{http://incubator.apache.org/wink/1.1/html/5.1 Registration and Configuration.html}{2012-2-7}}
+already have such a feature.
 
 \subsection{Producing Semantically annotated HTML}
 \label{sec:prod-semant-annot}
@@ -2596,18 +2612,17 @@ concept and prototypical implementation of the Resource Facades. The proposed
 design to support Microdata in template engines is also considered to be
 reusable and beneficial for many use cases.
 
-% @TODO Routes und Linkbuilder in sep. URI Implementation Kapitel ansprechen?
-
 Surprisingly, the API of JAX-RS (or Jersey) was not as helpful as should be
 expected from its official status. A couple of smaller classes were written for
 this work to wrap Jersey's functionality and those should be reusable in
 arbitrary REST projects. Some of those have been presented in
 \autoref{sec:prep-requ-comp}: Preconditions, PathParams or PaginationRange. In
-addition to this, a separate \lstinline:Routes: class centralized the mapping
-from URI paths to resource classes, a LinkBuilder centralized construction of
-URIs and the reader and writer provider classes delegated their work to the
-resource facades framework. It seems advisable for further REST projects to
-evaluate frameworks offering alternative concepts than JAX-RS.
+addition to this, a separate \lstinline:Routes: (\autoref{sec:rout-uri-constr})
+class centralized the mapping from URI paths to resource classes, a
+\lstinline:LinkBuilder: (ibid.) centralized construction of URIs and the reader
+and writer provider classes delegated their work to the resource facades
+framework. It seems advisable for further REST projects to evaluate frameworks
+offering alternative concepts than JAX-RS.
 
 % The main results of your work should be presented, together with critical
 % discussion. The chapter should cover three things (although these would not be
@@ -2822,7 +2837,6 @@ Considering all the problems, it is understandable that no effort could be found
 since 2008 to formalize the outlined mapping in an IANA registered media type.
 
 \paragraph{Conclusion}
-% @TODO Fußnoten zu Quellen?
 
 % Google's GDATA Json format, Youtube JSON feed?
 Other related formats considered are the ``Hypertext Application Language''
