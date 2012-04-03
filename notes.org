@@ -2,38 +2,7 @@
 
 http://www.cs.uwaterloo.ca/~brecht/thesis-hints.html
 
-
-Erfurt:
-Titelseite
-Zusammenfassung (deutsch) (1 Seite)
-Abstract (englisch) (1 Seite)
-Aufgabenstellung (1 Seite)
-Ggf. Vorwort oder Danksagung
-Inhaltverzeichnis (bis hierhin sollten die Seiten römisch nummeriert sein)
-Einleitung (ca. 5% der Gesamtarbeit, beginnt mit Seite 1)
-Stand der Wissenschaft und Technik (max. 40%)
-Konzept (zusammen mit Umsetzung und Bewertung ca. 50%)
-Umsetzung
-Bewertung
-Zusammenfassung und Ausblick (ca. 5%)
-Literaturverzeichnis
-Anhang
 Selbstständigkeitserklärung
-
-
-Herleitung der REST API
-
-- Die Anforderungen an eine Groupware API werden anhand zweier existierender und
-  weitverbreiteter APIs begründet: Card/CalDAV, OpenSocial.
-
-- Allerdings sind diese APIs entweder komplexer als notwendig (C.*DAV) oder
-  nicht restful (C.*DAV, OpenSocial). Außerdem wäre es natürlich schön, eine
-  Schnittstelle zu haben, die beide Anwendungsfälle bedienen kann.
-
-- Es wird gezeigt, dass AtomPub mit ein paar, meist bereits standardisierten
-  Ergänzungen eine sinnvolle, resourcenorientierte Alternative zu C.*DAV,
-  OpenSocial ist.
-
 Vorstellung der Medientypen inkl. Hypermediaunterstützung
 
 - Die ATOM Medientypen und Hypermediaunterstützung wurden bereits bei der API
@@ -50,158 +19,18 @@ Vorstellung der Medientypen inkl. Hypermediaunterstützung
   Schemas in JSON Schemas ist nicht möglich, also muss für alle XML Medientypen
   eine JSON Äquivalent manuel definiert werden.
 
-- Darstellung semantically annotated HTML mit drei verschiedenen Formaten,
-  Begründung der Formatauswahl. Vorschlag zur Implementierung mit einer
-  Templateengine und automatisierten Erstellung der Microdata Strukturelemente
-
-  Warum überhaupt annotated (X)HTML? Suchmaschinen, Semantischer Editor,
-  Interpretierung durch Browser Extensions (Import in Adressbuch, Kalender),
-  Serendipitous Reuse
-
-- HTML Forms und ihre Einbettung in eine Hypermedia API:
-  - Kein PUT/DELETE
-  - universeller, nichtssagender Medientyp application/x-www-form-urlencoded
-  - keine link-relation, um auf die Form zur Erstellung einer neuen Resource zu
-    verweisen.
-
-- Problematik des Updates mit nicht isomorphen Medientypen, Möglichkeiten, damit
-  umzugehen
-
-Implementierung und wiederverwendung von Komponenten
-
-- Auf Basis von Jersey, weil empfohlen von Schneider2010 (Vergleich und
-  Beurteilung von Java Frameworks für Web Services mit REST)
-
-- Komplexität der Behandlung verschiedener Medientypen versteckt hinter
-  "Resource" Klasse mit Hilfe von ResourceFacades
-
-- Die Mächtigkeit der Resourceklasse ermöglicht dass der restliche Code,
-  z.B. CollectionStorage sehr einfach gehalten werden kann.
-
-- Das CollectionStorage Interface kann für verschiedene Storagetypen
-  implementiert werden und ist auf das Konzept eines Updatefeeds spezialiesiert.
-
-- Wiederverwendbare Komponenten:
-  - ResourceFacades Framework inkl. Medientypspezifische Klassen zur Extraktion,
-    Transformation v. Daten
-  - ATOM Framework (z.B. Abdera)
-  - Extrem hilfreich: Dependency Injection
-  - JAX-RS überraschenderweise wenig hilfreich
-  - Einige kleine Helferklassen, die Funktionalität von JAX-RS ersetzen oder
-    besser zugreifbar machen
-
-- Größtes Problem: Fehlende oder unzureichende Libraries zum Parsen, Bauen,
-  Konvertieren der Medientypen. Erstellung und Pflege solcher Libraries ist eine
-  langwierige Fleißarbeit.
-
-  Gedanken zu Libraries für Medientypen: (macht das Sinn?)
-
-  - Die Libraries müssen unbekannte Felder beibehalten um Vendorspezifische
-    Erweiterungen nicht zu beschädigen und um Aufwärtskompatibel zu sein.
-
-  - Das Schema des Datentyps sollte nicht durch Klassen oder Objectfelder
-    bereits zur Compilezeit statisch festgelegt sein (hartcodiert) sondern erst
-    dynamisch zur Laufzeit gebaut werden. Das reduziert den
-    Implementierungsaufwand der Library und ermöglicht die Erweiterung des
-    Schemas zur Laufzeit.
-  
-    Beispiele: 
-    - ICal4J hat eine Java Klasse pro bekannter Property
-    - Apache Shindig hat eine Objekteigenschaft pro bekanntem PoCo Feld
-
 * Implementation Todos
 ** TODO SLUG Header
 ** TODO Wohin redirect nach delete/put?
-
 * todos 
 ** Darstellung Confusing: PUT/GET on Media Entries, DELETE on Entries, shared ETAG
 ** TODO The abbreviation of the phrase "that is" is written "i.e.". It contains a period after the "i" and one after the "e". A comma is also usually required with is use. This is a sentence containing an example of how to use "that is" (i.e., this sentence is the example). Quite often it is enclosed in parentheses and you should avoid using it too often. 
-** TODO Sektion über collection media types, besonders collection+json
-** TODO Einleitungen und Zusammenfassungen für Sektionen und gesammt
 ** TODO PortableContacts beschreiben und mit vCard vergleichen
 ** TODO Implementierung und Beschreibung: vCard/PoCo/xCard/iCal mit den gleichen Mitteln in Java darstellen
 ** TODO Grundlagen beschreiben
   http://theamiableapi.com/2012/03/04/rest-and-the-art-of-protocol-design/
-** TODO Was hat aufgehalten?
- Macht es Sinn in der Arbeit Punkte zu nennen, die bei dem Versuch der
- Implementierung hinderlich waren? Zumindest solche Punkte, wo einfach noch
- libraries für bestimmte Zwecke fehlen (erste Gruppe)?
-
- - active PoCo library?
- - no library to convert between vCard and PoCo
- - keine xCard/xCal library, vCal4j-vcard supports only version 3
- - no helper library to produce microdata
- - Abdera: keine Dokumentation, komplizierte Vererbungsbäume
-
- - Major updates of Jersey, Abdera shortly before release. Undesirable to start on the old versions.
- - Kolab undergoes a migration a migration of its underlying data format from its own proprietary kolab-xml to xCal/xCard
- - Java library to access Kolab zumindest im schlechten Zustand
- - Not possible to use Guice injection together with Jersey
- - Not possible to define empty paths in sub-resources
- - Jersey does not help to build URIs to resources when the path to those URIs
-   is not defined on the Resource class, limited URI building capabilites of
-   Jersey
-
-* TODO Einpassung in die vorgeschlagene Struktur für Abschlußarbeiten
-
- - http://www.fernuni-hagen.de/dvt/studium/richtlinien.shtml
-
- - Die schriftliche Ausarbeitung enthält üblicherweise:
-
-   - Einführung, Motivation, Aufgabenstellung und Aufbau der Arbeit
-     - TODO Aufgabenstellung
-
-   - Darstellung der verwendeten Grundlagen
-     Ich verwende: 
-     - Atom Syndication
-     - Atom Publishing Protocol
-     - Atom extensions: Pagination, deleted entry
-     - HTTP etags for offline work
-     - HTTP Delta encoding with Feed
-     - OpenSearch: plain text, time range
-     - Microdata
-     - vCard, iCal, xCard, xCal
-     - Portable Contacts
-     - evtl. Jersey, Abdera darstellen? 
-
-     Wie detailiert sollen Dinge dargestellt werden, die in der zitierten
-     Literatur eigentlich detailiert dargestellt sind? Bis in welche Tiefe
-     verwendete Dinge darstellen? HTTP und Java müssen wohl nicht erläutert
-     werden.
-
-   - Konzept und Lösungsidee
-     - AtomPub verwenden
-     - Atom Categories als "marker" zur Typisierung von Collections
-     - OpenSearch als Ersatz für CardDav/CalDAV Reports    
-     - Verzicht auf komplizierte Reports, da in den meisten Fällen eine volle
-       Synchronisation der Collections zumutbar ist
-     - Semantische Annotationen in Atom Entry Summaries verwenden statt
-       Projektionen wie in CalDAV/CardDAV
-
-   - Erläuterung des Entwurfs oder der Implementierung
-
-   - Zusammenfassung und Ausblick auf mögliche Erweiterungen
-     - Es wird gerade überlegt, PoCo zu einem isomorphen JSON Format für vCards
-       auszubauen
-     - PUT/DELETE/PATCH und etags für HTML forms wäre wünschenswert
-     - automatisches generieren von semantischen Annotationen in HTML template
-       engines
-     - Verbreitung und Effektivität von RFC3229+Feed untersuchen, einen Standard
-       schreiben
-
-   - Anhänge (optional)
-   - Literaturverzeichnis
-   - Index (optional)
-
-Bisher habe ich vor allem eine Zusammenstellung bereits bekannter Dinge und
-Erläuterung, wie diese sinnvoll kombiniert werden können.
 
 * Check der Aufgabenstellung
-
-  Die drei Fragen habe ich zwischendurch immer wieder angeschnitten. Soll ich
-  sie am Ende noch mal als individuelle Unterabschnitte zusammenfassen?
-
-** welche Komponenten des Entwurfs können für die Unterstützung verschiedener Medientypen gemeinsam genutzt oder wiederverwendet werden?
 
 ** Hypermediaunterstützung der verschiedenen Formate
 

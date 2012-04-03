@@ -1295,32 +1295,6 @@ the client into multiple repetitions of the above loop. The client must of
 course stop, if the above loop does not result in a synchronized collection
 after some time and should issue a warning.
 
-% \begin{figure}[tb]
-
-%   \begin{tikzpicture}
-%     [doc/.style={rectangle,draw=blue!30,fill=blue!20, node distance=6em}]
-%     \node[doc] (svc) [] {ServiceDoc};
-%     \node[doc] (collect) [below=of svc,text width=5em] {Contacts Collection}
-%       edge [<-] node {} (svc)
-%       edge [->, loop left] node {next} (collect);
-
-%     \node[doc] (calcollect) [below right=of svc,text width=5em] {Calendar Collection}
-%       edge [<-] node {} (svc);
-
-%     \node[doc] (entry) [below=of collect] {Entry (xCard)}
-%       edge [<-] node {1..n} (collect)
-%       edge [->] node [text width=5em] {personal calendar} (calcollect)
-%       edge [->, loop left] node {related xCards} (entry);
-
-%     \node[doc] (event) [below=of calcollect] {Entry (xCal event)}
-%       edge [<-] node {1..n} (calcollect)
-%       edge [->] node [below right] {participants} (entry);
-
-
-%   \end{tikzpicture}
-%   \caption{Discovery paths from the Service Document to individual groupware Resources}
-% \end{figure}
-
 \subsection{Efficient Synchronization with HTTP Delta encoding}
 \label{sec:effic-synchr-with}
 
@@ -1525,9 +1499,9 @@ list without the need to transfer full representations.
 The OpenSearch specification suggests that links to the OpenSearch Description
 Document for an Atom feed might be added inside a feed tag. There is however no
 reason not to add such a link inside the collection tag of a Service Document or
-even the full opensearch description document as shown in figure
-\ref{opensearch}. This allows a client to directly search a collection without
-the need to get the feed first.
+even the full opensearch description document as shown in
+figure~\ref{fig:opensearch}. This allows a client to directly search a
+collection without the need to get the feed first.
 
 % \subsubsection{Structural and Behavioral Rest Model}
 % Modelierung der Anwendung mit dem Meta Model nach Schreier.
@@ -2530,8 +2504,6 @@ objects.\footnote{\citeurl{https://github.com/Paxa/green_monkey}{2012-3-7}
 \section{Results and Discussion}
 \label{sec:results-discussion}
 
-% @TODO Hypermedia diskutieren: Was muss ein Client vorher wissen?
-
 This section presents findings made while designing and implementing the
 presented REST API, outlines which proposed goals have been achieved and why
 others were not achieved, and proposes future work.
@@ -2565,6 +2537,83 @@ no other choice today then to manually write and fill the necessary HTML
 attributes in an HTML template engine. An alternative, automated approach has
 been proposed in \autoref{sec:prod-semant-annot} but the implementation of a
 corresponding Java library was not possible in the scope of this work.
+
+\subsection{Hypermedia support and prior knowledge of clients}
+\label{sec:hyperm-supp-disc}
+
+A main question of this work was, how a groupware API could be designed that
+requires minimal prior knowledge by the client. Especially all resources should
+be discoverable by following links with the exception of one initial service
+URI.
+
+Figure \ref{fig:discoverypaths} outlines the resources and their discovery paths
+as discussed in this work. It can be seen, that all of them are reachable
+following links from the Atom Service Document. Collections link to the next
+partial collection, to their entries and are reachable from the Service
+document. The OpenSearch Description document includes an URI template to
+construct a link to a search result in Atom format containing links to
+collection entries. Additional links are defined as part of the specific media
+types managed by the collections, e.g., a link pointing to the calendar of an
+xCard or another to a participant of an event. The edges pointing to xCard group
+and media album are dashed, because the corresponding link relations are not yet
+officially registered as discussed in section \ref{sec:vcards-soci-netw}.
+
+\begin{figure}[tb]
+  \begin{tikzpicture}
+    [doc/.style={rectangle,draw=blue!30,fill=blue!20, node distance=1 em}]
+    \node[doc] (svc) [] {ServiceDoc};
+    \node[doc] (collect) [below left=2em of svc,text width=5em] {Contacts Collection}
+      edge [<-] node {} (svc)
+      edge [->, loop left] node {next} (collect);
+
+    \node[doc] (calcollect) [below right=2em of svc,text width=5em] {Calendar Collection}
+      edge [<-] node {} (svc);
+
+    \node[doc] (opensearch) [right=2em of svc] {OpenSearch Desc. Doc}
+      edge [<-] node {} (svc);
+
+    \node[doc] (entry) [below=2em of collect] {Entry (xCard)}
+      edge [<-] node {1..n} (collect)
+      edge [->] node [text width=5em] {personal calendar} (calcollect)
+      edge [->, loop left] node {related xCards} (entry);
+
+    \node[doc] (event) [below=2em of calcollect] {Entry (xCal event)}
+      edge [<-] node {1..n} (calcollect)
+      edge [->] node [below] {participants} (entry);
+
+    \node[doc] (searchresult) [above right=of event,text width=3em] {Search results}
+      edge [->] node {} (event)
+      edge [<-] node {} (opensearch);
+
+    \node[doc] (group) [below left=2em of entry] {xCard group}
+      edge [<->,style=dashed] node {} (entry);
+
+    \node[doc] (album) [below=2em of entry] {media album}
+      edge [<-,style=dashed] node {} (entry);
+  \end{tikzpicture}
+  \caption{Hypermedia links providing discovery paths from the Service Document
+    to individual groupware resources}
+  \label{fig:discoverypaths}
+\end{figure}
+
+All the above assumes, that the client has a built in understanding of the used
+media types, i.e., Atom related types including the not yet standardized
+deleted-entry, the OpenSearch Description Document and the types of the media
+entries in this case xCard and xCal. Media entries may be available in
+alternative representation enabling the client to negotiate the media type.
+
+If semantic annotation (section~\ref{sec:microdata}) should be used then the
+client also needs to understand the schema used for the annotations.
+
+Necessary client knowledge that is not yet standardized but also not application
+specific is:
+
+\begin{itemize}
+\item a link relation to the HTML form to create new entries (see
+  section~\ref{sec:html-forms})
+\item a schema providing atom categories to identify types of groupware
+  collections (see section~\ref{sec:disc-coll})
+\end{itemize}
 
 \subsection{Media type libraries}
 \label{sec:mediatype-libraries}
