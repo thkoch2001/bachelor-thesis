@@ -177,7 +177,8 @@ der verschiedenen Formate untersucht werden: Wie viel muss ein Client vorher
 wissen und wie viel kann er durch Hyperlinks entdecken?
 
 \tableofcontents{}
-\newpage{}
+\cleardoublepage
+%\newpage{}
 \pagenumbering{arabic}
 
 \section{Introduction}
@@ -259,9 +260,9 @@ supposedly new method to handle resources is introduced under the name
 ``resource facades''. The last subsection proposes an approach to automate the
 augmentation of HTML with semantic annotations in template engines.
 
-Findings and proposed future works follow in section
-\ref{sec:results-discussion} before section \ref{sec:conclusions} ends with the
-author's conclusions.
+% Findings and proposed future works follow in section
+% \ref{sec:results-discussion} before section \ref{sec:conclusions} ends with the
+% author's conclusions.
 
 %\footnote{Experiences with Android and Data in the cloud \citeurl{http://keithp.com/blogs/calypso}{?}}
 
@@ -771,6 +772,7 @@ WebDAV are not considered as useful requirements for a groupware API.
 % (e.g., the system requirements specification), if they exist.
 
 \subsection{Scope and General Requirements}
+\label{sec:scope-gener-requ}
 % This subsection of the SRS should provide a summary of the major functions 
 % that the software will perform. For example, an SRS for an accounting program 
 % may use this part to address customer account maintenance, customer statement, 
@@ -787,7 +789,7 @@ WebDAV are not considered as useful requirements for a groupware API.
 % and their relationships. Such a diagram is not intended to show a design of 
 % a product, but simply shows the logical relationships among variables.
 
-The software system designed in this work should provide a web based interface
+The software system designed in this work should provide an HTTP based interface
 for most common interactions with a groupware system like Kolab. It must obey
 the constraints of the REST architectural style \cite{Fielding2000}.
 
@@ -809,9 +811,8 @@ Guidelines of the design are:
     resources.
 \end{itemize}
 
-% RESTful: one entry point, reuse of existing protocols and media types
-% easy to understand and implement
-
+It should also be ensured, that the design can easily be extended to expose all
+functionality via an HTML based interface to a regular browser.
 
 \subsection{Replace Kolab IMAP, CardDAV and OpenSocial}
 \label{sec:replacement-carddav}
@@ -1615,10 +1616,10 @@ be lost.\footnote{The problem of ``POST once'' is orthogonal to that of media
 
 \subsection{Microformats, Microdata, RDFa}
 \label{sec:microdata}
-% TODO Schreier:nach dem lesen des einführenden Abschnitts weiss der Leser
-% nicht, was er im Rest des Abschnitts zu erwarten hat, dementsprechend ist die
-% Motivation für die Abschnitte unklar und es fällt schwer den roten Faden zu
-% finden
+
+The requirements list in section \ref{sec:scope-gener-requ} also lists an HTML
+bases user interface. This subsection and the following discuss special design
+issues concerning this requirement.
 
 HTML documents are primarily meant to be rendered by browsers and interpreted by
 humans. It is hard for a machine to interpret the meaning of text and data
@@ -1734,11 +1735,9 @@ chair of the RDF Web Applications Working Group at the W3C.
 \subsection{HTML Forms}
 \label{sec:html-forms}
 
-%@TODO bezug zur Arbeit?
-
-A web based user interface for a groupware today has many means to provide data
-editing and submission facilities thanks to powerful Javascript libraries like
-the VIE Editor (\autoref{sec:semantic-anno-use-cases}). The traditional,
+An HTML based user interface for a groupware today has many means to provide
+data editing and submission facilities thanks to powerful Javascript libraries
+like the VIE Editor (\autoref{sec:semantic-anno-use-cases}). The traditional,
 standardized and most compatible way however is the use of HTML
 forms. Unfortunately these lack a few features that could improve their use for
 RESTful systems.
@@ -2427,10 +2426,56 @@ Apache Wink\footnote{called ``Dynamic Resources''
   \citeurl{http://incubator.apache.org/wink/1.1/html/5.1 Registration and Configuration.html}{2012-2-7}}
 already have such a feature.
 
+\subsection{HTML}
+
+A common way to produce HTML is by using a template engine. The jersey framework
+provides a convenient integration mechanism for this purpose called ``implicit''
+or ``explicit views'' which is unfortunately not documented in the user
+guide\footnote{\citeurl{http://jersey.java.net/nonav/documentation/latest/user-guide.html}{2012-04-04}}
+but only in a blog post by one of the developers \cite{Sandoz2008}.
+
+Both mechanisms rely on a provisioned \lstinline:ViewProcessor: implementation
+(Listing \ref{fig:templateprocessor}) that integrates an arbitrary template
+engine. The \lstinline:Viewable: instance in the listing can either wrap an
+instance of a jersey resource class in which case it is called an ``implicit
+view'' or be explicitly returned by a resource handler method in which case the
+developer provides an arbitrary object to be wrapped inside the
+\lstinline:Viewable: as in Listing \ref{fig:viewable}.
+
+\begin{javalisting}[label=fig:templateprocessor,
+                   caption={Jersey interface to integrate template engines}]
+public Interface ViewProcessor<T> {
+  T resolve(String path);
+  void writeTo(T resolvedTemplate, Viewable viewable, OutputStream out)
+    throws IOException;
+}
+\end{javalisting}
+
+\begin{javalisting}[label=fig:viewable,
+                   caption={Jersey resource method explicitly returning a Viewable}]
+@GET @Produces("text/html,application/xhtml+xml")
+public Viewable get( ... ) {
+    ...
+    return new Viewable("index", contentObject);
+}
+\end{javalisting}
+
+The latter case is of interest for this work since the jersey resource classes
+as designed in this implementation don't actually represent the resources and
+their data. 
+
+The combination of the above mechanism with the earlier presented resource
+facades however is a bit more complicate. The resource facades mechanism on the
+one hand provides objects of arbitrary type and the template engine integration
+also accepts objects of arbitrary type. But at one point, a decision must be
+made, which facade should be used and which template should be
+rendered. Different strategies can be easily identified to solve this problem
+but it was not possible anymore to include an implementation in this work.
+
 \subsection{Producing Semantically annotated HTML}
 \label{sec:prod-semant-annot}
 
-% @TODO das Problem wird nur bedingt klar, vor allem wenn man die Notation in
+% das Problem wird nur bedingt klar, vor allem wenn man die Notation in
 % Listing 7 und 8 nicht komplett kennt, aber es wird auf keinen Fall klar,
 % welche Lösung du jetzt umsetzt
 
@@ -2721,13 +2766,16 @@ offering alternative concepts than JAX-RS.
 \subsection{Future work}
 \label{sec:further-work}
 
-% @TODO einleitender Satz
-
 % Apache Abdera 2 hat keine OpenSocial extension
 
 % Abdera is nicht immutable
 
 % XSL Stylesheets um HTML interface für ATOM zu bauen, z.B. von Google's Feedburner benutzt.
+
+A couple of interesting questions came up during research and implementation for
+this work which could not be included. The following subsection lists some of
+these questions, explain their relation to the scope of this work and provide
+some initial thoughts and findings.
 
 \subsubsection{Browser Caches as collection stores}
 \label{sec:browser-caches-as}
@@ -2942,9 +2990,9 @@ exist\footnote{most notable PubSubHubBub \cite{Fitzpatrick2010}} to enable a pus
 The idea for the Resource Facades concept was triggered by the use of the
 JavaBeans Activation Framework (JAF)\cite{Calder2006} in the JAX-RS
 specification. In this framework the DataHandler interface provides access to
-available commands for a specific MediaType via the getCommand method. The
-framework however was designed with the needs of a Desktop clipboard in
-mind. Since JAF has been released for Java version 1.4 it also does neither
+available commands for a specific MediaType via the \lstinline:getCommand:
+method. The framework however was designed with the needs of a Desktop clipboard
+in mind. Since JAF has been released for Java version 1.4 it also does neither
 support Generics nor uses the advantages of immutability.
 
 \cite{Pradel2008a} presents an approach and implementation in Scala to attach
@@ -2959,23 +3007,23 @@ interface. The Resource Facade approach presented here is slightly different in
 that creation of the facades is implemented independently from the facades
 themselves by the factory classes.
 
-% das Problem gehört meines Erachtens nach vorne wo du deine Lösung beschreibst und motivierst auch ein konkretes Beispiel, warum das bei dir keine gute Lösung ist wäre gut
-JAX-RS provides the MessageBodyReader and -Writer interfaces. However these
-interfaces are expected to be used only once per request. The resource method
-afterwards needs to work with whatever interface was produced by the
-MessageBodyReader. There exists no facility to request additional
-transformations or facades of a Resource.
+% % das Problem gehört meines Erachtens nach vorne wo du deine Lösung beschreibst und motivierst auch ein konkretes Beispiel, warum das bei dir keine gute Lösung ist wäre gut
+% JAX-RS provides the MessageBodyReader and -Writer interfaces. However these
+% interfaces are expected to be used only once per request. The resource method
+% afterwards needs to work with whatever interface was produced by the
+% MessageBodyReader. There exists no facility to request additional
+% transformations or facades of a Resource.
 
-It is possible in JAX-RS to request a MessageBodyReader instance from the
-\lstinline:Providers: interface. This couldn't however help to get additional
-Facades since the InputStream has already been consumed.
+% It is possible in JAX-RS to request a MessageBodyReader instance from the
+% \lstinline:Providers: interface. This couldn't however help to get additional
+% Facades since the InputStream has already been consumed.
 
-The concept shows similarities with Dependency Injection since dependencies of a
-facade are also provided by an external component. It may be possible that the
-concept could even be implemented on top of an existing Dependency Injection
-framework.\footnote{Scala can provide Dependency Injection solely with language
-  features via the so called Cake Pattern \cite{Warski2011} \cite{Odersky2005}.}
- Some aspects however may require extra care:
+The resource facades concept shows similarities with Dependency Injection since
+dependencies of a facade are also provided by an external component. It may be
+possible that the concept could even be implemented on top of an existing
+Dependency Injection framework.\footnote{Scala can provide Dependency Injection
+  solely with language features via the so called Cake Pattern \cite{Warski2011}
+  \cite{Odersky2005}.}  Some aspects however may require extra care:
 
 \begin{itemize}
 \item Resolving the dependencies of Facade factories must be parameterizable,
@@ -2997,10 +3045,7 @@ or Contact.
 
 \paragraph{Scala's type system}
 
-% @TODO ohne Scala Wissen nicht verständlich
-
- % @TODO Java class diagram?
-The proposed Java class diagram in this section has the disadvantage that the
+The proposed resource facades implementation has the disadvantage that the
 availability of a facade can not be checked at compilation time. It seems
 however that a more advanced type system could help in this regard.
 
@@ -3043,14 +3088,12 @@ class PostToCollection[StorageReqFacade]
 \end{javalisting}
 
 This example and the mentioned work on Scala roles shows that an advanced type
-systems may be able to considerably improve the presented facades approach. A
-more detailed study however is out of the scope of this work and the author's
-comprehension of type systems. % @TODO würde ich nicht schreiben?
+systems may be able to considerably improve the presented facades approach. 
 
 \section{Conclusions}
 \label{sec:conclusions}
 
-% @TODO Check gegen Aufgabenstellung
+% Check gegen Aufgabenstellung
 
 % The conclusions can be summarised in a fairly short chapter (2 or 3 pages). This
 % chapter brings together many of the points that you will have made in other
