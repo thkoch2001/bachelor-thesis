@@ -235,8 +235,45 @@
 
 \begin{frame}{Facades implementation}
   \begin{center}
-    \includegraphics[width=1\textwidth]{images/resourcefacades}
+    \includegraphics[width=1\textwidth]{images/resourcefacades<}
   \end{center}
+\end{frame}
+
+\begin{frame}{Dependency Injection}
+  \begin{center}  \begin{tikzpicture}[
+     align=center,
+     every edge/.style={draw,very thick},
+     doc/.style={rectangle,draw=blue!30,fill=blue!20, node distance=3em}]
+
+    \node[doc] (uriinfo) [] {UriInfo};
+
+    \node[doc] (httpheaders) [left=of uriinfo] {HTTPHeaders};
+
+    \node[doc] (Preconditions) [below=of httpheaders] {Preconditions}
+      edge [<-] node [] {} (httpheaders);
+
+    \node[doc] (PaginationRange) [below=of uriinfo] {Pagination-\\Range}
+      edge [<-] node [left] {} (uriinfo);
+
+    \node[doc] (pathparams) [right=of uriinfo] {PathParams}
+      edge [<-] node [above] {} (uriinfo);
+
+    \node[doc] (database) [right=of pathparams] {Database};
+
+    \node[doc] (collection) [below=of pathparams] {Collection-\\Storage}
+      edge [<-] node [right] {} (database)
+      edge [<-] node [right,text width=5em] {} (pathparams);
+
+    \node[doc] (resultset) [below=of PaginationRange] {ResultList}
+      edge [<-] node [left,text width=5em] {} (PaginationRange)
+      edge [<-] node [right] {} (collection)
+      edge [<-] node [] {} (Preconditions);
+
+  \begin{pgfonlayer}{background}
+      \node[fit=(httpheaders) (collection),draw, dashed,fill=lightgray!50, inner sep=1em] () {};
+  \end{pgfonlayer}
+
+  \end{tikzpicture} \end{center}
 \end{frame}
 
 \end{document}
