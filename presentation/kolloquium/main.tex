@@ -1,13 +1,20 @@
+% -*- mode: latex; -*-
 \documentclass{beamer}
 
 \usepackage{graphicx}
 \usepackage{tikz}
 \usetikzlibrary{shapes,calc,arrows,chains,decorations.pathmorphing,backgrounds,positioning,fit,scopes}
 
+\usepackage{listings}
+
 \setbeamersize{text margin left = 0.2em}
 \setbeamersize{text margin right = 0.2em}
 
-\begin{document}
+\title{A REST API for the groupware Kolab with support for different Media Types}
+\subtitle{Bachelor Thesis}
+\date{\today}
+\author{Thomas Koch}
+
 
 \newcommand{\entry}[1]{\node[entry, on chain]{entry \emph{#1}};}
 \newcommand{\deleted}[1]{\node[deleted, on chain]{deleted \emph{#1}};}
@@ -87,16 +94,25 @@
      feedsmatrix/.style={column sep=1.5em}
 }
 
-\title{A REST API for the groupware Kolab with support for different Media Types}
-\subtitle{Bachelor Thesis}
-\date{\today}
-\author{Thomas Koch}
+\begin{document}
+
+\maketitle
 
 \begin{frame}
-  \maketitle{}
+  \tableofcontents
 \end{frame}
+\section{Kolab}
 
 \begin{frame}{Kolab}
+  \begin{itemize}
+  \item started 2002
+  \item free MS Exchange replacement for German BSI
+  \item contacts, calendar, notes, tasks, journals
+  \item IMAP server as storage and synchronization protocol
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Kolab architecture}
   \begin{tikzpicture}[]
     { [every node/.style={text width=10em, node distance=10em}]
       \node (postfix) [label={SMTP}] { \img{postfix} };
@@ -115,7 +131,7 @@
   \end{tikzpicture}
 \end{frame}
 
-\begin{frame}{Kolab clients via connectors}
+\begin{frame}{Clients need Kolab specific connectors}
   \begin{center}
   \begin{tikzpicture}
     { [node distance=13em, every edge/.style={draw,ultra thick}]
@@ -132,8 +148,40 @@
   \end{center}
 \end{frame}
 
+\section{media types}
+\begin{frame}{support for different client types}
+  \begin{itemize}
+  \item desktop apps \tt{$\rightarrow$ vCard (IMF) / xCard (XML)}
+  \item browsers \tt{$\rightarrow$ (X)HTML + semantic annotation}
+  \item js widgets \tt{$\rightarrow$ PortableContacts (JSON)}
+  \end{itemize}
+\end{frame}
 
-\begin{frame}{Hyperlinks}
+\begin{frame}{media type conversion and non-isomorphism}
+
+  \begin{tabular}{p{20em} p{10em}}
+approaches:
+ \begin{itemize}
+  \item only one media type for writes
+  \item special PATCH media types
+  \item restrict types to common denominator
+  \item extend media types to reach isomorphism
+  \item ignore the problem, maybe do version control
+ \end{itemize} &
+   \begin{tikzpicture}
+     \node (xcard) {xCard};
+     \node (poco) at (5em,0) {PoCo}
+       edge[<->] (xcard);
+     \node [align=left] (html) at (2.5em,-3.5em) {HTML\\(Form)}
+       edge[<->] (xcard)
+       edge[<->] (poco);
+   \end{tikzpicture}
+  \end{tabular}
+\end{frame}
+
+\section{interactions}
+
+\begin{frame}{Atom Publishing Protocol, hypermedia}
   \begin{center}\begin{tikzpicture}[
     align=left,
     every loop/.style={looseness=4},
@@ -155,8 +203,7 @@
 
     \node[doc] (entry) [below=of collect] {Contact\\(xCard)}
       edge [<-] node {1..n} (collect)
-      edge [->] node [sloped] {personal\\calendar} (calcollect)
-      edge [->, loop left] node {related\\xCards} (entry);
+      edge [->] node [sloped] {personal\\calendar} (calcollect);
 
     \node[doc] (event) [below=of calcollect] {Event\\(xCal)}
       edge [<-] node {1..n} (calcollect)
@@ -167,10 +214,13 @@
       edge [->, loop right] node [] {} (searchresult)
       edge [<-] node {} (opensearch);
 
-    \node[doc] (group) [below left=of entry] {group\\(xCard)}
+    \node[doc] (social) [below left=of entry] {RELATED,\\PHOTO,\\IMPP, URL}
+      edge [<-] node {} (entry);
+
+    \node[doc] (group) [right=of social] {Group\\(xCard)}
       edge [<->,style=dashed] node {} (entry);
 
-    \node[doc] (album) [below right=of entry] {media album\\(Atom Feed)}
+    \node[doc] (album) [right=of group] {Media Album\\(Atom Feed)}
       edge [<-,style=dashed] node {} (entry);
   \end{tikzpicture}\end{center}
 \end{frame}
@@ -181,6 +231,10 @@
 { \entry{7}  \entry{6}  \entry{5} \entry{4} }
 { \entry{3}  \entry{2}  \entry{1} }
 \url{http://myapi.org/.../contacts?offset=0|4|8}
+\\
+feed entries link to full representations
+\\
+feed entries sorted by edited time
 \end{frame}
 
 \begin{frame}[t]{POST new entry to feed}
@@ -217,6 +271,8 @@
 { \deleted{11} \entry{8} \deleted{9}  \entry{1} }
 { \entry{3} \entry{5}  \entry{12}  }
 \end{frame}
+
+\section{implementation}
 
 \begin{frame}{Execution flow overview}
   \begin{center}
@@ -267,22 +323,76 @@
     \node[doc] (pathparams) [right=of uriinfo] {PathParams}
       edge [<-] node [above] {} (uriinfo);
 
-    \node[doc] (database) [right=of pathparams] {Database};
-
     \node[doc] (collection) [below=of pathparams] {Collection-\\Storage}
-      edge [<-] node [right] {} (database)
       edge [<-] node [right,text width=5em] {} (pathparams);
 
-    \node[doc] (resultset) [below=of PaginationRange] {ResultList}
-      edge [<-] node [left,text width=5em] {} (PaginationRange)
-      edge [<-] node [right] {} (collection)
-      edge [<-] node [] {} (Preconditions);
-
-  \begin{pgfonlayer}{background}
-      \node[fit=(httpheaders) (collection),draw, dashed,fill=lightgray!50, inner sep=1em] () {};
-  \end{pgfonlayer}
+  % \begin{pgfonlayer}{background}
+  %     \node[fit=(httpheaders) (collection),draw, dashed,fill=lightgray!50, inner sep=1em] () {};
+  % \end{pgfonlayer}
 
   \end{tikzpicture} \end{center}
+\end{frame}
+
+\begin{frame}{isolate URI handling}
+  \begin{itemize}
+  \item processing: PaginationRange, PathParam, Router class
+  \item construction: LinkBuilder
+  \item URI details are classified information $\rightarrow$ enforce hypermedia
+  \end{itemize}
+  no \lstinline:@Path:, \lstinline:@PathParam:, \lstinline:@QueryParam: annotations!
+\end{frame}
+
+\section{problems, findings, future work}
+
+\begin{frame}{problems: media type libraries}
+  \begin{itemize}
+    \item only vCard 3, no vCard / xCard 4
+    \item 2 dead PortableContact libraries
+    \item no existing conversion code
+    \item no helper for semantic annotation
+  \end{itemize}
+  \pause
+  \ldots but dozens of HTTP libraries
+\end{frame}
+
+\begin{frame}[fragile]{Semantic annotation helper}
+\lstset{frame=single,
+        backgroundcolor=\color{lightgray!50}
+}
+  \begin{lstlisting}
+div( itemscope itemtype="http://schema.org/Person"
+     itemid=#{vcard.getProperty("uid")} )
+  span( itemprop="name" )
+    #{vcard.getProperty("fn")}
+  span( itemprop="telephone" )
+    #{vcard.getProperty("tel")}
+  \end{lstlisting}
+let md be a MicroData aware helper object:
+  \begin{lstlisting}
+= md.scope
+  div
+    = md.prop("name")
+      span( style="color:red" )
+    = md.prop("telephone")
+    = md.prop("email")
+  \end{lstlisting}
+\end{frame}
+
+\begin{frame}{Kolab}
+  \begin{itemize}
+  \item ANNOTATEMORE (draft) $\rightarrow$ METADATA (RFC 5464) $\rightarrow$ Special-Use Mailboxes (RFC 6154)
+  \item vCard 3 $\rightarrow$ Kolab XML $\rightarrow$ xCard 4
+  \item documented by code
+  \item works only with Cyrus, not with Dovecot
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \begin{itemize}
+  \item concentration on media types
+  \item JAX-RS not helpful
+  \item ATOM is versatile
+  \end{itemize}
 \end{frame}
 
 \end{document}
